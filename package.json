@@ -9,21 +9,28 @@
     "lint": "next lint --cache",
     "format": "prettier --write . --cache",
     "cspell": "cspell ** --gitignore --cache",
-    "fix": "run-s format cspell lint"
+    "fix": "run-s format cspell lint",
+    "db:gen": "drizzle-kit generate:mysql",
+    "db:push": "dotenv -e ./.env.local drizzle-kit push:mysql",
+    "db:gen:push": "run-s db:gen db:push"
   },
   "dependencies": {
     "@ianvs/prettier-plugin-sort-imports": "^4.1.0",
+    "@planetscale/database": "^1.11.0",
     "@t3-oss/env-nextjs": "^0.6.1",
     "@types/node": "20.5.8",
     "@types/react": "18.2.21",
     "@types/react-dom": "18.2.7",
     "autoprefixer": "10.4.15",
     "cspell": "^7.3.2",
+    "dotenv-cli": "^7.3.0",
+    "drizzle-orm": "^0.28.5",
     "eslint": "8.48.0",
     "eslint-config-next": "13.4.19",
     "next": "13.4.19",
     "npm-run-all": "^4.1.5",
     "postcss": "8.4.29",
+    "postgres": "^3.3.5",
     "prettier": "^3.0.3",
     "prettier-plugin-tailwindcss": "^0.5.4",
     "react": "18.2.0",
@@ -31,5 +38,8 @@
     "tailwindcss": "3.3.3",
     "typescript": "5.2.2",
     "zod": "^3.22.2"
+  },
+  "devDependencies": {
+    "drizzle-kit": "^0.19.13"
   }
 }
