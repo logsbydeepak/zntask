@@ -15,9 +15,11 @@
     "db:gen:push": "run-s db:gen db:push"
   },
   "dependencies": {
+    "@hookform/resolvers": "^3.3.1",
     "@ianvs/prettier-plugin-sort-imports": "^4.1.0",
     "@planetscale/database": "^1.11.0",
     "@t3-oss/env-nextjs": "^0.6.1",
+    "@tailwindcss/forms": "^0.5.6",
     "@types/node": "20.5.8",
     "@types/react": "18.2.21",
     "@types/react-dom": "18.2.7",
@@ -35,9 +37,10 @@
     "prettier-plugin-tailwindcss": "^0.5.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-hook-form": "^7.45.4",
     "tailwindcss": "3.3.3",
     "typescript": "5.2.2",
-    "zod": "^3.22.2"
+    "zod": "^3.21.4"
   },
   "devDependencies": {
     "drizzle-kit": "^0.19.13"

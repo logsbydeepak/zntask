@@ -1,6 +1,13 @@
 {
   "version": "0.2",
   "language": "en",
-  "words": ["zntask", "ianvs", "tailwindcss", "nextjs", "planetscale"],
+  "words": [
+    "zntask",
+    "ianvs",
+    "tailwindcss",
+    "nextjs",
+    "planetscale",
+    "hookform"
+  ],
   "ignorePaths": ["pnpm-lock.yaml"]
 }
