@@ -1,6 +1,6 @@
 {
   "version": "0.2",
   "language": "en",
-  "words": ["zntask", "ianvs", "tailwindcss"],
+  "words": ["zntask", "ianvs", "tailwindcss", "nextjs"],
   "ignorePaths": ["pnpm-lock.yaml"]
 }
