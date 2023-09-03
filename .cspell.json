@@ -7,7 +7,9 @@
     "tailwindcss",
     "nextjs",
     "planetscale",
-    "hookform"
+    "hookform",
+    "ulidx",
+    "zustand"
   ],
   "ignorePaths": ["pnpm-lock.yaml"]
 }
