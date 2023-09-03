@@ -1,16 +1,10 @@
 'use client'
 
-import React from 'react'
-
 import { Toast, useToastStore } from '@/store/toast'
 import * as ToastPrimitive from '@radix-ui/react-toast'
 
 export function ToastProvider() {
   const toast = useToastStore((s) => s.toasts)
-
-  React.useEffect(() => {
-    console.log(toast)
-  }, [toast])
 
   return (
     <ToastPrimitive.Provider swipeDirection="right">
