@@ -1,5 +1,6 @@
 'use client'
 
+import React from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -8,14 +9,14 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@ui/button'
 import * as FormPrimitive from '@ui/form'
 
-const schema = z.object({
-  email: z.string().nonempty({ message: 'required' }).email(),
-  password: z.string().nonempty({ message: 'required' }).min(8).max(32),
-})
+import { login } from './actions'
+import { schema } from './utils'
 
 type FormValues = z.infer<typeof schema>
 
 export function Form() {
+  const [isPending, startTransition] = React.useTransition()
+
   const {
     register,
     handleSubmit,
@@ -25,7 +26,10 @@ export function Form() {
   })
 
   const onSubmit = (values: FormValues) => {
-    console.log(values)
+    startTransition(async () => {
+      const res = await login(values)
+      console.log(res)
+    })
   }
 
   return (

@@ -7,16 +7,13 @@ export function r<CODE extends Uppercase<string>, RES extends object>(
   res: RES
 ): { code: CODE; res: RES }
 
-export function r(args: any[]) {
-  if (args.length === 1) {
-    return args[0]
+export function r(code: string, res?: object) {
+  if (res) {
+    return { code: code, res: res }
   }
 
-  if (args.length === 2) {
-    return {
-      code: args[0],
-      res: args[1],
-    }
+  if (code) {
+    return { code: code }
   }
 
   throw new Error('Something went wrong!')
