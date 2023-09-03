@@ -30,13 +30,15 @@ export function Form() {
   return (
     <>
       <FormPrimitive.Root onSubmit={handleSubmit(onSubmit)}>
-        <FormPrimitive.Label htmlFor="email">Email</FormPrimitive.Label>
-        <FormPrimitive.Input id="email" {...register('email')} />
-        <FormPrimitive.Error>{errors.email?.message}</FormPrimitive.Error>
-        <FormPrimitive.Label htmlFor="password">Password</FormPrimitive.Label>
-        <FormPrimitive.Input id="password" {...register('password')} />
-        <FormPrimitive.Error>{errors.password?.message}</FormPrimitive.Error>
-        <Button>Login</Button>
+        <FormPrimitive.Fieldset>
+          <FormPrimitive.Label htmlFor="email">Email</FormPrimitive.Label>
+          <FormPrimitive.Input id="email" {...register('email')} />
+          <FormPrimitive.Error>{errors.email?.message}</FormPrimitive.Error>
+          <FormPrimitive.Label htmlFor="password">Password</FormPrimitive.Label>
+          <FormPrimitive.Input id="password" {...register('password')} />
+          <FormPrimitive.Error>{errors.password?.message}</FormPrimitive.Error>
+          <Button className="w-full">Login</Button>
+        </FormPrimitive.Fieldset>
       </FormPrimitive.Root>
     </>
   )
