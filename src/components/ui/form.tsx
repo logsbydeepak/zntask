@@ -17,7 +17,11 @@ export const Input = React.forwardRef<
   React.InputHTMLAttributes<HTMLInputElement>
 >(({ className, ...props }, ref) => (
   <input
-    className={cn('block w-full rounded-md', className)}
+    className={cn(
+      'mt-0.5 w-full rounded-md border border-gray-300 py-1.5 text-sm shadow-sm',
+      'focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-600',
+      className
+    )}
     {...props}
     ref={ref}
   />
@@ -28,7 +32,7 @@ export const Label = React.forwardRef<
   HTMLLabelElement,
   React.LabelHTMLAttributes<HTMLLabelElement>
 >(({ children, ...props }, ref) => (
-  <label {...props} ref={ref}>
+  <label {...props} ref={ref} className="text-sm">
     {children}
   </label>
 ))
@@ -38,7 +42,7 @@ export const Error = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLAttributes<HTMLParagraphElement>
 >(({ children, ...props }, ref) => (
-  <p {...props} ref={ref}>
+  <p {...props} ref={ref} className="mt-0.5 text-xs text-red-700">
     {children}
   </p>
 ))
