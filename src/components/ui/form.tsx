@@ -46,7 +46,7 @@ export const Error = React.forwardRef<
   <p
     {...props}
     ref={ref}
-    className="mt-2 inline-flex items-center rounded-full bg-red-50 px-2 text-xs font-medium text-red-700"
+    className="mt-2 inline-flex items-center rounded-full bg-red-50 px-2 py-0.5 text-xs font-medium text-red-700"
   >
     <span className="mr-1 h-2 w-2">
       <XCircleIcon className="h-full w-full" strokeWidth={3} />

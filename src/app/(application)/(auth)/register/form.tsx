@@ -2,7 +2,14 @@
 
 import React from 'react'
 import Link from 'next/link'
-import { CheckCircleIcon, CheckIcon, CircleIcon, XIcon } from 'lucide-react'
+import {
+  CheckCircleIcon,
+  CheckIcon,
+  CircleIcon,
+  EyeIcon,
+  EyeOffIcon,
+  XIcon,
+} from 'lucide-react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useDebounce } from 'use-debounce'
 import { z } from 'zod'
@@ -41,6 +48,7 @@ const passwordChecklist = [
 ]
 
 export function Form() {
+  const [isPasswordVisible, setIsPasswordVisible] = React.useState(false)
   const {
     register,
     handleSubmit,
@@ -110,6 +118,7 @@ export function Form() {
               id="password"
               {...register('password')}
               placeholder="strong password"
+              type={isPasswordVisible ? 'text' : 'password'}
             />
             {errors.password && (
               <FormPrimitive.Error>
@@ -118,6 +127,10 @@ export function Form() {
             )}
 
             <div className="mt-2">
+              <PasswordVisibilityToggle
+                isVisible={isPasswordVisible}
+                onClick={() => setIsPasswordVisible((prev) => !prev)}
+              />
               {passwordChecklist.map((i) => (
                 <PasswordChecklistItem
                   key={i.label}
@@ -137,6 +150,7 @@ export function Form() {
               id="confirmPassword"
               {...register('confirmPassword')}
               placeholder="strong password"
+              type={isPasswordVisible ? 'text' : 'password'}
             />
             {errors.confirmPassword && (
               <FormPrimitive.Error>
@@ -167,6 +181,33 @@ export function Form() {
         </Link>
       </p>
     </>
+  )
+}
+
+function PasswordVisibilityToggle({
+  isVisible,
+  onClick,
+}: {
+  isVisible: boolean
+  onClick: () => void
+}) {
+  return (
+    <button
+      onClick={onClick}
+      type="button"
+      className="mr-2 inline-flex items-center rounded-full bg-orange-600 px-2 py-0.5 focus:outline-none focus:ring-2 focus:ring-orange-600 focus:ring-offset-1"
+    >
+      <span className="mr-1 h-2 w-2 text-white">
+        {!isVisible ? (
+          <EyeIcon className="h-full w-full" strokeWidth={3} />
+        ) : (
+          <EyeOffIcon className="h-full w-full" strokeWidth={3} />
+        )}
+      </span>
+      <span className="text-xs font-medium text-white">
+        {!isVisible ? 'show Password' : 'hide password'}
+      </span>
+    </button>
   )
 }
 
