@@ -4,12 +4,12 @@ import { cva, type VariantProps } from 'cva'
 import { cn } from '@/utils/style'
 
 export const buttonStyle = cva({
-  base: 'rounded-md px-4 py-2.5 text-white text-sm font-medium',
+  base: 'rounded-md px-4 py-2.5 text-white text-sm font-medium border border-transparent focus:ring-2 focus:outline-none focus:ring-offset-2',
   variants: {
     intent: {
-      primary: 'bg-orange-600',
-      secondary: 'bg-gray-600',
-      destructive: 'bg-red-600',
+      primary: 'bg-orange-600 focus:ring-orange-700',
+      secondary: 'border-gray-200 text-gray-950 focus:ring-gray-900',
+      destructive: 'bg-red-600 focus:ring-red-600',
     },
   },
   defaultVariants: {

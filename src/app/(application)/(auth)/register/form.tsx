@@ -7,6 +7,7 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { useDebounce } from 'use-debounce'
 import { z } from 'zod'
 
+import { GoogleIcon } from '@/components/icon/google'
 import { cn } from '@/utils/style'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@ui/button'
@@ -64,55 +65,59 @@ export function Form() {
               <FormPrimitive.Label htmlFor="firstName">
                 First Name
               </FormPrimitive.Label>
-              <FormPrimitive.Input id="firstName" {...register('firstName')} />
-              <FormPrimitive.Error>
-                {errors.firstName?.message}
-              </FormPrimitive.Error>
+              <FormPrimitive.Input
+                id="firstName"
+                {...register('firstName')}
+                placeholder="Haven"
+              />
+              {errors.firstName && (
+                <FormPrimitive.Error>
+                  {errors.firstName?.message}
+                </FormPrimitive.Error>
+              )}
             </div>
 
             <div>
               <FormPrimitive.Label htmlFor="lastName">
                 Last Name
               </FormPrimitive.Label>
-              <FormPrimitive.Input id="lastName" {...register('lastName')} />
-              <FormPrimitive.Error>
-                {errors.lastName?.message}
-              </FormPrimitive.Error>
+              <FormPrimitive.Input
+                id="lastName"
+                {...register('lastName')}
+                placeholder="Thompson"
+              />
             </div>
           </div>
 
           <div>
             <FormPrimitive.Label htmlFor="email">Email</FormPrimitive.Label>
-            <FormPrimitive.Input id="email" {...register('email')} />
-            <FormPrimitive.Error>{errors.email?.message}</FormPrimitive.Error>
+            <FormPrimitive.Input
+              id="email"
+              {...register('email')}
+              placeholder="abc@domain.com"
+            />
+
+            {errors.email && (
+              <FormPrimitive.Error>{errors.email?.message}</FormPrimitive.Error>
+            )}
           </div>
 
           <div>
             <FormPrimitive.Label htmlFor="password">
               Password
             </FormPrimitive.Label>
-            <FormPrimitive.Input id="password" {...register('password')} />
-            <FormPrimitive.Error>
-              {errors.password?.message}
-            </FormPrimitive.Error>
-          </div>
-
-          <div>
-            <FormPrimitive.Label htmlFor="confirmPassword">
-              Confirm Password
-            </FormPrimitive.Label>
             <FormPrimitive.Input
-              id="confirmPassword"
-              {...register('confirmPassword')}
+              id="password"
+              {...register('password')}
+              placeholder="strong password"
             />
-            <FormPrimitive.Error>
-              {errors.confirmPassword?.message}
-            </FormPrimitive.Error>
+            {errors.password && (
+              <FormPrimitive.Error>
+                {errors.password?.message}
+              </FormPrimitive.Error>
+            )}
 
-            <div className="my-4">
-              <p className="text-xs text-gray-500">
-                Strong Password must contain
-              </p>
+            <div className="mt-2">
               {passwordChecklist.map((i) => (
                 <PasswordChecklistItem
                   key={i.label}
@@ -123,17 +128,44 @@ export function Form() {
               ))}
             </div>
           </div>
+
+          <div>
+            <FormPrimitive.Label htmlFor="confirmPassword">
+              Confirm Password
+            </FormPrimitive.Label>
+            <FormPrimitive.Input
+              id="confirmPassword"
+              {...register('confirmPassword')}
+              placeholder="strong password"
+            />
+            {errors.confirmPassword && (
+              <FormPrimitive.Error>
+                {errors.confirmPassword?.message}
+              </FormPrimitive.Error>
+            )}
+          </div>
         </div>
 
         <Button className="w-full">Register</Button>
       </FormPrimitive.Root>
-      <span>
-        <span>Already have an account?</span>
-        <Link href="/login">Login</Link>
-      </span>
-      <Button className="w-full" intent="secondary">
-        Continue with Google
+      <Button
+        className="mt-5 flex w-full items-center justify-center"
+        intent="secondary"
+      >
+        <div className="mr-2 h-5 w-5">
+          <GoogleIcon />
+        </div>
+        <span>Continue with Google</span>
       </Button>
+      <p className="mt-4 text-center text-sm text-gray-500">
+        Already have an account?{' '}
+        <Link
+          href="/login"
+          className="font-medium text-gray-700 hover:text-orange-600 hover:underline"
+        >
+          Login
+        </Link>
+      </p>
     </>
   )
 }
