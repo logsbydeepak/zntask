@@ -20,7 +20,7 @@ export function r(code: string, res?: object) {
 }
 
 export function h<
-  Z extends z.AnyZodObject,
+  Z extends z.ZodTypeAny,
   FN extends ({ input }: { input: z.infer<Z> }) => Promise<any>,
 >(z: Z, fn: FN): (input: z.infer<Z>) => ReturnType<FN>
 
@@ -30,7 +30,7 @@ export function h<FN extends (input: any) => Promise<any>>(
 
 export function h<
   A extends 'AUTH',
-  Z extends z.AnyZodObject,
+  Z extends z.ZodTypeAny,
   FN extends ({
     input,
     userId,

@@ -1,10 +1,10 @@
 'use client'
 
 import React from 'react'
+import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-import { useToastStore } from '@/store/toast'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@ui/button'
 import * as FormPrimitive from '@ui/form'
@@ -42,9 +42,17 @@ export function Form() {
           <FormPrimitive.Label htmlFor="password">Password</FormPrimitive.Label>
           <FormPrimitive.Input id="password" {...register('password')} />
           <FormPrimitive.Error>{errors.password?.message}</FormPrimitive.Error>
+          <Link href="#">forgot password?</Link>
           <Button className="w-full">Login</Button>
         </FormPrimitive.Fieldset>
       </FormPrimitive.Root>
+      <span>
+        <span>Already have an account?</span>
+        <Link href="/register">Register</Link>
+      </span>
+      <Button className="w-full" intent="secondary">
+        Continue with Google
+      </Button>
     </>
   )
 }

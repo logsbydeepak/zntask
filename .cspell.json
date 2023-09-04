@@ -9,7 +9,8 @@
     "planetscale",
     "hookform",
     "ulidx",
-    "zustand"
+    "zustand",
+    "lucide"
   ],
   "ignorePaths": ["pnpm-lock.yaml"]
 }
