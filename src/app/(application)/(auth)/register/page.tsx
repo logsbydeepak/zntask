@@ -1,3 +1,5 @@
+import { Metadata } from 'next'
+
 import {
   ActionContainer,
   FormContainer,
@@ -7,6 +9,10 @@ import {
 } from '@/app/(application)/(auth)/components'
 
 import { Action, Form } from './form'
+
+export const metadata: Metadata = {
+  title: 'Register',
+}
 
 export default function Page() {
   return (

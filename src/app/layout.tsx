@@ -6,7 +6,10 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'zntask',
+  title: {
+    default: 'zntask',
+    template: '%s | zntask',
+  },
 }
 
 export default function RootLayout({

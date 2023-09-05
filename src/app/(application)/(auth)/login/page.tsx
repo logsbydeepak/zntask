@@ -1,3 +1,5 @@
+import { Metadata } from 'next'
+
 import {
   ActionContainer,
   FormContainer,
@@ -8,6 +10,11 @@ import {
 
 import { Action, Form } from './form'
 
+export const metadata: Metadata = {
+  title: 'Login',
+}
+
+export const runtime = 'edge'
 export default function Page() {
   return (
     <>

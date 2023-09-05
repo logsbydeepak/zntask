@@ -16,6 +16,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@ui/button'
 import * as FormPrimitive from '@ui/form'
 
+import { registerWithCredentials } from './actions'
 import { schema } from './utils'
 
 type FormValues = z.infer<typeof schema>
@@ -45,6 +46,8 @@ const passwordChecklist = [
 
 export function Form() {
   const [isPasswordVisible, setIsPasswordVisible] = React.useState(false)
+  const [isPending, startTransition] = React.useTransition()
+
   const {
     register,
     handleSubmit,
@@ -57,7 +60,10 @@ export function Form() {
   const [watchPassword] = useDebounce(watch('password') ?? '', 500)
 
   const onSubmit = (values: FormValues) => {
-    console.log(values)
+    startTransition(async () => {
+      const res = await registerWithCredentials(values)
+      console.log(res)
+    })
   }
 
   return (
