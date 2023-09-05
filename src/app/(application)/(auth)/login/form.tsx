@@ -5,6 +5,11 @@ import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
+import {
+  AccountQuestion,
+  ContinueWithGoogle,
+  PasswordVisibilityToggle,
+} from '@/app/(application)/(auth)/components'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@ui/button'
 import * as FormPrimitive from '@ui/form'
@@ -15,6 +20,7 @@ import { schema } from './utils'
 type FormValues = z.infer<typeof schema>
 
 export function Form() {
+  const [isPasswordVisible, setIsPasswordVisible] = React.useState(false)
   const [isPending, startTransition] = React.useTransition()
 
   const {
@@ -33,26 +39,59 @@ export function Form() {
   }
 
   return (
-    <>
-      <FormPrimitive.Root onSubmit={handleSubmit(onSubmit)}>
-        <FormPrimitive.Fieldset>
+    <FormPrimitive.Root onSubmit={handleSubmit(onSubmit)}>
+      <div className="my-8 space-y-4">
+        <div>
           <FormPrimitive.Label htmlFor="email">Email</FormPrimitive.Label>
-          <FormPrimitive.Input id="email" {...register('email')} />
-          <FormPrimitive.Error>{errors.email?.message}</FormPrimitive.Error>
+          <FormPrimitive.Input
+            id="email"
+            {...register('email')}
+            placeholder="abc@domain.com"
+          />
+          {errors.email && (
+            <FormPrimitive.Error>{errors.email?.message}</FormPrimitive.Error>
+          )}
+        </div>
+
+        <div>
           <FormPrimitive.Label htmlFor="password">Password</FormPrimitive.Label>
-          <FormPrimitive.Input id="password" {...register('password')} />
-          <FormPrimitive.Error>{errors.password?.message}</FormPrimitive.Error>
-          <Link href="#">forgot password?</Link>
-          <Button className="w-full">Login</Button>
-        </FormPrimitive.Fieldset>
-      </FormPrimitive.Root>
-      <span>
-        <span>Already have an account?</span>
-        <Link href="/register">Register</Link>
-      </span>
-      <Button className="w-full" intent="secondary">
-        Continue with Google
-      </Button>
+          <FormPrimitive.Input
+            id="password"
+            {...register('password')}
+            placeholder="********"
+            type={isPasswordVisible ? 'text' : 'password'}
+          />
+
+          <div>
+            <PasswordVisibilityToggle
+              isVisible={isPasswordVisible}
+              onClick={() => setIsPasswordVisible((prev) => !prev)}
+            />
+            {errors.password && (
+              <FormPrimitive.Error>
+                {errors.password?.message}
+              </FormPrimitive.Error>
+            )}
+          </div>
+        </div>
+      </div>
+      <Button className="w-full">Login</Button>
+    </FormPrimitive.Root>
+  )
+}
+
+export function Action() {
+  return (
+    <>
+      <ContinueWithGoogle />
+      <AccountQuestion.Container>
+        <AccountQuestion.Title>
+          Already have an account?{' '}
+          <AccountQuestion.Action href="/register">
+            Register
+          </AccountQuestion.Action>
+        </AccountQuestion.Title>
+      </AccountQuestion.Container>
     </>
   )
 }

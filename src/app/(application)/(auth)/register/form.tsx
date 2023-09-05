@@ -113,7 +113,7 @@ export function Form() {
             placeholder="strong password"
             type={isPasswordVisible ? 'text' : 'password'}
           />
-          <div className="">
+          <div>
             <PasswordVisibilityToggle
               isVisible={isPasswordVisible}
               onClick={() => setIsPasswordVisible((prev) => !prev)}

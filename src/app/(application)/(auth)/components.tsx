@@ -4,26 +4,6 @@ import { EyeIcon, EyeOffIcon } from 'lucide-react'
 import { GoogleIcon } from '@/components/icon/google'
 import { LogoIcon } from '@/components/icon/logo'
 import { Button } from '@/components/ui/button'
-import { cn } from '@/utils/style'
-
-export function Container({
-  children,
-  className,
-}: {
-  children: React.ReactNode
-  className?: string
-}) {
-  return (
-    <div
-      className={cn(
-        'w-full border-gray-100 md:w-[500px] md:rounded-md md:border md:shadow-sm md:drop-shadow-sm',
-        className
-      )}
-    >
-      {children}
-    </div>
-  )
-}
 
 export function FormContainer({ children }: { children: React.ReactNode }) {
   return (
@@ -33,7 +13,7 @@ export function FormContainer({ children }: { children: React.ReactNode }) {
 
 export function ActionContainer({ children }: { children: React.ReactNode }) {
   return (
-    <div className="mt-10 space-y-4 border-t border-gray-100 bg-gray-50 px-10 py-10">
+    <div className="space-y-4 px-10 py-5 md:mt-10 md:border-t md:border-gray-100 md:bg-gray-50 md:py-10">
       {children}
     </div>
   )
@@ -117,7 +97,7 @@ function AccountQuestionAction({
       {...props}
       className="font-medium text-gray-700 hover:text-orange-600 hover:underline"
     >
-      Login
+      {children}
     </Link>
   )
 }

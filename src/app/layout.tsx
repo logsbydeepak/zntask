@@ -16,7 +16,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} text-gray-950`}>{children}</body>
+      <body className={`${inter.className} overflow-y-scroll text-gray-950`}>
+        {children}
+      </body>
     </html>
   )
 }

@@ -1,12 +1,25 @@
-import { Container } from '@/app/(application)/(auth)/components'
+import {
+  ActionContainer,
+  FormContainer,
+  Logo,
+  SubTitle,
+  Title,
+} from '@/app/(application)/(auth)/components'
 
-import { Form } from './form'
+import { Action, Form } from './form'
 
 export default function Page() {
   return (
-    <Container className="md:my-64">
-      <h1>Login</h1>
-      <Form />
-    </Container>
+    <>
+      <FormContainer>
+        <Logo />
+        <Title>Login to zntask</Title>
+        <SubTitle>Continue where you left</SubTitle>
+        <Form />
+      </FormContainer>
+      <ActionContainer>
+        <Action />
+      </ActionContainer>
+    </>
   )
 }

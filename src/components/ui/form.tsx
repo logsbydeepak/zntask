@@ -1,5 +1,5 @@
 import React, { FieldsetHTMLAttributes } from 'react'
-import { CircleIcon, XCircleIcon } from 'lucide-react'
+import { XCircleIcon } from 'lucide-react'
 
 import { cn } from '@/utils/style'
 
@@ -7,7 +7,7 @@ export const Root = React.forwardRef<
   HTMLFormElement,
   React.FormHTMLAttributes<HTMLFormElement>
 >(({ children, className, ...props }, ref) => (
-  <form {...props} ref={ref} className={cn('block', className)}>
+  <form {...props} ref={ref} className={cn('w-full', className)}>
     {children}
   </form>
 ))
