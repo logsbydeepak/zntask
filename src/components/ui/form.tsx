@@ -19,7 +19,7 @@ export const Input = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <input
     className={cn(
-      'mt-0.5 w-full rounded-md border border-gray-300 py-1.5 text-sm shadow-sm',
+      'mb-2 mt-0.5 w-full rounded-md border border-gray-300 py-1.5 text-sm shadow-sm',
       'placeholder:font-normal placeholder:text-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-orange-600',
       className
     )}
@@ -46,7 +46,7 @@ export const Error = React.forwardRef<
   <p
     {...props}
     ref={ref}
-    className="mt-2 inline-flex items-center rounded-full bg-red-50 px-2 py-0.5 text-xs font-medium text-red-700"
+    className="inline-flex items-center rounded-full bg-red-50 px-2 py-0.5 text-xs font-medium text-red-700"
   >
     <span className="mr-1 h-2 w-2">
       <XCircleIcon className="h-full w-full" strokeWidth={3} />

@@ -8,7 +8,7 @@ export const buttonStyle = cva({
   variants: {
     intent: {
       primary: 'bg-orange-600 focus:ring-orange-700',
-      secondary: 'border-gray-200 text-gray-950 focus:ring-gray-900',
+      secondary: 'border-gray-200 text-gray-950 focus:ring-gray-900 bg-white',
       destructive: 'bg-red-600 focus:ring-red-600',
     },
   },
