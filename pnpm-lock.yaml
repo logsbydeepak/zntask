@@ -26,6 +26,9 @@ dependencies:
   '@types/bcryptjs':
     specifier: ^2.4.3
     version: 2.4.3
+  '@types/ms':
+    specifier: ^0.7.31
+    version: 0.7.31
   '@types/node':
     specifier: 20.5.9
     version: 20.5.9
@@ -62,9 +65,15 @@ dependencies:
   eslint-config-next:
     specifier: 13.4.19
     version: 13.4.19(eslint@8.48.0)(typescript@5.2.2)
+  jose:
+    specifier: ^4.14.6
+    version: 4.14.6
   lucide-react:
     specifier: ^0.274.0
     version: 0.274.0(react@18.2.0)
+  ms:
+    specifier: ^2.1.3
+    version: 2.1.3
   next:
     specifier: 13.4.19
     version: 13.4.19(@babel/core@7.22.11)(react-dom@18.2.0)(react@18.2.0)
@@ -1395,6 +1404,10 @@ packages:
 
   /@types/json5@0.0.29:
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
+    dev: false
+
+  /@types/ms@0.7.31:
+    resolution: {integrity: sha512-iiUgKzV9AuaEkZqkOLDIvlQiL6ltuZd9tGcW3gwpnX8JbuiuhFlEGmmFXEXkN50Cvq7Os88IY2v0dkDqXYWVgA==}
     dev: false
 
   /@types/node@20.5.9:
@@ -3353,6 +3366,10 @@ packages:
   /jiti@1.19.3:
     resolution: {integrity: sha512-5eEbBDQT/jF1xg6l36P+mWGGoH9Spuy0PCdSr2dtWRDGC6ph/w9ZCL4lmESW8f8F7MwT3XKescfP0wnZWAKL9w==}
     hasBin: true
+    dev: false
+
+  /jose@4.14.6:
+    resolution: {integrity: sha512-EqJPEUlZD0/CSUMubKtMaYUOtWe91tZXTWMJZoKSbLk+KtdhNdcvppH8lA9XwVu2V4Ailvsj0GBZJ2ZwDjfesQ==}
     dev: false
 
   /js-tokens@4.0.0:
