@@ -80,6 +80,7 @@ export function h(...args: any[]) {
         const result = await args[1]({ input })
         return result
       } catch (error) {
+        console.log(error)
         throw new Error('Something went wrong!')
       }
     }

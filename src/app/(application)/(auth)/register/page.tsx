@@ -8,7 +8,7 @@ import {
   Title,
 } from '@/app/(application)/(auth)/components'
 
-import { Action, Form } from './form'
+import { Action, Form, StateProvider } from './form'
 
 export const metadata: Metadata = {
   title: 'Register',
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <>
+    <StateProvider>
       <FormContainer>
         <Logo />
         <Title>Register your zntask account</Title>
@@ -26,6 +26,6 @@ export default function Page() {
       <ActionContainer>
         <Action />
       </ActionContainer>
-    </>
+    </StateProvider>
   )
 }

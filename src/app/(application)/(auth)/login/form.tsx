@@ -2,7 +2,9 @@
 
 import React from 'react'
 import Link from 'next/link'
-import { useForm } from 'react-hook-form'
+import { useRouter } from 'next/navigation'
+import { atom, Provider, useAtom } from 'jotai'
+import { FormProvider, useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 import {
@@ -10,84 +12,140 @@ import {
   ContinueWithGoogle,
   PasswordVisibilityToggle,
 } from '@/app/(application)/(auth)/components'
+import { useToastStore } from '@/store/toast'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@ui/button'
 import * as FormPrimitive from '@ui/form'
 
-import { login } from './actions'
+import { loginWithCredentials } from './actions'
 import { schema } from './utils'
 
+const isLoadingAtom = atom(false)
 type FormValues = z.infer<typeof schema>
 
 export function Form() {
+  const router = useRouter()
+  const addToast = useToastStore((s) => s.addToast)
+
+  const startTransition = React.useTransition()[1]
+  const [isLoading, setIsLoading] = useAtom(isLoadingAtom)
   const [isPasswordVisible, setIsPasswordVisible] = React.useState(false)
-  const [isPending, startTransition] = React.useTransition()
+  const [isCredentialLoginLoading, setIsCredentialLoginLoading] =
+    React.useState(false)
 
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
   })
 
   const onSubmit = (values: FormValues) => {
+    setIsLoading(true)
+    setIsCredentialLoginLoading(true)
+
     startTransition(async () => {
-      const res = await login(values)
-      console.log(res)
+      setTimeout(async () => {
+        const res = await loginWithCredentials(values)
+        if (res.code === 'INVALID_CREDENTIALS') {
+          setError('password', {
+            type: 'manual',
+            message: 'invalid credentials',
+          })
+          setError('email', {
+            type: 'manual',
+            message: 'invalid credentials',
+          })
+        }
+
+        if (res.code === 'OK') {
+          addToast({
+            title: 'Login success',
+            description: 'You are now logged in',
+            type: 'success',
+          })
+          router.push('/')
+        }
+
+        setIsLoading(false)
+        setIsCredentialLoginLoading(false)
+      }, 2000)
     })
   }
 
   return (
     <FormPrimitive.Root onSubmit={handleSubmit(onSubmit)}>
-      <div className="my-8 space-y-4">
-        <div>
-          <FormPrimitive.Label htmlFor="email">Email</FormPrimitive.Label>
-          <FormPrimitive.Input
-            id="email"
-            {...register('email')}
-            placeholder="abc@domain.com"
-          />
-          {errors.email && (
-            <FormPrimitive.Error>{errors.email?.message}</FormPrimitive.Error>
-          )}
-        </div>
-
-        <div>
-          <FormPrimitive.Label htmlFor="password">Password</FormPrimitive.Label>
-          <FormPrimitive.Input
-            id="password"
-            {...register('password')}
-            placeholder="********"
-            type={isPasswordVisible ? 'text' : 'password'}
-          />
-
+      <FormPrimitive.Fieldset disabled={isLoading}>
+        <div className="my-8 space-y-4">
           <div>
-            <PasswordVisibilityToggle
-              isVisible={isPasswordVisible}
-              onClick={() => setIsPasswordVisible((prev) => !prev)}
+            <FormPrimitive.Label htmlFor="email">Email</FormPrimitive.Label>
+            <FormPrimitive.Input
+              id="email"
+              {...register('email')}
+              placeholder="abc@domain.com"
             />
-            {errors.password && (
-              <FormPrimitive.Error>
-                {errors.password?.message}
-              </FormPrimitive.Error>
+            {errors.email && (
+              <FormPrimitive.Error>{errors.email?.message}</FormPrimitive.Error>
             )}
           </div>
+
+          <div>
+            <FormPrimitive.Label htmlFor="password">
+              Password
+            </FormPrimitive.Label>
+            <FormPrimitive.Input
+              id="password"
+              {...register('password')}
+              placeholder="********"
+              type={isPasswordVisible ? 'text' : 'password'}
+            />
+
+            <div>
+              <PasswordVisibilityToggle
+                isVisible={isPasswordVisible}
+                onClick={() => setIsPasswordVisible((prev) => !prev)}
+              />
+              {errors.password && (
+                <FormPrimitive.Error>
+                  {errors.password?.message}
+                </FormPrimitive.Error>
+              )}
+            </div>
+          </div>
         </div>
-      </div>
-      <Button className="w-full">Login</Button>
+        <Button className="w-full" isLoading={isCredentialLoginLoading}>
+          Login
+        </Button>
+      </FormPrimitive.Fieldset>
     </FormPrimitive.Root>
   )
 }
 
+export function StateProvider({ children }: { children: React.ReactNode }) {
+  return <Provider>{children}</Provider>
+}
+
 export function Action() {
+  const startTransition = React.useTransition()[1]
+  const [isLoading, setIsLoading] = useAtom(isLoadingAtom)
+  const [isGoogleLoginLoading, setIsGoogleRegisterLoading] =
+    React.useState(false)
+
+  const onClick = () => {
+    setIsLoading(true)
+    setIsGoogleRegisterLoading(true)
+  }
   return (
     <>
-      <ContinueWithGoogle />
+      <fieldset disabled={isLoading}>
+        <ContinueWithGoogle isLoading={isGoogleLoginLoading} />
+      </fieldset>
       <AccountQuestion.Container>
         <AccountQuestion.Title>
           Already have an account?{' '}
-          <AccountQuestion.Action href="/register">
+          <AccountQuestion.Action href="/register" disabled={isLoading}>
             Register
           </AccountQuestion.Action>
         </AccountQuestion.Title>

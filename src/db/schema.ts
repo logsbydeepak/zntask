@@ -27,9 +27,15 @@ export const userRelations = relations(users, ({ one }) => ({
 }))
 
 export const credentialAuthRelations = relations(credentialAuth, ({ one }) => ({
-  user: one(users),
+  user: one(users, {
+    fields: [credentialAuth.userId],
+    references: [users.id],
+  }),
 }))
 
 export const googleAuthRelations = relations(googleAuth, ({ one }) => ({
-  user: one(users),
+  user: one(users, {
+    fields: [googleAuth.userId],
+    references: [users.id],
+  }),
 }))

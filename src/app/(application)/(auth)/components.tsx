@@ -37,13 +37,18 @@ export function SubTitle({ children }: { children: React.ReactNode }) {
   return <p className="text-center text-sm text-gray-500">{children}</p>
 }
 
-export function ContinueWithGoogle() {
+export function ContinueWithGoogle({
+  isLoading = false,
+}: {
+  isLoading?: boolean
+}) {
   return (
     <Button
       className="flex w-full items-center justify-center"
       intent="secondary"
+      isLoading={isLoading}
     >
-      <div className="mr-2 h-5 w-5">
+      <div className="mr-2 h-5 w-5 ">
         <GoogleIcon />
       </div>
       <span>Continue with Google</span>
@@ -88,14 +93,19 @@ function AccountQuestionTitle({ children }: { children: React.ReactNode }) {
 
 function AccountQuestionAction({
   children,
+  disabled = false,
+  href,
   ...props
-}: { children: React.ReactNode } & React.ComponentPropsWithoutRef<
-  typeof Link
->) {
+}: {
+  children: React.ReactNode
+  disabled?: boolean
+} & React.ComponentPropsWithoutRef<typeof Link>) {
   return (
     <Link
       {...props}
-      className="font-medium text-gray-700 hover:text-orange-600 hover:underline"
+      aria-disabled={disabled}
+      href={disabled ? '#' : href}
+      className="font-medium text-gray-700 hover:text-orange-600 hover:underline aria-[disabled=true]:cursor-not-allowed aria-[disabled=true]:text-gray-500"
     >
       {children}
     </Link>

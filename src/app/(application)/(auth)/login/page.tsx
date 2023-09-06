@@ -8,16 +8,15 @@ import {
   Title,
 } from '@/app/(application)/(auth)/components'
 
-import { Action, Form } from './form'
+import { Action, Form, StateProvider } from './form'
 
 export const metadata: Metadata = {
   title: 'Login',
 }
 
-export const runtime = 'edge'
 export default function Page() {
   return (
-    <>
+    <StateProvider>
       <FormContainer>
         <Logo />
         <Title>Login to zntask</Title>
@@ -27,6 +26,6 @@ export default function Page() {
       <ActionContainer>
         <Action />
       </ActionContainer>
-    </>
+    </StateProvider>
   )
 }
