@@ -23,3 +23,28 @@ export const setAuthCookie = (token: string) => {
     maxAge,
   })
 }
+
+export class UnauthorizedError extends Error {
+  constructor(message = 'user is not authorized') {
+    super(message)
+    this.name = 'UnauthorizedError'
+  }
+}
+
+export async function isAuth() {
+  try {
+    const token = cookies().get('auth')?.value
+    if (!token) throw new Error("Token doesn't exist!")
+
+    const secret = jose.base64url.decode(env.JWT_SECRET)
+    const { payload } = await jose.jwtDecrypt(token, secret)
+
+    if (!payload) throw new Error("Payload doesn't exist!")
+    if (!payload?.userId) throw new Error("Payload doesn't have userId!")
+    if (typeof payload.userId !== 'string') throw new Error('Invalid payload!')
+
+    return { userId: payload.userId }
+  } catch (error) {
+    throw new UnauthorizedError()
+  }
+}

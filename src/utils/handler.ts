@@ -1,4 +1,7 @@
+import { redirect } from 'next/navigation'
 import { z } from 'zod'
+
+import { isAuth, UnauthorizedError } from '@/app/(application)/(auth)/utils'
 
 export function r<CODE extends Uppercase<string>>(c: CODE): { code: CODE }
 
@@ -24,9 +27,7 @@ export function h<
   FN extends ({ input }: { input: z.infer<Z> }) => Promise<any>,
 >(z: Z, fn: FN): (input: z.infer<Z>) => ReturnType<FN>
 
-export function h<FN extends (input: any) => Promise<any>>(
-  fn: FN
-): () => ReturnType<FN>
+export function h<FN extends () => Promise<any>>(fn: FN): () => ReturnType<FN>
 
 export function h<
   A extends 'AUTH',
@@ -38,12 +39,12 @@ export function h<
     input: z.infer<Z>
     userId: string
   }) => Promise<any>,
->(z: Z, fn: FN): (input: z.infer<Z>) => ReturnType<FN>
+>(auth: A, z: Z, fn: FN): (input: z.infer<Z>) => ReturnType<FN>
 
 export function h<
   A extends 'AUTH',
   FN extends ({ userId }: { userId: string }) => Promise<any>,
->(fn: FN): () => ReturnType<FN>
+>(auth: A, fn: FN): () => ReturnType<FN>
 
 export function h(...args: any[]) {
   // auth
@@ -52,9 +53,13 @@ export function h(...args: any[]) {
     if (typeof args[1] === 'function') {
       return async function () {
         try {
-          const result = await args[1]({ userId: 'test' })
+          const { userId } = await isAuth()
+          const result = await args[1]({ userId })
           return result
         } catch (error) {
+          if (error instanceof UnauthorizedError) {
+            redirect('/login')
+          }
           throw new Error('Something went wrong!')
         }
       }
@@ -64,9 +69,13 @@ export function h(...args: any[]) {
     if (typeof args[1] === 'object' && typeof args[2] === 'function') {
       return async function (input: any) {
         try {
-          const result = await args[2]({ input, userId: 'test' })
+          const { userId } = await isAuth()
+          const result = await args[2]({ input, userId })
           return result
         } catch (error) {
+          if (error instanceof UnauthorizedError) {
+            redirect('/login')
+          }
           throw new Error('Something went wrong!')
         }
       }
