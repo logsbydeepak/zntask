@@ -6,3 +6,7 @@ export const schema = z.object({
   email: zEmail,
   password: zPassword('invalid password'),
 })
+
+export const resetPasswordSchema = z.object({
+  email: zEmail,
+})
