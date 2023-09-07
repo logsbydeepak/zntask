@@ -11,6 +11,7 @@ import {
   AccountQuestion,
   ContinueWithGoogle,
   PasswordVisibilityToggle,
+  ResetPassword,
 } from '@/app/(application)/(auth)/components'
 import { useToastStore } from '@/store/toast'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -107,6 +108,7 @@ export function Form() {
                 isVisible={isPasswordVisible}
                 onClick={() => setIsPasswordVisible((prev) => !prev)}
               />
+              <ResetPassword onClick={() => {}} />
               {errors.password && (
                 <FormPrimitive.Error>
                   {errors.password?.message}

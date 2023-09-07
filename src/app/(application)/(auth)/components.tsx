@@ -1,6 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
-import { EyeIcon, EyeOffIcon } from 'lucide-react'
+import { EyeIcon, EyeOffIcon, KeyIcon } from 'lucide-react'
 
 import { GoogleIcon } from '@/components/icon/google'
 import { LogoIcon } from '@/components/icon/logo'
@@ -54,6 +54,21 @@ export function ContinueWithGoogle({
       </div>
       <span>Continue with Google</span>
     </Button>
+  )
+}
+
+export function ResetPassword({ onClick }: { onClick: () => void }) {
+  return (
+    <button
+      onClick={onClick}
+      type="button"
+      className="mr-2 inline-flex items-center rounded-full bg-orange-600 px-2 py-0.5 focus:outline-none focus:ring-2 focus:ring-orange-600 focus:ring-offset-1"
+    >
+      <span className="mr-1 h-2 w-2 text-white">
+        <KeyIcon className="h-full w-full" strokeWidth={3} />
+      </span>
+      <span className="text-xs font-medium text-white">reset password</span>
+    </button>
   )
 }
 
