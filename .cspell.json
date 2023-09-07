@@ -10,7 +10,8 @@
     "hookform",
     "ulidx",
     "zustand",
-    "lucide"
+    "lucide",
+    "upstash"
   ],
   "ignorePaths": ["pnpm-lock.yaml"]
 }

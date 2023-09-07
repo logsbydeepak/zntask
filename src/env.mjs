@@ -13,6 +13,8 @@ export const env = createEnv({
     JWT_SECRET: zRequired,
     RESEND_API_KEY: zRequired,
     RESEND_FROM_EMAIL: zRequired.email(),
+    REDIS_URL: zRequired.url(),
+    REDIS_TOKEN: zRequired,
   },
   client: {},
   runtimeEnv: {
@@ -21,5 +23,7 @@ export const env = createEnv({
     JWT_SECRET: process.env.JWT_SECRET,
     RESEND_API_KEY: process.env.RESEND_API_KEY,
     RESEND_FROM_EMAIL: process.env.RESEND_FROM_EMAIL,
+    REDIS_URL: process.env.REDIS_URL,
+    REDIS_TOKEN: process.env.REDIS_TOKEN,
   },
 })
