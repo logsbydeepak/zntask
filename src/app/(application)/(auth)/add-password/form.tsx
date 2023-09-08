@@ -24,7 +24,7 @@ import { addPasswordClientSchema } from './utils'
 const schema = addPasswordClientSchema
 type FormValues = z.infer<typeof schema>
 
-export function Form() {
+export function Form({ token }: { token: string }) {
   const router = useRouter()
   const addToast = useToastStore((s) => s.addToast)
 

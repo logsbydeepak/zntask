@@ -8,11 +8,11 @@ export function r<CODE extends Uppercase<string>>(c: CODE): { code: CODE }
 export function r<CODE extends Uppercase<string>, RES extends object>(
   c: CODE,
   res: RES
-): { code: CODE; res: RES }
+): { code: CODE } & RES
 
 export function r(code: string, res?: object) {
   if (res) {
-    return { code: code, res: res }
+    return { code: code, ...res }
   }
 
   if (code) {

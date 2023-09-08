@@ -42,7 +42,7 @@ export default async function Page({
         <Title>Add Password</Title>
         <SubTitle>Add password to your account</SubTitle>
         {isTokenValid ? (
-          <Form />
+          <Form token={validate.data.token} />
         ) : (
           <Message>
             {token.code === 'TOKEN_EXPIRED' && 'time out'}
