@@ -108,6 +108,7 @@ export function Form() {
                 First Name
               </FormPrimitive.Label>
               <FormPrimitive.Input
+                autoFocus
                 id="firstName"
                 {...register('firstName')}
                 placeholder="Haven"

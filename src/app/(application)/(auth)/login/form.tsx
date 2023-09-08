@@ -16,8 +16,10 @@ import {
 import { useToastStore } from '@/store/toast'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as Dialog from '@radix-ui/react-dialog'
+import { Portal } from '@radix-ui/react-dialog'
 import { Button } from '@ui/button'
 import * as FormPrimitive from '@ui/form'
+import { Fieldset } from '@ui/form'
 
 import { loginWithCredentials } from './actions'
 import { resetPasswordSchema, schema } from './utils'

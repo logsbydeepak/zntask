@@ -3,7 +3,10 @@
 import bcrypt from 'bcryptjs'
 import { ulid } from 'ulidx'
 
-import { generateJWT, setAuthCookie } from '@/app/(application)/(auth)/utils'
+import {
+  generateAuthJWT,
+  setAuthCookie,
+} from '@/app/(application)/(auth)/utils'
 import { db, dbSchema } from '@/db'
 import { h, r } from '@/utils/handler'
 
@@ -32,7 +35,7 @@ export const registerWithCredentials = h(schema, async function ({ input }) {
     password: password,
   })
 
-  const token = await generateJWT(id)
+  const token = await generateAuthJWT(id)
   setAuthCookie(token)
 
   return r('OK')

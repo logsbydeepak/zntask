@@ -15,6 +15,7 @@ export const env = createEnv({
     RESEND_FROM_EMAIL: zRequired.email(),
     REDIS_URL: zRequired.url(),
     REDIS_TOKEN: zRequired,
+    BASE_URL: zRequired.url(),
   },
   client: {},
   runtimeEnv: {
@@ -25,5 +26,6 @@ export const env = createEnv({
     RESEND_FROM_EMAIL: process.env.RESEND_FROM_EMAIL,
     REDIS_URL: process.env.REDIS_URL,
     REDIS_TOKEN: process.env.REDIS_TOKEN,
+    BASE_URL: process.env.BASE_URL,
   },
 })

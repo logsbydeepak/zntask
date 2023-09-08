@@ -6,11 +6,19 @@ import ms from 'ms'
 const secret = jose.base64url.decode(env.JWT_SECRET)
 const maxAge = ms('30 days')
 
-export async function generateJWT(userId: string) {
+export async function generateAuthJWT(userId: string) {
   return await new jose.EncryptJWT({ userId })
     .setProtectedHeader({ alg: 'dir', enc: 'A128CBC-HS256' })
     .setIssuedAt()
     .setExpirationTime(maxAge)
+    .encrypt(secret)
+}
+
+export async function generateEmailJWT(id: string) {
+  return await new jose.EncryptJWT({ id })
+    .setProtectedHeader({ alg: 'dir', enc: 'A128CBC-HS256' })
+    .setIssuedAt()
+    .setExpirationTime(ms('15 minutes'))
     .encrypt(secret)
 }
 
