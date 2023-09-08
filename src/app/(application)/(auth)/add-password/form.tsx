@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { useRouter } from 'next/navigation'
-import { atom, Provider, useAtom } from 'jotai'
+import { HomeIcon } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { useDebounce } from 'use-debounce'
 import { z } from 'zod'
@@ -15,24 +15,21 @@ import {
   PasswordVisibilityToggle,
 } from '@/app/(application)/(auth)/components'
 import { useToastStore } from '@/store/toast'
-import { cn } from '@/utils/style'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@ui/button'
 import * as FormPrimitive from '@ui/form'
 
-import { registerWithCredentials } from './actions'
-import { schema } from './utils'
+import { addPasswordClientSchema } from './utils'
 
+const schema = addPasswordClientSchema
 type FormValues = z.infer<typeof schema>
-
-const isLoadingAtom = atom(false)
 
 export function Form() {
   const router = useRouter()
   const addToast = useToastStore((s) => s.addToast)
 
   const startTransition = React.useTransition()[1]
-  const [isLoading, setIsLoading] = useAtom(isLoadingAtom)
+  const [isLoading, setIsLoading] = React.useState(false)
   const [isPasswordVisible, setIsPasswordVisible] = React.useState(false)
   const [isCredentialRegisterLoading, setIsCredentialRegisterLoading] =
     React.useState(false)
@@ -53,81 +50,19 @@ export function Form() {
     setIsLoading(true)
     setIsCredentialRegisterLoading(true)
 
-    startTransition(async () => {
-      setTimeout(async () => {
-        const res = await registerWithCredentials(values)
-        if (res.code === 'EMAIL_ALREADY_EXISTS') {
-          setError('email', {
-            message: 'already exists',
-          })
-        }
-
-        if (res.code === 'OK') {
-          addToast({
-            title: 'Account created',
-            description: 'Your account has been created',
-            type: 'success',
-          })
-          router.push('/')
-        }
-        setIsLoading(false)
-        setIsCredentialRegisterLoading(false)
-      }, 2000)
-    })
+    startTransition(async () => {})
   }
 
   return (
     <FormPrimitive.Root onSubmit={handleSubmit(onSubmit)}>
       <FormPrimitive.Fieldset disabled={isLoading}>
         <div className="my-8 space-y-4">
-          <div className="flex space-x-4">
-            <div>
-              <FormPrimitive.Label htmlFor="firstName">
-                First Name
-              </FormPrimitive.Label>
-              <FormPrimitive.Input
-                autoFocus
-                id="firstName"
-                {...register('firstName')}
-                placeholder="Haven"
-              />
-              {errors.firstName && (
-                <FormPrimitive.Error>
-                  {errors.firstName?.message}
-                </FormPrimitive.Error>
-              )}
-            </div>
-
-            <div>
-              <FormPrimitive.Label htmlFor="lastName">
-                Last Name
-              </FormPrimitive.Label>
-              <FormPrimitive.Input
-                id="lastName"
-                {...register('lastName')}
-                placeholder="Thompson"
-              />
-            </div>
-          </div>
-
-          <div>
-            <FormPrimitive.Label htmlFor="email">Email</FormPrimitive.Label>
-            <FormPrimitive.Input
-              id="email"
-              {...register('email')}
-              placeholder="abc@domain.com"
-            />
-
-            {errors.email && (
-              <FormPrimitive.Error>{errors.email?.message}</FormPrimitive.Error>
-            )}
-          </div>
-
           <div>
             <FormPrimitive.Label htmlFor="password">
               Password
             </FormPrimitive.Label>
             <FormPrimitive.Input
+              autoFocus
               id="password"
               {...register('password')}
               placeholder="strong password"
@@ -176,42 +111,31 @@ export function Form() {
         </div>
 
         <Button className="w-full" isLoading={isCredentialRegisterLoading}>
-          Register
+          Add Password
         </Button>
       </FormPrimitive.Fieldset>
     </FormPrimitive.Root>
   )
 }
 
-export function StateProvider({ children }: { children: React.ReactNode }) {
-  return <Provider>{children}</Provider>
-}
-
 export function Action() {
-  const startTransition = React.useTransition()[1]
-  const [isLoading, setIsLoading] = useAtom(isLoadingAtom)
-  const [isGoogleRegisterLoading, setIsGoogleRegisterLoading] =
-    React.useState(false)
-
-  const onClick = () => {
-    setIsLoading(true)
-    setIsGoogleRegisterLoading(true)
-  }
+  const [isLoading, setIsLoading] = React.useState(false)
+  const router = useRouter()
 
   return (
     <>
       <fieldset disabled={isLoading}>
-        <ContinueWithGoogle isLoading={isGoogleRegisterLoading} />
+        <Button
+          intent="secondary"
+          className="w-full"
+          onClick={() => router.push('/')}
+        >
+          <div className="mr-2 h-4 w-4">
+            <HomeIcon className="h-full w-full" />
+          </div>
+          <span>Return to home</span>
+        </Button>
       </fieldset>
-
-      <AccountQuestion.Container>
-        <AccountQuestion.Title>
-          Already have an account?{' '}
-          <AccountQuestion.Action href="/login" disabled={isLoading}>
-            Login
-          </AccountQuestion.Action>
-        </AccountQuestion.Title>
-      </AccountQuestion.Container>
     </>
   )
 }

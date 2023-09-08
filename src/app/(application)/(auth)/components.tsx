@@ -1,14 +1,29 @@
 import React from 'react'
 import Link from 'next/link'
-import { EyeIcon, EyeOffIcon, KeyIcon } from 'lucide-react'
+import {
+  CheckCircleIcon,
+  CircleIcon,
+  EyeIcon,
+  EyeOffIcon,
+  KeyIcon,
+} from 'lucide-react'
 
 import { GoogleIcon } from '@/components/icon/google'
 import { LogoIcon } from '@/components/icon/logo'
 import { Button } from '@/components/ui/button'
+import { cn } from '@/utils/style'
 
-export function FormContainer({ children }: { children: React.ReactNode }) {
+export function FormContainer({
+  children,
+  className,
+}: {
+  children: React.ReactNode
+  className?: string
+}) {
   return (
-    <div className="flex flex-col items-center px-10 pt-10">{children}</div>
+    <div className={cn('flex flex-col items-center px-10 pt-10', className)}>
+      {children}
+    </div>
   )
 }
 
@@ -132,4 +147,56 @@ export const AccountQuestion = {
   Container: AccountQuestionContainer,
   Title: AccountQuestionTitle,
   Action: AccountQuestionAction,
+}
+
+export const passwordChecklist = [
+  {
+    label: '8 characters',
+    condition: (value: string) => value.length >= 8,
+  },
+  {
+    label: 'lowercase',
+    condition: (value: string) => /[a-z]/.test(value),
+  },
+  {
+    label: 'uppercase',
+    condition: (value: string) => /[A-Z]/.test(value),
+  },
+  {
+    label: 'numbers',
+    condition: (value: string) => /[0-9]/.test(value),
+  },
+  {
+    label: 'symbols',
+    condition: (value: string) => /[^a-zA-Z0-9]/.test(value),
+  },
+]
+
+export function PasswordChecklistItem({
+  children,
+  isValid,
+}: {
+  children: React.ReactNode
+  isValid: boolean
+}) {
+  return (
+    <div
+      className={cn(
+        'mr-2 mt-2 inline-block rounded-full border border-gray-200 px-2 py-0.5',
+        isValid && 'border-gray-100 bg-gray-50'
+      )}
+    >
+      <div className="flex items-center">
+        <span className="mr-1 h-2 w-2 text-gray-500">
+          {isValid ? (
+            <CheckCircleIcon className="h-full w-full" strokeWidth={3} />
+          ) : (
+            <CircleIcon className="h-full w-full" strokeWidth={3} />
+          )}
+        </span>
+
+        <p className={cn('text-xs font-medium text-gray-500')}>{children}</p>
+      </div>
+    </div>
+  )
 }
