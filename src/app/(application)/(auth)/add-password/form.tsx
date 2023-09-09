@@ -2,6 +2,7 @@
 
 import React from 'react'
 import { useRouter } from 'next/navigation'
+import { atom, useAtom, useAtomValue } from 'jotai'
 import { HomeIcon } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { useDebounce } from 'use-debounce'
@@ -18,6 +19,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@ui/button'
 import * as FormPrimitive from '@ui/form'
 
+import { addPassword } from './actions'
+
 const schema = z
   .object({
     password: zPassword('not strong enough'),
@@ -30,15 +33,15 @@ const schema = z
 
 type FormValues = z.infer<typeof schema>
 
+const isLoadingAtom = atom(false)
+
 export function Form({ token }: { token: string }) {
   const router = useRouter()
   const addToast = useToastStore((s) => s.addToast)
 
-  const startTransition = React.useTransition()[1]
-  const [isLoading, setIsLoading] = React.useState(false)
+  const [isPending, startTransition] = React.useTransition()
+  const [isLoading, setIsLoading] = useAtom(isLoadingAtom)
   const [isPasswordVisible, setIsPasswordVisible] = React.useState(false)
-  const [isCredentialRegisterLoading, setIsCredentialRegisterLoading] =
-    React.useState(false)
 
   const {
     register,
@@ -54,9 +57,37 @@ export function Form({ token }: { token: string }) {
 
   const onSubmit = (values: FormValues) => {
     setIsLoading(true)
-    setIsCredentialRegisterLoading(true)
+    startTransition(async () => {
+      const res = await addPassword({ ...values, token })
 
-    startTransition(async () => {})
+      switch (res.code) {
+        case 'OK':
+          addToast({
+            title: 'Password added',
+            description: 'password added successfully',
+            type: 'success',
+          })
+          router.push('/login')
+          break
+
+        case 'INVALID_TOKEN':
+          addToast({
+            title: 'Invalid token',
+            description: 'invalid token',
+            type: 'error',
+          })
+          break
+
+        case 'TOKEN_EXPIRED':
+          addToast({
+            title: 'Token expired',
+            description: 'token expired',
+            type: 'error',
+          })
+          break
+      }
+    })
+    setIsLoading(false)
   }
 
   return (
@@ -116,7 +147,7 @@ export function Form({ token }: { token: string }) {
           </div>
         </div>
 
-        <Button className="w-full" isLoading={isCredentialRegisterLoading}>
+        <Button className="w-full" isLoading={isPending}>
           Add Password
         </Button>
       </FormPrimitive.Fieldset>
@@ -125,7 +156,7 @@ export function Form({ token }: { token: string }) {
 }
 
 export function Action() {
-  const [isLoading, setIsLoading] = React.useState(false)
+  const isLoading = useAtomValue(isLoadingAtom)
   const router = useRouter()
 
   return (
