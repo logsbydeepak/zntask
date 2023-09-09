@@ -63,8 +63,7 @@ export function Form({ token }: { token: string }) {
       switch (res.code) {
         case 'OK':
           addToast({
-            title: 'Password added',
-            description: 'password added successfully',
+            message: 'password added successfully',
             type: 'success',
           })
           router.push('/login')
@@ -72,16 +71,14 @@ export function Form({ token }: { token: string }) {
 
         case 'INVALID_TOKEN':
           addToast({
-            title: 'Invalid token',
-            description: 'invalid token',
+            message: 'invalid token',
             type: 'error',
           })
           break
 
         case 'TOKEN_EXPIRED':
           addToast({
-            title: 'Token expired',
-            description: 'token expired',
+            message: 'token expired',
             type: 'error',
           })
           break

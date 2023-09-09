@@ -1,10 +1,9 @@
 'use client'
 
 import React from 'react'
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { atom, Provider, useAtom } from 'jotai'
-import { FormProvider, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 import {
@@ -16,10 +15,8 @@ import {
 import { useToastStore } from '@/store/toast'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as Dialog from '@radix-ui/react-dialog'
-import { Portal } from '@radix-ui/react-dialog'
 import { Button } from '@ui/button'
 import * as FormPrimitive from '@ui/form'
-import { Fieldset } from '@ui/form'
 
 import { loginWithCredentials, resetPassword } from './actions'
 import { resetPasswordSchema, schema } from './utils'
@@ -56,20 +53,25 @@ export function Form() {
       setTimeout(async () => {
         const res = await loginWithCredentials(values)
         if (res.code === 'INVALID_CREDENTIALS') {
-          setError('password', {
-            type: 'manual',
-            message: 'invalid credentials',
-          })
-          setError('email', {
-            type: 'manual',
-            message: 'invalid credentials',
-          })
+          setError(
+            'password',
+            {
+              message: 'invalid credentials',
+            },
+            { shouldFocus: true }
+          )
+          setError(
+            'email',
+            {
+              message: 'invalid credentials',
+            },
+            { shouldFocus: true }
+          )
         }
 
         if (res.code === 'OK') {
           addToast({
-            title: 'Login success',
-            description: 'You are now logged in',
+            message: 'You are now logged in',
             type: 'success',
           })
           router.push('/')
@@ -203,8 +205,7 @@ function ResetPasswordDialog({
       switch (res.code) {
         case 'OK':
           addToast({
-            title: 'Reset password success',
-            description: 'Please check your email',
+            message: 'Please check your email',
             type: 'success',
           })
           handleClose()

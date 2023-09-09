@@ -3,9 +3,12 @@ import { create, type StateCreator } from 'zustand'
 
 export interface Toast {
   id: string
-  title: string
-  description: string
-  type: 'success' | 'error' | 'warning' | 'info'
+  message: string
+  type: 'success' | 'error'
+  action?: {
+    label: string
+    onClick: () => void
+  }
 }
 
 interface State {

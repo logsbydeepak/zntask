@@ -64,8 +64,7 @@ export function Form() {
 
         if (res.code === 'OK') {
           addToast({
-            title: 'Account created',
-            description: 'Your account has been created',
+            message: 'Your account has been created',
             type: 'success',
           })
           router.push('/')
