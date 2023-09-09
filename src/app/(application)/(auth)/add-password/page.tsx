@@ -12,7 +12,7 @@ import {
 import { zRequired } from '@/utils/zod'
 
 import { Action, Form } from './form'
-import { checkToken } from './utils.server'
+import { checkToken } from './utils'
 
 export const metadata: Metadata = {
   title: 'Add password',

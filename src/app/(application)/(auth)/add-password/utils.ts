@@ -1,13 +1,20 @@
-import { z } from 'zod'
+import { env } from '#env'
+import * as jose from 'jose'
 
-import { zPassword, zRequired } from '@/utils/zod'
+import { r } from '@/utils/handler'
 
-export const addPasswordClientSchema = z
-  .object({
-    password: zPassword('not strong enough'),
-    confirmPassword: zRequired,
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: 'password do not match',
-    path: ['confirmPassword'],
-  })
+export async function checkToken(token: string) {
+  try {
+    const secret = jose.base64url.decode(env.JWT_SECRET)
+    const { payload } = await jose.jwtDecrypt(token, secret)
+
+    if (!payload) throw new Error("Payload doesn't exist!")
+    if (!payload?.userId) throw new Error("Payload doesn't have userId!")
+    if (typeof payload.userId !== 'string') throw new Error('Invalid payload!')
+
+    return r('OK', { userId: payload.userId })
+  } catch (error) {
+    if (error instanceof jose.errors.JWTExpired) return r('TOKEN_EXPIRED')
+    return r('INVALID_TOKEN')
+  }
+}

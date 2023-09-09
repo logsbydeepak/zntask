@@ -21,7 +21,7 @@ import { Button } from '@ui/button'
 import * as FormPrimitive from '@ui/form'
 import { Fieldset } from '@ui/form'
 
-import { loginWithCredentials } from './actions'
+import { loginWithCredentials, resetPassword } from './actions'
 import { resetPasswordSchema, schema } from './utils'
 
 const isLoadingAtom = atom(false)
@@ -181,18 +181,60 @@ function ResetPasswordDialog({
   isOpen: boolean
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
 }) {
+  const [isPending, startTransition] = React.useTransition()
   const {
     register,
     formState: { errors },
     handleSubmit,
+    setError,
   } = useForm<ResetPasswordFormValues>({
     resolver: zodResolver(resetPasswordSchema),
   })
+  const addToast = useToastStore((s) => s.addToast)
 
-  const onSubmit = (values: ResetPasswordFormValues) => {}
+  const handleClose = () => {
+    if (isPending) return
+    setIsOpen(false)
+  }
+
+  const onSubmit = (values: ResetPasswordFormValues) => {
+    startTransition(async () => {
+      const res = await resetPassword(values)
+      switch (res.code) {
+        case 'OK':
+          addToast({
+            title: 'Reset password success',
+            description: 'Please check your email',
+            type: 'success',
+          })
+          handleClose()
+
+        case 'EMAIL_ALREADY_SENT':
+          setError(
+            'email',
+            {
+              message: 'Email already sent',
+            },
+            {
+              shouldFocus: true,
+            }
+          )
+
+        case 'INVALID_CREDENTIALS':
+          setError(
+            'email',
+            {
+              message: 'Invalid credentials',
+            },
+            { shouldFocus: true }
+          )
+          break
+      }
+    })
+  }
 
   return (
-    <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog.Root open={isOpen} onOpenChange={handleClose}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-white/80 bg-opacity-50 backdrop-blur-sm" />
         <Dialog.Content className="fixed left-1/2 top-1/2 w-[400px] -translate-x-1/2 -translate-y-1/2 transform rounded-md border border-gray-200 bg-white p-6 shadow-2xl drop-shadow-sm">
@@ -222,14 +264,16 @@ function ResetPasswordDialog({
               )}
             </div>
 
-            <div className="flex space-x-4">
+            <fieldset className="flex space-x-4" disabled={isPending}>
               <Dialog.Close asChild>
                 <Button intent="secondary" className="w-full">
                   Cancel
                 </Button>
               </Dialog.Close>
-              <Button className="w-full">Submit</Button>
-            </div>
+              <Button className="w-full" isLoading={isPending}>
+                Submit
+              </Button>
+            </fieldset>
           </FormPrimitive.Root>
         </Dialog.Content>
       </Dialog.Portal>

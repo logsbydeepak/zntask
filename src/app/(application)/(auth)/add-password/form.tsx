@@ -8,20 +8,26 @@ import { useDebounce } from 'use-debounce'
 import { z } from 'zod'
 
 import {
-  AccountQuestion,
-  ContinueWithGoogle,
   passwordChecklist,
   PasswordChecklistItem,
   PasswordVisibilityToggle,
 } from '@/app/(application)/(auth)/components'
 import { useToastStore } from '@/store/toast'
+import { zPassword, zRequired } from '@/utils/zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@ui/button'
 import * as FormPrimitive from '@ui/form'
 
-import { addPasswordClientSchema } from './utils'
+const schema = z
+  .object({
+    password: zPassword('not strong enough'),
+    confirmPassword: zRequired,
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: 'password do not match',
+    path: ['confirmPassword'],
+  })
 
-const schema = addPasswordClientSchema
 type FormValues = z.infer<typeof schema>
 
 export function Form({ token }: { token: string }) {

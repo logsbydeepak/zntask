@@ -10,7 +10,7 @@ import { redis } from '@/utils/config'
 import { h, r } from '@/utils/handler'
 import { zPassword, zRequired } from '@/utils/zod'
 
-import { checkToken } from './utils.server'
+import { checkToken } from './utils'
 
 const zSchema = z
   .object({
