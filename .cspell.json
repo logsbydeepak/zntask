@@ -13,5 +13,5 @@
     "lucide",
     "upstash"
   ],
-  "ignorePaths": ["pnpm-lock.yaml"]
+  "ignorePaths": ["bun.lockb"]
 }
