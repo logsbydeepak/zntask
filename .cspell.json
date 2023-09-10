@@ -11,7 +11,8 @@
     "ulidx",
     "zustand",
     "lucide",
-    "upstash"
+    "upstash",
+    "Avvvatars"
   ],
   "ignorePaths": ["bun.lockb"]
 }

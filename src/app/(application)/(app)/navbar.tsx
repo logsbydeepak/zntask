@@ -1,6 +1,9 @@
 'use client'
 
 import Link from 'next/link'
+import Avvvatars from 'avvvatars-react'
+
+import * as Avatar from '@radix-ui/react-avatar'
 
 export function Navbar({
   firstName,
@@ -17,6 +20,12 @@ export function Navbar({
       <Link href="/">zntask</Link>
       <div>
         <p>{name}</p>
+        <Avatar.Root>
+          <Avatar.Image src={profilePicture || ''}>1</Avatar.Image>
+          <Avatar.Fallback>
+            <Avvvatars value={name} style="shape" shadow={true} />
+          </Avatar.Fallback>
+        </Avatar.Root>
       </div>
     </nav>
   )
