@@ -5,7 +5,7 @@ export default async function Page() {
   return (
     <>
       <h1>User</h1>
-      {JSON.stringify(user.res)}
+      {JSON.stringify(user)}
     </>
   )
 }
