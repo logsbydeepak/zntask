@@ -1,3 +1,5 @@
+import { Suspense } from 'react'
+
 import { getUser } from './fetch'
 import { Navbar } from './navbar'
 
@@ -9,12 +11,25 @@ export default async function Layout({
   const user = await getUser()
   return (
     <>
-      <Navbar
-        firstName={user.firstName}
-        lastName={user.lastName}
-        profilePicture={user.profilePicture}
-      />
-      {children}
+      <Suspense fallback={<Loading />}>
+        <GetUser />
+        {children}
+      </Suspense>
     </>
   )
+}
+
+async function GetUser() {
+  const user = await getUser()
+  return (
+    <Navbar
+      firstName={user.firstName}
+      lastName={user.lastName}
+      profilePicture={user.profilePicture}
+    />
+  )
+}
+
+function Loading() {
+  return <h1>LOADING...</h1>
 }
