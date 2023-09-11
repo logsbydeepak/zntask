@@ -1,7 +1,6 @@
+import { Redis } from '@upstash/redis'
 import { env } from '#env'
 import { Resend } from 'resend'
-
-import { Redis } from '@upstash/redis'
 
 export const redis = new Redis({
   url: env.REDIS_URL,

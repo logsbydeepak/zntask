@@ -2,6 +2,8 @@
 
 import React from 'react'
 import { useRouter } from 'next/navigation'
+import { zodResolver } from '@hookform/resolvers/zod'
+import * as Dialog from '@radix-ui/react-dialog'
 import { atom, Provider, useAtom } from 'jotai'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -14,8 +16,6 @@ import {
 } from '@/app/(application)/(auth)/components'
 import { Head } from '@/components/head'
 import { useToastStore } from '@/store/toast'
-import { zodResolver } from '@hookform/resolvers/zod'
-import * as Dialog from '@radix-ui/react-dialog'
 import { Button } from '@ui/button'
 import * as FormPrimitive from '@ui/form'
 

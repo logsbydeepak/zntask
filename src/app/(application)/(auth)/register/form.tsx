@@ -2,6 +2,7 @@
 
 import React from 'react'
 import { useRouter } from 'next/navigation'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { atom, Provider, useAtom } from 'jotai'
 import { useForm } from 'react-hook-form'
 import { useDebounce } from 'use-debounce'
@@ -15,8 +16,6 @@ import {
   PasswordVisibilityToggle,
 } from '@/app/(application)/(auth)/components'
 import { useToastStore } from '@/store/toast'
-import { cn } from '@/utils/style'
-import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@ui/button'
 import * as FormPrimitive from '@ui/form'
 

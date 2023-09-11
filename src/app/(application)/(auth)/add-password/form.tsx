@@ -2,6 +2,7 @@
 
 import React from 'react'
 import { useRouter } from 'next/navigation'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { atom, useAtom, useAtomValue } from 'jotai'
 import { HomeIcon } from 'lucide-react'
 import { useForm } from 'react-hook-form'
@@ -15,7 +16,6 @@ import {
 } from '@/app/(application)/(auth)/components'
 import { useToastStore } from '@/store/toast'
 import { zPassword, zRequired } from '@/utils/zod'
-import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@ui/button'
 import * as FormPrimitive from '@ui/form'
 

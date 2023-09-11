@@ -1,11 +1,11 @@
 'use client'
 
 import React from 'react'
+import * as ToastPrimitive from '@radix-ui/react-toast'
 import { AlertCircle, CheckCheckIcon } from 'lucide-react'
 
 import { Toast, useToastStore } from '@/store/toast'
 import { cn } from '@/utils/style'
-import * as ToastPrimitive from '@radix-ui/react-toast'
 
 export function ToastProvider() {
   const toast = useToastStore((s) => s.toasts)

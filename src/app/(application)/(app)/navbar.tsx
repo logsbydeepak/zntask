@@ -1,19 +1,13 @@
 'use client'
 
 import Link from 'next/link'
+import * as Avatar from '@radix-ui/react-avatar'
+import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 import Avvvatars from 'avvvatars-react'
-import {
-  CommandIcon,
-  FolderPlus,
-  FolderPlusIcon,
-  PlusIcon,
-  SearchIcon,
-} from 'lucide-react'
+import { CommandIcon, FolderPlusIcon, PlusIcon, SearchIcon } from 'lucide-react'
 
 import { LogoIcon } from '@/components/icon/logo'
 import { buttonStyle } from '@/components/ui/button'
-import * as Avatar from '@radix-ui/react-avatar'
-import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 
 export function Navbar({
   firstName,
