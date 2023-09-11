@@ -5,6 +5,7 @@ import * as Avatar from '@radix-ui/react-avatar'
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 import Avvvatars from 'avvvatars-react'
 import { CommandIcon, FolderPlusIcon, PlusIcon, SearchIcon } from 'lucide-react'
+import { useTheme } from 'next-themes'
 
 import { LogoIcon } from '@/components/icon/logo'
 import { buttonStyle } from '@/components/ui/button'
@@ -55,6 +56,8 @@ export function Navbar({
 }
 
 function UserMenu({ name, email }: { name: string; email: string }) {
+  const { theme, setTheme } = useTheme()
+
   return (
     <>
       <DropdownMenu.Item>
@@ -62,6 +65,32 @@ function UserMenu({ name, email }: { name: string; email: string }) {
         <br />
         {email}
       </DropdownMenu.Item>
+      <DropdownMenu.Sub>
+        <DropdownMenu.SubTrigger asChild>
+          <DropdownMenu.Item>Theme</DropdownMenu.Item>
+        </DropdownMenu.SubTrigger>
+        <DropdownMenu.Portal>
+          <DropdownMenu.SubContent>
+            <DropdownMenu.RadioGroup
+              value={theme}
+              onValueChange={(value) => {
+                if (['light', 'dark', 'system'].includes(value)) {
+                  setTheme(value)
+                }
+              }}
+            >
+              <DropdownMenu.RadioItem value="light">
+                Light
+              </DropdownMenu.RadioItem>
+              <DropdownMenu.RadioItem value="dark">Dark</DropdownMenu.RadioItem>
+              <DropdownMenu.RadioItem value="system">
+                System
+              </DropdownMenu.RadioItem>
+            </DropdownMenu.RadioGroup>
+          </DropdownMenu.SubContent>
+        </DropdownMenu.Portal>
+      </DropdownMenu.Sub>
+      <DropdownMenu.Item>Logout</DropdownMenu.Item>
     </>
   )
 }
