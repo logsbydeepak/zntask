@@ -1,3 +1,3 @@
 export default function Page() {
-  return <h1>Today</h1>
+  return <h1 className="text-lg font-medium">Today</h1>
 }

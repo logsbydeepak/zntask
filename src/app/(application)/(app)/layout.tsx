@@ -26,6 +26,7 @@ async function GetUser() {
       firstName={user.firstName}
       lastName={user.lastName}
       profilePicture={user.profilePicture}
+      email={user.email}
     />
   )
 }

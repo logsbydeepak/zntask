@@ -13,5 +13,6 @@ export const getUser = h('AUTH', async ({ userId }) => {
     firstName: user.firstName,
     lastName: user.lastName,
     profilePicture: user.profilePicture,
+    email: user.email,
   })
 })
