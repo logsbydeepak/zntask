@@ -22,33 +22,35 @@ export function Navbar({
 }) {
   const name = `${firstName} ${lastName}`
   return (
-    <nav className="fixed z-40 flex h-14 w-full items-center justify-between border-b border-gray-200 bg-white bg-opacity-50 px-5 backdrop-blur-sm">
-      <Link href="/" className="flex items-center space-x-2">
-        <span className="flex h-7 w-7 items-center justify-center rounded-full bg-orange-600 text-white">
-          <LogoIcon className="h-3 w-3" />
-        </span>
-        <span className="text-sm font-medium">zntask</span>
-      </Link>
-      <div className="flex space-x-4">
-        <Search />
+    <nav className="fixed z-40 w-full border-b border-gray-200 bg-white bg-opacity-50 backdrop-blur-sm">
+      <div className="flex h-14 items-center justify-between px-5 ">
+        <Link href="/" className="flex items-center space-x-2">
+          <span className="flex h-7 w-7 items-center justify-center rounded-full bg-orange-600 text-white">
+            <LogoIcon className="h-3 w-3" />
+          </span>
+          <span className="text-sm font-medium">zntask</span>
+        </Link>
+        <div className="flex space-x-4">
+          <Search />
 
-        <Icon>
-          <FolderPlusIcon className="h-full w-full" />
-        </Icon>
+          <Icon>
+            <FolderPlusIcon className="h-full w-full" />
+          </Icon>
 
-        <Icon>
-          <PlusIcon className="h-full w-full" />
-        </Icon>
+          <Icon>
+            <PlusIcon className="h-full w-full" />
+          </Icon>
 
-        <DropdownMenu.Root>
-          <DropdownMenu.Trigger>
-            <ProfilePicture src={profilePicture} name={name} />
-          </DropdownMenu.Trigger>
+          <DropdownMenu.Root>
+            <DropdownMenu.Trigger>
+              <ProfilePicture src={profilePicture} name={name} />
+            </DropdownMenu.Trigger>
 
-          <DropdownMenu.Content>
-            <UserMenu name={name} email={email} />
-          </DropdownMenu.Content>
-        </DropdownMenu.Root>
+            <DropdownMenu.Content>
+              <UserMenu name={name} email={email} />
+            </DropdownMenu.Content>
+          </DropdownMenu.Root>
+        </div>
       </div>
     </nav>
   )
@@ -96,10 +98,10 @@ function UserMenu({ name, email }: { name: string; email: string }) {
 
 function ProfilePicture({ src, name }: { src: string | null; name: string }) {
   return (
-    <Avatar.Root>
-      <Avatar.Image src={src || ''}>1</Avatar.Image>
+    <Avatar.Root className="flex h-8 w-8 items-center justify-center rounded-full ">
+      <Avatar.Image src={src || ''} />
       <Avatar.Fallback>
-        <Avvvatars value={name} shadow={true} size={28} />
+        <Avvvatars value={name} shadow={true} size={32} />
       </Avatar.Fallback>
     </Avatar.Root>
   )

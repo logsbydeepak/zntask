@@ -1,3 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  nav {
+    padding-right: var(--removed-body-scroll-bar-size) !important;
+  }
+
+  aside::-webkit-scrollbar {
+    @apply w-3;
+  }
+
+  aside:hover::-webkit-scrollbar-thumb {
+    @apply rounded-full border-[3px] border-solid border-white bg-gray-300;
+  }
+
+  aside::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-400;
+  }
+}

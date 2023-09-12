@@ -16,8 +16,8 @@ export default async function Layout({
     <>
       <Suspense fallback={<Loading />}>
         <GetUser />
-        {/* <Sidebar /> */}
-        <main className="h-[1000px] pt-14">{children}</main>
+        <Sidebar />
+        <main className="h-[1000px] pl-56 pt-14">{children}</main>
         <Dialogs />
       </Suspense>
     </>
