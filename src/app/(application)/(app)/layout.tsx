@@ -1,5 +1,7 @@
 import { Suspense } from 'react'
 
+import { Dialogs } from '@/components/dialogs'
+
 import { getUser } from './fetch'
 import { Navbar } from './navbar'
 
@@ -14,6 +16,7 @@ export default async function Layout({
       <Suspense fallback={<Loading />}>
         <GetUser />
         {children}
+        <Dialogs />
       </Suspense>
     </>
   )

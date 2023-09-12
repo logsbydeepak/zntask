@@ -1,5 +1,5 @@
 import React from 'react'
 
 export function Head({ title }: { title: string }) {
-  return <title>{`${title} | zntask`}</title>
+  return <title>{`${title} - zntask`}</title>
 }
