@@ -4,6 +4,7 @@ import { Dialogs } from '@/components/dialogs'
 
 import { getUser } from './fetch'
 import { Navbar } from './navbar'
+import { Sidebar } from './sidebar'
 
 export default async function Layout({
   children,
@@ -15,7 +16,8 @@ export default async function Layout({
     <>
       <Suspense fallback={<Loading />}>
         <GetUser />
-        {children}
+        {/* <Sidebar /> */}
+        <main className="h-[1000px] pt-14">{children}</main>
         <Dialogs />
       </Suspense>
     </>

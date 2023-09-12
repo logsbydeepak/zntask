@@ -8,7 +8,6 @@ import { CommandIcon, FolderPlusIcon, PlusIcon, SearchIcon } from 'lucide-react'
 import { useTheme } from 'next-themes'
 
 import { LogoIcon } from '@/components/icon/logo'
-import { buttonStyle } from '@/components/ui/button'
 
 export function Navbar({
   firstName,
@@ -23,7 +22,7 @@ export function Navbar({
 }) {
   const name = `${firstName} ${lastName}`
   return (
-    <nav className="flex h-14 items-center justify-between border-b border-gray-200 px-5">
+    <nav className="fixed z-40 flex h-14 w-full items-center justify-between border-b border-gray-200 bg-white bg-opacity-50 px-5 backdrop-blur-sm">
       <Link href="/" className="flex items-center space-x-2">
         <span className="flex h-7 w-7 items-center justify-center rounded-full bg-orange-600 text-white">
           <LogoIcon className="h-3 w-3" />
