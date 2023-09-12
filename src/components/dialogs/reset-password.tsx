@@ -1,6 +1,5 @@
 import React from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import * as Dialog from '@radix-ui/react-dialog'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -8,6 +7,7 @@ import { resetPassword } from '@/app/(application)/(auth)/login/actions'
 import { resetPasswordSchema } from '@/app/(application)/(auth)/login/utils'
 import { useToastStore } from '@/store/toast'
 import { Button } from '@ui/button'
+import * as Dialog from '@ui/dialog'
 import * as Form from '@ui/form'
 
 import { Head } from '../head'
@@ -31,7 +31,6 @@ export function ResetPasswordDialog({
   return (
     <Dialog.Root open={isOpen} onOpenChange={handleClose}>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 bg-white/80 bg-opacity-50 backdrop-blur-sm" />
         <Dialog.Content className="fixed left-1/2 top-1/2 w-[400px] -translate-x-1/2 -translate-y-1/2 transform rounded-md border border-gray-200 bg-white p-6 shadow-2xl drop-shadow-sm">
           <ResetPasswordDialogContent
             handleClose={handleClose}
