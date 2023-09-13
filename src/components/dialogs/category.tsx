@@ -1,5 +1,6 @@
 import React from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
+import * as RadioGroup from '@radix-ui/react-radio-group'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -13,6 +14,15 @@ import { Button } from '../ui/button'
 const schema = z.object({
   title: zRequired,
 })
+
+export const indicatorOptions = [
+  { name: 'orange', color: 'orange-600' },
+  { name: 'red', color: 'red-600' },
+  { name: 'blue', color: 'blue-600' },
+  { name: 'green', color: 'green-600' },
+  { name: 'yellow', color: 'yellow-600' },
+  { name: 'pink', color: 'pink-600' },
+]
 
 export function CategoryDialog() {
   const isOpen = useAppStore((state) => state.dialog.createCategory)
@@ -60,10 +70,30 @@ function CategoryDialogContent({ handleClose }: { handleClose: () => void }) {
       </div>
 
       <Form.Root className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
-        <div>
-          <Form.Label>Title</Form.Label>
-          <Form.Input {...register('title')} />
-          {errors.title && <Form.Error>{errors.title?.message}</Form.Error>}
+        <div className="space-y-2">
+          <div>
+            <Form.Label htmlFor="title">Title</Form.Label>
+            <Form.Input {...register('title')} id="title" />
+            {errors.title && <Form.Error>{errors.title?.message}</Form.Error>}
+          </div>
+
+          <div>
+            <Form.Label>Indicator</Form.Label>
+            <RadioGroup.Root>
+              {indicatorOptions.map((option) => (
+                <RadioGroup.Item
+                  key={option.name}
+                  value={option.name}
+                  className="flex items-center space-x-2"
+                >
+                  <RadioGroup.Indicator
+                    className={`h-4 w-4 rounded-full bg-${option.color}`}
+                  />
+                  {option.name}
+                </RadioGroup.Item>
+              ))}
+            </RadioGroup.Root>
+          </div>
         </div>
 
         <fieldset className="flex space-x-4">

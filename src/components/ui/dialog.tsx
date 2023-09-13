@@ -15,7 +15,7 @@ export const Portal = ({
     <Dialog.Overlay
       {...props}
       className={cn(
-        'fixed inset-0 bg-white/80 bg-opacity-50 backdrop-blur-sm',
+        'fixed inset-0 z-40 bg-white/80 bg-opacity-50 backdrop-blur-sm',
         className
       )}
     />
@@ -31,7 +31,7 @@ export const Content = React.forwardRef<
     {...props}
     ref={ref}
     className={cn(
-      'fixed left-1/2 top-1/2 w-[400px] -translate-x-1/2 -translate-y-1/2 transform rounded-md border border-gray-200 bg-white p-6 shadow-2xl drop-shadow-sm',
+      'fixed left-1/2 top-1/2 z-40 w-[400px] -translate-x-1/2 -translate-y-1/2 transform rounded-md border border-gray-200 bg-white p-6 shadow-2xl drop-shadow-sm',
       className
     )}
   >
