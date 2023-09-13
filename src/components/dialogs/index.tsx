@@ -4,6 +4,7 @@ import React from 'react'
 
 import { useAppStore } from '@/store/app'
 
+import { LogoutDialog } from './logout'
 import { ResetPasswordDialog } from './reset-password'
 
 export function Dialogs() {
@@ -21,6 +22,7 @@ export function Dialogs() {
         isOpen={isResetPasswordOpen}
         setIsOpen={setIsResetPasswordOpen}
       />
+      <LogoutDialog />
     </>
   )
 }

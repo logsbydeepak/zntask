@@ -8,6 +8,7 @@ import { CommandIcon, FolderPlusIcon, PlusIcon, SearchIcon } from 'lucide-react'
 import { useTheme } from 'next-themes'
 
 import { LogoIcon } from '@/components/icon/logo'
+import { useAppStore } from '@/store/app'
 
 export function Navbar({
   firstName,
@@ -58,6 +59,7 @@ export function Navbar({
 
 function UserMenu({ name, email }: { name: string; email: string }) {
   const { theme, setTheme } = useTheme()
+  const setDialog = useAppStore((s) => s.setDialog)
 
   return (
     <>
@@ -91,7 +93,9 @@ function UserMenu({ name, email }: { name: string; email: string }) {
           </DropdownMenu.SubContent>
         </DropdownMenu.Portal>
       </DropdownMenu.Sub>
-      <DropdownMenu.Item>Logout</DropdownMenu.Item>
+      <DropdownMenu.Item onSelect={() => setDialog('logout', true)}>
+        Logout
+      </DropdownMenu.Item>
     </>
   )
 }
