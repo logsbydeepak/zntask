@@ -5,15 +5,18 @@ const dialogState = {
   logout: false,
 }
 
-interface State {
-  dialog: typeof dialogState
+const initialState = {
+  dialog: dialogState,
 }
+
+type State = typeof initialState
 
 interface Actions {
   setDialog: <KEY extends keyof typeof dialogState>(
     key: keyof typeof dialogState,
     value: (typeof dialogState)[KEY]
   ) => void
+  resetAppState: () => void
 }
 
 const appStore: StateCreator<State & Actions> = (set) => ({
@@ -25,6 +28,9 @@ const appStore: StateCreator<State & Actions> = (set) => ({
         [key]: value,
       },
     }))
+  },
+  resetAppState() {
+    set(initialState)
   },
 })
 

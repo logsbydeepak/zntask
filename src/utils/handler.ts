@@ -38,12 +38,13 @@ export function h<
   }: {
     input: z.infer<Z>
     userId: string
+    token: string
   }) => Promise<any>,
 >(auth: A, z: Z, fn: FN): (input: z.infer<Z>) => ReturnType<FN>
 
 export function h<
   A extends 'AUTH',
-  FN extends ({ userId }: { userId: string }) => Promise<any>,
+  FN extends ({ userId }: { userId: string; token: string }) => Promise<any>,
 >(auth: A, fn: FN): () => ReturnType<FN>
 
 export function h(...args: any[]) {
@@ -53,8 +54,8 @@ export function h(...args: any[]) {
     if (typeof args[1] === 'function') {
       return async function () {
         try {
-          const { userId } = await isAuth()
-          const result = await args[1]({ userId })
+          const { userId, token } = await isAuth()
+          const result = await args[1]({ userId, token })
           return result
         } catch (error) {
           if (error instanceof UnauthorizedError) {
@@ -69,8 +70,8 @@ export function h(...args: any[]) {
     if (typeof args[1] === 'object' && typeof args[2] === 'function') {
       return async function (input: any) {
         try {
-          const { userId } = await isAuth()
-          const result = await args[2]({ input, userId })
+          const { userId, token } = await isAuth()
+          const result = await args[2]({ input, userId, token })
           return result
         } catch (error) {
           if (error instanceof UnauthorizedError) {

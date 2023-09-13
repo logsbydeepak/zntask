@@ -3,6 +3,8 @@ import { env } from '#env'
 import * as jose from 'jose'
 import ms from 'ms'
 
+import { redis } from '@/utils/config'
+
 const secret = jose.base64url.decode(env.JWT_SECRET)
 const maxAge = ms('30 days')
 
@@ -32,6 +34,16 @@ export const setAuthCookie = (token: string) => {
   })
 }
 
+export const removeAuthCookie = () => {
+  cookies().set('auth', '', {
+    httpOnly: true,
+    path: '/',
+    sameSite: 'strict',
+    secure: env.NODE_ENV === 'production',
+    maxAge: 0,
+  })
+}
+
 export class UnauthorizedError extends Error {
   constructor(message = 'user is not authorized') {
     super(message)
@@ -51,7 +63,10 @@ export async function isAuth() {
     if (!payload?.userId) throw new Error("Payload doesn't have userId!")
     if (typeof payload.userId !== 'string') throw new Error('Invalid payload!')
 
-    return { userId: payload.userId }
+    const redisRes = await redis.exists(`logout:${token}`)
+    if (redisRes === 1) throw new Error('Token is invalid!')
+
+    return { userId: payload.userId, token }
   } catch (error) {
     throw new UnauthorizedError()
   }

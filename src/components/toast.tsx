@@ -29,7 +29,6 @@ function Item({ toast }: { toast: Toast }) {
 
   return (
     <ToastPrimitive.Root
-      duration={50000000}
       onOpenChange={() => removeToast(toast.id)}
       className="flex justify-between rounded-md border border-gray-200 bg-white shadow-sm drop-shadow-sm"
     >

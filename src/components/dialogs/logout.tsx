@@ -1,5 +1,7 @@
 import React from 'react'
+import { useRouter } from 'next/navigation'
 
+import { logout } from '@/app/(application)/(app)/actions'
 import { useAppStore } from '@/store/app'
 import * as Dialog from '@ui/dialog'
 
@@ -44,6 +46,19 @@ function LogoutDialogContent({
   isPending: boolean
   startTransition: React.TransitionStartFunction
 }) {
+  const router = useRouter()
+  const resetAppState = useAppStore((s) => s.resetAppState)
+
+  const handleLogout = () => {
+    startTransition(async () => {
+      const res = await logout()
+      if (res.code === 'OK') {
+        resetAppState()
+        router.push('/login')
+      }
+    })
+  }
+
   return (
     <>
       <div>
@@ -53,16 +68,16 @@ function LogoutDialogContent({
         </Dialog.Description>
       </div>
 
-      <div className="flex space-x-4">
+      <fieldset className="flex space-x-4" disabled={isPending}>
         <Dialog.Close asChild>
           <Button intent="secondary" className="w-full">
             Cancel
           </Button>
         </Dialog.Close>
-        <Button className="w-full" isLoading={isPending}>
+        <Button className="w-full" isLoading={isPending} onClick={handleLogout}>
           Submit
         </Button>
-      </div>
+      </fieldset>
     </>
   )
 }
