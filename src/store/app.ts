@@ -3,6 +3,7 @@ import { create, StateCreator } from 'zustand'
 const dialogState = {
   resetPassword: false,
   logout: false,
+  createCategory: false,
 }
 
 const initialState = {

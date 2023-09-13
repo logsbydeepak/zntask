@@ -4,6 +4,7 @@ import React from 'react'
 
 import { useAppStore } from '@/store/app'
 
+import { CategoryDialog } from './category'
 import { LogoutDialog } from './logout'
 import { ResetPasswordDialog } from './reset-password'
 
@@ -23,6 +24,7 @@ export function Dialogs() {
         setIsOpen={setIsResetPasswordOpen}
       />
       <LogoutDialog />
+      <CategoryDialog />
     </>
   )
 }

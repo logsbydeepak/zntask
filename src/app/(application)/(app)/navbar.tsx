@@ -21,6 +21,8 @@ export function Navbar({
   profilePicture: string | null
   email: string
 }) {
+  const setDialog = useAppStore((s) => s.setDialog)
+
   const name = `${firstName} ${lastName}`
   return (
     <nav className="fixed z-40 w-full border-b border-gray-200 bg-white bg-opacity-50 backdrop-blur-sm">
@@ -34,7 +36,7 @@ export function Navbar({
         <div className="flex space-x-4">
           <Search />
 
-          <Icon>
+          <Icon onClick={() => setDialog('createCategory', true)}>
             <FolderPlusIcon className="h-full w-full" />
           </Icon>
 
@@ -111,9 +113,18 @@ function ProfilePicture({ src, name }: { src: string | null; name: string }) {
   )
 }
 
-function Icon({ children }: { children: React.ReactNode }) {
+function Icon({
+  children,
+  onClick,
+}: {
+  children: React.ReactNode
+  onClick?: () => void
+}) {
   return (
-    <button className="flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 bg-gray-50 text-gray-500 hover:bg-gray-100 hover:text-gray-950">
+    <button
+      onClick={onClick}
+      className="flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 bg-gray-50 text-gray-500 hover:bg-gray-100 hover:text-gray-950"
+    >
       <span className="inline-block h-4 w-4">{children}</span>
     </button>
   )
