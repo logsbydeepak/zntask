@@ -8,7 +8,7 @@ export interface Category {
   indicator: string
 }
 
-interface Action {
+export interface Action {
   type: 'ADD'
   id: string
 }
@@ -21,9 +21,11 @@ type State = typeof initialState
 
 interface Actions {
   addCategory: (category: Omit<Category, 'id'>) => void
+  getCategory: (id: string) => undefined | Category
+  removeAction: (id: string) => void
 }
 
-const categoryStore: StateCreator<State & Actions> = (set) => ({
+const categoryStore: StateCreator<State & Actions> = (set, get) => ({
   ...initialState,
   addCategory: (category) => {
     const id = ulid()
@@ -31,7 +33,15 @@ const categoryStore: StateCreator<State & Actions> = (set) => ({
 
     set((state) => ({
       category: [...state.category, newCategory],
-      action: [{ type: 'ADD', id }],
+      action: [...state.action, { type: 'ADD', id }],
+    }))
+  },
+  getCategory(id) {
+    return get().category.find((category) => category.id === id)
+  },
+  removeAction(id) {
+    set((state) => ({
+      action: state.action.filter((action) => action.id !== id),
     }))
   },
 })

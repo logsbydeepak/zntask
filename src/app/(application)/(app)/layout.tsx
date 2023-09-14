@@ -2,7 +2,9 @@ import { Suspense } from 'react'
 
 import { Dialogs } from '@/components/dialogs'
 
+import { CategorySync } from './category-sync'
 import { getUser } from './fetch'
+import { IsReady } from './is-ready'
 import { Navbar } from './navbar'
 import { Sidebar } from './sidebar'
 
@@ -16,9 +18,12 @@ export default async function Layout({
     <>
       <Suspense fallback={<Loading />}>
         <GetUser />
-        <Sidebar />
-        <main className="h-[1000px] pl-56 pt-14">{children}</main>
-        <Dialogs />
+        <IsReady>
+          <Sidebar />
+          <main className="h-[1000px] pl-56 pt-14">{children}</main>
+          <Dialogs />
+          <CategorySync />
+        </IsReady>
       </Suspense>
     </>
   )
