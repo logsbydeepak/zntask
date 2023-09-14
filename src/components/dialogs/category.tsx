@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 import { useAppStore } from '@/store/app'
+import { cn } from '@/utils/style'
 import { zRequired } from '@/utils/zod'
 import * as Dialog from '@ui/dialog'
 import * as Form from '@ui/form'
@@ -13,15 +14,20 @@ import { Button } from '../ui/button'
 
 const schema = z.object({
   title: zRequired,
+  indicator: zRequired,
 })
 
 export const indicatorOptions = [
-  { name: 'orange', color: 'orange-600' },
-  { name: 'red', color: 'red-600' },
-  { name: 'blue', color: 'blue-600' },
-  { name: 'green', color: 'green-600' },
-  { name: 'yellow', color: 'yellow-600' },
-  { name: 'pink', color: 'pink-600' },
+  { name: 'orange', color: 'orange' },
+  { name: 'red', color: 'red' },
+  { name: 'blue', color: 'blue' },
+  { name: 'green', color: 'green' },
+  { name: 'yellow', color: 'yellow' },
+  { name: 'pink', color: 'pink' },
+  { name: 'lime', color: 'lime' },
+  { name: 'cyan', color: 'cyan' },
+  { name: 'violet', color: 'violet' },
+  { name: 'indigo', color: 'indigo' },
 ]
 
 export function CategoryDialog() {
@@ -54,6 +60,7 @@ function CategoryDialogContent({ handleClose }: { handleClose: () => void }) {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm<FormValues>({ resolver: zodResolver(schema) })
 
   const onSubmit = (data: FormValues) => {
@@ -69,7 +76,7 @@ function CategoryDialogContent({ handleClose }: { handleClose: () => void }) {
         </Dialog.Description>
       </div>
 
-      <Form.Root className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
+      <Form.Root className="space-y-7" onSubmit={handleSubmit(onSubmit)}>
         <div className="space-y-2">
           <div>
             <Form.Label htmlFor="title">Title</Form.Label>
@@ -77,19 +84,37 @@ function CategoryDialogContent({ handleClose }: { handleClose: () => void }) {
             {errors.title && <Form.Error>{errors.title?.message}</Form.Error>}
           </div>
 
-          <div>
-            <Form.Label>Indicator</Form.Label>
-            <RadioGroup.Root>
+          <div className="space-y-2">
+            <Form.Label htmlFor="indicator">Indicator</Form.Label>
+            <RadioGroup.Root
+              className="flex justify-between"
+              defaultValue="orange"
+              onValueChange={(value) => {
+                const validValue = indicatorOptions.find(
+                  (option) => option.name === value
+                )
+                if (!validValue) return
+                setValue('indicator', value)
+              }}
+            >
               {indicatorOptions.map((option) => (
                 <RadioGroup.Item
                   key={option.name}
                   value={option.name}
-                  className="flex items-center space-x-2"
+                  className="flex items-center justify-center"
+                  asChild
                 >
-                  <RadioGroup.Indicator
-                    className={`h-4 w-4 rounded-full bg-${option.color}`}
-                  />
-                  {option.name}
+                  <div
+                    className={cn(
+                      'h-5 w-5 cursor-pointer rounded-full hover:ring-2 focus:outline-none',
+                      `bg-${option.color}-600 hover:ring-${option.color}-300 focus:ring-${option.color}-300`,
+                      'focus:ring-2 focus:ring-offset-white'
+                    )}
+                  >
+                    <RadioGroup.Indicator asChild>
+                      <div className="h-2.5 w-2.5 rounded-full bg-white"></div>
+                    </RadioGroup.Indicator>
+                  </div>
                 </RadioGroup.Item>
               ))}
             </RadioGroup.Root>

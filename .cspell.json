@@ -12,7 +12,8 @@
     "zustand",
     "lucide",
     "upstash",
-    "Avvvatars"
+    "Avvvatars",
+    "safelist"
   ],
   "ignorePaths": ["bun.lockb"]
 }
