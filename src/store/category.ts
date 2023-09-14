@@ -8,9 +8,14 @@ export interface Category {
   indicator: string
 }
 
+interface Action {
+  type: 'ADD'
+  id: string
+}
+
 const initialState = {
-  syncedCategories: [] as Category[],
-  localCategories: [] as Category[],
+  category: [] as Category[],
+  action: [] as Action[],
 }
 type State = typeof initialState
 
@@ -18,12 +23,15 @@ interface Actions {
   addCategory: (category: Omit<Category, 'id'>) => void
 }
 
-const categoryStore: StateCreator<State & Actions> = (set, get) => ({
-  syncedCategories: [],
-  localCategories: [],
-  addCategory(category) {
+const categoryStore: StateCreator<State & Actions> = (set) => ({
+  ...initialState,
+  addCategory: (category) => {
+    const id = ulid()
+    const newCategory: Category = { ...category, id }
+
     set((state) => ({
-      localCategories: [...state.localCategories, { ...category, id: ulid() }],
+      category: [...state.category, newCategory],
+      action: [{ type: 'ADD', id }],
     }))
   },
 })

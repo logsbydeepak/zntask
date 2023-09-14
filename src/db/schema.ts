@@ -21,9 +21,24 @@ export const googleAuth = mysqlTable('google_auth', {
   googleId: varchar('google_id', { length: 256 }).notNull(),
 })
 
-export const userRelations = relations(users, ({ one }) => ({
+export const categories = mysqlTable('categories', {
+  id: varchar('id', { length: 26 }).primaryKey(),
+  userId: varchar('user_id', { length: 26 }).notNull(),
+  title: varchar('title', { length: 256 }).notNull(),
+  indicator: varchar('indicator', { length: 256 }).notNull(),
+})
+
+export const categoryRelations = relations(categories, ({ one }) => ({
+  user: one(users, {
+    fields: [categories.userId],
+    references: [users.id],
+  }),
+}))
+
+export const userRelations = relations(users, ({ one, many }) => ({
   credentialAuth: one(credentialAuth),
   googleAuth: one(googleAuth),
+  categories: many(categories),
 }))
 
 export const credentialAuthRelations = relations(credentialAuth, ({ one }) => ({
