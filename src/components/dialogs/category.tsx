@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 import { useAppStore } from '@/store/app'
+import { useCategoryStore } from '@/store/category'
 import { cn } from '@/utils/style'
 import { zRequired } from '@/utils/zod'
 import * as Dialog from '@ui/dialog'
@@ -56,15 +57,21 @@ export function CategoryDialog() {
 
 type FormValues = z.infer<typeof schema>
 function CategoryDialogContent({ handleClose }: { handleClose: () => void }) {
+  const addCategory = useCategoryStore((s) => s.addCategory)
+
   const {
     register,
     handleSubmit,
     formState: { errors },
     setValue,
-  } = useForm<FormValues>({ resolver: zodResolver(schema) })
+  } = useForm<FormValues>({
+    resolver: zodResolver(schema),
+    defaultValues: { indicator: 'orange' },
+  })
 
   const onSubmit = (data: FormValues) => {
-    console.log(data)
+    addCategory(data)
+    handleClose()
   }
 
   return (
