@@ -3,8 +3,8 @@ import { create, StateCreator } from 'zustand'
 import { persist } from 'zustand/middleware'
 
 export interface Category {
-  title: string
   id: string
+  title: string
   indicator: string
 }
 
@@ -23,13 +23,18 @@ interface Actions {
   addCategory: (category: Omit<Category, 'id'>) => void
   getCategory: (id: string) => undefined | Category
   removeAction: (id: string) => void
+  addCategories: (categories: Category[]) => void
 }
 
 const categoryStore: StateCreator<State & Actions> = (set, get) => ({
   ...initialState,
   addCategory: (category) => {
     const id = ulid()
-    const newCategory: Category = { ...category, id }
+    const newCategory: Category = {
+      id: id,
+      title: category.title,
+      indicator: category.indicator,
+    }
 
     set((state) => ({
       category: [...state.category, newCategory],
@@ -42,6 +47,11 @@ const categoryStore: StateCreator<State & Actions> = (set, get) => ({
   removeAction(id) {
     set((state) => ({
       action: state.action.filter((action) => action.id !== id),
+    }))
+  },
+  addCategories(categories) {
+    set((state) => ({
+      category: [...categories],
     }))
   },
 })
