@@ -77,7 +77,7 @@ export function ResetPassword({ onClick }: { onClick: () => void }) {
     <button
       onClick={onClick}
       type="button"
-      className="mr-2 inline-flex items-center rounded-full bg-orange-600 px-2 py-0.5 focus:outline-none focus:ring-2 focus:ring-orange-600 focus:ring-offset-1"
+      className="mr-2 inline-flex items-center rounded-full bg-orange-600 px-2 py-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-600 focus-visible:ring-offset-1"
     >
       <span className="mr-1 h-2 w-2 text-white">
         <KeyIcon className="h-full w-full" strokeWidth={3} />
@@ -98,7 +98,7 @@ export function PasswordVisibilityToggle({
     <button
       onClick={onClick}
       type="button"
-      className="mr-2 inline-flex items-center rounded-full bg-orange-600 px-2 py-0.5 focus:outline-none focus:ring-2 focus:ring-orange-600 focus:ring-offset-1"
+      className="mr-2 inline-flex items-center rounded-full bg-orange-600 px-2 py-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-600 focus-visible:ring-offset-1"
     >
       <span className="mr-1 h-2 w-2 text-white">
         {!isVisible ? (

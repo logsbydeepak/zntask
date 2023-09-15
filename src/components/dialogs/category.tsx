@@ -113,9 +113,9 @@ function CategoryDialogContent({ handleClose }: { handleClose: () => void }) {
                 >
                   <div
                     className={cn(
-                      'h-5 w-5 cursor-pointer rounded-full hover:ring-2 focus:outline-none',
-                      `bg-${option.color}-600 hover:ring-${option.color}-300 focus:ring-${option.color}-300`,
-                      'focus:ring-2 focus:ring-offset-white'
+                      'h-5 w-5 cursor-pointer rounded-full hover:ring-2',
+                      `bg-${option.color}-600 hover:ring-${option.color}-300 `,
+                      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-950 focus-visible:ring-offset-2 focus-visible:ring-offset-white'
                     )}
                   >
                     <RadioGroup.Indicator asChild>
