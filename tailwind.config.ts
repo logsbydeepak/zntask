@@ -8,7 +8,12 @@ const config: Config = {
     './tw-safelist.txt',
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        mono: ['var(--font-jetBrains)'],
+        sans: ['var(--font-inter)'],
+      },
+    },
   },
   plugins: [require('@tailwindcss/forms')],
 }

@@ -141,7 +141,7 @@ function Search() {
         <span className="inline-block h-2.5 w-2.5">
           <CommandIcon className="h-full w-full" />
         </span>
-        <span className="text-[10px]">K</span>
+        <span className="font-mono text-[10px]">K</span>
       </span>
     </button>
   )
