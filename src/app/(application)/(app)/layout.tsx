@@ -19,7 +19,9 @@ export default async function Layout({
       <AppLoading>
         <GetUser />
         <Sidebar />
-        <main className="h-[1000px] pl-56 pt-14">{children}</main>
+        <main className="pl-56 pt-14">
+          <div className="mx-auto max-w-7xl px-10 py-4">{children}</div>
+        </main>
         <Dialogs />
         <Sync />
       </AppLoading>

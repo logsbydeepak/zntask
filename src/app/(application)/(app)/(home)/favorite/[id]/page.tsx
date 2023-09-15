@@ -1,3 +1,5 @@
+import { Title } from '@/app/(application)/(app)/layout-components'
+
 export default function Page() {
-  return <h1 className="text-lg font-medium">Favorite id</h1>
+  return <Title>Favorite id</Title>
 }

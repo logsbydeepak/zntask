@@ -1,19 +1,22 @@
-import { Metadata } from 'next'
+import * as Layout from '@/app/(application)/(app)/layout-components'
+import { Head } from '@/components/head'
 
 import { ResetPassword } from './component.c'
 import { getUserWithAuth } from './fetch'
 
-export const metadata: Metadata = {
-  title: 'User',
-}
-
 export default async function Page() {
   const user = await getUserWithAuth()
+
   return (
-    <>
-      <h1>User</h1>
-      {JSON.stringify(user)}
-      <ResetPassword />
-    </>
+    <Layout.Root>
+      <Layout.Header>
+        <Layout.Title>User</Layout.Title>
+        <Head title="User" />
+      </Layout.Header>
+      <Layout.Content>
+        {JSON.stringify(user)}
+        <ResetPassword />
+      </Layout.Content>
+    </Layout.Root>
   )
 }
