@@ -6,7 +6,7 @@ import { useCategoryStore } from '@/store/category'
 
 import { addCategory } from './actions'
 
-export function CategorySync() {
+export function Sync() {
   const [isPending, startTransition] = React.useTransition()
 
   const action = useCategoryStore((state) => state.action)

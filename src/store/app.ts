@@ -1,4 +1,7 @@
+import { atom } from 'jotai'
 import { create, StateCreator } from 'zustand'
+
+export const isAppLoadingAtom = atom(true)
 
 const dialogState = {
   resetPassword: false,

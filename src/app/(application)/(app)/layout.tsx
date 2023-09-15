@@ -2,33 +2,28 @@ import { Suspense } from 'react'
 
 import { Dialogs } from '@/components/dialogs'
 
-import { getInitCategories } from './actions'
-import { CategorySync } from './category-sync'
+import { AppLoading } from './app-loading'
 import { getUser } from './fetch'
-import { InitCategories } from './init-category'
-import { IsReady } from './is-ready'
 import { Navbar } from './navbar'
 import { Sidebar } from './sidebar'
+import { SplashScreen } from './splash-screen'
+import { Sync } from './sync'
 
 export default async function Layout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  const user = await getUser()
   return (
-    <>
-      <Suspense fallback={<Loading />}>
+    <Suspense fallback={<SplashScreen />}>
+      <AppLoading>
         <GetUser />
-        <IsReady>
-          <Sidebar />
-          <InitCategories />
-          <main className="h-[1000px] pl-56 pt-14">{children}</main>
-          <Dialogs />
-          <CategorySync />
-        </IsReady>
-      </Suspense>
-    </>
+        <Sidebar />
+        <main className="h-[1000px] pl-56 pt-14">{children}</main>
+        <Dialogs />
+        <Sync />
+      </AppLoading>
+    </Suspense>
   )
 }
 
@@ -42,8 +37,4 @@ async function GetUser() {
       email={user.email}
     />
   )
-}
-
-function Loading() {
-  return <h1>LOADING...</h1>
 }
