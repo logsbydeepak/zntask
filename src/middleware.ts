@@ -16,6 +16,10 @@ export async function middleware(req: NextRequest) {
 
     const isAppPage =
       req.nextUrl.pathname.startsWith('/today') ||
+      req.nextUrl.pathname.startsWith('/inbox') ||
+      req.nextUrl.pathname.startsWith('/upcoming') ||
+      req.nextUrl.pathname.startsWith('/favorite') ||
+      req.nextUrl.pathname.startsWith('/category') ||
       req.nextUrl.pathname.startsWith('/user')
 
     if (isAuth) {
@@ -52,6 +56,11 @@ export const config = {
     '/register/:path*',
 
     '/today/:path*',
+    '/inbox/:path*',
+    '/upcoming/:path*',
+    '/favorite/:path*',
+    '/category/:path*',
+
     '/user/:path*',
   ],
 }

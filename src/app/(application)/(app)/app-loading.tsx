@@ -37,12 +37,12 @@ function InitCategories() {
 
   const setIsAppLoading = useSetAtom(isAppLoadingAtom)
 
-  const category = useCategoryStore((s) => s.category)
+  const categories = useCategoryStore((s) => s.categories)
   const addCategories = useCategoryStore((s) => s.addCategories)
 
   useEffect(() => {
     if (renderCount.current) return
-    const hash = bcrypt.hashSync(JSON.stringify(category), 10)
+    const hash = bcrypt.hashSync(JSON.stringify(categories), 10)
 
     startTransaction(async () => {
       const res = await getInitCategories({ hash })
@@ -54,7 +54,7 @@ function InitCategories() {
     setIsAppLoading(false)
 
     renderCount.current++
-  }, [category, addCategories, setIsAppLoading])
+  }, [categories, addCategories, setIsAppLoading])
 
   return null
 }

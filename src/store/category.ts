@@ -14,7 +14,7 @@ export interface Action {
 }
 
 const initialState = {
-  category: [] as Category[],
+  categories: [] as Category[],
   action: [] as Action[],
 }
 type State = typeof initialState
@@ -37,12 +37,12 @@ const categoryStore: StateCreator<State & Actions> = (set, get) => ({
     }
 
     set((state) => ({
-      category: [...state.category, newCategory],
+      categories: [...state.categories, newCategory],
       action: [...state.action, { type: 'ADD', id }],
     }))
   },
   getCategory(id) {
-    return get().category.find((category) => category.id === id)
+    return get().categories.find((category) => category.id === id)
   },
   removeAction(id) {
     set((state) => ({
@@ -51,7 +51,7 @@ const categoryStore: StateCreator<State & Actions> = (set, get) => ({
   },
   addCategories(categories) {
     set((state) => ({
-      category: [...categories],
+      categories: [...categories],
     }))
   },
 })
