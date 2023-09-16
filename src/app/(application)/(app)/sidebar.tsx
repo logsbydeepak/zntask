@@ -2,6 +2,9 @@
 
 import React from 'react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { atom, Provider, useAtomValue, useSetAtom } from 'jotai'
+import { useHydrateAtoms } from 'jotai/utils'
 import {
   CalendarClockIcon,
   ChevronDownIcon,
@@ -37,41 +40,50 @@ export function Sidebar() {
 }
 
 function QuickSection() {
+  const pathname = usePathname()
+
   const item = [
     {
       icon: <CalendarClockIcon className="h-full w-full" />,
       label: 'today',
       href: '/today',
+      isActive: pathname.startsWith('/today') || pathname === '/',
     },
     {
       label: 'inbox',
       href: '/inbox',
       icon: <InboxIcon className="h-full w-full" />,
+      isActive: pathname.startsWith('/inbox'),
     },
     {
       label: 'upcoming',
       href: '/upcoming',
       icon: <GanttChartIcon className="h-full w-full" />,
+      isActive: pathname.startsWith('/upcoming'),
     },
     {
       label: 'favorite',
       href: '/favorite',
       icon: <HeartIcon className="h-full w-full" />,
+      isActive: pathname === '/favorite',
     },
     {
       label: 'category',
       href: '/category',
       icon: <FolderIcon className="h-full w-full" />,
+      isActive: pathname === '/category',
     },
   ]
 
   return (
     <>
       {item.map((i) => (
-        <Item.Root key={i.label}>
+        <Item.Root key={i.label} isActive={i.isActive}>
           <Item.Content.Link href={i.href}>
             <LabelContainer>
-              <Item.LabelIcon>{i.icon}</Item.LabelIcon>
+              <Item.LabelIcon className="text-gray-600 data-[active=true]:text-orange-600">
+                {i.icon}
+              </Item.LabelIcon>
               <Item.Label>{i.label}</Item.Label>
             </LabelContainer>
           </Item.Content.Link>
@@ -82,6 +94,7 @@ function QuickSection() {
 }
 
 function FavoriteSection() {
+  const pathname = usePathname()
   const [isCollapsibleOpen, setIsCollapsibleOpen] = React.useState(false)
   const favorites = useCategoryStore((s) =>
     s.categories.filter((c) => c.isFavorite)
@@ -96,7 +109,12 @@ function FavoriteSection() {
     <>
       <Title>Favorite</Title>
       {favoritesToDisplay.map((i) => (
-        <CategoryItem key={i.id} category={i} href={`/favorite/${i.id}`} />
+        <CategoryItem
+          key={i.id}
+          category={i}
+          href={`/favorite/${i.id}`}
+          isActive={pathname === `/favorite/${i.id}`}
+        />
       ))}
 
       {favorites.length > 4 && (
@@ -113,6 +131,7 @@ function FavoriteSection() {
 }
 
 function CategorySection() {
+  const pathname = usePathname()
   const [isCollapsibleOpen, setIsCollapsibleOpen] = React.useState(false)
   const categories = useCategoryStore((s) => s.categories)
 
@@ -125,7 +144,12 @@ function CategorySection() {
     <>
       <Title>Category</Title>
       {categoriesToDisplay.map((i) => (
-        <CategoryItem key={i.id} category={i} href={`/category/${i.id}`} />
+        <CategoryItem
+          key={i.id}
+          category={i}
+          href={`/category/${i.id}`}
+          isActive={pathname === `/category/${i.id}`}
+        />
       ))}
 
       {categories.length > 4 && (
@@ -144,12 +168,14 @@ function CategorySection() {
 function CategoryItem({
   category,
   href,
+  isActive,
 }: {
   category: Category
   href: string
+  isActive: boolean
 }) {
   return (
-    <Item.Root>
+    <Item.Root isActive={isActive}>
       <Item.Content.Link href={href}>
         <Item.LabelContainer>
           <Item.LabelIcon>
@@ -200,19 +226,49 @@ function Title({ children }: { children: React.ReactNode }) {
   return <h4 className="text-xs font-medium text-gray-600">{children}</h4>
 }
 
-function ItemRoot({ children }: { children: React.ReactNode }) {
-  return <div>{children}</div>
+const isActiveAtom = atom(false)
+
+function SetInitialValue({ isActive }: { isActive: boolean }) {
+  useHydrateAtoms([[isActiveAtom, isActive]])
+  const setIsActiveAtom = useSetAtom(isActiveAtom)
+
+  React.useEffect(() => {
+    setIsActiveAtom(isActive)
+  }, [isActive])
+
+  return null
+}
+
+function ItemRoot({
+  children,
+  isActive = false,
+}: {
+  children: React.ReactNode
+  isActive?: boolean
+}) {
+  return (
+    <Provider>
+      <SetInitialValue isActive={isActive} />
+      <div>{children}</div>
+    </Provider>
+  )
 }
 
 const itemContentStyle =
-  'flex items-center h-9 px-2 hover:bg-gray-50 rounded-md border border-transparent hover:border-gray-200 w-full'
+  'flex items-center h-9 px-2 hover:bg-gray-50 rounded-md border border-transparent hover:border-gray-200 w-full data-[active=true]:bg-gray-50 data-[active=true]:border-gray-200'
 function ItemContentLink({
   children,
   href,
   className,
 }: React.ComponentProps<typeof Link>) {
+  const isActive = useAtomValue(isActiveAtom)
+
   return (
-    <Link href={href} className={cn(itemContentStyle, className)}>
+    <Link
+      href={href}
+      className={cn(itemContentStyle, className)}
+      data-active={isActive}
+    >
       {children}
     </Link>
   )
@@ -235,8 +291,15 @@ function ItemLabel({ className, children }: React.ComponentProps<'span'>) {
 }
 
 function ItemLabelIcon({ className, children }: React.ComponentProps<'span'>) {
+  const isActive = useAtomValue(isActiveAtom)
+
   return (
-    <span className="flex h-4 w-4 items-center justify-center">{children}</span>
+    <span
+      className={cn('flex h-4 w-4 items-center justify-center', className)}
+      data-active={isActive}
+    >
+      {children}
+    </span>
   )
 }
 
