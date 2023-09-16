@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 import { useAppStore } from '@/store/app'
-import { useCategoryStore } from '@/store/category'
+import { indicatorOptions, useCategoryStore } from '@/store/category'
 import { cn } from '@/utils/style'
 import { zRequired } from '@/utils/zod'
 import * as Dialog from '@ui/dialog'
@@ -17,19 +17,6 @@ const schema = z.object({
   title: zRequired,
   indicator: zRequired,
 })
-
-export const indicatorOptions = [
-  { name: 'orange', color: 'orange' },
-  { name: 'red', color: 'red' },
-  { name: 'blue', color: 'blue' },
-  { name: 'green', color: 'green' },
-  { name: 'yellow', color: 'yellow' },
-  { name: 'pink', color: 'pink' },
-  { name: 'lime', color: 'lime' },
-  { name: 'cyan', color: 'cyan' },
-  { name: 'violet', color: 'violet' },
-  { name: 'indigo', color: 'indigo' },
-]
 
 export function CategoryDialog() {
   const isOpen = useAppStore((state) => state.dialog.createCategory)

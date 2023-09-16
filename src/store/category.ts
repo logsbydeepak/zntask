@@ -9,9 +9,26 @@ export interface Category {
   isFavorite: boolean
 }
 
+export const indicatorOptions = [
+  { name: 'orange', color: 'orange' },
+  { name: 'red', color: 'red' },
+  { name: 'blue', color: 'blue' },
+  { name: 'green', color: 'green' },
+  { name: 'yellow', color: 'yellow' },
+  { name: 'pink', color: 'pink' },
+  { name: 'lime', color: 'lime' },
+  { name: 'cyan', color: 'cyan' },
+  { name: 'violet', color: 'violet' },
+  { name: 'indigo', color: 'indigo' },
+]
+
 export interface Action {
   type: 'ADD'
   id: string
+}
+
+export const getIndicatorColor = (indicator: string) => {
+  return indicatorOptions.find((option) => option.name === indicator)?.color
 }
 
 const initialState = {

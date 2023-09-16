@@ -1,6 +1,7 @@
 'use client'
 
-import { Link } from 'lucide-react'
+import React from 'react'
+import Link from 'next/link'
 
 import * as Layout from '@/app/(application)/(app)/layout-components'
 import { Head } from '@/components/head'

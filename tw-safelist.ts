@@ -1,4 +1,4 @@
-import { indicatorOptions } from '@/components/dialogs/category'
+import { indicatorOptions } from '@/store/category'
 
 const path = './tw-safelist.txt'
 
