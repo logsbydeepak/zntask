@@ -24,9 +24,11 @@ const schema = z.object({
   id: zRequired.refine(isValid, { message: 'Invalid ulid' }),
   title: zRequired,
   indicator: zRequired,
+  isFavorite: z.boolean(),
 })
 
 export const addCategory = h('AUTH', schema, async ({ input, userId }) => {
+  console.log('addCategory', input, userId)
   await db.insert(dbSchema.categories).values({ ...input, userId })
 
   return r('OK', { input })
@@ -50,20 +52,16 @@ export const getInitCategories = h(
     if (categories.length === 0) return r('OK', { categories })
 
     const modCategories = categories.map((category) => {
-      const { id, title, indicator } = category
-      return { id, title, indicator }
+      const { id, title, indicator, isFavorite } = category
+      return { id, title, indicator, isFavorite }
     })
 
-    const compareHash = await bcrypt.compare(
+    const isValidHash = await bcrypt.compare(
       JSON.stringify(modCategories),
       input.hash
     )
-    console.log(JSON.stringify(modCategories))
-    console.log(compareHash)
 
-    const serverHash = await bcrypt.hash(JSON.stringify(modCategories), 10)
-
-    if (serverHash === input.hash) {
+    if (isValidHash) {
       return r('IS_VALID')
     }
 

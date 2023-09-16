@@ -3,12 +3,16 @@ import { z } from 'zod'
 
 import { isAuth, UnauthorizedError } from '@/app/(application)/(auth)/utils'
 
+type Prettify<T> = {
+  [K in keyof T]: T[K]
+} & {}
+
 export function r<CODE extends Uppercase<string>>(c: CODE): { code: CODE }
 
 export function r<CODE extends Uppercase<string>, RES extends object>(
   c: CODE,
   res: RES
-): { code: CODE } & RES
+): Prettify<{ code: CODE } & RES>
 
 export function r(code: string, res?: object) {
   if (res) {
@@ -74,6 +78,7 @@ export function h(...args: any[]) {
           const result = await args[2]({ input, userId, token })
           return result
         } catch (error) {
+          console.log(error)
           if (error instanceof UnauthorizedError) {
             redirect('/login')
           }

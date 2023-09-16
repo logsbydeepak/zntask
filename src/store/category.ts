@@ -6,6 +6,7 @@ export interface Category {
   id: string
   title: string
   indicator: string
+  isFavorite: boolean
 }
 
 export interface Action {
@@ -20,7 +21,7 @@ const initialState = {
 type State = typeof initialState
 
 interface Actions {
-  addCategory: (category: Omit<Category, 'id'>) => void
+  addCategory: (category: Omit<Omit<Category, 'id'>, 'isFavorite'>) => void
   getCategory: (id: string) => undefined | Category
   removeAction: (id: string) => void
   addCategories: (categories: Category[]) => void
@@ -34,6 +35,7 @@ const categoryStore: StateCreator<State & Actions> = (set, get) => ({
       id: id,
       title: category.title,
       indicator: category.indicator,
+      isFavorite: false,
     }
 
     set((state) => ({
