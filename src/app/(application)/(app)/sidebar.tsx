@@ -4,6 +4,8 @@ import React from 'react'
 import Link from 'next/link'
 import {
   CalendarClockIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
   FolderIcon,
   GanttChartIcon,
   HeadingIcon,
@@ -11,7 +13,7 @@ import {
   InboxIcon,
 } from 'lucide-react'
 
-import { getIndicatorColor, useCategoryStore } from '@/store/category'
+import { Category, getIndicatorColor, useCategoryStore } from '@/store/category'
 import { cn } from '@/utils/style'
 
 export function Sidebar() {
@@ -80,48 +82,117 @@ function QuickSection() {
 }
 
 function FavoriteSection() {
+  const [isCollapsibleOpen, setIsCollapsibleOpen] = React.useState(false)
   const favorites = useCategoryStore((s) =>
     s.categories.filter((c) => c.isFavorite)
+  )
+
+  const favoritesToDisplay = favorites.slice(
+    0,
+    favorites.length >= 5 && !isCollapsibleOpen ? 4 : favorites.length
   )
 
   return (
     <>
       <Title>Favorite</Title>
-      {favorites.map((i) => (
-        <Item.Root key={i.id}>
-          <Item.Content.Link href={`/favorite/${i.id}`}>
-            {i.title}
-          </Item.Content.Link>
-        </Item.Root>
+      {favoritesToDisplay.map((i) => (
+        <CategoryItem key={i.id} category={i} href={`/favorite/${i.id}`} />
       ))}
+
+      {favorites.length > 4 && (
+        <ShowMore
+          number={favorites.length - 4}
+          isOpen={isCollapsibleOpen}
+          onClick={() => {
+            setIsCollapsibleOpen((open) => !open)
+          }}
+        />
+      )}
     </>
   )
 }
 
 function CategorySection() {
+  const [isCollapsibleOpen, setIsCollapsibleOpen] = React.useState(false)
   const categories = useCategoryStore((s) => s.categories)
+
+  const categoriesToDisplay = categories.slice(
+    0,
+    categories.length >= 5 && !isCollapsibleOpen ? 4 : categories.length
+  )
 
   return (
     <>
       <Title>Category</Title>
-      {categories.map((i) => (
-        <Item.Root key={i.id}>
-          <Item.Content.Link href={`/category/${i.id}`}>
-            <Item.LabelContainer>
-              <Item.LabelIcon>
-                <div
-                  className={cn(
-                    'h-3 w-3 rounded-sm',
-                    `bg-${getIndicatorColor(i.indicator)}-600`
-                  )}
-                />
-              </Item.LabelIcon>
-              <Item.Label>{i.title}</Item.Label>
-            </Item.LabelContainer>
-          </Item.Content.Link>
-        </Item.Root>
+      {categoriesToDisplay.map((i) => (
+        <CategoryItem key={i.id} category={i} href={`/category/${i.id}`} />
       ))}
+
+      {categories.length > 4 && (
+        <ShowMore
+          number={categories.length - 4}
+          isOpen={isCollapsibleOpen}
+          onClick={() => {
+            setIsCollapsibleOpen((open) => !open)
+          }}
+        />
+      )}
     </>
+  )
+}
+
+function CategoryItem({
+  category,
+  href,
+}: {
+  category: Category
+  href: string
+}) {
+  return (
+    <Item.Root>
+      <Item.Content.Link href={href}>
+        <Item.LabelContainer>
+          <Item.LabelIcon>
+            <div
+              className={cn(
+                'h-3 w-3 rounded-sm',
+                `bg-${getIndicatorColor(category.indicator)}-600`
+              )}
+            />
+          </Item.LabelIcon>
+          <Item.Label>{category.title}</Item.Label>
+        </Item.LabelContainer>
+      </Item.Content.Link>
+    </Item.Root>
+  )
+}
+
+function ShowMore({
+  number,
+  isOpen,
+  onClick,
+}: {
+  number: number
+  isOpen: boolean
+  onClick: () => void
+}) {
+  return (
+    <Item.Root>
+      <Item.Content.Button onClick={onClick}>
+        <Item.LabelContainer>
+          <Item.LabelIcon>
+            {isOpen ? (
+              <ChevronUpIcon className="h-4 w-4" />
+            ) : (
+              <ChevronDownIcon className="h-4 w-4" />
+            )}
+          </Item.LabelIcon>
+          <Item.Label>
+            {isOpen ? 'Show less' : `Show ${number} more`}
+          </Item.Label>
+        </Item.LabelContainer>
+      </Item.Content.Button>
+    </Item.Root>
   )
 }
 
@@ -134,7 +205,7 @@ function ItemRoot({ children }: { children: React.ReactNode }) {
 }
 
 const itemContentStyle =
-  'flex items-center h-9 px-2 hover:bg-gray-50 rounded-md border border-transparent hover:border-gray-200'
+  'flex items-center h-9 px-2 hover:bg-gray-50 rounded-md border border-transparent hover:border-gray-200 w-full'
 function ItemContentLink({
   children,
   href,
@@ -150,8 +221,13 @@ function ItemContentLink({
 function ItemContentButton({
   children,
   className,
+  ...props
 }: React.ComponentProps<'button'>) {
-  return <button className={cn(itemContentStyle, className)}>{children}</button>
+  return (
+    <button {...props} className={cn(itemContentStyle, className)}>
+      {children}
+    </button>
+  )
 }
 
 function ItemLabel({ className, children }: React.ComponentProps<'span'>) {

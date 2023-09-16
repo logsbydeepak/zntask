@@ -13,7 +13,8 @@
     "lucide",
     "upstash",
     "Avvvatars",
-    "safelist","Gantt"
+    "safelist",
+    "Gantt"
   ],
   "ignorePaths": ["bun.lockb"]
 }
