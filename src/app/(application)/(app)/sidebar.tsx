@@ -3,6 +3,7 @@
 import React from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { Indicator } from '@radix-ui/react-radio-group'
 import { atom, Provider, useAtomValue, useSetAtom } from 'jotai'
 import { useHydrateAtoms } from 'jotai/utils'
 import {
@@ -24,14 +25,14 @@ export function Sidebar() {
 
   return (
     <aside className="fixed bottom-0 top-14 w-56 overflow-y-scroll border-r border-gray-200 bg-white">
-      <div className="my-4 space-y-6 px-2">
-        <div className="space-y-1">
+      <div className="my-4 space-y-6">
+        <div className="space-y-2">
           <QuickSection />
         </div>
-        <div className="space-y-1">
+        <div className="space-y-2">
           <FavoriteSection />
         </div>
-        <div className="space-y-1">
+        <div className="space-y-2">
           <CategorySection />
         </div>
       </div>
@@ -76,7 +77,7 @@ function QuickSection() {
   ]
 
   return (
-    <>
+    <ItemContainer>
       {item.map((i) => (
         <Item.Root key={i.label} isActive={i.isActive}>
           <Item.Content.Link href={i.href}>
@@ -89,7 +90,7 @@ function QuickSection() {
           </Item.Content.Link>
         </Item.Root>
       ))}
-    </>
+    </ItemContainer>
   )
 }
 
@@ -107,25 +108,31 @@ function FavoriteSection() {
 
   return (
     <>
-      <Title>Favorite</Title>
-      {favoritesToDisplay.map((i) => (
-        <CategoryItem
-          key={i.id}
-          category={i}
-          href={`/favorite/${i.id}`}
-          isActive={pathname === `/favorite/${i.id}`}
-        />
-      ))}
+      <div>
+        <Title>Favorite</Title>
+      </div>
+      <ItemContainer>
+        {favorites.length === 0 && <NoItem />}
 
-      {favorites.length > 4 && (
-        <ShowMore
-          number={favorites.length - 4}
-          isOpen={isCollapsibleOpen}
-          onClick={() => {
-            setIsCollapsibleOpen((open) => !open)
-          }}
-        />
-      )}
+        {favoritesToDisplay.map((i) => (
+          <CategoryItem
+            key={i.id}
+            category={i}
+            href={`/favorite/${i.id}`}
+            isActive={pathname === `/favorite/${i.id}`}
+          />
+        ))}
+
+        {favorites.length > 4 && (
+          <ShowMore
+            number={favorites.length - 4}
+            isOpen={isCollapsibleOpen}
+            onClick={() => {
+              setIsCollapsibleOpen((open) => !open)
+            }}
+          />
+        )}
+      </ItemContainer>
     </>
   )
 }
@@ -142,25 +149,31 @@ function CategorySection() {
 
   return (
     <>
-      <Title>Category</Title>
-      {categoriesToDisplay.map((i) => (
-        <CategoryItem
-          key={i.id}
-          category={i}
-          href={`/category/${i.id}`}
-          isActive={pathname === `/category/${i.id}`}
-        />
-      ))}
+      <div>
+        <Title>Category</Title>
+      </div>
+      <ItemContainer>
+        {categories.length === 0 && <NoItem />}
 
-      {categories.length > 4 && (
-        <ShowMore
-          number={categories.length - 4}
-          isOpen={isCollapsibleOpen}
-          onClick={() => {
-            setIsCollapsibleOpen((open) => !open)
-          }}
-        />
-      )}
+        {categoriesToDisplay.map((i) => (
+          <CategoryItem
+            key={i.id}
+            category={i}
+            href={`/category/${i.id}`}
+            isActive={pathname === `/category/${i.id}`}
+          />
+        ))}
+
+        {categories.length > 4 && (
+          <ShowMore
+            number={categories.length - 4}
+            isOpen={isCollapsibleOpen}
+            onClick={() => {
+              setIsCollapsibleOpen((open) => !open)
+            }}
+          />
+        )}
+      </ItemContainer>
     </>
   )
 }
@@ -190,6 +203,16 @@ function CategoryItem({
         </Item.LabelContainer>
       </Item.Content.Link>
     </Item.Root>
+  )
+}
+
+function NoItem() {
+  return (
+    <div className="pl-3">
+      <span className="block w-full rounded-md border border-gray-200 bg-gray-50 py-6 text-center text-xs text-gray-600">
+        No item
+      </span>
+    </div>
   )
 }
 
@@ -223,7 +246,7 @@ function ShowMore({
 }
 
 function Title({ children }: { children: React.ReactNode }) {
-  return <h4 className="text-xs font-medium text-gray-600">{children}</h4>
+  return <h4 className="pl-3 text-xs font-medium text-gray-600">{children}</h4>
 }
 
 const isActiveAtom = atom(false)
@@ -234,9 +257,24 @@ function SetInitialValue({ isActive }: { isActive: boolean }) {
 
   React.useEffect(() => {
     setIsActiveAtom(isActive)
-  }, [isActive])
+  }, [isActive, setIsActiveAtom])
 
   return null
+}
+
+function ItemContainer({ children }: { children: React.ReactNode }) {
+  return <div className="space-y-1.5">{children}</div>
+}
+
+function ItemIndicator() {
+  const isActive = useAtomValue(isActiveAtom)
+
+  return (
+    <span
+      data-active={isActive}
+      className="mr-1 h-5 w-1 rounded-br-md rounded-tr-md bg-white data-[active=true]:bg-orange-600"
+    />
+  )
 }
 
 function ItemRoot({
@@ -249,7 +287,10 @@ function ItemRoot({
   return (
     <Provider>
       <SetInitialValue isActive={isActive} />
-      <div>{children}</div>
+      <div className="flex items-center">
+        <ItemIndicator />
+        <div className="w-full">{children}</div>
+      </div>
     </Provider>
   )
 }
@@ -286,7 +327,7 @@ function ItemContentButton({
   )
 }
 
-function ItemLabel({ className, children }: React.ComponentProps<'span'>) {
+function ItemLabel({ children }: React.ComponentProps<'span'>) {
   return <span className="text-sm text-gray-600">{children}</span>
 }
 
