@@ -1,14 +1,29 @@
 'use client'
 
 import Link from 'next/link'
-import * as Avatar from '@radix-ui/react-avatar'
-import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
+import {
+  AvatarFallback,
+  AvatarImage,
+  Avatar as AvatarRoot,
+} from '@radix-ui/react-avatar'
 import Avvvatars from 'avvvatars-react'
 import { CommandIcon, FolderPlusIcon, PlusIcon, SearchIcon } from 'lucide-react'
 import { useTheme } from 'next-themes'
 
 import { LogoIcon } from '@/components/icon/logo'
 import { useAppStore } from '@/store/app'
+import {
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuPortal,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuRoot,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from '@ui/menu'
 
 export function Navbar({
   firstName,
@@ -44,15 +59,15 @@ export function Navbar({
             <PlusIcon className="h-full w-full" />
           </Icon>
 
-          <DropdownMenu.Root>
-            <DropdownMenu.Trigger>
+          <DropdownMenuRoot>
+            <DropdownMenuTrigger>
               <ProfilePicture src={profilePicture} name={name} />
-            </DropdownMenu.Trigger>
+            </DropdownMenuTrigger>
 
-            <DropdownMenu.Content>
+            <DropdownMenuContent>
               <UserMenu name={name} email={email} />
-            </DropdownMenu.Content>
-          </DropdownMenu.Root>
+            </DropdownMenuContent>
+          </DropdownMenuRoot>
         </div>
       </div>
     </nav>
@@ -65,18 +80,18 @@ function UserMenu({ name, email }: { name: string; email: string }) {
 
   return (
     <>
-      <DropdownMenu.Item>
+      <DropdownMenuItem>
         {name}
         <br />
         {email}
-      </DropdownMenu.Item>
-      <DropdownMenu.Sub>
-        <DropdownMenu.SubTrigger asChild>
-          <DropdownMenu.Item>Theme</DropdownMenu.Item>
-        </DropdownMenu.SubTrigger>
-        <DropdownMenu.Portal>
-          <DropdownMenu.SubContent>
-            <DropdownMenu.RadioGroup
+      </DropdownMenuItem>
+      <DropdownMenuSub>
+        <DropdownMenuSubTrigger asChild>
+          <DropdownMenuItem>Theme</DropdownMenuItem>
+        </DropdownMenuSubTrigger>
+        <DropdownMenuPortal>
+          <DropdownMenuSubContent>
+            <DropdownMenuRadioGroup
               value={theme}
               onValueChange={(value) => {
                 if (['light', 'dark', 'system'].includes(value)) {
@@ -84,32 +99,30 @@ function UserMenu({ name, email }: { name: string; email: string }) {
                 }
               }}
             >
-              <DropdownMenu.RadioItem value="light">
-                Light
-              </DropdownMenu.RadioItem>
-              <DropdownMenu.RadioItem value="dark">Dark</DropdownMenu.RadioItem>
-              <DropdownMenu.RadioItem value="system">
+              <DropdownMenuRadioItem value="light">Light</DropdownMenuRadioItem>
+              <DropdownMenuRadioItem value="dark">Dark</DropdownMenuRadioItem>
+              <DropdownMenuRadioItem value="system">
                 System
-              </DropdownMenu.RadioItem>
-            </DropdownMenu.RadioGroup>
-          </DropdownMenu.SubContent>
-        </DropdownMenu.Portal>
-      </DropdownMenu.Sub>
-      <DropdownMenu.Item onSelect={() => setDialog('logout', true)}>
+              </DropdownMenuRadioItem>
+            </DropdownMenuRadioGroup>
+          </DropdownMenuSubContent>
+        </DropdownMenuPortal>
+      </DropdownMenuSub>
+      <DropdownMenuItem onSelect={() => setDialog('logout', true)}>
         Logout
-      </DropdownMenu.Item>
+      </DropdownMenuItem>
     </>
   )
 }
 
 function ProfilePicture({ src, name }: { src: string | null; name: string }) {
   return (
-    <Avatar.Root className="flex h-8 w-8 items-center justify-center rounded-full ">
-      <Avatar.Image src={src || ''} />
-      <Avatar.Fallback>
+    <AvatarRoot className="flex h-8 w-8 items-center justify-center rounded-full ">
+      <AvatarImage src={src || ''} />
+      <AvatarFallback>
         <Avvvatars value={name} shadow={true} size={32} />
-      </Avatar.Fallback>
-    </Avatar.Root>
+      </AvatarFallback>
+    </AvatarRoot>
   )
 }
 
