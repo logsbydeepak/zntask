@@ -1,5 +1,6 @@
 'use client'
 
+import React from 'react'
 import Link from 'next/link'
 import {
   AvatarFallback,
@@ -7,7 +8,15 @@ import {
   Avatar as AvatarRoot,
 } from '@radix-ui/react-avatar'
 import Avvvatars from 'avvvatars-react'
-import { CommandIcon, FolderPlusIcon, PlusIcon, SearchIcon } from 'lucide-react'
+import {
+  CommandIcon,
+  FolderPlusIcon,
+  MonitorIcon,
+  MoonStarIcon,
+  PlusIcon,
+  SearchIcon,
+  SunIcon,
+} from 'lucide-react'
 import { useTheme } from 'next-themes'
 
 import { LogoIcon } from '@/components/icon/logo'
@@ -15,13 +24,9 @@ import { useAppStore } from '@/store/app'
 import {
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuPortal,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
   DropdownMenuRoot,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from '@ui/menu'
 
@@ -64,7 +69,7 @@ export function Navbar({
               <ProfilePicture src={profilePicture} name={name} />
             </DropdownMenuTrigger>
 
-            <DropdownMenuContent>
+            <DropdownMenuContent align="end" sideOffset={8}>
               <UserMenu name={name} email={email} />
             </DropdownMenuContent>
           </DropdownMenuRoot>
@@ -85,35 +90,51 @@ function UserMenu({ name, email }: { name: string; email: string }) {
         <br />
         {email}
       </DropdownMenuItem>
-      <DropdownMenuSub>
-        <DropdownMenuSubTrigger asChild>
-          <DropdownMenuItem>Theme</DropdownMenuItem>
-        </DropdownMenuSubTrigger>
-        <DropdownMenuPortal>
-          <DropdownMenuSubContent>
-            <DropdownMenuRadioGroup
-              value={theme}
-              onValueChange={(value) => {
-                if (['light', 'dark', 'system'].includes(value)) {
-                  setTheme(value)
-                }
-              }}
-            >
-              <DropdownMenuRadioItem value="light">Light</DropdownMenuRadioItem>
-              <DropdownMenuRadioItem value="dark">Dark</DropdownMenuRadioItem>
-              <DropdownMenuRadioItem value="system">
-                System
-              </DropdownMenuRadioItem>
-            </DropdownMenuRadioGroup>
-          </DropdownMenuSubContent>
-        </DropdownMenuPortal>
-      </DropdownMenuSub>
+      <DropdownMenuRadioGroup
+        className="flex justify-between px-4 py-4"
+        value={theme}
+        onValueChange={(value) => {
+          if (['light', 'dark', 'system'].includes(value)) {
+            setTheme(value)
+          }
+        }}
+      >
+        <DropdownMenuRadioItem value="light" asChild>
+          <ThemeItem>
+            <SunIcon className="h-full w-full" />
+          </ThemeItem>
+        </DropdownMenuRadioItem>
+        <DropdownMenuRadioItem value="dark" asChild>
+          <ThemeItem>
+            <MoonStarIcon className="h-full w-full" />
+          </ThemeItem>
+        </DropdownMenuRadioItem>
+        <DropdownMenuRadioItem value="system" asChild>
+          <ThemeItem>
+            <MonitorIcon className="h-full w-full" />
+          </ThemeItem>
+        </DropdownMenuRadioItem>
+      </DropdownMenuRadioGroup>
       <DropdownMenuItem onSelect={() => setDialog('logout', true)}>
         Logout
       </DropdownMenuItem>
     </>
   )
 }
+
+const ThemeItem = React.forwardRef<
+  HTMLButtonElement,
+  React.ComponentPropsWithoutRef<'button'>
+>(({ children, ...props }, ref) => (
+  <button
+    {...props}
+    ref={ref}
+    className="flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 bg-gray-50 text-gray-500 outline-none data-[state=checked]:border-orange-700 data-[highlighted]:bg-gray-100 data-[state=checked]:bg-orange-600 data-[highlighted]:text-gray-950 data-[state=checked]:text-white data-[highlighted]:ring-2 data-[highlighted]:ring-gray-950 data-[highlighted]:ring-offset-2"
+  >
+    <span className="inline-block h-4 w-4">{children}</span>
+  </button>
+))
+ThemeItem.displayName = 'ThemeItem'
 
 function ProfilePicture({ src, name }: { src: string | null; name: string }) {
   return (

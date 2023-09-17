@@ -12,9 +12,6 @@ import {
   RadioGroup as DropdownMenuRadioGroupPrimitives,
   RadioItem as DropdownMenuRadioItemPrimitives,
   Root as DropdownMenuRootPrimitives,
-  SubContent as DropdownMenuSubContentPrimitives,
-  Sub as DropdownMenuSubPrimitives,
-  SubTrigger as DropdownMenuSubTriggerPrimitives,
   Trigger as DropdownMenuTriggerPrimitives,
 } from '@radix-ui/react-dropdown-menu'
 
@@ -24,11 +21,13 @@ export const ContextMenuTrigger = ContextMenuTriggerPrimitives
 export const DropdownMenuRoot = DropdownMenuRootPrimitives
 export const DropdownMenuPortal = DropdownMenuPortalPrimitives
 export const DropdownMenuTrigger = DropdownMenuTriggerPrimitives
-export const DropdownMenuSubTrigger = DropdownMenuSubTriggerPrimitives
-export const DropdownMenuSub = DropdownMenuSubPrimitives
 export const DropdownMenuRadioGroup = DropdownMenuRadioGroupPrimitives
+export const DropdownMenuRadioItem = DropdownMenuRadioItemPrimitives
 
-const menuContentStyle = ''
+const menuContentStyle =
+  'bg-white rounded-md border border-gray-200 py-1.5 shadow-md drop-shadow-sm'
+const menuItemStyle =
+  'bg-white text-xs text-gray-600 focus:outline-none py-2 px-4 data-[highlighted]:bg-gray-100 data-[highlighted]:cursor-pointer '
 
 export const ContextMenuContent = React.forwardRef<
   React.ElementRef<typeof ContextMenuContentPrimitives>,
@@ -60,23 +59,6 @@ export const DropdownMenuContent = React.forwardRef<
 ))
 DropdownMenuContent.displayName = DropdownMenuContentPrimitives.displayName
 
-export const DropdownMenuSubContent = React.forwardRef<
-  React.ElementRef<typeof DropdownMenuSubContentPrimitives>,
-  Omit<
-    React.ComponentPropsWithoutRef<typeof DropdownMenuSubContentPrimitives>,
-    'className'
-  >
->(({ ...props }, ref) => (
-  <DropdownMenuSubContentPrimitives
-    {...props}
-    ref={ref}
-    className={menuContentStyle}
-  />
-))
-DropdownMenuSubContent.displayName =
-  DropdownMenuSubContentPrimitives.displayName
-
-const menuItemStyle = ''
 export const ContextMenuItem = React.forwardRef<
   React.ElementRef<typeof ContextMenuItemPrimitives>,
   Omit<
@@ -98,18 +80,3 @@ export const DropdownMenuItem = React.forwardRef<
   <DropdownMenuItemPrimitives {...props} ref={ref} className={menuItemStyle} />
 ))
 DropdownMenuItem.displayName = DropdownMenuItemPrimitives.displayName
-
-export const DropdownMenuRadioItem = React.forwardRef<
-  React.ElementRef<typeof DropdownMenuRadioItemPrimitives>,
-  Omit<
-    React.ComponentPropsWithoutRef<typeof DropdownMenuRadioItemPrimitives>,
-    'className'
-  >
->(({ ...props }, ref) => (
-  <DropdownMenuRadioItemPrimitives
-    {...props}
-    ref={ref}
-    className={menuItemStyle}
-  />
-))
-DropdownMenuRadioItem.displayName = DropdownMenuRadioItemPrimitives.displayName
