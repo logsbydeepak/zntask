@@ -2,6 +2,7 @@
 
 import React from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import {
   AvatarFallback,
   AvatarImage,
@@ -11,6 +12,7 @@ import Avvvatars from 'avvvatars-react'
 import {
   CommandIcon,
   FolderPlusIcon,
+  LogOutIcon,
   MonitorIcon,
   MoonStarIcon,
   PlusIcon,
@@ -28,6 +30,7 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuRoot,
   DropdownMenuTrigger,
+  MenuIcon,
 } from '@ui/menu'
 
 export function Navbar({
@@ -70,7 +73,7 @@ export function Navbar({
             </DropdownMenuTrigger>
 
             <DropdownMenuContent align="end" sideOffset={8}>
-              <UserMenu name={name} email={email} />
+              <UserMenu name={name} email={email} src={profilePicture} />
             </DropdownMenuContent>
           </DropdownMenuRoot>
         </div>
@@ -79,17 +82,31 @@ export function Navbar({
   )
 }
 
-function UserMenu({ name, email }: { name: string; email: string }) {
+function UserMenu({
+  name,
+  email,
+  src,
+}: {
+  name: string
+  email: string
+  src: string | null
+}) {
   const { theme, setTheme } = useTheme()
   const setDialog = useAppStore((s) => s.setDialog)
+  const router = useRouter()
 
   return (
     <>
-      <DropdownMenuItem>
-        {name}
-        <br />
-        {email}
+      <DropdownMenuItem onSelect={() => router.push('/user')} className="">
+        <ProfilePicture name={name} src={src} />
+        <span>
+          <p className="w-24 overflow-hidden text-ellipsis">{name}</p>
+          <p className="w-24 overflow-hidden text-ellipsis text-[10px] font-normal">
+            {email}
+          </p>
+        </span>
       </DropdownMenuItem>
+
       <DropdownMenuRadioGroup
         className="flex justify-between px-4 py-4"
         value={theme}
@@ -116,7 +133,10 @@ function UserMenu({ name, email }: { name: string; email: string }) {
         </DropdownMenuRadioItem>
       </DropdownMenuRadioGroup>
       <DropdownMenuItem onSelect={() => setDialog('logout', true)}>
-        Logout
+        <MenuIcon>
+          <LogOutIcon className="h-full w-full" />
+        </MenuIcon>
+        <span>Logout</span>
       </DropdownMenuItem>
     </>
   )
