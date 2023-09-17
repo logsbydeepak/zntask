@@ -3,8 +3,6 @@
 import React from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { atom, Provider, useAtomValue, useSetAtom } from 'jotai'
-import { useHydrateAtoms } from 'jotai/utils'
 import {
   CalendarClockIcon,
   ChevronDownIcon,
@@ -20,8 +18,6 @@ import { Category, getIndicatorColor, useCategoryStore } from '@/store/category'
 import { cn } from '@/utils/style'
 
 export function Sidebar() {
-  const categories = useCategoryStore((state) => state.categories)
-
   return (
     <aside className="fixed bottom-0 top-14 w-56 overflow-y-scroll border-r border-gray-200 bg-white">
       <div className="my-4 space-y-6">
@@ -81,7 +77,7 @@ function QuickSection() {
         <Item.Root key={i.label} isActive={i.isActive}>
           <Item.Content.Link href={i.href}>
             <LabelContainer>
-              <Item.LabelIcon className="text-gray-600 data-[active=true]:text-orange-600">
+              <Item.LabelIcon className="text-gray-600 group-data-[active=true]:text-orange-600">
                 {i.icon}
               </Item.LabelIcon>
               <Item.Label>{i.label}</Item.Label>
@@ -255,31 +251,13 @@ function Title({ children }: { children: React.ReactNode }) {
   return <h4 className="pl-3 text-xs font-medium text-gray-600">{children}</h4>
 }
 
-const isActiveAtom = atom(false)
-
-function SetInitialValue({ isActive }: { isActive: boolean }) {
-  useHydrateAtoms([[isActiveAtom, isActive]])
-  const setIsActiveAtom = useSetAtom(isActiveAtom)
-
-  React.useEffect(() => {
-    setIsActiveAtom(isActive)
-  }, [isActive, setIsActiveAtom])
-
-  return null
-}
-
 function ItemContainer({ children }: { children: React.ReactNode }) {
   return <div className="space-y-1.5">{children}</div>
 }
 
 function ItemIndicator() {
-  const isActive = useAtomValue(isActiveAtom)
-
   return (
-    <span
-      data-active={isActive}
-      className="mr-1 h-5 w-1 rounded-br-md rounded-tr-md bg-white data-[active=true]:bg-orange-600"
-    />
+    <span className="mr-1 h-5 w-1 rounded-br-md rounded-tr-md bg-white group-data-[active=true]:bg-orange-600" />
   )
 }
 
@@ -291,31 +269,22 @@ function ItemRoot({
   isActive?: boolean
 }) {
   return (
-    <Provider>
-      <SetInitialValue isActive={isActive} />
-      <div className="flex items-center">
-        <ItemIndicator />
-        <div className="w-full">{children}</div>
-      </div>
-    </Provider>
+    <div className="group flex items-center" data-active={isActive}>
+      <ItemIndicator />
+      <div className="group w-full">{children}</div>
+    </div>
   )
 }
 
 const itemContentStyle =
-  'flex items-center h-9 px-2 hover:bg-gray-50 rounded-md border border-transparent hover:border-gray-200 w-full data-[active=true]:bg-gray-50 data-[active=true]:border-gray-200'
+  'flex items-center h-9 px-2 hover:bg-gray-50 rounded-md border border-transparent hover:border-gray-200 w-full group-data-[active=true]:bg-gray-50 group-data-[active=true]:border-gray-200'
 function ItemContentLink({
   children,
   href,
   className,
 }: React.ComponentProps<typeof Link>) {
-  const isActive = useAtomValue(isActiveAtom)
-
   return (
-    <Link
-      href={href}
-      className={cn(itemContentStyle, className)}
-      data-active={isActive}
-    >
+    <Link href={href} className={cn(itemContentStyle, className)}>
       {children}
     </Link>
   )
@@ -334,25 +303,16 @@ function ItemContentButton({
 }
 
 function ItemLabel({ children }: React.ComponentProps<'span'>) {
-  const isActive = useAtomValue(isActiveAtom)
   return (
-    <span
-      data-active={isActive}
-      className="text-sm text-gray-600 data-[active=true]:font-medium data-[active=true]:text-gray-900"
-    >
+    <span className="text-sm text-gray-600 data-[active=true]:font-medium group-data-[active=true]:text-gray-900">
       {children}
     </span>
   )
 }
 
 function ItemLabelIcon({ className, children }: React.ComponentProps<'span'>) {
-  const isActive = useAtomValue(isActiveAtom)
-
   return (
-    <span
-      className={cn('flex h-4 w-4 items-center justify-center', className)}
-      data-active={isActive}
-    >
+    <span className={cn('flex h-4 w-4 items-center justify-center', className)}>
       {children}
     </span>
   )
