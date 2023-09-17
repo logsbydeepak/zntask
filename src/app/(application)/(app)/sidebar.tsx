@@ -3,7 +3,6 @@
 import React from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Indicator } from '@radix-ui/react-radio-group'
 import { atom, Provider, useAtomValue, useSetAtom } from 'jotai'
 import { useHydrateAtoms } from 'jotai/utils'
 import {
@@ -12,9 +11,9 @@ import {
   ChevronUpIcon,
   FolderIcon,
   GanttChartIcon,
-  HeadingIcon,
   HeartIcon,
   InboxIcon,
+  MoreVerticalIcon,
 } from 'lucide-react'
 
 import { Category, getIndicatorColor, useCategoryStore } from '@/store/category'
@@ -189,7 +188,7 @@ function CategoryItem({
 }) {
   return (
     <Item.Root isActive={isActive}>
-      <Item.Content.Link href={href}>
+      <Item.Content.Link href={href} className="justify-between">
         <Item.LabelContainer>
           <Item.LabelIcon>
             <div
@@ -201,6 +200,13 @@ function CategoryItem({
           </Item.LabelIcon>
           <Item.Label>{category.title}</Item.Label>
         </Item.LabelContainer>
+        <span>
+          <button className="flex h-6 w-6 items-center justify-center text-gray-400 hover:text-gray-800">
+            <span className="inline-block h-4 w-4">
+              <MoreVerticalIcon className="h-full w-full" />
+            </span>
+          </button>
+        </span>
       </Item.Content.Link>
     </Item.Root>
   )
@@ -328,7 +334,15 @@ function ItemContentButton({
 }
 
 function ItemLabel({ children }: React.ComponentProps<'span'>) {
-  return <span className="text-sm text-gray-600">{children}</span>
+  const isActive = useAtomValue(isActiveAtom)
+  return (
+    <span
+      data-active={isActive}
+      className="text-sm text-gray-600 data-[active=true]:font-medium data-[active=true]:text-gray-900"
+    >
+      {children}
+    </span>
+  )
 }
 
 function ItemLabelIcon({ className, children }: React.ComponentProps<'span'>) {
