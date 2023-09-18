@@ -42,6 +42,7 @@ interface Actions {
   getCategory: (id: string) => undefined | Category
   addCategories: (categories: Category[]) => void
   editCategory: (category: Category) => void
+  deleteCategory: (category: Category) => void
 
   removeAction: (id: string) => void
 }
@@ -82,6 +83,12 @@ const categoryStore: StateCreator<State & Actions> = (set, get) => ({
         return item
       }),
       action: [...state.action, { type: 'EDIT', id: category.id }],
+    }))
+  },
+  deleteCategory(category) {
+    set((state) => ({
+      categories: state.categories.filter((item) => item.id !== category.id),
+      action: [...state.action, { type: 'DELETE', id: category.id }],
     }))
   },
 })
