@@ -1,17 +1,18 @@
 import React from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as RadioGroup from '@radix-ui/react-radio-group'
-import { useForm } from 'react-hook-form'
+import { set, useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 import { useAppStore } from '@/store/app'
-import { indicatorOptions, useCategoryStore } from '@/store/category'
+import { Category, indicatorOptions, useCategoryStore } from '@/store/category'
 import { cn } from '@/utils/style'
 import { zRequired } from '@/utils/zod'
+import { Button } from '@ui/button'
 import * as Dialog from '@ui/dialog'
 import * as Form from '@ui/form'
 
-import { Button } from '../ui/button'
+import { Head } from '../head'
 
 const schema = z.object({
   title: zRequired,
@@ -19,12 +20,17 @@ const schema = z.object({
 })
 
 export function CategoryDialog() {
-  const isOpen = useAppStore((state) => state.dialog.createCategory)
+  const isCreate = useAppStore((state) => state.dialog.createCategory)
+  const isEdit = useAppStore((state) => state.dialog.editCategory)
   const setDialog = useAppStore((state) => state.setDialog)
 
+  const isOpen = isCreate || !!isEdit
   const setIsOpen = React.useCallback(
-    (isOpen: boolean) => setDialog('createCategory', isOpen),
-    [setDialog]
+    (isOpen: boolean) => {
+      if (isCreate) return setDialog('createCategory', isOpen)
+      if (isEdit) return setDialog('editCategory', null)
+    },
+    [setDialog, isCreate, isEdit]
   )
 
   const handleClose = () => {
@@ -35,7 +41,11 @@ export function CategoryDialog() {
     <Dialog.Root open={isOpen} onOpenChange={handleClose}>
       <Dialog.Portal>
         <Dialog.Content className="space-y-4">
-          <CategoryDialogContent handleClose={handleClose} />
+          <CategoryDialogContent
+            handleClose={handleClose}
+            isEdit={isEdit}
+            isCreate={isCreate}
+          />
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>
@@ -43,28 +53,46 @@ export function CategoryDialog() {
 }
 
 type FormValues = z.infer<typeof schema>
-function CategoryDialogContent({ handleClose }: { handleClose: () => void }) {
+function CategoryDialogContent({
+  handleClose,
+  isEdit,
+  isCreate,
+}: {
+  handleClose: () => void
+  isCreate: boolean
+  isEdit: Category | null
+}) {
   const addCategory = useCategoryStore((s) => s.addCategory)
+  const editCategory = useCategoryStore((s) => s.editCategory)
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+    getValues,
     setValue,
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
-    defaultValues: { indicator: 'orange' },
+    defaultValues: {
+      title: isEdit?.title ?? '',
+      indicator: isEdit?.indicator ?? 'orange',
+    },
   })
 
   const onSubmit = (data: FormValues) => {
-    addCategory(data)
+    if (isCreate) addCategory(data)
+    if (isEdit) editCategory({ ...isEdit, ...data })
+
     handleClose()
   }
 
+  const title = isEdit ? `Edit ${isEdit?.title}` : 'Create Category'
+
   return (
     <>
+      <Head title={title} />
       <div>
-        <Dialog.Title>Create Category</Dialog.Title>
+        <Dialog.Title>{title}</Dialog.Title>
         <Dialog.Description>
           Add a new category to your list.
         </Dialog.Description>
@@ -82,7 +110,7 @@ function CategoryDialogContent({ handleClose }: { handleClose: () => void }) {
             <Form.Label htmlFor="indicator">Indicator</Form.Label>
             <RadioGroup.Root
               className="flex justify-between"
-              defaultValue="orange"
+              defaultValue={getValues('indicator')}
               onValueChange={(value) => {
                 const validValue = indicatorOptions.find(
                   (option) => option.name === value

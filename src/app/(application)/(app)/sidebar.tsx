@@ -28,6 +28,7 @@ import {
   DropdownMenuTrigger,
   MenuIcon,
 } from '@/components/ui/menu'
+import { useAppStore } from '@/store/app'
 import { Category, getIndicatorColor, useCategoryStore } from '@/store/category'
 import { cn } from '@/utils/style'
 
@@ -196,20 +197,22 @@ function CategoryItem({
   href: string
   isActive: boolean
 }) {
+  const setDialog = useAppStore((s) => s.setDialog)
+
   const menuItem = [
     {
       label: 'Edit',
-      onSelect: (category: Category) => {},
+      onSelect: () => setDialog('editCategory', category),
       icon: <EditIcon className="h-full w-full" />,
     },
     {
       label: 'Delete',
-      onSelect: (category: Category) => {},
+      onSelect: () => setDialog('deleteCategory', category),
       icon: <Trash2Icon className="h-full w-full" />,
     },
     {
       label: category.isFavorite ? 'Unfavorite' : 'Favorite',
-      onSelect: (category: Category) => {},
+      onSelect: () => {},
       icon: category.isFavorite ? (
         <HeartOffIcon className="h-full w-full" />
       ) : (
@@ -248,10 +251,7 @@ function CategoryItem({
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="start">
                   {menuItem.map((i) => (
-                    <DropdownMenuItem
-                      key={i.label}
-                      onSelect={() => i.onSelect(category)}
-                    >
+                    <DropdownMenuItem key={i.label} onSelect={i.onSelect}>
                       <MenuIcon>{i.icon}</MenuIcon>
                       <span>{i.label}</span>
                     </DropdownMenuItem>
@@ -263,10 +263,7 @@ function CategoryItem({
         </ContextMenuTrigger>
         <ContextMenuContent>
           {menuItem.map((i) => (
-            <ContextMenuItem
-              key={i.label}
-              onSelect={() => i.onSelect(category)}
-            >
+            <ContextMenuItem key={i.label} onSelect={i.onSelect}>
               <MenuIcon>{i.icon}</MenuIcon>
               <span>{i.label}</span>
             </ContextMenuItem>

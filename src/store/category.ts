@@ -23,7 +23,7 @@ export const indicatorOptions = [
 ]
 
 export interface Action {
-  type: 'ADD'
+  type: 'ADD' | 'EDIT' | 'DELETE'
   id: string
 }
 
@@ -40,8 +40,10 @@ type State = typeof initialState
 interface Actions {
   addCategory: (category: Omit<Omit<Category, 'id'>, 'isFavorite'>) => void
   getCategory: (id: string) => undefined | Category
-  removeAction: (id: string) => void
   addCategories: (categories: Category[]) => void
+  editCategory: (category: Category) => void
+
+  removeAction: (id: string) => void
 }
 
 const categoryStore: StateCreator<State & Actions> = (set, get) => ({
@@ -71,6 +73,15 @@ const categoryStore: StateCreator<State & Actions> = (set, get) => ({
   addCategories(categories) {
     set((state) => ({
       categories: [...categories],
+    }))
+  },
+  editCategory(category) {
+    set((state) => ({
+      categories: state.categories.map((item) => {
+        if (item.id === category.id) return category
+        return item
+      }),
+      action: [...state.action, { type: 'EDIT', id: category.id }],
     }))
   },
 })
