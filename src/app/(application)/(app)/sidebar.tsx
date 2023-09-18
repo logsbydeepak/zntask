@@ -7,19 +7,33 @@ import {
   CalendarClockIcon,
   ChevronDownIcon,
   ChevronUpIcon,
+  EditIcon,
   FolderIcon,
   GanttChartIcon,
   HeartIcon,
+  HeartOffIcon,
   InboxIcon,
   MoreVerticalIcon,
+  Trash2Icon,
 } from 'lucide-react'
 
+import {
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuRoot,
+  ContextMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuRoot,
+  DropdownMenuTrigger,
+  MenuIcon,
+} from '@/components/ui/menu'
 import { Category, getIndicatorColor, useCategoryStore } from '@/store/category'
 import { cn } from '@/utils/style'
 
 export function Sidebar() {
   return (
-    <aside className="fixed bottom-0 top-14 w-56 overflow-y-scroll border-r border-gray-200 bg-white">
+    <aside className="fixed bottom-0 top-14 w-56 overflow-y-scroll border-r border-gray-200 bg-white pr-1">
       <div className="my-4 space-y-6">
         <div className="space-y-2">
           <QuickSection />
@@ -182,28 +196,83 @@ function CategoryItem({
   href: string
   isActive: boolean
 }) {
+  const menuItem = [
+    {
+      label: 'Edit',
+      onSelect: (category: Category) => {},
+      icon: <EditIcon className="h-full w-full" />,
+    },
+    {
+      label: 'Delete',
+      onSelect: (category: Category) => {},
+      icon: <Trash2Icon className="h-full w-full" />,
+    },
+    {
+      label: category.isFavorite ? 'Unfavorite' : 'Favorite',
+      onSelect: (category: Category) => {},
+      icon: category.isFavorite ? (
+        <HeartOffIcon className="h-full w-full" />
+      ) : (
+        <HeartIcon className="h-full w-full" />
+      ),
+    },
+  ]
+
   return (
     <Item.Root isActive={isActive}>
-      <Item.Content.Link href={href} className="justify-between">
-        <Item.LabelContainer>
-          <Item.LabelIcon>
-            <div
-              className={cn(
-                'h-3 w-3 rounded-sm',
-                `bg-${getIndicatorColor(category.indicator)}-600`
-              )}
-            />
-          </Item.LabelIcon>
-          <Item.Label>{category.title}</Item.Label>
-        </Item.LabelContainer>
-        <span>
-          <button className="flex h-6 w-6 items-center justify-center text-gray-400 hover:text-gray-800">
-            <span className="inline-block h-4 w-4">
-              <MoreVerticalIcon className="h-full w-full" />
+      <ContextMenuRoot>
+        <ContextMenuTrigger className="group">
+          <Item.Content.Link
+            href={href}
+            className="justify-between group-data-[state=open]:border-gray-200 group-data-[state=open]:bg-gray-50"
+          >
+            <Item.LabelContainer>
+              <Item.LabelIcon>
+                <div
+                  className={cn(
+                    'h-3 w-3 rounded-sm',
+                    `bg-${getIndicatorColor(category.indicator)}-600`
+                  )}
+                />
+              </Item.LabelIcon>
+              <Item.Label>{category.title}</Item.Label>
+            </Item.LabelContainer>
+            <span className="flex justify-center">
+              <DropdownMenuRoot>
+                <DropdownMenuTrigger asChild>
+                  <button className="flex h-6 w-6 items-center justify-center text-gray-400 hover:text-gray-800 data-[state=open]:text-gray-800">
+                    <span className="inline-block h-4 w-4">
+                      <MoreVerticalIcon className="h-full w-full" />
+                    </span>
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start">
+                  {menuItem.map((i) => (
+                    <DropdownMenuItem
+                      key={i.label}
+                      onSelect={() => i.onSelect(category)}
+                    >
+                      <MenuIcon>{i.icon}</MenuIcon>
+                      <span>{i.label}</span>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenuRoot>
             </span>
-          </button>
-        </span>
-      </Item.Content.Link>
+          </Item.Content.Link>
+        </ContextMenuTrigger>
+        <ContextMenuContent>
+          {menuItem.map((i) => (
+            <ContextMenuItem
+              key={i.label}
+              onSelect={() => i.onSelect(category)}
+            >
+              <MenuIcon>{i.icon}</MenuIcon>
+              <span>{i.label}</span>
+            </ContextMenuItem>
+          ))}
+        </ContextMenuContent>
+      </ContextMenuRoot>
     </Item.Root>
   )
 }
