@@ -1,6 +1,7 @@
 'use server'
 
 import bcrypt from 'bcryptjs'
+import { eq } from 'drizzle-orm'
 import { isValid } from 'ulidx'
 import { z } from 'zod'
 
@@ -28,8 +29,16 @@ const schema = z.object({
 })
 
 export const addCategory = h('AUTH', schema, async ({ input, userId }) => {
-  console.log('addCategory', input, userId)
   await db.insert(dbSchema.categories).values({ ...input, userId })
+
+  return r('OK', { input })
+})
+
+export const editCategory = h('AUTH', schema, async ({ input, userId }) => {
+  await db
+    .update(dbSchema.categories)
+    .set(input)
+    .where(eq(dbSchema.categories.id, input.id))
 
   return r('OK', { input })
 })

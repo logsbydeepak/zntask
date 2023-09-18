@@ -4,7 +4,7 @@ import React from 'react'
 
 import { useCategoryStore } from '@/store/category'
 
-import { addCategory } from './actions'
+import { addCategory, editCategory } from './actions'
 
 export function Sync() {
   const startTransition = React.useTransition()[1]
@@ -26,6 +26,15 @@ export function Sync() {
         if (!currentCategory) return
         const res = await addCategory(currentCategory)
 
+        if (res.code === 'OK') {
+          removeAction(currentAction.id)
+        }
+      }
+
+      if (currentAction.type === 'EDIT') {
+        const currentCategory = getCategory(currentAction.id)
+        if (!currentCategory) return
+        const res = await editCategory(currentCategory)
         if (res.code === 'OK') {
           removeAction(currentAction.id)
         }
