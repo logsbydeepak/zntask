@@ -4,7 +4,7 @@ import React from 'react'
 
 import { useCategoryStore } from '@/store/category'
 
-import { addCategory, editCategory } from './actions'
+import { addCategory, deleteCategory, editCategory } from './actions'
 
 export function Sync() {
   const startTransition = React.useTransition()[1]
@@ -13,6 +13,10 @@ export function Sync() {
   const action = useCategoryStore((state) => state.action)
   const getCategory = useCategoryStore((state) => state.getCategory)
   const removeAction = useCategoryStore((state) => state.removeAction)
+  const getDeleteCategory = useCategoryStore((state) => state.getDeleteCategory)
+  const removeDeleteCategory = useCategoryStore(
+    (state) => state.removeDeleteCategory
+  )
 
   React.useEffect(() => {
     if (isSyncing) return
@@ -39,9 +43,28 @@ export function Sync() {
           removeAction(currentAction.id)
         }
       }
+
+      if (currentAction.type === 'DELETE') {
+        const currentCategory = getDeleteCategory(currentAction.id)
+        if (!currentCategory) return
+
+        const res = await deleteCategory(currentCategory)
+        if (res.code === 'OK') {
+          removeAction(currentAction.id)
+          removeDeleteCategory(currentAction.id)
+        }
+      }
     })
     setIsSyncing(false)
-  }, [action, getCategory, removeAction, startTransition, isSyncing])
+  }, [
+    action,
+    getCategory,
+    removeAction,
+    startTransition,
+    isSyncing,
+    getDeleteCategory,
+    removeDeleteCategory,
+  ])
 
   return null
 }

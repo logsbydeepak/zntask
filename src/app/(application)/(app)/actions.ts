@@ -43,6 +43,13 @@ export const editCategory = h('AUTH', schema, async ({ input, userId }) => {
   return r('OK', { input })
 })
 
+export const deleteCategory = h('AUTH', schema, async ({ input, userId }) => {
+  await db
+    .delete(dbSchema.categories)
+    .where(eq(dbSchema.categories.id, input.id))
+  return r('OK', { input })
+})
+
 const getInitCategoriesSchema = z.object({
   hash: zRequired,
 })

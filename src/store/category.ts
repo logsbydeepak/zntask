@@ -34,6 +34,7 @@ export const getIndicatorColor = (indicator: string) => {
 const initialState = {
   categories: [] as Category[],
   action: [] as Action[],
+  deleteCategories: [] as Category[],
 }
 type State = typeof initialState
 
@@ -43,6 +44,9 @@ interface Actions {
   addCategories: (categories: Category[]) => void
   editCategory: (category: Category) => void
   deleteCategory: (category: Category) => void
+
+  getDeleteCategory: (id: string) => Category | undefined
+  removeDeleteCategory: (id: string) => void
 
   removeAction: (id: string) => void
 }
@@ -88,7 +92,20 @@ const categoryStore: StateCreator<State & Actions> = (set, get) => ({
   deleteCategory(category) {
     set((state) => ({
       categories: state.categories.filter((item) => item.id !== category.id),
+      deleteCategories: [...state.deleteCategories, category],
       action: [...state.action, { type: 'DELETE', id: category.id }],
+    }))
+  },
+
+  getDeleteCategory(id) {
+    return get().deleteCategories.find((category) => category.id === id)
+  },
+
+  removeDeleteCategory(id) {
+    set((state) => ({
+      deleteCategories: state.deleteCategories.filter(
+        (category) => category.id !== id
+      ),
     }))
   },
 })
