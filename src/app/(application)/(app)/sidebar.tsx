@@ -198,6 +198,7 @@ function CategoryItem({
   isActive: boolean
 }) {
   const setDialog = useAppStore((s) => s.setDialog)
+  const editCategory = useCategoryStore((s) => s.editCategory)
 
   const menuItem = [
     {
@@ -212,7 +213,8 @@ function CategoryItem({
     },
     {
       label: category.isFavorite ? 'Unfavorite' : 'Favorite',
-      onSelect: () => {},
+      onSelect: () =>
+        editCategory({ ...category, isFavorite: !category.isFavorite }),
       icon: category.isFavorite ? (
         <HeartOffIcon className="h-full w-full" />
       ) : (
