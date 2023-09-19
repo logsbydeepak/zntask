@@ -11,7 +11,7 @@ export function Header({ children }: { children: React.ReactNode }) {
 }
 
 export function Content({ children }: { children?: React.ReactNode }) {
-  return <div>{children}</div>
+  return <div className="pt-4">{children}</div>
 }
 
 export function NotFound() {
