@@ -19,19 +19,18 @@ import {
 
 import {
   ContextMenuContent,
-  ContextMenuItem,
   ContextMenuRoot,
   ContextMenuTrigger,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuRoot,
   DropdownMenuTrigger,
-  MenuIcon,
 } from '@/components/ui/menu'
 import { useAppStore } from '@/store/app'
 import { Category, useCategoryStore } from '@/store/category'
 import { getCategoryColor } from '@/utils/category'
 import { cn } from '@/utils/style'
+
+import { CategoryMenuContent } from './(home)/category-components'
 
 export function Sidebar() {
   return (
@@ -198,53 +197,27 @@ function CategoryItem({
   href: string
   isActive: boolean
 }) {
-  const setDialog = useAppStore((s) => s.setDialog)
-  const editCategory = useCategoryStore((s) => s.editCategory)
-
-  const menuItem = [
-    {
-      label: 'Edit',
-      onSelect: () => setDialog('editCategory', category),
-      icon: <EditIcon className="h-full w-full" />,
-    },
-    {
-      label: 'Delete',
-      onSelect: () => setDialog('deleteCategory', category),
-      icon: <Trash2Icon className="h-full w-full" />,
-    },
-    {
-      label: category.isFavorite ? 'Unfavorite' : 'Favorite',
-      onSelect: () =>
-        editCategory({ ...category, isFavorite: !category.isFavorite }),
-      icon: category.isFavorite ? (
-        <HeartOffIcon className="h-full w-full" />
-      ) : (
-        <HeartIcon className="h-full w-full" />
-      ),
-    },
-  ]
-
   return (
     <Item.Root isActive={isActive}>
       <ContextMenuRoot>
-        <ContextMenuTrigger className="group">
-          <Item.Content.Link
-            href={href}
-            className="justify-between group-data-[state=open]:border-gray-200 group-data-[state=open]:bg-gray-50"
-          >
-            <Item.LabelContainer>
-              <Item.LabelIcon>
-                <div
-                  className={cn(
-                    'h-3 w-3 rounded-sm',
-                    `bg-${getCategoryColor(category.indicator)}-600`
-                  )}
-                />
-              </Item.LabelIcon>
-              <Item.Label>{category.title}</Item.Label>
-            </Item.LabelContainer>
-            <span className="flex justify-center">
-              <DropdownMenuRoot>
+        <DropdownMenuRoot>
+          <ContextMenuTrigger className="group">
+            <Item.Content.Link
+              href={href}
+              className="justify-between group-data-[state=open]:border-gray-200 group-data-[state=open]:bg-gray-50"
+            >
+              <Item.LabelContainer>
+                <Item.LabelIcon>
+                  <div
+                    className={cn(
+                      'h-3 w-3 rounded-sm',
+                      `bg-${getCategoryColor(category.indicator)}-600`
+                    )}
+                  />
+                </Item.LabelIcon>
+                <Item.Label>{category.title}</Item.Label>
+              </Item.LabelContainer>
+              <span className="flex justify-center">
                 <DropdownMenuTrigger asChild>
                   <button className="flex h-6 w-6 items-center justify-center text-gray-400 hover:text-gray-800 data-[state=open]:text-gray-800">
                     <span className="inline-block h-4 w-4">
@@ -252,26 +225,16 @@ function CategoryItem({
                     </span>
                   </button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="start">
-                  {menuItem.map((i) => (
-                    <DropdownMenuItem key={i.label} onSelect={i.onSelect}>
-                      <MenuIcon>{i.icon}</MenuIcon>
-                      <span>{i.label}</span>
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenuRoot>
-            </span>
-          </Item.Content.Link>
-        </ContextMenuTrigger>
-        <ContextMenuContent>
-          {menuItem.map((i) => (
-            <ContextMenuItem key={i.label} onSelect={i.onSelect}>
-              <MenuIcon>{i.icon}</MenuIcon>
-              <span>{i.label}</span>
-            </ContextMenuItem>
-          ))}
-        </ContextMenuContent>
+              </span>
+            </Item.Content.Link>
+          </ContextMenuTrigger>
+          <ContextMenuContent>
+            <CategoryMenuContent category={category} type="context" />
+          </ContextMenuContent>
+          <DropdownMenuContent align="start">
+            <CategoryMenuContent category={category} type="dropdown" />
+          </DropdownMenuContent>
+        </DropdownMenuRoot>
       </ContextMenuRoot>
     </Item.Root>
   )
