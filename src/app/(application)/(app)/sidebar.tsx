@@ -29,7 +29,8 @@ import {
   MenuIcon,
 } from '@/components/ui/menu'
 import { useAppStore } from '@/store/app'
-import { Category, getIndicatorColor, useCategoryStore } from '@/store/category'
+import { Category, useCategoryStore } from '@/store/category'
+import { getCategoryColor } from '@/utils/category'
 import { cn } from '@/utils/style'
 
 export function Sidebar() {
@@ -236,7 +237,7 @@ function CategoryItem({
                 <div
                   className={cn(
                     'h-3 w-3 rounded-sm',
-                    `bg-${getIndicatorColor(category.indicator)}-600`
+                    `bg-${getCategoryColor(category.indicator)}-600`
                   )}
                 />
               </Item.LabelIcon>

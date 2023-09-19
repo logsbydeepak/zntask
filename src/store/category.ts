@@ -2,33 +2,18 @@ import { ulid } from 'ulidx'
 import { create, StateCreator } from 'zustand'
 import { persist } from 'zustand/middleware'
 
+import { CategoryIndicatorLabelType } from '@/utils/category'
+
 export interface Category {
   id: string
   title: string
-  indicator: string
+  indicator: CategoryIndicatorLabelType
   isFavorite: boolean
 }
-
-export const indicatorOptions = [
-  { name: 'orange', color: 'orange' },
-  { name: 'red', color: 'red' },
-  { name: 'blue', color: 'blue' },
-  { name: 'green', color: 'green' },
-  { name: 'yellow', color: 'yellow' },
-  { name: 'pink', color: 'pink' },
-  { name: 'lime', color: 'lime' },
-  { name: 'cyan', color: 'cyan' },
-  { name: 'violet', color: 'violet' },
-  { name: 'indigo', color: 'indigo' },
-]
 
 export interface Action {
   type: 'ADD' | 'EDIT' | 'DELETE'
   id: string
-}
-
-export const getIndicatorColor = (indicator: string) => {
-  return indicatorOptions.find((option) => option.name === indicator)?.color
 }
 
 const initialState = {

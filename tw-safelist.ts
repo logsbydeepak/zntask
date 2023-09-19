@@ -1,10 +1,10 @@
-import { indicatorOptions } from '@/store/category'
+import { categoryIndicatorOptions } from '@/utils/category'
 
 const path = './tw-safelist.txt'
 
 const write: string[] = []
 
-indicatorOptions.forEach((item) => {
+categoryIndicatorOptions.forEach((item) => {
   const color = item.color
   write.push(`bg-${color}-600`, `hover:ring-${color}-300`)
 })

@@ -5,7 +5,8 @@ import { set, useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 import { useAppStore } from '@/store/app'
-import { Category, indicatorOptions, useCategoryStore } from '@/store/category'
+import { Category, useCategoryStore } from '@/store/category'
+import { categoryIndicatorOptions, zCategoryIndicator } from '@/utils/category'
 import { cn } from '@/utils/style'
 import { zRequired } from '@/utils/zod'
 import { Button } from '@ui/button'
@@ -16,7 +17,7 @@ import { Head } from '../head'
 
 const schema = z.object({
   title: zRequired,
-  indicator: zRequired,
+  indicator: zCategoryIndicator,
 })
 
 export function CategoryDialog() {
@@ -112,17 +113,14 @@ function CategoryDialogContent({
               className="flex justify-between"
               defaultValue={getValues('indicator')}
               onValueChange={(value) => {
-                const validValue = indicatorOptions.find(
-                  (option) => option.name === value
-                )
-                if (!validValue) return
-                setValue('indicator', value)
+                const validatedValue = zCategoryIndicator.parse(value)
+                setValue('indicator', validatedValue)
               }}
             >
-              {indicatorOptions.map((option) => (
+              {categoryIndicatorOptions.map((option) => (
                 <RadioGroup.Item
-                  key={option.name}
-                  value={option.name}
+                  key={option.label}
+                  value={option.label}
                   className="flex items-center justify-center"
                   asChild
                 >

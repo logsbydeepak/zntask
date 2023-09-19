@@ -1,5 +1,10 @@
 import { relations } from 'drizzle-orm'
-import { boolean, mysqlTable, varchar } from 'drizzle-orm/mysql-core'
+import { boolean, mysqlEnum, mysqlTable, varchar } from 'drizzle-orm/mysql-core'
+
+import {
+  categoryDefaultIndicatorOption,
+  categoryIndicatorLabel,
+} from '@/utils/category'
 
 export const users = mysqlTable('users', {
   id: varchar('id', { length: 26 }).primaryKey(),
@@ -25,7 +30,12 @@ export const categories = mysqlTable('categories', {
   id: varchar('id', { length: 26 }).primaryKey(),
   userId: varchar('user_id', { length: 26 }).notNull(),
   title: varchar('title', { length: 256 }).notNull(),
-  indicator: varchar('indicator', { length: 256 }).notNull(),
+  indicator: varchar('indicator', {
+    length: 256,
+    enum: categoryIndicatorLabel,
+  })
+    .default(categoryDefaultIndicatorOption.label)
+    .notNull(),
   isFavorite: boolean('is_favorite').notNull(),
 })
 

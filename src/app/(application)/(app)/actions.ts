@@ -2,10 +2,10 @@
 
 import bcrypt from 'bcryptjs'
 import { eq } from 'drizzle-orm'
-import { isValid } from 'ulidx'
 import { z } from 'zod'
 
 import { db, dbSchema } from '@/db'
+import { zCategory } from '@/utils/category'
 import { redis } from '@/utils/config'
 import { h, r } from '@/utils/handler'
 import { zRequired } from '@/utils/zod'
@@ -21,20 +21,15 @@ export const logout = h('AUTH', async ({ userId, token }) => {
   return r('OK')
 })
 
-const schema = z.object({
-  id: zRequired.refine(isValid, { message: 'Invalid ulid' }),
-  title: zRequired,
-  indicator: zRequired,
-  isFavorite: z.boolean(),
-})
-
-export const addCategory = h('AUTH', schema, async ({ input, userId }) => {
-  await db.insert(dbSchema.categories).values({ ...input, userId })
+export const addCategory = h('AUTH', zCategory, async ({ input, userId }) => {
+  await db
+    .insert(dbSchema.categories)
+    .values({ ...input, userId, indicator: 'orange' })
 
   return r('OK', { input })
 })
 
-export const editCategory = h('AUTH', schema, async ({ input, userId }) => {
+export const editCategory = h('AUTH', zCategory, async ({ input, userId }) => {
   await db
     .update(dbSchema.categories)
     .set(input)
@@ -43,12 +38,16 @@ export const editCategory = h('AUTH', schema, async ({ input, userId }) => {
   return r('OK', { input })
 })
 
-export const deleteCategory = h('AUTH', schema, async ({ input, userId }) => {
-  await db
-    .delete(dbSchema.categories)
-    .where(eq(dbSchema.categories.id, input.id))
-  return r('OK', { input })
-})
+export const deleteCategory = h(
+  'AUTH',
+  zCategory,
+  async ({ input, userId }) => {
+    await db
+      .delete(dbSchema.categories)
+      .where(eq(dbSchema.categories.id, input.id))
+    return r('OK', { input })
+  }
+)
 
 const getInitCategoriesSchema = z.object({
   hash: zRequired,
