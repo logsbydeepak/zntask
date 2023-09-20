@@ -197,6 +197,7 @@ function CategoryItem({
   href: string
   isActive: boolean
 }) {
+  const editCategory = useCategoryStore((s) => s.editCategory)
   return (
     <Item.Root isActive={isActive}>
       <ContextMenuRoot>
@@ -217,14 +218,20 @@ function CategoryItem({
                 </Item.LabelIcon>
                 <Item.Label>{category.title}</Item.Label>
               </Item.LabelContainer>
-              <span className="flex items-center justify-center space-x-0.5">
-                <span>
-                  {category.isFavorite && href.startsWith('/category') && (
+              <span className="flex items-center space-x-0.5">
+                {category.isFavorite && href.startsWith('/category') && (
+                  <button
+                    className="flex h-6 w-6 items-center justify-center rounded-md text-gray-500 hover:bg-red-50 hover:text-red-700"
+                    onClick={(e) => {
+                      e.preventDefault()
+                      editCategory({ ...category, isFavorite: false })
+                    }}
+                  >
                     <span>
-                      <HeartIcon className="h-2.5 w-2.5 text-gray-500" />
+                      <HeartIcon className="h-2.5 w-2.5" strokeWidth={3} />
                     </span>
-                  )}
-                </span>
+                  </button>
+                )}
 
                 <DropdownMenuTrigger asChild>
                   <button className="flex h-6 w-6 items-center justify-center text-gray-400 hover:text-gray-800 data-[state=open]:text-gray-800">

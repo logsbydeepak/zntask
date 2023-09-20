@@ -30,6 +30,7 @@ export function CategoryItem({
   category: Category
   href: string
 }) {
+  const editCategory = useCategoryStore((s) => s.editCategory)
   return (
     <ContextMenuRoot>
       <DropdownMenuRoot>
@@ -47,7 +48,21 @@ export function CategoryItem({
               />
               <p className="text-sm">{category.title}</p>
             </div>
-            <div>
+            <div className="flex items-center space-x-1">
+              {category.isFavorite && href.startsWith('/category') && (
+                <button
+                  className="flex h-6 w-6 items-center justify-center rounded-md text-gray-500 hover:bg-red-50 hover:text-red-700"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    editCategory({ ...category, isFavorite: false })
+                  }}
+                >
+                  <span>
+                    <HeartIcon className="h-2.5 w-2.5" strokeWidth={3} />
+                  </span>
+                </button>
+              )}
+
               <DropdownMenuTrigger asChild>
                 <button className="flex h-6 w-6 items-center justify-center text-gray-400 hover:text-gray-800 data-[state=open]:text-gray-800">
                   <span className="inline-block h-4 w-4">
