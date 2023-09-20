@@ -51,14 +51,17 @@ export function CategoryItem({
             <div className="flex items-center space-x-1">
               {category.isFavorite && href.startsWith('/category') && (
                 <button
-                  className="flex h-6 w-6 items-center justify-center rounded-md text-gray-500 hover:bg-red-50 hover:text-red-700"
+                  className="group/favorite flex h-6 w-6 items-center justify-center rounded-md text-gray-500 hover:bg-red-50 hover:text-red-700"
                   onClick={(e) => {
                     e.preventDefault()
                     editCategory({ ...category, isFavorite: false })
                   }}
                 >
-                  <span>
+                  <span className="group-hover/favorite:hidden">
                     <HeartIcon className="h-2.5 w-2.5" strokeWidth={3} />
+                  </span>
+                  <span className="hidden group-hover/favorite:inline-block">
+                    <HeartOffIcon className="h-2.5 w-2.5" strokeWidth={3} />
                   </span>
                 </button>
               )}
