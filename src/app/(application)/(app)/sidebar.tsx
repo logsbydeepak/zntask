@@ -3,6 +3,7 @@
 import React from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useAtomValue } from 'jotai'
 import {
   CalendarClockIcon,
   ChevronDownIcon,
@@ -25,7 +26,7 @@ import {
   DropdownMenuRoot,
   DropdownMenuTrigger,
 } from '@/components/ui/menu'
-import { useAppStore } from '@/store/app'
+import { isSidebarOpenAtom } from '@/store/app'
 import { Category, useCategoryStore } from '@/store/category'
 import { getCategoryColor } from '@/utils/category'
 import { cn } from '@/utils/style'
@@ -33,6 +34,9 @@ import { cn } from '@/utils/style'
 import { CategoryMenuContent } from './(home)/category-components'
 
 export function Sidebar() {
+  const isSidebarOpen = useAtomValue(isSidebarOpenAtom)
+
+  if (!isSidebarOpen) return null
   return (
     <aside className="fixed bottom-0 top-14 w-56 overflow-y-scroll border-r border-gray-200 bg-white pr-1">
       <div className="my-4 space-y-6">

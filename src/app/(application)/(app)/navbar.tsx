@@ -9,12 +9,15 @@ import {
   Avatar as AvatarRoot,
 } from '@radix-ui/react-avatar'
 import Avvvatars from 'avvvatars-react'
+import { useAtomValue, useSetAtom } from 'jotai'
 import {
   CommandIcon,
   FolderPlusIcon,
   LogOutIcon,
+  MenuSquareIcon,
   MonitorIcon,
   MoonStarIcon,
+  PanelLeftIcon,
   PlusIcon,
   SearchIcon,
   SunIcon,
@@ -22,7 +25,7 @@ import {
 import { useTheme } from 'next-themes'
 
 import { LogoIcon } from '@/components/icon/logo'
-import { useAppStore } from '@/store/app'
+import { isSidebarOpenAtom, useAppStore } from '@/store/app'
 import {
   DropdownMenuContent,
   DropdownMenuItem,
@@ -45,6 +48,8 @@ export function Navbar({
   email: string
 }) {
   const setDialog = useAppStore((s) => s.setDialog)
+  const setIsSidebarOpen = useSetAtom(isSidebarOpenAtom)
+  const isSidebarOpen = useAtomValue(isSidebarOpenAtom)
 
   const name = `${firstName} ${lastName}`
   return (
@@ -56,7 +61,7 @@ export function Navbar({
           </span>
           <span className="text-sm font-medium">zntask</span>
         </Link>
-        <div className="flex space-x-4">
+        <div className="flex space-x-2 md:space-x-4">
           <Search />
 
           <Icon onClick={() => setDialog('createCategory', true)}>
@@ -65,6 +70,14 @@ export function Navbar({
 
           <Icon>
             <PlusIcon className="h-full w-full" />
+          </Icon>
+
+          <Icon onClick={() => setIsSidebarOpen((open) => !open)}>
+            {isSidebarOpen ? (
+              <PanelLeftIcon className="h-full w-full" />
+            ) : (
+              <MenuSquareIcon className="h-full w-full" />
+            )}
           </Icon>
 
           <DropdownMenuRoot>
@@ -186,16 +199,18 @@ function Icon({
 
 function Search() {
   return (
-    <button className="group flex items-center rounded-lg border border-gray-200 bg-gray-50 pl-3 pr-1.5 hover:bg-gray-100 hover:text-gray-950">
+    <button className="group flex items-center rounded-lg border border-gray-200 bg-gray-50 px-[7px] hover:bg-gray-100 hover:text-gray-950 md:pl-3 md:pr-1.5">
       <span className="h-4 w-4 text-gray-500 group-hover:text-gray-950">
         <SearchIcon className="h-full w-full" />
       </span>
-      <span className="ml-2 mr-4 text-xs text-gray-500">Search</span>
-      <span className="flex items-center space-x-1 rounded-md border border-gray-200 px-1.5 text-xs text-gray-500">
-        <span className="inline-block h-2.5 w-2.5">
-          <CommandIcon className="h-full w-full" />
+      <span className="hidden md:flex md:items-center">
+        <span className="ml-2 mr-4 text-xs text-gray-500">Search</span>
+        <span className="flex items-center space-x-1 rounded-md border border-gray-200 px-1.5 text-xs text-gray-500">
+          <span className="inline-block h-2.5 w-2.5">
+            <CommandIcon className="h-full w-full" />
+          </span>
+          <span className="font-mono text-[10px]">K</span>
         </span>
-        <span className="font-mono text-[10px]">K</span>
       </span>
     </button>
   )

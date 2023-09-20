@@ -4,6 +4,7 @@ import { Dialogs } from '@/components/dialogs'
 
 import { AppLoading } from './app-loading'
 import { getUser } from './fetch'
+import { AppLayout, JotaiProvider } from './layout-client'
 import { Navbar } from './navbar'
 import { Sidebar } from './sidebar'
 import { SplashScreen } from './splash-screen'
@@ -16,15 +17,15 @@ export default async function Layout({
 }) {
   return (
     <Suspense fallback={<SplashScreen />}>
-      <AppLoading>
-        <GetUser />
-        <Sidebar />
-        <main className="pl-56 pt-14">
-          <div className="mx-auto max-w-7xl px-10 py-4">{children}</div>
-        </main>
-        <Dialogs />
-        <Sync />
-      </AppLoading>
+      <JotaiProvider>
+        <AppLoading>
+          <GetUser />
+          <Sidebar />
+          <AppLayout>{children}</AppLayout>
+          <Dialogs />
+          <Sync />
+        </AppLoading>
+      </JotaiProvider>
     </Suspense>
   )
 }

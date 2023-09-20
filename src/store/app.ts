@@ -4,6 +4,7 @@ import { create, StateCreator } from 'zustand'
 import { Category } from './category'
 
 export const isAppLoadingAtom = atom(true)
+export const isSidebarOpenAtom = atom(false)
 
 const dialogState = {
   resetPassword: false,

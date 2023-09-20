@@ -1,10 +1,10 @@
 'use client'
 
-import React, { useEffect } from 'react'
+import React from 'react'
 import bcrypt from 'bcryptjs'
 import { useAtomValue, useSetAtom } from 'jotai'
 
-import { isAppLoadingAtom } from '@/store/app'
+import { isAppLoadingAtom, isSidebarOpenAtom } from '@/store/app'
 import { useCategoryStore } from '@/store/category'
 
 import { getInitCategories } from './actions'
@@ -18,17 +18,25 @@ export function AppLoading({ children }: { children: React.ReactNode }) {
     setIsAppReady(true)
   }, [setIsAppReady])
 
-  if (!isAppReady) return <SplashScreen />
-  if (isAppLoading) {
-    return (
-      <>
-        <SplashScreen />
-        <InitCategories />
-      </>
-    )
-  }
+  return (
+    <>
+      {!isAppReady && (
+        <>
+          <SplashScreen />
+        </>
+      )}
 
-  return children
+      {isAppLoading && (
+        <>
+          <SplashScreen />
+          <InitCategories />
+        </>
+      )}
+
+      {!isAppLoading && isAppReady && <>{children}</>}
+      <ShouldSidebarBeOpen />
+    </>
+  )
 }
 
 function InitCategories() {
@@ -40,7 +48,7 @@ function InitCategories() {
   const categories = useCategoryStore((s) => s.categories)
   const addCategories = useCategoryStore((s) => s.addCategories)
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (renderCount.current) return
     const hash = bcrypt.hashSync(JSON.stringify(categories), 10)
 
@@ -55,6 +63,26 @@ function InitCategories() {
 
     renderCount.current++
   }, [categories, addCategories, setIsAppLoading])
+
+  return null
+}
+
+function ShouldSidebarBeOpen() {
+  const setIsSidebarOpen = useSetAtom(isSidebarOpenAtom)
+
+  React.useEffect(() => {
+    function handleResize() {
+      if (window.innerWidth > 768) {
+        setIsSidebarOpen(true)
+        return
+      }
+      setIsSidebarOpen(false)
+    }
+
+    handleResize()
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [setIsSidebarOpen])
 
   return null
 }
