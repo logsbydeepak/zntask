@@ -33,10 +33,10 @@ export function CategoryItem({
   return (
     <ContextMenuRoot>
       <DropdownMenuRoot>
-        <ContextMenuTrigger className="group">
+        <ContextMenuTrigger className="group block">
           <Link
             href={href}
-            className="flex items-center justify-between rounded-lg border border-transparent px-4 py-2 hover:border-gray-200 hover:bg-gray-50"
+            className="flex items-center justify-between rounded-lg border border-transparent px-4 py-2 hover:border-gray-200 hover:bg-gray-50 group-data-[state=open]:border-gray-200 group-data-[state=open]:bg-gray-50"
           >
             <div className="flex items-center space-x-3">
               <div

@@ -217,7 +217,15 @@ function CategoryItem({
                 </Item.LabelIcon>
                 <Item.Label>{category.title}</Item.Label>
               </Item.LabelContainer>
-              <span className="flex justify-center">
+              <span className="flex items-center justify-center space-x-0.5">
+                <span>
+                  {category.isFavorite && href.startsWith('/category') && (
+                    <span>
+                      <HeartIcon className="h-2.5 w-2.5 text-gray-500" />
+                    </span>
+                  )}
+                </span>
+
                 <DropdownMenuTrigger asChild>
                   <button className="flex h-6 w-6 items-center justify-center text-gray-400 hover:text-gray-800 data-[state=open]:text-gray-800">
                     <span className="inline-block h-4 w-4">
