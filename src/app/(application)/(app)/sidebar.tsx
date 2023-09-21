@@ -3,7 +3,7 @@
 import React from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useAtomValue } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 import {
   CalendarClockIcon,
   ChevronDownIcon,
@@ -26,6 +26,7 @@ import {
   DropdownMenuRoot,
   DropdownMenuTrigger,
 } from '@/components/ui/menu'
+import { useMediaQuery } from '@/hooks/useMediaQuery'
 import { isSidebarOpenAtom } from '@/store/app'
 import { Category, useCategoryStore } from '@/store/category'
 import { getCategoryColor } from '@/utils/category'
@@ -38,7 +39,7 @@ export function Sidebar() {
 
   if (!isSidebarOpen) return null
   return (
-    <aside className="fixed bottom-0 top-14 w-56 overflow-y-scroll border-r border-gray-200 bg-white pr-1">
+    <aside className="fixed bottom-0 top-14 w-full overflow-y-scroll border-r border-gray-200 bg-white pr-1 md:w-56">
       <div className="my-4 space-y-6">
         <div className="space-y-2">
           <QuickSection />
@@ -337,8 +338,17 @@ function ItemContentLink({
   href,
   className,
 }: React.ComponentProps<typeof Link>) {
+  const { isSmallScreen } = useMediaQuery()
+  const setIsSidebarOpen = useSetAtom(isSidebarOpenAtom)
+
   return (
-    <Link href={href} className={cn(itemContentStyle, className)}>
+    <Link
+      href={href}
+      className={cn(itemContentStyle, className)}
+      onClick={() => {
+        if (isSmallScreen) return setIsSidebarOpen(false)
+      }}
+    >
       {children}
     </Link>
   )

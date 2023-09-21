@@ -4,6 +4,7 @@ import React from 'react'
 import bcrypt from 'bcryptjs'
 import { useAtomValue, useSetAtom } from 'jotai'
 
+import { useMediaQuery } from '@/hooks/useMediaQuery'
 import { isAppLoadingAtom, isSidebarOpenAtom } from '@/store/app'
 import { useCategoryStore } from '@/store/category'
 
@@ -34,7 +35,7 @@ export function AppLoading({ children }: { children: React.ReactNode }) {
       )}
 
       {!isAppLoading && isAppReady && <>{children}</>}
-      <ShouldSidebarBeOpen />
+      <SidebarState />
     </>
   )
 }
@@ -67,22 +68,17 @@ function InitCategories() {
   return null
 }
 
-function ShouldSidebarBeOpen() {
+function SidebarState() {
   const setIsSidebarOpen = useSetAtom(isSidebarOpenAtom)
+  const { isSmallScreen } = useMediaQuery()
 
   React.useEffect(() => {
-    function handleResize() {
-      if (window.innerWidth > 768) {
-        setIsSidebarOpen(true)
-        return
-      }
-      setIsSidebarOpen(false)
+    if (!isSmallScreen) {
+      setIsSidebarOpen(true)
+      return
     }
-
-    handleResize()
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
-  }, [setIsSidebarOpen])
+    setIsSidebarOpen(false)
+  }, [isSmallScreen, setIsSidebarOpen])
 
   return null
 }

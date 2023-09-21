@@ -61,24 +61,29 @@ export function Navbar({
           </span>
           <span className="text-sm font-medium">zntask</span>
         </Link>
-        <div className="flex space-x-2 md:space-x-4">
-          <Search />
+        <div className="flex space-x-3 md:space-x-4">
+          <div className="flex space-x-3">
+            <Search />
 
-          <Icon onClick={() => setDialog('createCategory', true)}>
-            <FolderPlusIcon className="h-full w-full" />
-          </Icon>
+            <Icon onClick={() => setIsSidebarOpen((open) => !open)}>
+              {isSidebarOpen ? (
+                <PanelLeftIcon className="h-full w-full" />
+              ) : (
+                <MenuSquareIcon className="h-full w-full" />
+              )}
+            </Icon>
+          </div>
+          <div className="my-1 w-[1px] bg-gray-200" />
 
-          <Icon>
-            <PlusIcon className="h-full w-full" />
-          </Icon>
+          <div className="flex space-x-3">
+            <Icon onClick={() => setDialog('createCategory', true)}>
+              <FolderPlusIcon className="h-full w-full" />
+            </Icon>
 
-          <Icon onClick={() => setIsSidebarOpen((open) => !open)}>
-            {isSidebarOpen ? (
-              <PanelLeftIcon className="h-full w-full" />
-            ) : (
-              <MenuSquareIcon className="h-full w-full" />
-            )}
-          </Icon>
+            <Icon>
+              <PlusIcon className="h-full w-full" />
+            </Icon>
+          </div>
 
           <DropdownMenuRoot>
             <DropdownMenuTrigger>
