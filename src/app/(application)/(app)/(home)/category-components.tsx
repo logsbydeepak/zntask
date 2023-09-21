@@ -42,7 +42,7 @@ export function CategoryItem({
             <div className="flex items-center space-x-3">
               <div
                 className={cn(
-                  'h-3 w-3 rounded-sm',
+                  'h-3 w-3 rounded-[4.5px]',
                   `bg-${getCategoryColor(category.indicator)}-600`
                 )}
               />

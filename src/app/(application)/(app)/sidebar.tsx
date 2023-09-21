@@ -39,8 +39,8 @@ export function Sidebar() {
 
   if (!isSidebarOpen) return null
   return (
-    <aside className="fixed bottom-0 top-14 w-full overflow-y-scroll border-r border-gray-200 bg-white pr-1 md:w-56">
-      <div className="my-4 space-y-6">
+    <aside className="fixed bottom-0 top-14 w-full overflow-y-scroll border-r-0 border-gray-200 bg-white pr-1 md:w-56 md:border-r">
+      <div className="my-4 space-y-6 pr-1">
         <div className="space-y-2">
           <QuickSection />
         </div>
@@ -203,6 +203,7 @@ function CategoryItem({
   isActive: boolean
 }) {
   const editCategory = useCategoryStore((s) => s.editCategory)
+  const { isSmallScreen } = useMediaQuery()
   return (
     <Item.Root isActive={isActive}>
       <ContextMenuRoot>
@@ -216,7 +217,7 @@ function CategoryItem({
                 <Item.LabelIcon>
                   <div
                     className={cn(
-                      'h-3 w-3 rounded-sm',
+                      'h-3 w-3 rounded-[4.5px]',
                       `bg-${getCategoryColor(category.indicator)}-600`
                     )}
                   />
@@ -254,7 +255,7 @@ function CategoryItem({
           <ContextMenuContent>
             <CategoryMenuContent category={category} type="context" />
           </ContextMenuContent>
-          <DropdownMenuContent align="start">
+          <DropdownMenuContent align={isSmallScreen ? 'end' : 'start'}>
             <CategoryMenuContent category={category} type="dropdown" />
           </DropdownMenuContent>
         </DropdownMenuRoot>
