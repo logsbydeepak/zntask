@@ -7,7 +7,7 @@ export function useMediaQuery() {
 
   React.useEffect(() => {
     function handleResize() {
-      if (window.innerWidth > 768) {
+      if (window.innerWidth >= 768) {
         setIsSmallScreen(false)
         return
       }

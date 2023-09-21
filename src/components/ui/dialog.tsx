@@ -31,7 +31,7 @@ export const Content = React.forwardRef<
     {...props}
     ref={ref}
     className={cn(
-      'fixed left-1/2 top-1/2 z-40 w-[400px] -translate-x-1/2 -translate-y-1/2 transform rounded-md border border-gray-200 bg-white p-6 shadow-2xl drop-shadow-sm',
+      'fixed bottom-0 z-40 w-full transform rounded-none rounded-t-xl border-t border-gray-200 bg-white p-4 shadow-2xl drop-shadow-2xl sm:bottom-auto sm:left-1/2 sm:top-1/2 sm:w-[400px] sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-md sm:border sm:p-6 sm:shadow-lg sm:drop-shadow-sm',
       className
     )}
   >
