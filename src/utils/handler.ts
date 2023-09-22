@@ -62,10 +62,7 @@ export function h(...args: any[]) {
           const result = await args[1]({ userId, token })
           return result
         } catch (error) {
-          if (error instanceof UnauthorizedError) {
-            redirect('/login')
-          }
-          throw new Error('Something went wrong!')
+          handleError(error)
         }
       }
     }
@@ -78,11 +75,7 @@ export function h(...args: any[]) {
           const result = await args[2]({ input, userId, token })
           return result
         } catch (error) {
-          console.log(error)
-          if (error instanceof UnauthorizedError) {
-            redirect('/login')
-          }
-          throw new Error('Something went wrong!')
+          handleError(error)
         }
       }
     }
@@ -95,8 +88,7 @@ export function h(...args: any[]) {
         const result = await args[1]({ input })
         return result
       } catch (error) {
-        console.log(error)
-        throw new Error('Something went wrong!')
+        handleError(error)
       }
     }
   }
@@ -108,9 +100,19 @@ export function h(...args: any[]) {
         const result = await args[0]()
         return result
       } catch (error) {
-        throw new Error('Something went wrong!')
+        handleError(error)
       }
     }
+  }
+
+  throw new Error('Something went wrong!')
+}
+
+function handleError(error: unknown) {
+  console.log(error)
+
+  if (error instanceof UnauthorizedError) {
+    redirect('/login')
   }
 
   throw new Error('Something went wrong!')

@@ -8,19 +8,23 @@ import { redis } from '@/utils/config'
 const secret = jose.base64url.decode(env.JWT_SECRET)
 const maxAge = ms('30 days')
 
+function genExpTime(ExpMs: number) {
+  return Date.now() + ExpMs
+}
+
 export async function generateAuthJWT(userId: string) {
   return await new jose.EncryptJWT({ userId })
     .setProtectedHeader({ alg: 'dir', enc: 'A128CBC-HS256' })
-    .setIssuedAt()
-    .setExpirationTime(maxAge)
+    .setAudience('auth')
+    .setExpirationTime(genExpTime(maxAge))
     .encrypt(secret)
 }
 
-export async function generateEmailJWT(id: string) {
-  return await new jose.EncryptJWT({ id })
+export async function generateEmailJWT(userId: string) {
+  return await new jose.EncryptJWT({ userId })
     .setProtectedHeader({ alg: 'dir', enc: 'A128CBC-HS256' })
-    .setIssuedAt()
-    .setExpirationTime(ms('15 minutes'))
+    .setAudience('reset-password')
+    .setExpirationTime(genExpTime(ms('15 minutes')))
     .encrypt(secret)
 }
 
@@ -57,7 +61,9 @@ export async function isAuth() {
     if (!token) throw new Error("Token doesn't exist!")
 
     const secret = jose.base64url.decode(env.JWT_SECRET)
-    const { payload } = await jose.jwtDecrypt(token, secret)
+    const { payload } = await jose.jwtDecrypt(token, secret, {
+      audience: 'auth',
+    })
 
     if (!payload) throw new Error("Payload doesn't exist!")
     if (!payload?.userId) throw new Error("Payload doesn't have userId!")

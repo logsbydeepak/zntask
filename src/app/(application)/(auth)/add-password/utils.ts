@@ -6,7 +6,9 @@ import { r } from '@/utils/handler'
 export async function checkToken(token: string) {
   try {
     const secret = jose.base64url.decode(env.JWT_SECRET)
-    const { payload } = await jose.jwtDecrypt(token, secret)
+    const { payload } = await jose.jwtDecrypt(token, secret, {
+      audience: 'reset-password',
+    })
 
     if (!payload) throw new Error("Payload doesn't exist!")
     if (!payload?.userId) throw new Error("Payload doesn't have userId!")

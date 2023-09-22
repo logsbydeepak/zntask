@@ -69,7 +69,9 @@ async function checkIsAuth(token?: string) {
   try {
     if (!token) return false
     const secret = jose.base64url.decode(env.JWT_SECRET)
-    const { payload } = await jose.jwtDecrypt(token, secret)
+    const { payload } = await jose.jwtDecrypt(token, secret, {
+      audience: 'auth',
+    })
     if (!payload) return false
     if (!payload?.userId) return false
     if (typeof payload.userId !== 'string') return false
