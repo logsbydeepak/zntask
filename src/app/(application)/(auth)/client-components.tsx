@@ -23,7 +23,7 @@ export function Navbar() {
   }
 
   return (
-    <nav className="p-2 md:p-4">
+    <nav className="m-2 md:m-4">
       <div className="flex justify-end">
         <div className="flex space-x-2 rounded-full border px-1 py-1">
           <Icon isActive={theme === 'light'} onClick={() => setTheme('light')}>

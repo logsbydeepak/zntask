@@ -33,3 +33,15 @@ const toastStore: StateCreator<State & Actions> = (set) => ({
 })
 
 export const useToastStore = create(toastStore)
+
+interface Action {
+  label: string
+  onClick: () => void
+}
+
+export const toast = {
+  success: (message: string, action?: Action) =>
+    useToastStore.getState().addToast({ message, type: 'success', action }),
+  error: (message: string, action?: Action) =>
+    useToastStore.getState().addToast({ message, type: 'error', action }),
+}

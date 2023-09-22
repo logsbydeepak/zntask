@@ -14,7 +14,7 @@ import {
   ResetPassword,
 } from '@/app/(application)/(auth)/components'
 import { ResetPasswordDialog } from '@/components/dialogs/reset-password'
-import { useToastStore } from '@/store/toast'
+import { toast } from '@/store/toast'
 import { Button } from '@ui/button'
 import * as FormPrimitive from '@ui/form'
 
@@ -26,7 +26,6 @@ type FormValues = z.infer<typeof schema>
 
 export function Form() {
   const router = useRouter()
-  const addToast = useToastStore((s) => s.addToast)
 
   const [isResetPasswordDialogOpen, setIsResetPasswordDialogOpen] =
     React.useState(false)
@@ -70,10 +69,7 @@ export function Form() {
         }
 
         if (res.code === 'OK') {
-          addToast({
-            message: 'You are now logged in',
-            type: 'success',
-          })
+          toast.success('You are now logged in')
           router.push('/')
         }
 

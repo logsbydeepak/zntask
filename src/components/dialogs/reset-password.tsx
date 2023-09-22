@@ -5,7 +5,7 @@ import { z } from 'zod'
 
 import { resetPassword } from '@/app/(application)/(auth)/login/actions'
 import { resetPasswordSchema } from '@/app/(application)/(auth)/login/utils'
-import { useToastStore } from '@/store/toast'
+import { toast } from '@/store/toast'
 import { Button } from '@ui/button'
 import * as Dialog from '@ui/dialog'
 import * as Form from '@ui/form'
@@ -60,17 +60,13 @@ function ResetPasswordDialogContent({
   } = useForm<FormValues>({
     resolver: zodResolver(resetPasswordSchema),
   })
-  const addToast = useToastStore((s) => s.addToast)
 
   const onSubmit = (values: FormValues) => {
     startTransition(async () => {
       const res = await resetPassword(values)
       switch (res.code) {
         case 'OK':
-          addToast({
-            message: 'Please check your email',
-            type: 'success',
-          })
+          toast.success('Please check your email')
           handleClose()
 
         case 'EMAIL_ALREADY_SENT':

@@ -3,6 +3,7 @@ import { useRouter } from 'next/navigation'
 
 import { logout } from '@/app/(application)/(app)/actions'
 import { useAppStore } from '@/store/app'
+import { toast } from '@/store/toast'
 import * as Dialog from '@ui/dialog'
 
 import { Button } from '../ui/button'
@@ -53,6 +54,7 @@ function LogoutDialogContent({
     startTransition(async () => {
       const res = await logout()
       if (res.code === 'OK') {
+        toast.success('Logout successful')
         resetAppState()
         router.push('/login')
       }

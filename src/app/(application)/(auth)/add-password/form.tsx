@@ -14,7 +14,7 @@ import {
   PasswordChecklistItem,
   PasswordVisibilityToggle,
 } from '@/app/(application)/(auth)/components'
-import { useToastStore } from '@/store/toast'
+import { toast } from '@/store/toast'
 import { zPassword, zRequired } from '@/utils/zod'
 import { Button } from '@ui/button'
 import * as FormPrimitive from '@ui/form'
@@ -37,7 +37,6 @@ const isLoadingAtom = atom(false)
 
 export function Form({ token }: { token: string }) {
   const router = useRouter()
-  const addToast = useToastStore((s) => s.addToast)
 
   const [isPending, startTransition] = React.useTransition()
   const [isLoading, setIsLoading] = useAtom(isLoadingAtom)
@@ -62,25 +61,16 @@ export function Form({ token }: { token: string }) {
 
       switch (res.code) {
         case 'OK':
-          addToast({
-            message: 'password added successfully',
-            type: 'success',
-          })
+          toast.success('password added successfully')
           router.push('/login')
           break
 
         case 'INVALID_TOKEN':
-          addToast({
-            message: 'invalid token',
-            type: 'error',
-          })
+          toast.success('invalid token')
           break
 
         case 'TOKEN_EXPIRED':
-          addToast({
-            message: 'token expired',
-            type: 'error',
-          })
+          toast.success('token expired')
           break
       }
     })

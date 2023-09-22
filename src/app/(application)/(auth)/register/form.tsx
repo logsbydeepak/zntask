@@ -15,7 +15,7 @@ import {
   PasswordChecklistItem,
   PasswordVisibilityToggle,
 } from '@/app/(application)/(auth)/components'
-import { useToastStore } from '@/store/toast'
+import { toast } from '@/store/toast'
 import { Button } from '@ui/button'
 import * as FormPrimitive from '@ui/form'
 
@@ -28,7 +28,6 @@ const isLoadingAtom = atom(false)
 
 export function Form() {
   const router = useRouter()
-  const addToast = useToastStore((s) => s.addToast)
 
   const startTransition = React.useTransition()[1]
   const [isLoading, setIsLoading] = useAtom(isLoadingAtom)
@@ -62,10 +61,7 @@ export function Form() {
         }
 
         if (res.code === 'OK') {
-          addToast({
-            message: 'Your account has been created',
-            type: 'success',
-          })
+          toast.success('Your account has been created')
           router.push('/')
         }
         setIsLoading(false)
