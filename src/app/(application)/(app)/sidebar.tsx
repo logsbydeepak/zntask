@@ -333,7 +333,7 @@ function ItemRoot({
 }
 
 const itemContentStyle =
-  'flex items-center h-9 px-2 hover:bg-gray-50 rounded-md border border-transparent hover:border-gray-200 w-full group-data-[active=true]:bg-gray-50 group-data-[active=true]:border-gray-200'
+  'flex items-center h-9 px-2 hover:bg-gray-50 rounded-md border border-transparent hover:border-gray-200 group-data-[active=true]:bg-gray-50 group-data-[active=true]:border-gray-200'
 function ItemContentLink({
   children,
   href,
@@ -369,7 +369,7 @@ function ItemContentButton({
 
 function ItemLabel({ children }: React.ComponentProps<'span'>) {
   return (
-    <span className="text-sm text-gray-600 data-[active=true]:font-medium group-data-[active=true]:text-gray-900">
+    <span className="inline-block overflow-hidden text-ellipsis whitespace-nowrap text-sm text-gray-600 data-[active=true]:font-medium group-data-[active=true]:text-gray-900">
       {children}
     </span>
   )
@@ -384,7 +384,11 @@ function ItemLabelIcon({ className, children }: React.ComponentProps<'span'>) {
 }
 
 function LabelContainer({ children }: React.ComponentProps<'span'>) {
-  return <span className="flex items-center space-x-3">{children}</span>
+  return (
+    <span className="flex items-center space-x-3 overflow-hidden pr-3">
+      {children}
+    </span>
+  )
 }
 
 const Item = {

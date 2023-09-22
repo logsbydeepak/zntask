@@ -13,20 +13,9 @@ import { SplashScreen } from './splash-screen'
 
 export function AppLoading({ children }: { children: React.ReactNode }) {
   const isAppLoading = useAtomValue(isAppLoadingAtom)
-  const [isAppReady, setIsAppReady] = React.useState(false)
-
-  React.useEffect(() => {
-    setIsAppReady(true)
-  }, [setIsAppReady])
 
   return (
     <>
-      {!isAppReady && (
-        <>
-          <SplashScreen />
-        </>
-      )}
-
       {isAppLoading && (
         <>
           <SplashScreen />
@@ -34,7 +23,7 @@ export function AppLoading({ children }: { children: React.ReactNode }) {
         </>
       )}
 
-      {!isAppLoading && isAppReady && <>{children}</>}
+      {!isAppLoading && <>{children}</>}
       <SidebarState />
     </>
   )
