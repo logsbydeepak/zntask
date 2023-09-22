@@ -35,7 +35,10 @@ export const zCategory = z.object({
   title: zRequired,
   indicator: z.enum(categoryIndicatorLabel),
   isFavorite: z.boolean(),
+  orderId: zRequired.refine(isValid, { message: 'Invalid ulid' }),
 })
+
+export type CategoryType = z.infer<typeof zCategory>
 
 export const getCategoryColor = (indicator: CategoryIndicatorLabelType) => {
   const color = categoryIndicatorOptions.find(
@@ -44,3 +47,5 @@ export const getCategoryColor = (indicator: CategoryIndicatorLabelType) => {
   if (!color) throw new Error('Invalid category indicator')
   return color
 }
+
+export type Category = z.infer<typeof zCategory>

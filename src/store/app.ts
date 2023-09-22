@@ -1,7 +1,7 @@
 import { atom } from 'jotai'
 import { create, StateCreator } from 'zustand'
 
-import { Category } from './category'
+import { Category } from '@/utils/category'
 
 export const isAppLoadingAtom = atom(true)
 export const isSidebarOpenAtom = atom(false)

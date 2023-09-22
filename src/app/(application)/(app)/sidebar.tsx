@@ -28,8 +28,8 @@ import {
 } from '@/components/ui/menu'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import { isSidebarOpenAtom } from '@/store/app'
-import { Category, useCategoryStore } from '@/store/category'
-import { getCategoryColor } from '@/utils/category'
+import { useCategoryStore } from '@/store/category'
+import { Category, getCategoryColor } from '@/utils/category'
 import { cn } from '@/utils/style'
 
 import { CategoryMenuContent } from './(home)/category-components'

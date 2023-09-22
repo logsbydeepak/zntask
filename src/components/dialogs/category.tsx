@@ -5,8 +5,12 @@ import { set, useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 import { useAppStore } from '@/store/app'
-import { Category, useCategoryStore } from '@/store/category'
-import { categoryIndicatorOptions, zCategoryIndicator } from '@/utils/category'
+import { useCategoryStore } from '@/store/category'
+import {
+  Category,
+  categoryIndicatorOptions,
+  zCategoryIndicator,
+} from '@/utils/category'
 import { cn } from '@/utils/style'
 import { zRequired } from '@/utils/zod'
 import { Button } from '@ui/button'

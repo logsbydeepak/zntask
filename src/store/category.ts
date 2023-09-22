@@ -2,14 +2,7 @@ import { ulid } from 'ulidx'
 import { create, StateCreator } from 'zustand'
 import { persist } from 'zustand/middleware'
 
-import { CategoryIndicatorLabelType } from '@/utils/category'
-
-export interface Category {
-  id: string
-  title: string
-  indicator: CategoryIndicatorLabelType
-  isFavorite: boolean
-}
+import { Category } from '@/utils/category'
 
 export interface Action {
   type: 'ADD' | 'EDIT' | 'DELETE'
@@ -24,7 +17,9 @@ const initialState = {
 type State = typeof initialState
 
 interface Actions {
-  addCategory: (category: Omit<Omit<Category, 'id'>, 'isFavorite'>) => void
+  addCategory: (
+    category: Omit<Omit<Omit<Category, 'id'>, 'isFavorite'>, 'orderId'>
+  ) => void
   getCategory: (id: string) => undefined | Category
   addCategories: (categories: Category[]) => void
   editCategory: (category: Category) => void
@@ -45,10 +40,11 @@ const categoryStore: StateCreator<State & Actions> = (set, get) => ({
       title: category.title,
       indicator: category.indicator,
       isFavorite: false,
+      orderId: id,
     }
 
     set((state) => ({
-      categories: [...state.categories, newCategory],
+      categories: [newCategory, ...state.categories],
       action: [...state.action, { type: 'ADD', id }],
     }))
   },

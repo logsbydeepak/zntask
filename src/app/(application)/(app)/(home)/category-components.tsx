@@ -8,8 +8,8 @@ import {
 } from 'lucide-react'
 
 import { useAppStore } from '@/store/app'
-import { Category, useCategoryStore } from '@/store/category'
-import { getCategoryColor } from '@/utils/category'
+import { useCategoryStore } from '@/store/category'
+import { Category, getCategoryColor } from '@/utils/category'
 import { cn } from '@/utils/style'
 import {
   ContextMenuContent,

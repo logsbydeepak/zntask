@@ -1,7 +1,8 @@
 import React from 'react'
 
 import { useAppStore } from '@/store/app'
-import { Category, useCategoryStore } from '@/store/category'
+import { useCategoryStore } from '@/store/category'
+import { Category } from '@/utils/category'
 import { Button } from '@ui/button'
 import * as Dialog from '@ui/dialog'
 

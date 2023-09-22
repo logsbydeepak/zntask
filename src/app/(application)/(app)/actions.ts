@@ -61,15 +61,19 @@ export const getInitCategories = h(
       where(fields, operators) {
         return operators.eq(fields.userId, userId)
       },
+      orderBy(fields, operators) {
+        return operators.desc(fields.orderId)
+      },
     })
     if (!categories) throw new Error('No categories found')
 
     if (categories.length === 0) return r('OK', { categories })
 
-    const modCategories = categories.map((category) => {
-      const { id, title, indicator, isFavorite } = category
-      return { id, title, indicator, isFavorite }
-    })
+    const modCategories = categories.map(
+      ({ id, title, indicator, isFavorite, orderId }) => {
+        return { id, title, indicator, isFavorite, orderId }
+      }
+    )
 
     const isValidHash = await bcrypt.compare(
       JSON.stringify(modCategories),
