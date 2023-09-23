@@ -40,7 +40,7 @@ const categoryStore: StateCreator<State & Actions> = (set, get) => ({
       title: category.title,
       indicator: category.indicator,
       isFavorite: false,
-      orderId: id,
+      orderId: ulid(),
     }
 
     set((state) => ({
