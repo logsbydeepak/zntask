@@ -1,7 +1,7 @@
 import React from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as RadioGroup from '@radix-ui/react-radio-group'
-import { set, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 import { useAppStore } from '@/store/app'

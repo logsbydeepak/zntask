@@ -109,11 +109,6 @@ export function CategoryMenuContent({
       icon: <EditIcon className="h-full w-full" />,
     },
     {
-      label: 'Delete',
-      onSelect: () => setDialog('deleteCategory', category),
-      icon: <Trash2Icon className="h-full w-full" />,
-    },
-    {
       label: category.isFavorite ? 'Unfavorite' : 'Favorite',
       onSelect: () =>
         editCategory({ ...category, isFavorite: !category.isFavorite }),
@@ -123,20 +118,26 @@ export function CategoryMenuContent({
         <HeartIcon className="h-full w-full" />
       ),
     },
+    {
+      label: 'Delete',
+      onSelect: () => setDialog('deleteCategory', category),
+      icon: <Trash2Icon className="h-full w-full" />,
+      intent: 'destructive' as const,
+    },
   ]
 
   if (type === 'context') {
     return menuItem.map((i) => (
-      <ContextMenuItem key={i.label} onSelect={i.onSelect}>
-        <MenuIcon>{i.icon}</MenuIcon>
+      <ContextMenuItem key={i.label} onSelect={i.onSelect} intent={i.intent}>
+        <MenuIcon intent={i.intent}>{i.icon}</MenuIcon>
         <span>{i.label}</span>
       </ContextMenuItem>
     ))
   }
 
   return menuItem.map((i) => (
-    <DropdownMenuItem key={i.label} onSelect={i.onSelect}>
-      <MenuIcon>{i.icon}</MenuIcon>
+    <DropdownMenuItem key={i.label} onSelect={i.onSelect} intent={i.intent}>
+      <MenuIcon intent={i.intent}>{i.icon}</MenuIcon>
       <span>{i.label}</span>
     </DropdownMenuItem>
   ))

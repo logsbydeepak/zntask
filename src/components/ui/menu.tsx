@@ -14,6 +14,7 @@ import {
   Root as DropdownMenuRootPrimitives,
   Trigger as DropdownMenuTriggerPrimitives,
 } from '@radix-ui/react-dropdown-menu'
+import { cva } from 'cva'
 
 import { cn } from '@/utils/style'
 
@@ -27,12 +28,51 @@ export const DropdownMenuRadioGroup = DropdownMenuRadioGroupPrimitives
 export const DropdownMenuRadioItem = DropdownMenuRadioItemPrimitives
 
 const menuContentStyle =
-  'bg-white rounded-md border border-gray-200 py-1.5 shadow-md drop-shadow-sm'
-const menuItemStyle =
-  'bg-white text-xs text-gray-600 focus:outline-none py-2 px-4 data-[highlighted]:bg-gray-100 data-[highlighted]:cursor-pointer flex space-x-3 font-medium'
+  'bg-white rounded-md border border-gray-200 p-1 shadow-md drop-shadow-sm'
 
-export function MenuIcon({ children }: { children: React.ReactNode }) {
-  return <span className="h-4 w-4 text-gray-950">{children}</span>
+const menuItemStyle = cva({
+  base: 'bg-white text-xs focus:outline-none rounded-[4px] py-2 px-4 data-[highlighted]:cursor-pointer flex space-x-3 font-medium group/item',
+  variants: {
+    intent: {
+      neutral: 'text-gray-950 data-[highlighted]:bg-gray-100',
+      destructive:
+        'data-[highlighted]:bg-red-50 data-[highlighted]:text-red-700',
+    },
+  },
+  defaultVariants: {
+    intent: 'neutral',
+  },
+})
+
+type MenuItemStyleProps = React.ComponentPropsWithoutRef<typeof menuItemStyle>
+
+const menuIconStyle = cva({
+  base: 'h-4 w-4 text-gray-600',
+  variants: {
+    intent: {
+      neutral: 'text-gray-600',
+      destructive:
+        'group-data-[highlighted]/item:group-data-[intent=destructive]/item:text-red-700',
+    },
+  },
+  defaultVariants: {
+    intent: 'neutral',
+  },
+})
+
+type MenuIconStyleProps = React.ComponentPropsWithoutRef<typeof menuIconStyle>
+
+export function MenuIcon({
+  children,
+  className,
+  intent,
+}: {
+  children: React.ReactNode
+  className?: string
+} & MenuIconStyleProps) {
+  return (
+    <span className={cn(menuIconStyle({ intent }), className)}>{children}</span>
+  )
 }
 
 export const ContextMenuContent = React.forwardRef<
@@ -64,24 +104,28 @@ DropdownMenuContent.displayName = DropdownMenuContentPrimitives.displayName
 
 export const ContextMenuItem = React.forwardRef<
   React.ElementRef<typeof ContextMenuItemPrimitives>,
-  React.ComponentPropsWithoutRef<typeof ContextMenuItemPrimitives>
->(({ className, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof ContextMenuItemPrimitives> &
+    MenuItemStyleProps
+>(({ className, intent, ...props }, ref) => (
   <ContextMenuItemPrimitives
     {...props}
     ref={ref}
-    className={cn(menuItemStyle, className)}
+    data-intent={intent}
+    className={cn(menuItemStyle({ intent }), className)}
   />
 ))
 ContextMenuItem.displayName = ContextMenuItemPrimitives.displayName
 
 export const DropdownMenuItem = React.forwardRef<
   React.ElementRef<typeof DropdownMenuItemPrimitives>,
-  React.ComponentPropsWithoutRef<typeof DropdownMenuItemPrimitives>
->(({ className, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof DropdownMenuItemPrimitives> &
+    MenuItemStyleProps
+>(({ className, intent, ...props }, ref) => (
   <DropdownMenuItemPrimitives
     {...props}
     ref={ref}
-    className={cn(menuItemStyle, className)}
+    data-intent={intent}
+    className={cn(menuItemStyle({ intent }), className)}
   />
 ))
 DropdownMenuItem.displayName = DropdownMenuItemPrimitives.displayName
