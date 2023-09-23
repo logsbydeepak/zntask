@@ -1,5 +1,7 @@
 'use client'
 
+import { FolderIcon } from 'lucide-react'
+
 import * as Layout from '@/app/(application)/(app)/layout-components'
 import { Head } from '@/components/head'
 import { useCategoryStore } from '@/store/category'
@@ -17,6 +19,15 @@ export default function Page() {
       </Layout.Header>
       <Layout.Content>
         <CategoryContainer>
+          {categories.length === 0 && (
+            <Layout.Empty.Container>
+              <Layout.Empty.Icon>
+                <FolderIcon className="h-full w-full" />
+              </Layout.Empty.Icon>
+              <Layout.Empty.Label>No category</Layout.Empty.Label>
+            </Layout.Empty.Container>
+          )}
+
           {categories.map((i) => (
             <CategoryItem key={i.id} category={i} href={`/category/${i.id}`} />
           ))}
