@@ -5,6 +5,7 @@ import { Category } from '@/utils/category'
 
 export const isAppLoadingAtom = atom(true)
 export const isSidebarOpenAtom = atom(false)
+export const isAppSyncingAtom = atom(false)
 
 const dialogState = {
   resetPassword: false,
@@ -27,9 +28,6 @@ interface Actions {
     value: (typeof dialogState)[KEY]
   ) => void
   resetAppState: () => void
-
-  addToSyncingList: (id: string) => void
-  removeFromSyncingList: (id: string) => void
 }
 
 const appStore: StateCreator<State & Actions> = (set) => ({
@@ -44,18 +42,6 @@ const appStore: StateCreator<State & Actions> = (set) => ({
   },
   resetAppState() {
     set(initialState)
-  },
-
-  addToSyncingList(id) {
-    set((state) => ({
-      syncingList: [...state.syncingList, id],
-    }))
-  },
-
-  removeFromSyncingList(id) {
-    set((state) => ({
-      syncingList: state.syncingList.filter((item) => item !== id),
-    }))
   },
 })
 

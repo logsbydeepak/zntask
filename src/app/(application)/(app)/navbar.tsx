@@ -25,7 +25,7 @@ import {
 import { useTheme } from 'next-themes'
 
 import { LogoIcon } from '@/components/icon/logo'
-import { isSidebarOpenAtom, useAppStore } from '@/store/app'
+import { isAppSyncingAtom, isSidebarOpenAtom, useAppStore } from '@/store/app'
 import {
   DropdownMenuContent,
   DropdownMenuItem,
@@ -178,7 +178,7 @@ const ThemeItem = React.forwardRef<
 ThemeItem.displayName = 'ThemeItem'
 
 function ProfilePicture({ src, name }: { src: string | null; name: string }) {
-  const isAppSyncing = useAppStore((s) => s.syncingList.length > 0)
+  const isAppSyncing = useAtomValue(isAppSyncingAtom)
 
   React.useEffect(() => {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {

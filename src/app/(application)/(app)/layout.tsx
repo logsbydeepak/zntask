@@ -10,6 +10,7 @@ import { AppLayout, JotaiProvider } from './layout-client'
 import { Navbar } from './navbar'
 import { Sidebar } from './sidebar'
 import { SplashScreen } from './splash-screen'
+import { Sync } from './sync'
 
 export default async function Layout({
   children,
@@ -24,6 +25,7 @@ export default async function Layout({
         <Sidebar />
         <AppLayout>{children}</AppLayout>
         <Dialogs />
+        <Sync />
       </JotaiProvider>
     </Suspense>
   )

@@ -38,9 +38,13 @@ export const editCategory = h('AUTH', zCategory, async ({ input, userId }) => {
   return r('OK', { input })
 })
 
+const zDeleteCategory = z.object({
+  id: zRequired.refine((id) => id.length > 0, { message: 'Invalid id' }),
+})
+
 export const deleteCategory = h(
   'AUTH',
-  zCategory,
+  zDeleteCategory,
   async ({ input, userId }) => {
     await db
       .delete(dbSchema.categories)

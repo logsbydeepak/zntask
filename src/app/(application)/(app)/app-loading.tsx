@@ -25,12 +25,13 @@ export function SidebarState() {
 
 export function InitStore({ categories }: { categories: CategoryType[] }) {
   const init = React.useRef(false)
-  const addCategories = useCategoryStore((s) => s.addCategories)
+  const setNewCategories = useCategoryStore((s) => s.setNewCategories)
 
-  if (!init.current) {
-    addCategories(categories)
+  React.useEffect(() => {
+    if (init.current) return
     init.current = true
-  }
+    setNewCategories(categories)
+  }, [categories, setNewCategories])
 
   return null
 }
