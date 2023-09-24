@@ -5,7 +5,7 @@ import React from 'react'
 export function useMediaQuery() {
   const [isSmallScreen, setIsSmallScreen] = React.useState(false)
 
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     function handleResize() {
       if (window.innerWidth >= 768) {
         setIsSmallScreen(false)

@@ -49,41 +49,23 @@ export const deleteCategory = h(
   }
 )
 
-const getInitCategoriesSchema = z.object({
-  hash: zRequired,
+export const getCategories = h('AUTH', async ({ userId }) => {
+  const categories = await db.query.categories.findMany({
+    where(fields, operators) {
+      return operators.eq(fields.userId, userId)
+    },
+    orderBy(fields, operators) {
+      return operators.desc(fields.orderId)
+    },
+  })
+
+  if (!categories) throw new Error('No categories found')
+  if (categories.length === 0) return r('OK', { categories })
+
+  const modCategories = categories.map((category) => {
+    const { userId, ...rest } = category
+    return rest
+  })
+
+  return r('OK', { categories: modCategories })
 })
-
-export const getInitCategories = h(
-  'AUTH',
-  getInitCategoriesSchema,
-  async ({ userId, input }) => {
-    const categories = await db.query.categories.findMany({
-      where(fields, operators) {
-        return operators.eq(fields.userId, userId)
-      },
-      orderBy(fields, operators) {
-        return operators.desc(fields.orderId)
-      },
-    })
-    if (!categories) throw new Error('No categories found')
-
-    if (categories.length === 0) return r('OK', { categories })
-
-    const modCategories = categories.map(
-      ({ id, title, indicator, isFavorite, orderId }) => {
-        return { id, title, indicator, isFavorite, orderId }
-      }
-    )
-
-    const isValidHash = await bcrypt.compare(
-      JSON.stringify(modCategories),
-      input.hash
-    )
-
-    if (isValidHash) {
-      return r('IS_VALID')
-    }
-
-    return r('OK', { categories: modCategories })
-  }
-)

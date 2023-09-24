@@ -1,73 +1,36 @@
 'use client'
 
 import React from 'react'
-import bcrypt from 'bcryptjs'
-import { useAtomValue, useSetAtom } from 'jotai'
+import { useSetAtom } from 'jotai'
 
 import { useMediaQuery } from '@/hooks/useMediaQuery'
-import { isAppLoadingAtom, isSidebarOpenAtom } from '@/store/app'
+import { isSidebarOpenAtom } from '@/store/app'
 import { useCategoryStore } from '@/store/category'
+import { CategoryType } from '@/utils/category'
 
-import { getInitCategories } from './actions'
-import { SplashScreen } from './splash-screen'
-
-export function AppLoading({ children }: { children: React.ReactNode }) {
-  const isAppLoading = useAtomValue(isAppLoadingAtom)
-
-  return (
-    <>
-      {isAppLoading && (
-        <>
-          <SplashScreen />
-          <InitCategories />
-        </>
-      )}
-
-      {!isAppLoading && <>{children}</>}
-      <SidebarState />
-    </>
-  )
-}
-
-function InitCategories() {
-  const renderCount = React.useRef(0)
-  const [isPending, startTransaction] = React.useTransition()
-
-  const setIsAppLoading = useSetAtom(isAppLoadingAtom)
-
-  const categories = useCategoryStore((s) => s.categories)
-  const addCategories = useCategoryStore((s) => s.addCategories)
-
-  React.useEffect(() => {
-    if (renderCount.current) return
-    const hash = bcrypt.hashSync(JSON.stringify(categories), 10)
-
-    startTransaction(async () => {
-      const res = await getInitCategories({ hash })
-      if (res.code === 'OK') {
-        addCategories(res.categories)
-      }
-    })
-
-    setIsAppLoading(false)
-
-    renderCount.current++
-  }, [categories, addCategories, setIsAppLoading])
-
-  return null
-}
-
-function SidebarState() {
+export function SidebarState() {
   const setIsSidebarOpen = useSetAtom(isSidebarOpenAtom)
   const { isSmallScreen } = useMediaQuery()
 
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     if (!isSmallScreen) {
       setIsSidebarOpen(true)
       return
     }
     setIsSidebarOpen(false)
   }, [isSmallScreen, setIsSidebarOpen])
+
+  return null
+}
+
+export function InitStore({ categories }: { categories: CategoryType[] }) {
+  const init = React.useRef(false)
+  const addCategories = useCategoryStore((s) => s.addCategories)
+
+  if (!init.current) {
+    addCategories(categories)
+    init.current = true
+  }
 
   return null
 }

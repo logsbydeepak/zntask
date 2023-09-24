@@ -1,14 +1,15 @@
-import { Suspense } from 'react'
+import React, { Suspense } from 'react'
 
 import { Dialogs } from '@/components/dialogs'
+import { useCategoryStore } from '@/store/category'
 
-import { AppLoading } from './app-loading'
+import { getCategories } from './actions'
+import { InitStore, SidebarState } from './app-loading'
 import { getUser } from './fetch'
 import { AppLayout, JotaiProvider } from './layout-client'
 import { Navbar } from './navbar'
 import { Sidebar } from './sidebar'
 import { SplashScreen } from './splash-screen'
-import { Sync } from './sync'
 
 export default async function Layout({
   children,
@@ -18,13 +19,11 @@ export default async function Layout({
   return (
     <Suspense fallback={<SplashScreen />}>
       <JotaiProvider>
-        <AppLoading>
-          <GetUser />
-          <Sidebar />
-          <AppLayout>{children}</AppLayout>
-          <Dialogs />
-          <Sync />
-        </AppLoading>
+        <SidebarState />
+        <GetUser />
+        <Sidebar />
+        <AppLayout>{children}</AppLayout>
+        <Dialogs />
       </JotaiProvider>
     </Suspense>
   )
@@ -32,12 +31,17 @@ export default async function Layout({
 
 async function GetUser() {
   const user = await getUser()
+  const categoriesRes = await getCategories()
+
   return (
-    <Navbar
-      firstName={user.firstName}
-      lastName={user.lastName}
-      profilePicture={user.profilePicture}
-      email={user.email}
-    />
+    <>
+      <Navbar
+        firstName={user.firstName}
+        lastName={user.lastName}
+        profilePicture={user.profilePicture}
+        email={user.email}
+      />
+      <InitStore categories={categoriesRes.categories} />
+    </>
   )
 }
