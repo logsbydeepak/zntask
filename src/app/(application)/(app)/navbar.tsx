@@ -50,11 +50,6 @@ export function Navbar({
   const setDialog = useAppStore((s) => s.setDialog)
   const setIsSidebarOpen = useSetAtom(isSidebarOpenAtom)
   const isSidebarOpen = useAtomValue(isSidebarOpenAtom)
-  const isAppSyncing = useAppStore((s) => s.syncingList.length > 0)
-
-  React.useEffect(() => {
-    console.log('isAppSyncing', isAppSyncing)
-  }, [isAppSyncing])
 
   const name = `${firstName} ${lastName}`
   return (
@@ -183,12 +178,18 @@ const ThemeItem = React.forwardRef<
 ThemeItem.displayName = 'ThemeItem'
 
 function ProfilePicture({ src, name }: { src: string | null; name: string }) {
+  const isAppSyncing = useAppStore((s) => s.syncingList.length > 0)
+
   return (
-    <AvatarRoot className="flex h-8 w-8 items-center justify-center rounded-full ">
+    <AvatarRoot className="relative flex h-8 w-8 items-center justify-center rounded-full">
       <AvatarImage src={src || ''} />
       <AvatarFallback>
         <Avvvatars value={name} shadow={true} size={32} />
       </AvatarFallback>
+      <span
+        className="absolute bottom-0 right-0 mb-0.5 h-1.5 w-1.5 rounded-full border-white bg-orange-600 ring-2 ring-white transition-opacity data-[sync=false]:hidden data-[sync=true]:animate-pulse"
+        data-sync={isAppSyncing}
+      />
     </AvatarRoot>
   )
 }
