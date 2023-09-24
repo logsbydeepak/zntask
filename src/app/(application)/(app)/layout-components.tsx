@@ -1,5 +1,3 @@
-import { Button } from '@/components/ui/button'
-
 export function Title({ children }: { children: React.ReactNode }) {
   return <h1 className="text-lg font-medium">{children}</h1>
 }
@@ -22,9 +20,9 @@ export function NotFound() {
 
 function EmptyContainer({ children }: { children: React.ReactNode }) {
   return (
-    <div className="mt-60 flex h-full flex-col items-center justify-center">
-      <div className="flex h-40 w-40 items-center justify-center rounded-md border border-gray-200 bg-white shadow-sm">
-        <span className="flex flex-col items-center space-y-1 text-gray-600">
+    <div className="flex h-[calc(100vh-200px)] flex-col items-center justify-center">
+      <div className="flex h-32 w-32 items-center justify-center rounded-lg border border-gray-200 bg-white shadow-sm">
+        <span className="flex flex-col items-center space-y-1 text-center text-gray-600">
           {children}
         </span>
       </div>

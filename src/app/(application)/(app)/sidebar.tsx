@@ -333,7 +333,7 @@ function ItemRoot({
 }
 
 const itemContentStyle =
-  'flex items-center h-9 px-2 hover:bg-gray-50 rounded-md border border-transparent hover:border-gray-200 group-data-[active=true]:bg-gray-50 group-data-[active=true]:border-gray-200'
+  'flex items-center h-9 px-2 w-full hover:bg-gray-50 rounded-md border border-transparent hover:border-gray-200 group-data-[active=true]:bg-gray-50 group-data-[active=true]:border-gray-200'
 function ItemContentLink({
   children,
   href,
