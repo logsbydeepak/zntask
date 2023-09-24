@@ -1,4 +1,3 @@
-import { startTransition } from 'react'
 import { ulid } from 'ulidx'
 import { create, StateCreator } from 'zustand'
 
@@ -8,6 +7,8 @@ import {
   editCategory,
 } from '@/app/(application)/(app)/actions'
 import { Category } from '@/utils/category'
+
+import { useAppStore } from './app'
 
 const initialState = {
   categories: [] as Category[],
@@ -27,6 +28,7 @@ interface Actions {
 
 const categoryStore: StateCreator<State & Actions> = (set, get) => ({
   ...initialState,
+
   addCategory: async (category) => {
     const id = ulid()
     const newCategory: Category = {
@@ -40,18 +42,13 @@ const categoryStore: StateCreator<State & Actions> = (set, get) => ({
     set((state) => ({
       categories: [newCategory, ...state.categories],
     }))
-    startTransition(() => {
-      addCategory(newCategory)
-    })
+
+    useAppStore.getState().addToSyncingList(id)
+    addCategory(newCategory).finally(() =>
+      useAppStore.getState().removeFromSyncingList(id)
+    )
   },
-  getCategory(id) {
-    return get().categories.find((category) => category.id === id)
-  },
-  addCategories(categories) {
-    set((state) => ({
-      categories: [...categories],
-    }))
-  },
+
   editCategory(category) {
     set((state) => ({
       categories: state.categories.map((item) => {
@@ -60,9 +57,10 @@ const categoryStore: StateCreator<State & Actions> = (set, get) => ({
       }),
     }))
 
-    startTransition(() => {
-      editCategory(category)
-    })
+    useAppStore.getState().addToSyncingList(category.id)
+    editCategory(category).finally(() =>
+      useAppStore.getState().removeFromSyncingList(category.id)
+    )
   },
   deleteCategory(category) {
     set((state) => ({
@@ -70,9 +68,20 @@ const categoryStore: StateCreator<State & Actions> = (set, get) => ({
       deleteCategories: [...state.deleteCategories, category],
     }))
 
-    startTransition(() => {
-      deleteCategory(category)
-    })
+    useAppStore.getState().addToSyncingList(category.id)
+    deleteCategory(category).finally(() =>
+      useAppStore.getState().removeFromSyncingList(category.id)
+    )
+  },
+
+  getCategory(id) {
+    return get().categories.find((category) => category.id === id)
+  },
+
+  addCategories(categories) {
+    set((state) => ({
+      categories: [...categories],
+    }))
   },
 })
 

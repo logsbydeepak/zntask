@@ -50,6 +50,11 @@ export function Navbar({
   const setDialog = useAppStore((s) => s.setDialog)
   const setIsSidebarOpen = useSetAtom(isSidebarOpenAtom)
   const isSidebarOpen = useAtomValue(isSidebarOpenAtom)
+  const isAppSyncing = useAppStore((s) => s.syncingList.length > 0)
+
+  React.useEffect(() => {
+    console.log('isAppSyncing', isAppSyncing)
+  }, [isAppSyncing])
 
   const name = `${firstName} ${lastName}`
   return (

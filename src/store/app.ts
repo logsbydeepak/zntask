@@ -16,6 +16,7 @@ const dialogState = {
 
 const initialState = {
   dialog: dialogState,
+  syncingList: [] as string[],
 }
 
 type State = typeof initialState
@@ -26,12 +27,15 @@ interface Actions {
     value: (typeof dialogState)[KEY]
   ) => void
   resetAppState: () => void
+
+  addToSyncingList: (id: string) => void
+  removeFromSyncingList: (id: string) => void
 }
 
 const appStore: StateCreator<State & Actions> = (set) => ({
-  dialog: dialogState,
+  ...initialState,
   setDialog(key, value) {
-    set((state) => ({
+    set(() => ({
       dialog: {
         ...dialogState,
         [key]: value,
@@ -40,6 +44,18 @@ const appStore: StateCreator<State & Actions> = (set) => ({
   },
   resetAppState() {
     set(initialState)
+  },
+
+  addToSyncingList(id) {
+    set((state) => ({
+      syncingList: [...state.syncingList, id],
+    }))
+  },
+
+  removeFromSyncingList(id) {
+    set((state) => ({
+      syncingList: state.syncingList.filter((item) => item !== id),
+    }))
   },
 })
 
