@@ -180,6 +180,18 @@ ThemeItem.displayName = 'ThemeItem'
 function ProfilePicture({ src, name }: { src: string | null; name: string }) {
   const isAppSyncing = useAppStore((s) => s.syncingList.length > 0)
 
+  React.useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (isAppSyncing) {
+        e.preventDefault()
+        return (e.returnValue = 'Your changes are not saved. Are you sure?')
+      }
+    }
+
+    window.addEventListener('beforeunload', handleBeforeUnload)
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload)
+  }, [isAppSyncing])
+
   return (
     <AvatarRoot className="relative flex h-8 w-8 items-center justify-center rounded-full">
       <AvatarImage src={src || ''} />
