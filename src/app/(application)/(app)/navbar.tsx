@@ -8,10 +8,6 @@ import {
   AvatarImage,
   Avatar as AvatarRoot,
 } from '@radix-ui/react-avatar'
-import {
-  Item as RadioItem,
-  Root as RadioRoot,
-} from '@radix-ui/react-radio-group'
 import Avvvatars from 'avvvatars-react'
 import { useAtomValue, useSetAtom } from 'jotai'
 import {
