@@ -40,7 +40,16 @@ export const categories = mysqlTable('categories', {
   orderId: varchar('order_id', { length: 26 }).notNull(),
 })
 
-export const categoryRelations = relations(categories, ({ one }) => ({
+export const tasks = mysqlTable('tasks', {
+  id: varchar('id', { length: 26 }).primaryKey(),
+  userId: varchar('user_id', { length: 26 }).primaryKey(),
+  isCompleted: boolean('is_completed').notNull(),
+  title: varchar('title', { length: 256 }).notNull(),
+  categoryId: varchar('category_id', { length: 26 }).notNull(),
+  orderId: varchar('order_id', { length: 26 }).notNull(),
+})
+
+export const categoryRelations = relations(categories, ({ one, many }) => ({
   user: one(users, {
     fields: [categories.userId],
     references: [users.id],
