@@ -3,13 +3,12 @@ import { create, StateCreator } from 'zustand'
 
 import { Category } from '@/utils/category'
 
+import { Task } from './task'
+
 export const isAppLoadingAtom = atom(true)
 export const isSidebarOpenAtom = atom(false)
 export const isAppSyncingAtom = atom(false)
 
-export interface Task {
-  title: string
-}
 const dialogState = {
   resetPassword: false,
   logout: false,
