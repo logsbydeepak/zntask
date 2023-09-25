@@ -80,7 +80,7 @@ export function Navbar({
               <FolderPlusIcon className="h-full w-full" />
             </Icon>
 
-            <Icon>
+            <Icon onClick={() => setDialog('createTask', true)}>
               <PlusIcon className="h-full w-full" />
             </Icon>
           </div>

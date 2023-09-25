@@ -8,6 +8,7 @@ import { CategoryDialog } from './category'
 import { DeleteCategoryDialog } from './delete-category'
 import { LogoutDialog } from './logout'
 import { ResetPasswordDialog } from './reset-password'
+import { TaskDialog } from './task'
 
 export function Dialogs() {
   const isResetPasswordOpen = useAppStore((state) => state.dialog.resetPassword)
@@ -27,6 +28,7 @@ export function Dialogs() {
       <LogoutDialog />
       <CategoryDialog />
       <DeleteCategoryDialog />
+      <TaskDialog />
     </>
   )
 }
