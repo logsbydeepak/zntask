@@ -4,10 +4,12 @@ import { InboxIcon } from 'lucide-react'
 
 import * as Layout from '@/app/(application)/(app)/layout-components'
 import { Head } from '@/components/head'
+import { useAppStore } from '@/store/app'
 import { useTaskStore } from '@/store/task'
 
 export default function Page() {
   const tasks = useTaskStore((s) => s.tasks)
+  const setDialog = useAppStore((s) => s.setDialog)
 
   return (
     <Layout.Root>
@@ -26,7 +28,9 @@ export default function Page() {
         )}
 
         {tasks.map((i) => (
-          <p key={i.id}>{i.title}</p>
+          <p key={i.id} onClick={() => setDialog('editTask', i)}>
+            {i.title}
+          </p>
         ))}
       </Layout.Content>
     </Layout.Root>
