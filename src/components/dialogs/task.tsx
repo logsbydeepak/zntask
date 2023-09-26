@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 import { useAppStore } from '@/store/app'
-import { Task } from '@/store/task'
+import { Task, useTaskStore } from '@/store/task'
 import { zRequired } from '@/utils/zod'
 import { Button } from '@ui/button'
 import * as Dialog from '@ui/dialog'
@@ -59,6 +59,9 @@ function TaskDialogContent({
   isCreate: boolean
   isEdit: null | Task
 }) {
+  const addTask = useTaskStore((state) => state.addTask)
+  const editTask = useTaskStore((state) => state.editTask)
+
   const {
     register,
     handleSubmit,
@@ -73,6 +76,8 @@ function TaskDialogContent({
   })
 
   const onSubmit = (data: FormValues) => {
+    if (isCreate) addTask(data)
+    if (isEdit) editTask({ ...isEdit, ...data })
     handleClose()
   }
 
