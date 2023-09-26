@@ -4,6 +4,7 @@ import { create, StateCreator } from 'zustand'
 export interface Task {
   id: string
   title: string
+  categoryId: string | null
 }
 
 const initialState = {
@@ -24,7 +25,7 @@ const taskStore: StateCreator<State & Actions> = (set, get) => ({
     const id = ulid()
     const newTask: Task = {
       id: id,
-      title: task.title,
+      ...task,
     }
 
     set((state) => ({

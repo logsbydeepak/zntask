@@ -76,7 +76,7 @@ function TaskDialogContent({
   })
 
   const onSubmit = (data: FormValues) => {
-    if (isCreate) addTask(data)
+    if (isCreate) addTask({ ...data, categoryId: null })
     if (isEdit) editTask({ ...isEdit, ...data })
     handleClose()
   }

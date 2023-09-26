@@ -8,7 +8,7 @@ import { useAppStore } from '@/store/app'
 import { useTaskStore } from '@/store/task'
 
 export default function Page() {
-  const tasks = useTaskStore((s) => s.tasks)
+  const tasks = useTaskStore((s) => s.tasks.filter((i) => !i.categoryId))
   const setDialog = useAppStore((s) => s.setDialog)
 
   return (
