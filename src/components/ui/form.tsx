@@ -1,4 +1,5 @@
 import React, { FieldsetHTMLAttributes } from 'react'
+import { cva } from 'cva'
 import { XCircleIcon } from 'lucide-react'
 
 import { cn } from '@/utils/style'
@@ -13,19 +14,19 @@ export const Root = React.forwardRef<
 ))
 Root.displayName = 'Form.Root'
 
+export const formInputStyle = cva({
+  base: [
+    'p-3',
+    'mb-2 mt-0.5 w-full rounded-md border border-gray-300 py-1.5 text-sm shadow-sm disabled:text-gray-500',
+    'placeholder:font-normal placeholder:text-gray-400 focus-visible:border-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-600',
+  ],
+})
+
 export const Input = React.forwardRef<
   HTMLInputElement,
   React.InputHTMLAttributes<HTMLInputElement>
 >(({ className, ...props }, ref) => (
-  <input
-    className={cn(
-      'mb-2 mt-0.5 w-full rounded-md border border-gray-300 py-1.5 text-sm shadow-sm disabled:text-gray-500',
-      'placeholder:font-normal placeholder:text-gray-400 focus-visible:border-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-600',
-      className
-    )}
-    {...props}
-    ref={ref}
-  />
+  <input className={cn(formInputStyle(), className)} {...props} ref={ref} />
 ))
 Input.displayName = 'Form.Input'
 

@@ -1,4 +1,4 @@
-import { ulid } from 'ulidx'
+import { isValid, ulid } from 'ulidx'
 import { create, StateCreator } from 'zustand'
 
 import { Category } from '@/utils/category'
@@ -14,7 +14,7 @@ interface Actions {
   addCategory: (
     category: Omit<Omit<Omit<Category, 'id'>, 'isFavorite'>, 'orderId'>
   ) => void
-  getCategory: (id: string) => undefined | Category
+  getCategory: (id: string | null) => undefined | Category
   editCategory: (category: Category) => void
   deleteCategory: (category: Category) => void
   setNewCategories: (categories: Category[]) => void
@@ -71,6 +71,9 @@ const categoryStore: StateCreator<State & Actions> = (set, get) => ({
   },
 
   getCategory(id) {
+    if (!id) return
+    if (!isValid(id)) return
+
     return get().categories.find((category) => category.id === id)
   },
 

@@ -6,17 +6,12 @@ import { cn } from '@/utils/style'
 export const Root = Dialog.Root
 export const Close = Dialog.Close
 
-export const Portal = ({
-  children,
-  className,
-  ...props
-}: Dialog.DialogPortalProps) => (
+export const Portal = ({ children, ...props }: Dialog.DialogPortalProps) => (
   <Dialog.Portal>
     <Dialog.Overlay
       {...props}
       className={cn(
-        'fixed inset-0 z-40 bg-white/80 bg-opacity-50 backdrop-blur-sm',
-        className
+        'fixed inset-0 z-40 bg-white/80 bg-opacity-50 backdrop-blur-sm'
       )}
     />
     {children}
