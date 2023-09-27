@@ -2,10 +2,11 @@ import React from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as Popover from '@radix-ui/react-popover'
 import { Command } from 'cmdk'
-import { InboxIcon } from 'lucide-react'
+import { FolderIcon, InboxIcon } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
+import * as Layout from '@/app/(application)/(app)/layout-components'
 import { useAppStore } from '@/store/app'
 import { useCategoryStore } from '@/store/category'
 import { Task, useTaskStore } from '@/store/task'
@@ -156,7 +157,16 @@ function TaskDialogContent({
                   <Command.Input
                     className={cn(Form.formInputStyle(), 'mt-0')}
                   />
-                  <Command.List className="container-scroll mt-2 h-48 overflow-y-scroll pr-1">
+                  <Command.List className="container-scroll mt-3 h-48 overflow-y-scroll pr-1">
+                    <Command.Empty className="flex h-48 items-center justify-center">
+                      <div className="flex h-28 w-28 flex-col items-center justify-center space-y-1 rounded-md border shadow-sm">
+                        <span className="inline-block h-5 w-5">
+                          <FolderIcon className="h-full w-full" />
+                        </span>
+                        <p className="text-xs text-gray-600">No category</p>
+                      </div>
+                    </Command.Empty>
+
                     <Command.Item
                       className="group/item"
                       value="inbox"
