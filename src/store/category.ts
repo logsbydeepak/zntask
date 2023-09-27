@@ -13,7 +13,7 @@ type State = typeof initialState
 interface Actions {
   addCategory: (
     category: Omit<Omit<Omit<Category, 'id'>, 'isFavorite'>, 'orderId'>
-  ) => void
+  ) => Category
   getCategory: (id: string | null) => undefined | Category
   editCategory: (category: Category) => void
   deleteCategory: (category: Category) => void
@@ -23,7 +23,7 @@ interface Actions {
 const categoryStore: StateCreator<State & Actions> = (set, get) => ({
   ...initialState,
 
-  addCategory: async (category) => {
+  addCategory: (category) => {
     const id = ulid()
     const newCategory: Category = {
       id: id,
@@ -42,6 +42,8 @@ const categoryStore: StateCreator<State & Actions> = (set, get) => ({
       action: 'CREATE',
       categoryId: id,
     })
+
+    return newCategory
   },
 
   editCategory(category) {
