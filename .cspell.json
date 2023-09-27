@@ -14,7 +14,8 @@
     "upstash",
     "Avvvatars",
     "safelist",
-    "Gantt"
+    "Gantt",
+    "cmdk"
   ],
   "ignorePaths": ["bun.lockb"]
 }

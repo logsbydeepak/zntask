@@ -1,6 +1,7 @@
 import React from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as Popover from '@radix-ui/react-popover'
+import { Command } from 'cmdk'
 import { InboxIcon } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -65,9 +66,11 @@ function TaskDialogContent({
   isCreate: boolean
   isEdit: null | Task
 }) {
+  const [isCategoryPickerOpen, setIsCategoryPickerOpen] = React.useState(false)
   const addTask = useTaskStore((state) => state.addTask)
   const editTask = useTaskStore((state) => state.editTask)
   const getCategory = useCategoryStore((state) => state.getCategory)
+  const categories = useCategoryStore((state) => state.categories)
 
   const {
     register,
@@ -75,6 +78,7 @@ function TaskDialogContent({
     formState: { errors },
     getValues,
     setValue,
+    watch,
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -88,10 +92,11 @@ function TaskDialogContent({
     if (isEdit) editTask({ ...isEdit, ...data })
     handleClose()
   }
+  const categoryId = watch('categoryId')
 
   const title = isEdit ? `Edit ${isEdit?.title}` : 'Create Task'
 
-  const currentCategory = getCategory(getValues('categoryId'))
+  const currentCategory = getCategory(categoryId)
 
   return (
     <>
@@ -105,34 +110,127 @@ function TaskDialogContent({
         <div className="space-y-2">
           <div>
             <Form.Label htmlFor="title">Task</Form.Label>
-            <Form.Input {...register('title')} id="title" />
+            <Form.Input {...register('title')} id="title" autoFocus />
             {errors.title && <Form.Error>{errors.title?.message}</Form.Error>}
           </div>
           <div>
             <Form.Label htmlFor="category">Category</Form.Label>
-            <button
-              className={cn(
-                Form.formInputStyle(),
-                'flex items-center text-left'
-              )}
-              id="category"
-              type="button"
+            <Popover.Root
+              open={isCategoryPickerOpen}
+              onOpenChange={setIsCategoryPickerOpen}
             >
-              <div className="mr-2 flex h-3.5 w-3.5 items-center justify-center">
-                {!currentCategory && (
-                  <InboxIcon className="h-full w-full text-gray-600" />
-                )}
-                {currentCategory && (
-                  <div
-                    className={cn(
-                      'h-3 w-3 rounded-[4.5px]',
-                      `bg-${getCategoryColor(currentCategory.indicator)}-600`
+              <Popover.Trigger asChild>
+                <button
+                  className={cn(
+                    Form.formInputStyle(),
+                    'flex items-center text-left'
+                  )}
+                  id="category"
+                  type="button"
+                >
+                  <div className="mr-2 flex h-3.5 w-3.5 items-center justify-center">
+                    {!currentCategory && (
+                      <InboxIcon className="h-full w-full text-gray-600" />
                     )}
+                    {currentCategory && (
+                      <div
+                        className={cn(
+                          'h-3 w-3 rounded-[4.5px]',
+                          `bg-${getCategoryColor(
+                            currentCategory.indicator
+                          )}-600`
+                        )}
+                      />
+                    )}
+                  </div>
+                  <span>
+                    {currentCategory ? currentCategory.title : 'Inbox'}
+                  </span>
+                </button>
+              </Popover.Trigger>
+              <Popover.Content
+                className="w-96 rounded-lg border border-gray-200 bg-white p-3 shadow-sm"
+                sideOffset={10}
+              >
+                <Command className="w-full">
+                  <Command.Input
+                    className={cn(Form.formInputStyle(), 'mt-0')}
                   />
-                )}
-              </div>
-              <span>{currentCategory ? currentCategory.title : 'Inbox'}</span>
-            </button>
+                  <Command.List className="container-scroll mt-2 h-48 overflow-y-scroll pr-1">
+                    <Command.Item
+                      className="group/item"
+                      value="inbox"
+                      onSelect={() => {
+                        setValue('categoryId', '')
+                        setIsCategoryPickerOpen(false)
+                      }}
+                    >
+                      <CategoryItem.Container>
+                        <CategoryItem.Icon>
+                          <InboxIcon className="h-3.5 w-3.5 text-gray-600" />
+                        </CategoryItem.Icon>
+                        <CategoryItem.Title>Inbox</CategoryItem.Title>
+                      </CategoryItem.Container>
+                    </Command.Item>
+
+                    {currentCategory && (
+                      <Command.Item
+                        className="group/item"
+                        value={`${currentCategory.title} ${currentCategory.id}`}
+                        onSelect={() => {
+                          setValue('categoryId', currentCategory.id)
+                          setIsCategoryPickerOpen(false)
+                        }}
+                      >
+                        <CategoryItem.Container>
+                          <CategoryItem.Icon>
+                            <div
+                              className={cn(
+                                'h-3 w-3 rounded-[4.5px]',
+                                `bg-${getCategoryColor(
+                                  currentCategory.indicator
+                                )}-600`
+                              )}
+                            />
+                          </CategoryItem.Icon>
+                          <CategoryItem.Title>
+                            {currentCategory.title}
+                          </CategoryItem.Title>
+                        </CategoryItem.Container>
+                      </Command.Item>
+                    )}
+
+                    <Command.Separator className="mx-2 my-2 border-t border-gray-200" />
+
+                    {categories
+                      .filter((i) => i.id !== categoryId)
+                      .map((i) => (
+                        <Command.Item
+                          key={i.id}
+                          value={`${i.title} ${i.id}`}
+                          onSelect={() => {
+                            setValue('categoryId', i.id)
+                            setIsCategoryPickerOpen(false)
+                          }}
+                          className="group/item"
+                        >
+                          <CategoryItem.Container>
+                            <CategoryItem.Icon>
+                              <div
+                                className={cn(
+                                  'h-3 w-3 rounded-[4.5px]',
+                                  `bg-${getCategoryColor(i.indicator)}-600`
+                                )}
+                              />
+                            </CategoryItem.Icon>
+                            <CategoryItem.Title>{i.title}</CategoryItem.Title>
+                          </CategoryItem.Container>
+                        </Command.Item>
+                      ))}
+                  </Command.List>
+                </Command>
+              </Popover.Content>
+            </Popover.Root>
           </div>
         </div>
 
@@ -149,4 +247,30 @@ function TaskDialogContent({
       </Form.Root>
     </>
   )
+}
+
+function CategoryItemContainer({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="flex cursor-pointer items-center rounded-md border border-transparent px-3 py-1.5 group-data-[selected=true]/item:border-gray-200 group-data-[selected=true]/item:bg-gray-50">
+      {children}
+    </div>
+  )
+}
+
+function CategoryItemIcon({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="mr-2 flex h-4 w-4 items-center justify-center">
+      {children}
+    </div>
+  )
+}
+
+function CategoryItemTitle({ children }: { children: React.ReactNode }) {
+  return <p className="text-sm">{children}</p>
+}
+
+const CategoryItem = {
+  Container: CategoryItemContainer,
+  Icon: CategoryItemIcon,
+  Title: CategoryItemTitle,
 }

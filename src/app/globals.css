@@ -14,15 +14,18 @@
     }
   }
 
-  aside::-webkit-scrollbar {
+  aside::-webkit-scrollbar,
+  .container-scroll::-webkit-scrollbar {
     @apply w-3;
   }
 
-  aside:hover::-webkit-scrollbar-thumb {
+  aside:hover::-webkit-scrollbar-thumb,
+  .container-scroll:hover::-webkit-scrollbar-thumb {
     @apply rounded-full border-[3px] border-solid border-white bg-gray-300;
   }
 
-  aside::-webkit-scrollbar-thumb:hover {
+  aside::-webkit-scrollbar-thumb:hover,
+  .container-scroll::-webkit-scrollbar-thumb:hover {
     @apply bg-gray-400;
   }
 }
