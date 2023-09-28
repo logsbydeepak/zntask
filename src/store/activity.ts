@@ -1,13 +1,21 @@
 import { ulid } from 'ulidx'
 import { create, StateCreator } from 'zustand'
 
-type Activity = {
-  id: string
-  type: 'category'
-  action: 'CREATE' | 'DELETE' | 'EDIT'
-  categoryId: string
-  isSynced: boolean
-}
+type Activity =
+  | {
+      id: string
+      type: 'category'
+      action: 'CREATE' | 'DELETE' | 'EDIT'
+      categoryId: string
+      isSynced: boolean
+    }
+  | {
+      id: string
+      type: 'task'
+      action: 'CREATE' | 'DELETE' | 'EDIT'
+      taskId: string
+      isSynced: boolean
+    }
 
 const initialState = {
   activities: [] as Activity[],
@@ -15,8 +23,20 @@ const initialState = {
 
 type State = typeof initialState
 
+type AddTaskType =
+  | {
+      type: 'task'
+      taskId: string
+      action: 'CREATE' | 'DELETE' | 'EDIT'
+    }
+  | {
+      type: 'category'
+      categoryId: string
+      action: 'CREATE' | 'DELETE' | 'EDIT'
+    }
+
 interface Action {
-  addActivity: (activity: Omit<Omit<Activity, 'isSynced'>, 'id'>) => void
+  addActivity: (activity: AddTaskType) => void
   removeActivity: (id: string) => void
   setActivitySynced: (id: string) => void
 }
@@ -25,12 +45,31 @@ const activityStore: StateCreator<State & Action> = (set, get) => ({
   ...initialState,
 
   addActivity: (activity) => {
-    set((state) => ({
-      activities: [
-        { ...activity, isSynced: false, id: ulid() },
-        ...state.activities,
-      ],
-    }))
+    if (activity.type === 'category') {
+      set((state) => ({
+        activities: [
+          {
+            ...activity,
+            isSynced: false,
+            id: ulid(),
+          },
+          ...state.activities,
+        ],
+      }))
+    }
+
+    if (activity.type === 'task') {
+      set((state) => ({
+        activities: [
+          {
+            ...activity,
+            isSynced: false,
+            id: ulid(),
+          },
+          ...state.activities,
+        ],
+      }))
+    }
   },
 
   removeActivity: (id) => {

@@ -52,7 +52,7 @@ export function TaskDialog() {
   return (
     <Dialog.Root open={isOpen} onOpenChange={handleClose}>
       <Dialog.Portal>
-        <Dialog.Content className="space-y-4">
+        <Dialog.Content className="space-y-4 focus:outline-none">
           <TaskDialogContent
             handleClose={handleClose}
             isEdit={isEdit}
@@ -99,7 +99,12 @@ function TaskDialogContent({
   })
 
   const onSubmit = (data: FormValues) => {
-    if (isCreate) addTask({ ...data, categoryId: getValues('categoryId') })
+    if (isCreate)
+      addTask({
+        ...data,
+        categoryId: getValues('categoryId'),
+        isCompleted: false,
+      })
     if (isEdit) editTask({ ...isEdit, ...data })
     handleClose()
   }

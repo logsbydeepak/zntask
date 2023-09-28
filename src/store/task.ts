@@ -1,10 +1,14 @@
 import { ulid } from 'ulidx'
 import { create, StateCreator } from 'zustand'
 
+import { useActivityStore } from './activity'
+
 export interface Task {
   id: string
   title: string
+  isCompleted: boolean
   categoryId: string | null
+  orderId: string
 }
 
 const initialState = {
@@ -13,7 +17,7 @@ const initialState = {
 type State = typeof initialState
 
 interface Actions {
-  addTask: (task: Omit<Task, 'id'>) => void
+  addTask: (task: Omit<Omit<Task, 'id'>, 'orderId'>) => void
   editTask: (task: Task) => void
   deleteTask: (task: Task) => void
 }
@@ -26,11 +30,18 @@ const taskStore: StateCreator<State & Actions> = (set, get) => ({
     const newTask: Task = {
       id: id,
       ...task,
+      orderId: ulid(),
     }
 
     set((state) => ({
       tasks: [newTask, ...state.tasks],
     }))
+
+    useActivityStore.getState().addActivity({
+      type: 'task',
+      taskId: id,
+      action: 'CREATE',
+    })
   },
 
   editTask(task) {
@@ -40,12 +51,24 @@ const taskStore: StateCreator<State & Actions> = (set, get) => ({
         return item
       }),
     }))
+
+    useActivityStore.getState().addActivity({
+      type: 'task',
+      taskId: task.id,
+      action: 'EDIT',
+    })
   },
 
   deleteTask(task) {
     set((state) => ({
       tasks: state.tasks.filter((item) => item.id !== task.id),
     }))
+
+    useActivityStore.getState().addActivity({
+      type: 'task',
+      taskId: task.id,
+      action: 'DELETE',
+    })
   },
 })
 
