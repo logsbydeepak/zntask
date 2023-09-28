@@ -157,6 +157,19 @@ function TaskDialogContent({
               <Popover.Content
                 className="category-popover w-96 rounded-lg border border-gray-200 bg-white shadow-sm"
                 sideOffset={10}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && e.shiftKey) {
+                    e.preventDefault()
+
+                    if (!search) return
+                    const newCategory = addCategory({
+                      title: search,
+                      indicator: 'orange',
+                    })
+                    setValue('categoryId', newCategory.id)
+                    setIsCategoryPickerOpen(false)
+                  }
+                }}
               >
                 <Command
                   className="w-full px-4 py-4"
@@ -165,10 +178,12 @@ function TaskDialogContent({
                       ? `${currentCategory.title} ${currentCategory.id}`
                       : 'inbox'
                   }
-                  onValueChange={(v) => {
-                    console.log(v)
-                    setCommandValue(v)
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && e.shiftKey) {
+                      e.preventDefault()
+                    }
                   }}
+                  onValueChange={(v) => setCommandValue(v)}
                 >
                   <Command.Input
                     value={search}
@@ -229,7 +244,7 @@ function TaskDialogContent({
                       </CategoryItem.Container>
                     </Command.Item>
 
-                    <Command.Separator className="mx-2 my-2 border-t border-gray-200" />
+                    <Command.Separator className="mx-2 my-2 border-t border-gray-100" />
 
                     {categories
                       .filter((i) => i.id !== categoryId)
@@ -265,7 +280,6 @@ function TaskDialogContent({
                       type="button"
                       onClick={() => {
                         if (!commandValue) return
-                        console.log(commandValue)
                         if (commandValue === 'inbox') {
                           setValue('categoryId', '')
                           setIsCategoryPickerOpen(false)
