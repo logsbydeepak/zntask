@@ -7,7 +7,7 @@ import { useActivityStore } from '@/store/activity'
 import { isAppSyncingAtom } from '@/store/app'
 import { useCategoryStore } from '@/store/category'
 
-import { addCategory, deleteCategory, editCategory } from './actions'
+import { addCategory, deleteCategory, editCategory } from './category.h'
 
 export function Sync() {
   const [isPending, startTransition] = React.useTransition()
