@@ -2,7 +2,13 @@ import React from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as Popover from '@radix-ui/react-popover'
 import { Command } from 'cmdk'
-import { FolderIcon, InboxIcon } from 'lucide-react'
+import {
+  ArrowBigUp,
+  ArrowBigUpIcon,
+  CornerDownLeftIcon,
+  FolderIcon,
+  InboxIcon,
+} from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { isValid } from 'ulidx'
 import { z } from 'zod'
@@ -273,10 +279,9 @@ function TaskDialogContent({
                       ))}
                   </Command.List>
                 </Command>
-                <div className="border-t border-gray-200 px-4 py-2">
+                <div className="border-t border-gray-200 px-4 py-3">
                   <div className="flex justify-between">
-                    <Button
-                      intent="secondary"
+                    <ActionButton
                       type="button"
                       onClick={() => {
                         if (!commandValue) return
@@ -292,10 +297,12 @@ function TaskDialogContent({
                         }
                       }}
                     >
-                      Select
-                    </Button>
-                    <Button
-                      intent="secondary"
+                      <span>Select</span>
+                      <ShortcutIcon>
+                        <CornerDownLeftIcon className="h-full w-full" />
+                      </ShortcutIcon>
+                    </ActionButton>
+                    <ActionButton
                       type="button"
                       onClick={() => {
                         if (!search) return
@@ -307,8 +314,16 @@ function TaskDialogContent({
                         setIsCategoryPickerOpen(false)
                       }}
                     >
-                      Create new
-                    </Button>
+                      <span>Create new</span>
+                      <div className="flex space-x-1">
+                        <ShortcutIcon>
+                          <ArrowBigUpIcon className="h-full w-full" />
+                        </ShortcutIcon>
+                        <ShortcutIcon>
+                          <CornerDownLeftIcon className="h-full w-full" />
+                        </ShortcutIcon>
+                      </div>
+                    </ActionButton>
                   </div>
                 </div>
               </Popover.Content>
@@ -355,4 +370,23 @@ const CategoryItem = {
   Container: CategoryItemContainer,
   Icon: CategoryItemIcon,
   Title: CategoryItemTitle,
+}
+
+function ShortcutIcon({ children }: { children: React.ReactNode }) {
+  return (
+    <span className="flex h-5 w-5 items-center justify-center rounded-md border border-gray-200 text-gray-500 group-hover:border-gray-300 group-hover:text-gray-950">
+      <span className="h-3 w-3">{children}</span>
+    </span>
+  )
+}
+
+function ActionButton({ children, ...props }: React.ComponentProps<'button'>) {
+  return (
+    <button
+      {...props}
+      className="group flex items-center space-x-2 rounded-md px-2 py-1 text-xs font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-950 focus-visible:outline-gray-950"
+    >
+      {children}
+    </button>
+  )
 }
