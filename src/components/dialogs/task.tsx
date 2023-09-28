@@ -8,6 +8,7 @@ import {
   CornerDownLeftIcon,
   FolderIcon,
   InboxIcon,
+  SearchIcon,
 } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { isValid } from 'ulidx'
@@ -178,7 +179,7 @@ function TaskDialogContent({
                 }}
               >
                 <Command
-                  className="w-full px-4 py-4"
+                  className="w-full"
                   value={
                     currentCategory
                       ? `${currentCategory.title} ${currentCategory.id}`
@@ -191,13 +192,16 @@ function TaskDialogContent({
                   }}
                   onValueChange={(v) => setCommandValue(v)}
                 >
-                  <Command.Input
-                    value={search}
-                    onValueChange={setSearch}
-                    className={cn(Form.formInputStyle(), 'mt-0')}
-                  />
+                  <div className="flex items-center border-b border-gray-200 px-4 py-2.5">
+                    <SearchIcon className="h-3 w-3 text-gray-400" />
+                    <Command.Input
+                      value={search}
+                      onValueChange={setSearch}
+                      className="ml-2 h-5 w-full border-none p-0 text-sm outline-none focus:ring-0"
+                    />
+                  </div>
 
-                  <Command.List className="container-scroll mt-3 h-48 overflow-y-scroll pr-1">
+                  <Command.List className="container-scroll my-3 ml-4 mr-2 h-48 overflow-y-scroll pr-2">
                     <Command.Empty className="flex h-48 items-center justify-center">
                       <div className="flex h-28 w-28 flex-col items-center justify-center space-y-1 rounded-md border shadow-sm">
                         <span className="inline-block h-5 w-5">
@@ -279,7 +283,7 @@ function TaskDialogContent({
                       ))}
                   </Command.List>
                 </Command>
-                <div className="border-t border-gray-200 px-4 py-3">
+                <div className="border-t border-gray-200 px-4 py-1.5">
                   <div className="flex justify-between">
                     <ActionButton
                       type="button"
