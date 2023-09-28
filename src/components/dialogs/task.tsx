@@ -99,7 +99,7 @@ function TaskDialogContent({
   })
 
   const onSubmit = (data: FormValues) => {
-    if (isCreate) addTask({ ...data, categoryId: null })
+    if (isCreate) addTask({ ...data, categoryId: getValues('categoryId') })
     if (isEdit) editTask({ ...isEdit, ...data })
     handleClose()
   }
@@ -242,7 +242,7 @@ function TaskDialogContent({
                       className="group/item"
                       value="inbox"
                       onSelect={() => {
-                        setValue('categoryId', '')
+                        setValue('categoryId', null)
                         setIsCategoryPickerOpen(false)
                       }}
                     >
@@ -290,7 +290,7 @@ function TaskDialogContent({
                       onClick={() => {
                         if (!commandValue) return
                         if (commandValue === 'inbox') {
-                          setValue('categoryId', '')
+                          setValue('categoryId', null)
                           setIsCategoryPickerOpen(false)
                           return
                         }
