@@ -22,6 +22,7 @@ export const CategoryPopover = React.forwardRef<
     currentCategory: Category | undefined
   }
 >(({ setIsOpen, setValue, currentCategory, ...props }, ref) => {
+  const searchInputRef = React.useRef<HTMLInputElement>(null)
   const [search, setSearch] = React.useState('')
   const addCategory = useCategoryStore((state) => state.addCategory)
   const [commandValue, setCommandValue] = React.useState('')
@@ -68,9 +69,11 @@ export const CategoryPopover = React.forwardRef<
         <div className="flex items-center border-b border-gray-200 px-4 py-2.5">
           <SearchIcon className="h-3 w-3 text-gray-400" />
           <Command.Input
+            ref={searchInputRef}
             value={search}
+            placeholder="search"
             onValueChange={setSearch}
-            className="ml-2 h-5 w-full border-none p-0 text-sm outline-none focus:ring-0"
+            className="ml-2 h-5 w-full border-none p-0 text-sm outline-none placeholder:text-gray-400 focus:ring-0"
           />
         </div>
 
@@ -153,7 +156,15 @@ export const CategoryPopover = React.forwardRef<
         </Command.List>
       </Command>
 
-      <div className="border-t border-gray-200 px-4 py-1.5">
+      <div
+        className="border-t border-gray-200 px-4 py-1.5"
+        onKeyDown={(e) => {
+          if (e.key === '/') {
+            e.preventDefault()
+            searchInputRef.current?.focus()
+          }
+        }}
+      >
         <div className="flex justify-between">
           <ActionButton
             type="button"
