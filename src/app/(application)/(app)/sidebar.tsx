@@ -127,7 +127,7 @@ function FavoriteSection() {
         <Title>Favorite</Title>
       </div>
       <ItemContainer>
-        {favorites.length === 0 && <NoItem />}
+        {favorites.length === 0 && <EmptyFavorite />}
 
         {favoritesToDisplay.map((i) => (
           <CategoryItem
@@ -168,7 +168,7 @@ function CategorySection() {
         <Title>Category</Title>
       </div>
       <ItemContainer>
-        {categories.length === 0 && <NoItem />}
+        {categories.length === 0 && <EmptyCategory />}
 
         {categoriesToDisplay.map((i) => (
           <CategoryItem
@@ -264,14 +264,44 @@ function CategoryItem({
   )
 }
 
-function NoItem() {
+function EmptyFavorite() {
+  return (
+    <EmptyContainer>
+      <EmptyIcon>
+        <HeartIcon className="h-full w-full" />
+      </EmptyIcon>
+      <EmptyLabel>no favorite</EmptyLabel>
+    </EmptyContainer>
+  )
+}
+
+function EmptyCategory() {
+  return (
+    <EmptyContainer>
+      <EmptyIcon>
+        <FolderIcon className="h-full w-full" />
+      </EmptyIcon>
+      <EmptyLabel>no category</EmptyLabel>
+    </EmptyContainer>
+  )
+}
+
+function EmptyContainer({ children }: { children: React.ReactNode }) {
   return (
     <div className="pl-3">
-      <span className="block w-full rounded-md border border-gray-200 bg-gray-50 py-6 text-center text-xs text-gray-600">
-        No item
-      </span>
+      <div className="flex w-full items-center justify-center space-x-2 rounded-md border border-gray-200 bg-gray-50 py-10 md:py-5">
+        {children}
+      </div>
     </div>
   )
+}
+
+function EmptyLabel({ children }: { children: React.ReactNode }) {
+  return <p className="text-xs text-gray-600">{children}</p>
+}
+
+function EmptyIcon({ children }: { children: React.ReactNode }) {
+  return <div className="h-4 w-4 text-gray-600">{children}</div>
 }
 
 function ShowMore({
