@@ -1,6 +1,11 @@
 import React from 'react'
 import { PopoverContent } from '@radix-ui/react-popover'
-import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react'
+import {
+  CalendarClockIcon,
+  CalendarPlusIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+} from 'lucide-react'
 import { DayPicker } from 'react-day-picker'
 
 export const SchedulePopover = React.forwardRef<
@@ -12,8 +17,21 @@ export const SchedulePopover = React.forwardRef<
   return (
     <PopoverContent
       ref={ref}
-      className="category-popover w-full rounded-lg border border-gray-200 bg-white p-4 shadow-sm"
+      sideOffset={20}
+      className="category-popover w-full space-y-4 rounded-lg border border-gray-200 bg-white p-2 shadow-sm"
     >
+      <div>
+        <button className="flex w-full items-center space-x-2 px-4 py-2">
+          <CalendarClockIcon className="h-4 w-4 text-gray-600" />
+          <span className="text-gray-950">Today</span>
+        </button>
+
+        <button className="flex w-full items-center space-x-2 px-4 py-2">
+          <CalendarPlusIcon className="h-4 w-4 text-gray-600" />
+          <span className="text-gray-950">Tomorrow</span>
+        </button>
+      </div>
+
       <DayPicker
         selected={selectedDay}
         onSelect={setSelectedDay}

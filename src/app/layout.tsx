@@ -24,7 +24,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${inter.variable} ${jetBrainsMono.variable} overflow-x-hidden overflow-y-scroll font-sans text-gray-950`}
+        className={`${inter.variable} ${jetBrainsMono.variable} overflow-x-hidden overflow-y-scroll font-sans text-sm text-gray-950`}
       >
         {children}
       </body>
