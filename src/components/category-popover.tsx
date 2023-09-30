@@ -36,7 +36,7 @@ export const CategoryPopover = React.forwardRef<
   return (
     <PopoverContent
       ref={ref}
-      className="category-popover w-96 rounded-lg border border-gray-200 bg-white shadow-sm"
+      className="category-popover w-full rounded-lg border border-gray-200 bg-white shadow-sm sm:w-96"
       sideOffset={10}
       onKeyDown={(e) => {
         if (e.key === 'Enter' && e.shiftKey) {

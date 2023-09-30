@@ -3,6 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import * as Popover from '@radix-ui/react-popover'
 import { InboxIcon } from 'lucide-react'
 import { useForm } from 'react-hook-form'
+import { ulid } from 'ulidx'
 import { z } from 'zod'
 
 import { CategoryPopover } from '@/components/category-popover'
@@ -16,6 +17,8 @@ import { zRequired } from '@/utils/zod'
 import { Button } from '@ui/button'
 import * as Dialog from '@ui/dialog'
 import * as Form from '@ui/form'
+
+import { SchedulePopover } from '../schedule-popover'
 
 const schema = z.object({
   title: zRequired,
@@ -158,6 +161,22 @@ function TaskDialogContent({
               />
             </Popover.Root>
           </div>
+          <Form.Label htmlFor="schedule">Schedule</Form.Label>
+          <Popover.Root>
+            <Popover.Trigger asChild>
+              <button
+                className={cn(
+                  Form.formInputStyle(),
+                  'flex items-center text-left'
+                )}
+                id="schedule"
+                type="button"
+              >
+                Schedule
+              </button>
+            </Popover.Trigger>
+            <SchedulePopover />
+          </Popover.Root>
         </div>
 
         <fieldset className="flex space-x-4">
