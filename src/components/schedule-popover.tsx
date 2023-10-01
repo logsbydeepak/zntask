@@ -1,5 +1,6 @@
 import React from 'react'
 import { PopoverContent } from '@radix-ui/react-popover'
+import * as chrono from 'chrono-node'
 import {
   CalendarClockIcon,
   CalendarPlusIcon,
@@ -7,12 +8,45 @@ import {
   ChevronRightIcon,
 } from 'lucide-react'
 import { DayPicker } from 'react-day-picker'
+import { ulid } from 'ulidx'
+
+import * as Form from '@ui/form'
+
+const parseTime = (time: string) => {
+  try {
+    const date = chrono.parseDate(time)
+    return date.toLocaleString()
+  } catch (error) {
+    return 'Invalid time'
+  }
+}
 
 export const SchedulePopover = React.forwardRef<
   React.ElementRef<typeof PopoverContent>,
   React.ComponentProps<typeof PopoverContent>
 >(({ ...props }, ref) => {
   const [selectedDay, setSelectedDay] = React.useState<Date>()
+  const [value, setValue] = React.useState('')
+  const [date, setDate] = React.useState<Date | null>(null)
+  const [time, setTime] = React.useState<Date | null>(null)
+
+  React.useEffect(() => {
+    try {
+      const date = chrono.parse(value)[0]
+      setDate(date.start.date())
+    } catch (error) {
+      setDate(null)
+    }
+
+    try {
+      const time = chrono.parse(value)[0]
+      if (time.start.isCertain('hour')) {
+        setTime(time.start.date())
+      }
+    } catch (error) {
+      setTime(null)
+    }
+  }, [value])
 
   return (
     <PopoverContent
@@ -20,21 +54,37 @@ export const SchedulePopover = React.forwardRef<
       sideOffset={20}
       className="category-popover w-full space-y-4 rounded-lg border border-gray-200 bg-white p-2 shadow-sm"
     >
+      <Form.Input
+        value={value}
+        onChange={(e) => {
+          setValue(e.target.value)
+        }}
+        placeholder="tomorrow at 9am"
+      />
       <div>
-        <button className="flex w-full items-center space-x-2 px-4 py-2">
+        <button
+          className="flex w-full items-center space-x-2 px-4 py-2"
+          type="button"
+        >
           <CalendarClockIcon className="h-4 w-4 text-gray-600" />
           <span className="text-gray-950">Today</span>
         </button>
 
-        <button className="flex w-full items-center space-x-2 px-4 py-2">
+        <button
+          className="flex w-full items-center space-x-2 px-4 py-2"
+          type="button"
+        >
           <CalendarPlusIcon className="h-4 w-4 text-gray-600" />
           <span className="text-gray-950">Tomorrow</span>
         </button>
       </div>
 
       <DayPicker
-        selected={selectedDay}
-        onSelect={setSelectedDay}
+        selected={date ?? undefined}
+        onSelect={(value) => {
+          if (!value) return
+          setDate(value)
+        }}
         mode="single"
         className="text-sm"
         showOutsideDays={true}
@@ -59,6 +109,10 @@ export const SchedulePopover = React.forwardRef<
           IconRight: ({ ...props }) => <ChevronRightIcon className="h-4 w-4" />,
         }}
       />
+
+      {/* {parseTime(value)} */}
+      <p>date: {date && date.toLocaleDateString()}</p>
+      <p>time: {time && time.toLocaleTimeString()}</p>
     </PopoverContent>
   )
 })
