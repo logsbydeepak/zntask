@@ -2,13 +2,12 @@ import React from 'react'
 import { PopoverContent } from '@radix-ui/react-popover'
 import * as chrono from 'chrono-node'
 import {
-  CalendarClockIcon,
-  CalendarPlusIcon,
+  CalendarIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
+  HourglassIcon,
 } from 'lucide-react'
 import { DayPicker } from 'react-day-picker'
-import { ulid } from 'ulidx'
 
 import * as Form from '@ui/form'
 
@@ -25,7 +24,6 @@ export const SchedulePopover = React.forwardRef<
   React.ElementRef<typeof PopoverContent>,
   React.ComponentProps<typeof PopoverContent>
 >(({ ...props }, ref) => {
-  const [selectedDay, setSelectedDay] = React.useState<Date>()
   const [value, setValue] = React.useState('')
   const [date, setDate] = React.useState<Date | null>(null)
   const [time, setTime] = React.useState<Date | null>(null)
@@ -52,8 +50,24 @@ export const SchedulePopover = React.forwardRef<
     <PopoverContent
       ref={ref}
       sideOffset={20}
-      className="category-popover w-full space-y-4 rounded-lg border border-gray-200 bg-white p-2 shadow-sm"
+      className="category-popover w-80 space-y-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm"
     >
+      <div className="space-x-2">
+        <InfoContainer>
+          <InfoIcon>
+            <CalendarIcon className="h-full w-full" />
+          </InfoIcon>
+          <InfoText>{date ? date.toLocaleDateString() : 'Select'}</InfoText>
+        </InfoContainer>
+
+        <InfoContainer>
+          <InfoIcon>
+            <HourglassIcon className="h-full w-full" />
+          </InfoIcon>
+          <InfoText>{time ? time.toLocaleTimeString() : 'Select'}</InfoText>
+        </InfoContainer>
+      </div>
+
       <Form.Input
         value={value}
         onChange={(e) => {
@@ -61,23 +75,6 @@ export const SchedulePopover = React.forwardRef<
         }}
         placeholder="tomorrow at 9am"
       />
-      <div>
-        <button
-          className="flex w-full items-center space-x-2 px-4 py-2"
-          type="button"
-        >
-          <CalendarClockIcon className="h-4 w-4 text-gray-600" />
-          <span className="text-gray-950">Today</span>
-        </button>
-
-        <button
-          className="flex w-full items-center space-x-2 px-4 py-2"
-          type="button"
-        >
-          <CalendarPlusIcon className="h-4 w-4 text-gray-600" />
-          <span className="text-gray-950">Tomorrow</span>
-        </button>
-      </div>
 
       <DayPicker
         selected={date ?? undefined}
@@ -109,12 +106,24 @@ export const SchedulePopover = React.forwardRef<
           IconRight: ({ ...props }) => <ChevronRightIcon className="h-4 w-4" />,
         }}
       />
-
-      {/* {parseTime(value)} */}
-      <p>date: {date && date.toLocaleDateString()}</p>
-      <p>time: {time && time.toLocaleTimeString()}</p>
     </PopoverContent>
   )
 })
 
 SchedulePopover.displayName = 'SchedulePopover'
+
+function InfoContainer({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="inline-flex items-center space-x-1 rounded-full border px-4 py-1 text-xs">
+      {children}
+    </div>
+  )
+}
+
+function InfoIcon({ children }: { children: React.ReactNode }) {
+  return <div className="h-3 w-3 text-gray-600">{children}</div>
+}
+
+function InfoText({ children }: { children: React.ReactNode }) {
+  return <span>{children}</span>
+}

@@ -15,7 +15,8 @@
     "Avvvatars",
     "safelist",
     "Gantt",
-    "cmdk"
+    "cmdk",
+    "chrono"
   ],
   "ignorePaths": ["bun.lockb"]
 }
