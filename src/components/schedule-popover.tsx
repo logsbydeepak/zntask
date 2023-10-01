@@ -1,6 +1,7 @@
 import React from 'react'
 import { PopoverContent } from '@radix-ui/react-popover'
 import * as chrono from 'chrono-node'
+import { format, isThisYear, isToday, isTomorrow, isYesterday } from 'date-fns'
 import {
   CalendarIcon,
   ChevronLeftIcon,
@@ -10,15 +11,6 @@ import {
 import { DayPicker } from 'react-day-picker'
 
 import * as Form from '@ui/form'
-
-const parseTime = (time: string) => {
-  try {
-    const date = chrono.parseDate(time)
-    return date.toLocaleString()
-  } catch (error) {
-    return 'Invalid time'
-  }
-}
 
 export const SchedulePopover = React.forwardRef<
   React.ElementRef<typeof PopoverContent>,
@@ -57,14 +49,26 @@ export const SchedulePopover = React.forwardRef<
           <InfoIcon>
             <CalendarIcon className="h-full w-full" />
           </InfoIcon>
-          <InfoText>{date ? date.toLocaleDateString() : 'Select'}</InfoText>
+          <InfoText>
+            {date
+              ? (isTomorrow(date) && 'tomorrow') ||
+                (isToday(date) && 'today') ||
+                (isYesterday(date) && 'yesterday') ||
+                (isThisYear(date) &&
+                  !isToday(date) &&
+                  !isTomorrow(date) &&
+                  !isYesterday(date) &&
+                  format(date, 'MMM d')) ||
+                format(date, 'MMM d, yyyy')
+              : 'select'}
+          </InfoText>
         </InfoContainer>
 
         <InfoContainer>
           <InfoIcon>
             <HourglassIcon className="h-full w-full" />
           </InfoIcon>
-          <InfoText>{time ? time.toLocaleTimeString() : 'Select'}</InfoText>
+          <InfoText>{time ? format(time, 'p') : 'select'}</InfoText>
         </InfoContainer>
       </div>
 
