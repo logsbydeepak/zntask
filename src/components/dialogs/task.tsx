@@ -2,7 +2,7 @@ import React from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as Popover from '@radix-ui/react-popover'
 import { format, isThisYear, isToday, isTomorrow, isYesterday } from 'date-fns'
-import { InboxIcon } from 'lucide-react'
+import { CalendarIcon, HourglassIcon, InboxIcon } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { ulid } from 'ulidx'
 import { z } from 'zod'
@@ -181,22 +181,34 @@ function TaskDialogContent({
                 id="schedule"
                 type="button"
               >
-                {!date && !time && <span>None</span>}
+                <div className="flex w-1/2 items-center">
+                  {!date && !time && <span>None</span>}
+                  {date && (
+                    <CalendarIcon className="mr-2 h-3.5 w-3.5 text-gray-600" />
+                  )}
+                  {date && (
+                    <>
+                      {(isTomorrow(date) && 'tomorrow') ||
+                        (isToday(date) && 'today') ||
+                        (isYesterday(date) && 'yesterday') ||
+                        (isThisYear(date) &&
+                          !isToday(date) &&
+                          !isTomorrow(date) &&
+                          !isYesterday(date) &&
+                          format(date, 'MMM d')) ||
+                        format(date, 'MMM d, yyyy')}
+                    </>
+                  )}
+                </div>
 
-                {date && (
-                  <>
-                    {(isTomorrow(date) && 'tomorrow') ||
-                      (isToday(date) && 'today') ||
-                      (isYesterday(date) && 'yesterday') ||
-                      (isThisYear(date) &&
-                        !isToday(date) &&
-                        !isTomorrow(date) &&
-                        !isYesterday(date) &&
-                        format(date, 'MMM d')) ||
-                      format(date, 'MMM d, yyyy')}
-                  </>
-                )}
-                {time && format(time, ', h:mm a')}
+                {time && <div className="mx-4 h-3 border-l border-gray-200" />}
+
+                <div className="flex w-1/2 items-center">
+                  {time && (
+                    <HourglassIcon className="mr-2 h-3.5 w-3.5 text-gray-600" />
+                  )}
+                  {time && format(time, 'h:mm a')}
+                </div>
               </button>
             </Popover.Trigger>
             <SchedulePopover
