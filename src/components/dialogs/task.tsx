@@ -1,6 +1,7 @@
 import React from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as Popover from '@radix-ui/react-popover'
+import { format, isThisYear, isToday, isTomorrow, isYesterday } from 'date-fns'
 import { InboxIcon } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { ulid } from 'ulidx'
@@ -23,6 +24,8 @@ import { SchedulePopover } from '../schedule-popover'
 const schema = z.object({
   title: zRequired,
   categoryId: z.string().nullable(),
+  date: z.date().nullable(),
+  time: z.date().nullable(),
 })
 
 export function TaskDialog() {
@@ -69,6 +72,7 @@ function TaskDialogContent({
   isEdit: null | Task
 }) {
   const [isCategoryPickerOpen, setIsCategoryPickerOpen] = React.useState(false)
+  const [isSchedulePickerOpen, setIsSchedulePickerOpen] = React.useState(false)
   const addTask = useTaskStore((state) => state.addTask)
   const editTask = useTaskStore((state) => state.editTask)
   const getCategory = useCategoryStore((state) => state.getCategory)
@@ -101,6 +105,8 @@ function TaskDialogContent({
   const categoryId = watch('categoryId')
   const title = isEdit ? `Edit ${isEdit?.title}` : 'Create Task'
   const currentCategory = getCategory(categoryId)
+  const date = watch('date')
+  const time = watch('time')
 
   return (
     <>
@@ -110,13 +116,13 @@ function TaskDialogContent({
         <Dialog.Description>Add a new task.</Dialog.Description>
       </div>
 
-      <Form.Root className="space-y-7" onSubmit={handleSubmit(onSubmit)}>
+      <div className="space-y-7">
         <div className="space-y-2">
-          <div>
+          <Form.Root onSubmit={handleSubmit(onSubmit)} id="task">
             <Form.Label htmlFor="title">Task</Form.Label>
             <Form.Input {...register('title')} id="title" />
             {errors.title && <Form.Error>{errors.title?.message}</Form.Error>}
-          </div>
+          </Form.Root>
           <div>
             <Form.Label htmlFor="category">Category</Form.Label>
             <Popover.Root
@@ -162,7 +168,10 @@ function TaskDialogContent({
             </Popover.Root>
           </div>
           <Form.Label htmlFor="schedule">Schedule</Form.Label>
-          <Popover.Root>
+          <Popover.Root
+            open={isSchedulePickerOpen}
+            onOpenChange={setIsSchedulePickerOpen}
+          >
             <Popover.Trigger asChild>
               <button
                 className={cn(
@@ -172,10 +181,34 @@ function TaskDialogContent({
                 id="schedule"
                 type="button"
               >
-                Schedule
+                {!date && !time && <span>None</span>}
+
+                {date && (
+                  <>
+                    {(isTomorrow(date) && 'tomorrow') ||
+                      (isToday(date) && 'today') ||
+                      (isYesterday(date) && 'yesterday') ||
+                      (isThisYear(date) &&
+                        !isToday(date) &&
+                        !isTomorrow(date) &&
+                        !isYesterday(date) &&
+                        format(date, 'MMM d')) ||
+                      format(date, 'MMM d, yyyy')}
+                  </>
+                )}
+                {time && format(time, ', h:mm a')}
               </button>
             </Popover.Trigger>
-            <SchedulePopover />
+            <SchedulePopover
+              setIsOpen={setIsSchedulePickerOpen}
+              currentDate={getValues('date')}
+              currentTime={getValues('time')}
+              key={ulid()}
+              setDateAndTime={(date, time) => {
+                setValue('date', date)
+                setValue('time', time)
+              }}
+            />
           </Popover.Root>
         </div>
 
@@ -185,11 +218,11 @@ function TaskDialogContent({
               Cancel
             </Button>
           </Dialog.Close>
-          <Button className="w-full" type="submit">
+          <Button className="w-full" type="submit" form="task">
             Submit
           </Button>
         </fieldset>
-      </Form.Root>
+      </div>
     </>
   )
 }
