@@ -71,7 +71,7 @@ export const SchedulePopover = React.forwardRef<
       ref={ref}
       side="top"
       sideOffset={15}
-      className="category-popover w-full space-y-4 rounded-lg border border-gray-200 bg-white shadow-sm"
+      className="category-popover w-[290px] space-y-4 rounded-lg border border-gray-200 bg-white shadow-sm"
       autoFocus={true}
       tabIndex={20}
       onKeyDown={(e) => {
@@ -170,7 +170,7 @@ export const SchedulePopover = React.forwardRef<
         </div>
       </div>
 
-      <div className="w-full px-4">
+      <div className="px-4">
         <DayPicker
           selected={date ?? undefined}
           onSelect={(value) => {
@@ -195,10 +195,11 @@ export const SchedulePopover = React.forwardRef<
             day_selected:
               'bg-orange-600 text-white hover:bg-orange-600 hover:border-orange-600',
             day_outside: 'text-gray-400',
+            table: 'w-full',
           }}
           components={{
-            IconLeft: ({ ...props }) => <ChevronLeftIcon className="h-4 w-4" />,
-            IconRight: ({ ...props }) => (
+            IconLeft: () => <ChevronLeftIcon className="h-4 w-4" />,
+            IconRight: () => (
               <ChevronRightIcon className="h-4 w-4" />
             ),
           }}
@@ -225,6 +226,7 @@ export const SchedulePopover = React.forwardRef<
                     format(date, 'MMM d, yyyy')}
                 </>
               )}
+              {!date && 'set date'}
             </InfoText>
             {date && (
               <InfoIconButton
@@ -241,7 +243,10 @@ export const SchedulePopover = React.forwardRef<
             <InfoIcon>
               <HourglassIcon className="h-full w-full" />
             </InfoIcon>
-            <InfoText>{time && format(time, 'h:mm a')}</InfoText>
+            <InfoText>
+              {time && format(time, 'h:mm a')}
+              {!time && 'set time'}
+            </InfoText>
 
             {time && (
               <InfoIconButton
