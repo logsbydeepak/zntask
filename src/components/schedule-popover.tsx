@@ -10,11 +10,14 @@ import {
   set,
 } from 'date-fns'
 import {
+  ArrowBigUpIcon,
   CalendarCheckIcon,
   CalendarIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
+  CornerDownLeftIcon,
   HourglassIcon,
+  Info,
   SearchIcon,
   XIcon,
 } from 'lucide-react'
@@ -140,7 +143,7 @@ export const SchedulePopover = React.forwardRef<
         </div>
       </div>
 
-      <div className="w-60">
+      <div className="w-full px-4">
         <DayPicker
           selected={date ?? undefined}
           onSelect={(value) => {
@@ -174,11 +177,81 @@ export const SchedulePopover = React.forwardRef<
           }}
         />
       </div>
+
+      <div className="flex items-center justify-between border-t border-gray-200 px-4 py-1.5">
+        <div className="flex items-center space-x-1">
+          <InfoContainer>
+            <InfoIcon>
+              <CalendarIcon className="h-full w-full" />
+            </InfoIcon>
+            <InfoText>
+              {date && (
+                <>
+                  {(isTomorrow(date) && 'tomorrow') ||
+                    (isToday(date) && 'today') ||
+                    (isYesterday(date) && 'yesterday') ||
+                    (isThisYear(date) &&
+                      !isToday(date) &&
+                      !isTomorrow(date) &&
+                      !isYesterday(date) &&
+                      format(date, 'MMM d')) ||
+                    format(date, 'MMM d, yyyy')}
+                </>
+              )}
+            </InfoText>
+          </InfoContainer>
+
+          <InfoContainer>
+            <InfoIcon>
+              <HourglassIcon className="h-full w-full" />
+            </InfoIcon>
+            <InfoText>{time && format(time, 'h:mm a')}</InfoText>
+          </InfoContainer>
+        </div>
+
+        <ActionButton type="button">
+          <span>Select</span>
+          <div className="flex space-x-1">
+            <ShortcutIcon>
+              <ArrowBigUpIcon className="h-full w-full" />
+            </ShortcutIcon>
+            <ShortcutIcon>
+              <CornerDownLeftIcon className="h-full w-full" />
+            </ShortcutIcon>
+          </div>
+        </ActionButton>
+      </div>
     </PopoverContent>
   )
 })
 
 SchedulePopover.displayName = 'SchedulePopover'
+
+function InfoContainer({
+  children,
+  onClick,
+}: {
+  children: React.ReactNode
+  onClick?: () => void
+}) {
+  return (
+    <div className="inline-flex items-center space-x-1 text-xs text-gray-600">
+      {children}
+    </div>
+  )
+}
+
+function InfoIcon({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="h-3 w-3 group-data-[active=true]:text-white">
+      {children}
+    </div>
+  )
+}
+
+function InfoText({ children }: { children: React.ReactNode }) {
+  return <span>{children}</span>
+}
 
 function ActionContainer({
   children,
@@ -203,4 +276,23 @@ function ActionIcon({ children }: { children: React.ReactNode }) {
 
 function ActionText({ children }: { children: React.ReactNode }) {
   return <span className="font-normal">{children}</span>
+}
+
+function ShortcutIcon({ children }: { children: React.ReactNode }) {
+  return (
+    <span className="flex h-5 w-5 items-center justify-center rounded-md border border-gray-200 text-gray-500 group-hover:border-gray-300 group-hover:text-gray-950">
+      <span className="h-3 w-3">{children}</span>
+    </span>
+  )
+}
+
+function ActionButton({ children, ...props }: React.ComponentProps<'button'>) {
+  return (
+    <button
+      {...props}
+      className="group flex items-center space-x-2 rounded-md px-2 py-1 text-xs font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-950 focus-visible:outline-gray-950"
+    >
+      {children}
+    </button>
+  )
 }
