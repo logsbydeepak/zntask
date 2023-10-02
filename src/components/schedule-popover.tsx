@@ -10,14 +10,18 @@ import {
   set,
 } from 'date-fns'
 import {
+  CalendarCheckIcon,
   CalendarIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
   HourglassIcon,
+  SearchIcon,
   XIcon,
 } from 'lucide-react'
 import { DayPicker } from 'react-day-picker'
+import { useDebounce } from 'use-debounce'
 
+import { Action } from '@/app/(application)/(auth)/add-password/form'
 import * as Form from '@ui/form'
 
 export const SchedulePopover = React.forwardRef<
@@ -28,76 +32,113 @@ export const SchedulePopover = React.forwardRef<
   const [date, setDate] = React.useState<Date | null>(null)
   const [time, setTime] = React.useState<Date | null>(null)
 
+  const [actionTime, setActionTime] = React.useState<Date | null>(null)
+  const [actionDate, setActionDate] = React.useState<Date | null>(null)
+
+  const [debouncedValue] = useDebounce(value, 500)
+
   React.useEffect(() => {
     try {
-      const date = chrono.parse(value)[0]
-      setDate(date.start.date())
-    } catch (error) {
-      setDate(null)
-    }
+      const parseValue = chrono.parse(debouncedValue)[0]
+      const date = parseValue.start.date()
 
-    try {
-      const time = chrono.parse(value)[0]
-      if (time.start.isCertain('hour')) {
-        setTime(time.start.date())
+      setActionDate(date)
+      if (parseValue.start.isCertain('hour')) {
+        setActionTime(date)
+      } else {
+        setActionTime(null)
       }
     } catch (error) {
-      setTime(null)
+      setActionDate(null)
+      setActionDate(null)
     }
-  }, [value])
+  }, [debouncedValue])
 
   return (
     <PopoverContent
       ref={ref}
-      sideOffset={20}
-      className="category-popover w-80 space-y-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm"
+      side="top"
+      sideOffset={15}
+      className="category-popover w-64 space-y-4 rounded-lg border border-gray-200 bg-white shadow-sm"
     >
-      <div className="space-x-2">
-        <InfoContainer
-          isActive={!!date}
-          onClick={() => {
-            setDate(null)
-            setTime(null)
-          }}
-        >
-          <InfoIcon>
-            <CalendarIcon className="h-full w-full" strokeWidth={2} />
-          </InfoIcon>
-          <InfoText>
-            {date
-              ? (isTomorrow(date) && 'tomorrow') ||
-                (isToday(date) && 'today') ||
-                (isYesterday(date) && 'yesterday') ||
-                (isThisYear(date) &&
-                  !isToday(date) &&
-                  !isTomorrow(date) &&
-                  !isYesterday(date) &&
-                  format(date, 'MMM d')) ||
-                format(date, 'MMM d, yyyy')
-              : 'select'}
-          </InfoText>
-        </InfoContainer>
+      <div className="flex flex-col border-b border-gray-200 px-4 pb-4 pt-2.5">
+        <div className="flex items-center">
+          <CalendarCheckIcon className="h-3 w-3 text-gray-400" />
+          <input
+            id="schedule-form"
+            placeholder="today at 9am"
+            className="ml-2 h-5 w-full border-none p-0 text-sm outline-none placeholder:text-gray-400 focus:ring-0"
+            value={value}
+            autoComplete="off"
+            onChange={(e) => setValue(e.target.value)}
+          />
+        </div>
+        <div className="mt-3 flex flex-row flex-wrap gap-x-1.5 gap-y-2">
+          {actionDate && actionTime && (
+            <ActionContainer>
+              <ActionIcon>
+                <CalendarIcon className="h-full w-full" />
+              </ActionIcon>
+              <ActionIcon>
+                <HourglassIcon className="h-full w-full" />
+              </ActionIcon>
+            </ActionContainer>
+          )}
 
-        <InfoContainer
-          isActive={!!time}
-          onClick={() => {
-            setTime(null)
-          }}
-        >
-          <InfoIcon>
-            <HourglassIcon className="h-full w-full" strokeWidth={2} />
-          </InfoIcon>
-          <InfoText>{time ? format(time, 'p') : 'select'}</InfoText>
-        </InfoContainer>
+          {actionDate && (
+            <ActionContainer>
+              <ActionIcon>
+                <CalendarIcon className="h-full w-full" />
+              </ActionIcon>
+              <ActionText>
+                {format(actionDate ?? new Date(), 'MMM d')}
+              </ActionText>
+            </ActionContainer>
+          )}
+          {actionTime && (
+            <ActionContainer>
+              <ActionIcon>
+                <HourglassIcon className="h-full w-full" />
+              </ActionIcon>
+              <ActionText>
+                {format(actionTime ?? new Date(), 'h:mm a')}
+              </ActionText>
+            </ActionContainer>
+          )}
+
+          <ActionContainer>
+            <ActionIcon>
+              <CalendarIcon className="h-full w-full" />
+            </ActionIcon>
+            <ActionText>today</ActionText>
+          </ActionContainer>
+
+          <ActionContainer>
+            <ActionIcon>
+              <CalendarIcon className="h-full w-full" />
+            </ActionIcon>
+            <ActionText>tomorrow</ActionText>
+          </ActionContainer>
+
+          {date && (
+            <ActionContainer>
+              <ActionIcon>
+                <XIcon className="h-full w-full" />
+              </ActionIcon>
+              <ActionText>clear date</ActionText>
+            </ActionContainer>
+          )}
+
+          {time && (
+            <ActionContainer>
+              <ActionIcon>
+                <XIcon className="h-full w-full" />
+              </ActionIcon>
+              <ActionText>clear time</ActionText>
+            </ActionContainer>
+          )}
+        </div>
       </div>
-
-      <Form.Input
-        value={value}
-        onChange={(e) => {
-          setValue(e.target.value)
-        }}
-        placeholder="tomorrow at 9am"
-      />
 
       <div className="w-60">
         <DayPicker
@@ -139,42 +180,27 @@ export const SchedulePopover = React.forwardRef<
 
 SchedulePopover.displayName = 'SchedulePopover'
 
-function InfoContainer({
+function ActionContainer({
   children,
-  isActive = false,
   onClick,
 }: {
   children: React.ReactNode
-  isActive?: boolean
   onClick?: () => void
 }) {
   return (
-    <div
-      className="group inline-flex items-center space-x-1 rounded-full border px-3 py-1 text-xs font-medium data-[active=true]:border-orange-600 data-[active=true]:bg-orange-600 data-[active=true]:text-white"
-      data-active={isActive}
+    <button
+      className="group inline-flex items-center space-x-1 rounded-full border border-gray-200 px-2 py-0.5 text-xs font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-950"
+      type="button"
     >
       {children}
-      {isActive && (
-        <button
-          className="flex h-3 w-3 items-center justify-center rounded-full bg-white"
-          type="button"
-          onClick={onClick}
-        >
-          <XIcon className="h-2.5 w-2.5 text-orange-600" strokeWidth={3} />
-        </button>
-      )}
-    </div>
+    </button>
   )
 }
 
-function InfoIcon({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="h-3 w-3 text-gray-600 group-data-[active=true]:text-white">
-      {children}
-    </div>
-  )
+function ActionIcon({ children }: { children: React.ReactNode }) {
+  return <div className="h-2.5 w-2.5">{children}</div>
 }
 
-function InfoText({ children }: { children: React.ReactNode }) {
-  return <span>{children}</span>
+function ActionText({ children }: { children: React.ReactNode }) {
+  return <span className="font-normal">{children}</span>
 }
