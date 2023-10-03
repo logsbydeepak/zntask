@@ -1,23 +1,13 @@
 import React from 'react'
 import { PopoverContent } from '@radix-ui/react-popover'
 import * as chrono from 'chrono-node'
+import { addDays, format } from 'date-fns'
 import {
-  addDays,
-  format,
-  isThisYear,
-  isToday,
-  isTomorrow,
-  isYesterday,
-} from 'date-fns'
-import {
-  ArrowBigUpIcon,
   CalendarCheckIcon,
   CalendarIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
-  CornerDownLeftIcon,
   HourglassIcon,
-  XIcon,
 } from 'lucide-react'
 import { DayPicker } from 'react-day-picker'
 import { useDebounce } from 'use-debounce'
@@ -26,19 +16,15 @@ export const SchedulePopover = React.forwardRef<
   React.ElementRef<typeof PopoverContent>,
   React.ComponentProps<typeof PopoverContent> & {
     setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
-    setDateAndTime: (date: Date | null, time: Date | null) => void
-    currentDate: Date | null
-    currentTime: Date | null
+    setDate: (date: Date | null) => void
+    setTime: (time: Date | null) => void
+    date: Date | null
+    time: Date | null
   }
->(({ setIsOpen, setDateAndTime, currentDate, currentTime, ...props }, ref) => {
-  const inputRef = React.useRef<HTMLInputElement>(null)
+>(({ setIsOpen, date, time, setTime, setDate, ...props }, ref) => {
   const [value, setValue] = React.useState('')
-  const [date, setDate] = React.useState<Date | null>(currentDate)
-  const [time, setTime] = React.useState<Date | null>(currentTime)
-
   const [actionTime, setActionTime] = React.useState<Date | null>(null)
   const [actionDate, setActionDate] = React.useState<Date | null>(null)
-
   const [debouncedValue] = useDebounce(value, 500)
 
   React.useEffect(() => {
@@ -58,11 +44,11 @@ export const SchedulePopover = React.forwardRef<
     }
   }, [debouncedValue])
 
-  const resetValue = () => {
+  const handleClose = () => {
     setValue('')
-    setActionTime(null)
     setActionDate(null)
-    inputRef.current?.focus()
+    setActionTime(null)
+    setIsOpen(false)
   }
 
   return (
@@ -74,15 +60,6 @@ export const SchedulePopover = React.forwardRef<
       className="category-popover w-[290px] space-y-4 rounded-lg border border-gray-200 bg-white shadow-sm"
       autoFocus={true}
       tabIndex={20}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' && e.shiftKey) {
-          e.preventDefault()
-          if (!date) return
-          if (time && !date) return
-          setDateAndTime(date, time)
-          setIsOpen(false)
-        }
-      }}
     >
       <div className="flex flex-col border-b border-gray-200 px-4 pb-4 pt-2.5">
         <div className="flex items-center">
@@ -90,7 +67,6 @@ export const SchedulePopover = React.forwardRef<
           <input
             placeholder="today at 9am"
             autoFocus
-            ref={inputRef}
             className="ml-2 h-5 w-full border-none p-0 text-sm outline-none placeholder:text-gray-400 focus:ring-0"
             value={value}
             autoComplete="off"
@@ -103,7 +79,7 @@ export const SchedulePopover = React.forwardRef<
               onClick={() => {
                 setTime(actionTime)
                 setDate(actionDate)
-                resetValue()
+                handleClose()
               }}
             >
               <ActionIcon>
@@ -119,7 +95,7 @@ export const SchedulePopover = React.forwardRef<
             <ActionContainer
               onClick={() => {
                 setDate(actionDate)
-                resetValue()
+                handleClose()
               }}
             >
               <ActionIcon>
@@ -134,7 +110,7 @@ export const SchedulePopover = React.forwardRef<
             <ActionContainer
               onClick={() => {
                 setTime(actionDate)
-                resetValue()
+                handleClose()
               }}
             >
               <ActionIcon>
@@ -149,6 +125,7 @@ export const SchedulePopover = React.forwardRef<
           <ActionContainer
             onClick={() => {
               setDate(new Date())
+              handleClose()
             }}
           >
             <ActionIcon>
@@ -160,6 +137,7 @@ export const SchedulePopover = React.forwardRef<
           <ActionContainer
             onClick={() => {
               setDate(addDays(new Date(), 1))
+              handleClose()
             }}
           >
             <ActionIcon>
@@ -170,12 +148,13 @@ export const SchedulePopover = React.forwardRef<
         </div>
       </div>
 
-      <div className="px-4">
+      <div className="px-4 pb-4">
         <DayPicker
           selected={date ?? undefined}
           onSelect={(value) => {
             if (!value) return
             setDate(value)
+            handleClose()
           }}
           mode="single"
           className="text-sm"
@@ -203,127 +182,11 @@ export const SchedulePopover = React.forwardRef<
           }}
         />
       </div>
-
-      <div className="flex items-end justify-between border-t border-gray-200 px-4 py-3">
-        <div className="flex flex-col space-y-2">
-          <InfoContainer>
-            <InfoIcon>
-              <CalendarIcon className="h-full w-full" />
-            </InfoIcon>
-            <InfoText>
-              {date && (
-                <>
-                  {(isTomorrow(date) && 'tomorrow') ||
-                    (isToday(date) && 'today') ||
-                    (isYesterday(date) && 'yesterday') ||
-                    (isThisYear(date) &&
-                      !isToday(date) &&
-                      !isTomorrow(date) &&
-                      !isYesterday(date) &&
-                      format(date, 'MMM d')) ||
-                    format(date, 'MMM d, yyyy')}
-                </>
-              )}
-              {!date && 'set date'}
-            </InfoText>
-            {date && (
-              <InfoIconButton
-                onClick={() => {
-                  setDate(null)
-                }}
-              >
-                <XIcon className="h-full w-full" />
-              </InfoIconButton>
-            )}
-          </InfoContainer>
-
-          <InfoContainer>
-            <InfoIcon>
-              <HourglassIcon className="h-full w-full" />
-            </InfoIcon>
-            <InfoText>
-              {time && format(time, 'h:mm a')}
-              {!time && 'set time'}
-            </InfoText>
-
-            {time && (
-              <InfoIconButton
-                onClick={() => {
-                  setTime(null)
-                }}
-              >
-                <XIcon className="h-full w-full" />
-              </InfoIconButton>
-            )}
-          </InfoContainer>
-        </div>
-
-        <ActionButton
-          type="button"
-          onClick={() => {
-            if (!date) return
-            if (time && !date) return
-            setDateAndTime(date, time)
-            setIsOpen(false)
-          }}
-        >
-          <span>Select</span>
-          <div className="flex space-x-1">
-            <ShortcutIcon>
-              <ArrowBigUpIcon className="h-full w-full" />
-            </ShortcutIcon>
-            <ShortcutIcon>
-              <CornerDownLeftIcon className="h-full w-full" />
-            </ShortcutIcon>
-          </div>
-        </ActionButton>
-      </div>
     </PopoverContent>
   )
 })
 
 SchedulePopover.displayName = 'SchedulePopover'
-
-function InfoContainer({
-  children,
-  onClick,
-}: {
-  children: React.ReactNode
-  onClick?: () => void
-}) {
-  return (
-    <div className="flex h-4 items-center space-x-1 text-xs text-gray-600">
-      {children}
-    </div>
-  )
-}
-
-function InfoIcon({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="h-3 w-3 group-data-[active=true]:text-white">
-      {children}
-    </div>
-  )
-}
-
-function InfoIconButton({
-  children,
-  ...props
-}: React.ComponentProps<'button'>) {
-  return (
-    <button
-      {...props}
-      className="h-2.5 w-2.5 rounded-full text-gray-600 hover:text-gray-950"
-      type="button"
-    >
-      {children}
-    </button>
-  )
-}
-
-function InfoText({ children }: { children: React.ReactNode }) {
-  return <span>{children}</span>
-}
 
 function ActionContainer({
   children,
@@ -348,23 +211,4 @@ function ActionIcon({ children }: { children: React.ReactNode }) {
 
 function ActionText({ children }: { children: React.ReactNode }) {
   return <span className="font-normal">{children}</span>
-}
-
-function ShortcutIcon({ children }: { children: React.ReactNode }) {
-  return (
-    <span className="flex h-5 w-5 items-center justify-center rounded-md border border-gray-200 text-gray-500 group-hover:border-gray-300 group-hover:text-gray-950">
-      <span className="h-3 w-3">{children}</span>
-    </span>
-  )
-}
-
-function ActionButton({ children, ...props }: React.ComponentProps<'button'>) {
-  return (
-    <button
-      {...props}
-      className="group flex items-center space-x-2 rounded-md px-2 py-1 text-xs font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-950 focus-visible:outline-gray-950"
-    >
-      {children}
-    </button>
-  )
 }

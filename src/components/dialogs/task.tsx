@@ -2,9 +2,8 @@ import React from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as Popover from '@radix-ui/react-popover'
 import { format, isThisYear, isToday, isTomorrow, isYesterday } from 'date-fns'
-import { CalendarIcon, HourglassIcon, InboxIcon } from 'lucide-react'
+import { CalendarIcon, HourglassIcon, InboxIcon, XIcon } from 'lucide-react'
 import { useForm } from 'react-hook-form'
-import { ulid } from 'ulidx'
 import { z } from 'zod'
 
 import { CategoryPopover } from '@/components/category-popover'
@@ -193,19 +192,7 @@ function TaskDialogContent({
                   {date && (
                     <CalendarIcon className="mr-2 h-3.5 w-3.5 text-gray-600" />
                   )}
-                  {date && (
-                    <>
-                      {(isTomorrow(date) && 'tomorrow') ||
-                        (isToday(date) && 'today') ||
-                        (isYesterday(date) && 'yesterday') ||
-                        (isThisYear(date) &&
-                          !isToday(date) &&
-                          !isTomorrow(date) &&
-                          !isYesterday(date) &&
-                          format(date, 'MMM d')) ||
-                        format(date, 'MMM d, yyyy')}
-                    </>
-                  )}
+                  {date && showDate(date)}
                 </div>
 
                 {time && <div className="mx-4 h-3 border-l border-gray-200" />}
@@ -214,18 +201,19 @@ function TaskDialogContent({
                   {time && (
                     <HourglassIcon className="mr-2 h-3.5 w-3.5 text-gray-600" />
                   )}
-                  {time && format(time, 'h:mm a')}
+                  {time && showTime(time)}
                 </div>
               </button>
             </Popover.Trigger>
             <SchedulePopover
               setIsOpen={setIsSchedulePickerOpen}
-              currentDate={getValues('date')}
-              currentTime={getValues('time')}
-              key={ulid()}
-              setDateAndTime={(date, time) => {
-                setValue('date', date)
-                setValue('time', time)
+              date={date}
+              time={time}
+              setDate={(value) => {
+                setValue('date', value)
+              }}
+              setTime={(value) => {
+                setValue('time', value)
               }}
             />
           </Popover.Root>
@@ -244,4 +232,22 @@ function TaskDialogContent({
       </div>
     </>
   )
+}
+
+const showDate = (date: Date) => {
+  return (
+    (isTomorrow(date) && 'tomorrow') ||
+    (isToday(date) && 'today') ||
+    (isYesterday(date) && 'yesterday') ||
+    (isThisYear(date) &&
+      !isToday(date) &&
+      !isTomorrow(date) &&
+      !isYesterday(date) &&
+      format(date, 'MMM d')) ||
+    format(date, 'MMM d, yyyy')
+  )
+}
+
+const showTime = (time: Date) => {
+  return format(time, 'h:mm a')
 }
