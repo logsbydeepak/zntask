@@ -2,6 +2,7 @@
 
 import React from 'react'
 import { HeartIcon } from 'lucide-react'
+import { useShallow } from 'zustand/shallow'
 
 import * as Layout from '@/app/(application)/(app)/layout-components'
 import { Head } from '@/components/head'
@@ -10,8 +11,8 @@ import { useCategoryStore } from '@/store/category'
 import { CategoryContainer, CategoryItem } from '../category-components'
 
 export default function Page() {
-  const favorites = useCategoryStore((s) =>
-    s.categories.filter((c) => c.isFavorite)
+  const favorites = useCategoryStore(
+    useShallow((s) => s.categories.filter((c) => c.isFavorite))
   )
 
   return (

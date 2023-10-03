@@ -1,14 +1,17 @@
 'use client'
 
 import { CheckCheckIcon } from 'lucide-react'
+import { useShallow } from 'zustand/shallow'
 
 import * as Layout from '@/app/(application)/(app)/layout-components'
 import { Head } from '@/components/head'
 import { useCategoryStore } from '@/store/category'
 
 export default function Page({ params }: { params: { id?: string } }) {
-  const category = useCategoryStore((state) =>
-    state.categories.find((c) => c.id === params.id && c.isFavorite)
+  const category = useCategoryStore(
+    useShallow((s) =>
+      s.categories.find((c) => c.id === params.id && c.isFavorite)
+    )
   )
 
   if (!category || !params.id) {

@@ -8,15 +8,14 @@ import {
   CalendarClockIcon,
   ChevronDownIcon,
   ChevronUpIcon,
-  EditIcon,
   FolderIcon,
   GanttChartIcon,
   HeartIcon,
   HeartOffIcon,
   InboxIcon,
   MoreVerticalIcon,
-  Trash2Icon,
 } from 'lucide-react'
+import { useShallow } from 'zustand/shallow'
 
 import {
   ContextMenuContent,
@@ -112,8 +111,9 @@ function QuickSection() {
 function FavoriteSection() {
   const pathname = usePathname()
   const [isCollapsibleOpen, setIsCollapsibleOpen] = React.useState(false)
-  const favorites = useCategoryStore((s) =>
-    s.categories.filter((c) => c.isFavorite)
+
+  const favorites = useCategoryStore(
+    useShallow((s) => s.categories.filter((c) => c.isFavorite))
   )
 
   const favoritesToDisplay = favorites.slice(

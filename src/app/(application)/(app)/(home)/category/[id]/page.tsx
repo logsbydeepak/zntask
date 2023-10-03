@@ -1,6 +1,7 @@
 'use client'
 
 import { CheckCheckIcon } from 'lucide-react'
+import { useShallow } from 'zustand/shallow'
 
 import * as Layout from '@/app/(application)/(app)/layout-components'
 import { Head } from '@/components/head'
@@ -11,14 +12,16 @@ import { useTaskStore } from '@/store/task'
 export default function Page({ params }: { params: { id?: string } }) {
   const setDialog = useAppStore((s) => s.setDialog)
 
-  const category = useCategoryStore((s) =>
-    s.categories.find((c) => c.id === params.id)
+  const category = useCategoryStore(
+    useShallow((s) => s.categories.find((c) => c.id === params.id))
   )
 
-  const tasks = useTaskStore((s) => {
-    if (!category) return []
-    return s.tasks.filter((i) => i.categoryId === category.id)
-  })
+  const tasks = useTaskStore(
+    useShallow((s) => {
+      if (!category) return []
+      return s.tasks.filter((i) => i.categoryId === category.id)
+    })
+  )
 
   if (!category || !params.id) {
     return <Layout.NotFound />

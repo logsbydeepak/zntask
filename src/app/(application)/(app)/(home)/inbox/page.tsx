@@ -1,6 +1,7 @@
 'use client'
 
 import { InboxIcon } from 'lucide-react'
+import { useShallow } from 'zustand/shallow'
 
 import * as Layout from '@/app/(application)/(app)/layout-components'
 import { Head } from '@/components/head'
@@ -8,7 +9,9 @@ import { useAppStore } from '@/store/app'
 import { useTaskStore } from '@/store/task'
 
 export default function Page() {
-  const tasks = useTaskStore((s) => s.tasks.filter((i) => !i.categoryId))
+  const tasks = useTaskStore(
+    useShallow((s) => s.tasks.filter((i) => !i.categoryId))
+  )
   const setDialog = useAppStore((s) => s.setDialog)
 
   return (
