@@ -2,7 +2,7 @@ import React from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as Popover from '@radix-ui/react-popover'
 import { format, isThisYear, isToday, isTomorrow, isYesterday } from 'date-fns'
-import { CalendarIcon, HourglassIcon, InboxIcon, XIcon } from 'lucide-react'
+import { CalendarIcon, HourglassIcon, InboxIcon } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -205,6 +205,33 @@ function TaskDialogContent({
                 </div>
               </button>
             </Popover.Trigger>
+            {date && (
+              <HelperButton
+                onClick={() => {
+                  setValue('date', null)
+                  setValue('time', null)
+                }}
+              >
+                <HelperIcon>
+                  <CalendarIcon className="h-full w-full" strokeWidth={2.5} />
+                </HelperIcon>
+                <HelperText>clear date</HelperText>
+              </HelperButton>
+            )}
+
+            {time && (
+              <HelperButton
+                onClick={() => {
+                  setValue('time', null)
+                }}
+              >
+                <HelperIcon>
+                  <HourglassIcon className="h-full w-full" strokeWidth={2.5} />
+                </HelperIcon>
+                <HelperText>clear time</HelperText>
+              </HelperButton>
+            )}
+
             <SchedulePopover
               setIsOpen={setIsSchedulePickerOpen}
               date={date}
@@ -250,4 +277,30 @@ const showDate = (date: Date) => {
 
 const showTime = (time: Date) => {
   return format(time, 'h:mm a')
+}
+
+function HelperButton({
+  onClick,
+  children,
+}: {
+  onClick?: () => void
+  children: React.ReactNode
+}) {
+  return (
+    <button
+      onClick={onClick}
+      type="button"
+      className="mr-2 inline-flex items-center rounded-full bg-orange-600 px-2 py-0.5 text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-600 focus-visible:ring-offset-1"
+    >
+      {children}
+    </button>
+  )
+}
+
+function HelperIcon({ children }: { children: React.ReactNode }) {
+  return <span className="mr-1 inline-block h-2 w-2">{children}</span>
+}
+
+function HelperText({ children }: { children: React.ReactNode }) {
+  return <span className="text-xs font-medium">{children}</span>
 }
