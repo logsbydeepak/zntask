@@ -89,17 +89,24 @@ function TaskDialogContent({
     defaultValues: {
       title: isEdit?.title ?? '',
       categoryId: isEdit?.categoryId ?? null,
+      date: isEdit?.date ? new Date(isEdit.date) : null,
+      time: isEdit?.time ? new Date(isEdit.time) : null,
     },
   })
 
   const onSubmit = (data: FormValues) => {
+    const date = data.date ? data.date.toISOString() : null
+    const time = data.time ? data.time.toISOString() : null
+
     if (isCreate)
       addTask({
         ...data,
         categoryId: getValues('categoryId'),
         isCompleted: false,
+        date,
+        time,
       })
-    if (isEdit) editTask({ ...isEdit, ...data })
+    if (isEdit) editTask({ ...isEdit, ...data, date, time })
     handleClose()
   }
   const categoryId = watch('categoryId')

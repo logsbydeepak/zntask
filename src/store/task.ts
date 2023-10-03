@@ -9,6 +9,8 @@ export interface Task {
   isCompleted: boolean
   categoryId: string | null
   orderId: string
+  date: string | null
+  time: string | null
 }
 
 const initialState = {
