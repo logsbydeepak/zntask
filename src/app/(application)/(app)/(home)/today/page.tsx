@@ -1,5 +1,6 @@
 'use client'
 
+import React from 'react'
 import * as Tabs from '@radix-ui/react-tabs'
 import { isToday } from 'date-fns'
 import { CalendarClockIcon } from 'lucide-react'
@@ -18,11 +19,10 @@ export default function Page() {
         <Head title="Today" />
       </Layout.Header>
       <Layout.Content>
-        <Tabs.Root>
-          <Tabs.List>
-            <Tabs.Trigger value="planed">planed</Tabs.Trigger>
-            <Tabs.Trigger value="completed">completed</Tabs.Trigger>
-            <Tabs.Trigger value="archived">archived</Tabs.Trigger>
+        <Tabs.Root defaultValue="planed">
+          <Tabs.List className="inline-flex space-x-2 rounded-lg bg-gray-100 p-1.5">
+            <TabsTrigger value="planed">Planed</TabsTrigger>
+            <TabsTrigger value="completed">Completed</TabsTrigger>
           </Tabs.List>
           <Tabs.Content value="planed">
             <PlanedTab />
@@ -30,14 +30,23 @@ export default function Page() {
           <Tabs.Content value="completed">
             <CompletedTab />
           </Tabs.Content>
-          <Tabs.Content value="archived">
-            <ArchivedTab />
-          </Tabs.Content>
         </Tabs.Root>
       </Layout.Content>
     </Layout.Root>
   )
 }
+
+const TabsTrigger = React.forwardRef<
+  React.ElementRef<typeof Tabs.Trigger>,
+  React.ComponentProps<typeof Tabs.Trigger>
+>((props, ref) => (
+  <Tabs.Trigger
+    {...props}
+    ref={ref}
+    className="rounded-md bg-gray-100 px-3 py-1 text-xs text-gray-600 hover:text-gray-950 aria-[selected=true]:bg-white aria-[selected=true]:text-gray-950 aria-[selected=true]:shadow-sm aria-[selected=true]:drop-shadow-sm"
+  />
+))
+TabsTrigger.displayName = Tabs.Trigger.displayName
 
 function PlanedTab() {
   const tasks = useTaskStore(
