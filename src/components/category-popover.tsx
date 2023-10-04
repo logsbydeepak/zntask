@@ -81,7 +81,7 @@ export const CategoryPopover = React.forwardRef<
           <Command.Empty className="flex h-48 items-center justify-center">
             <div className="flex h-28 w-28 flex-col items-center justify-center space-y-1 rounded-md border shadow-sm">
               <span className="inline-block h-5 w-5">
-                <FolderIcon className="h-full w-full" />
+                <FolderIcon />
               </span>
               <p className="text-xs text-gray-600">No category</p>
             </div>
@@ -185,7 +185,7 @@ export const CategoryPopover = React.forwardRef<
           >
             <span>Select</span>
             <ShortcutIcon>
-              <CornerDownLeftIcon className="h-full w-full" />
+              <CornerDownLeftIcon />
             </ShortcutIcon>
           </ActionButton>
           <ActionButton
@@ -203,10 +203,10 @@ export const CategoryPopover = React.forwardRef<
             <span>Create new</span>
             <div className="flex space-x-1">
               <ShortcutIcon>
-                <ArrowBigUpIcon className="h-full w-full" />
+                <ArrowBigUpIcon />
               </ShortcutIcon>
               <ShortcutIcon>
-                <CornerDownLeftIcon className="h-full w-full" />
+                <CornerDownLeftIcon />
               </ShortcutIcon>
             </div>
           </ActionButton>

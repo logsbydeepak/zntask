@@ -71,7 +71,7 @@ function EmptyLayout() {
   return (
     <Layout.Empty.Container>
       <Layout.Empty.Icon>
-        <FolderIcon className="h-full w-full" />
+        <FolderIcon />
       </Layout.Empty.Icon>
       <Layout.Empty.Label>No category</Layout.Empty.Label>
     </Layout.Empty.Container>

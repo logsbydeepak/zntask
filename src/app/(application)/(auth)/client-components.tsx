@@ -27,16 +27,16 @@ export function Navbar() {
       <div className="flex justify-end">
         <div className="flex space-x-2 rounded-full border px-1 py-1">
           <Icon isActive={theme === 'light'} onClick={() => setTheme('light')}>
-            <MoonIcon className="h-full w-full" strokeWidth={2} />
+            <MoonIcon strokeWidth={2} />
           </Icon>
           <Icon isActive={theme === 'dark'} onClick={() => setTheme('dark')}>
-            <SunIcon className="h-full w-full" strokeWidth={2} />
+            <SunIcon strokeWidth={2} />
           </Icon>
           <Icon
             isActive={theme === 'system'}
             onClick={() => setTheme('system')}
           >
-            <MonitorIcon className="h-full w-full" strokeWidth={2} />
+            <MonitorIcon strokeWidth={2} />
           </Icon>
         </div>
       </div>

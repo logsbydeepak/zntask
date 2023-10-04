@@ -2,7 +2,6 @@ export function GoogleIcon() {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      className="h-full w-full"
       fill="currentColor"
       height={24}
       width={24}

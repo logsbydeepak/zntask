@@ -13,7 +13,7 @@ export default function Page() {
       <Layout.Content>
         <Layout.Empty.Container>
           <Layout.Empty.Icon>
-            <GanttChartIcon className="h-full w-full" />
+            <GanttChartIcon />
           </Layout.Empty.Icon>
           <Layout.Empty.Label>No task</Layout.Empty.Label>
         </Layout.Empty.Container>

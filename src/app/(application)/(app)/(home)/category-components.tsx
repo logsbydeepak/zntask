@@ -69,7 +69,7 @@ export function CategoryItem({
               <DropdownMenuTrigger asChild>
                 <button className="flex h-6 w-6 items-center justify-center text-gray-400 hover:text-gray-800 data-[state=open]:text-gray-800">
                   <span className="inline-block h-4 w-4">
-                    <MoreVerticalIcon className="h-full w-full" />
+                    <MoreVerticalIcon />
                   </span>
                 </button>
               </DropdownMenuTrigger>
@@ -106,22 +106,18 @@ export function CategoryMenuContent({
     {
       label: 'Edit',
       onSelect: () => setDialog('editCategory', category),
-      icon: <EditIcon className="h-full w-full" />,
+      icon: <EditIcon />,
     },
     {
       label: category.isFavorite ? 'Unfavorite' : 'Favorite',
       onSelect: () =>
         editCategory({ ...category, isFavorite: !category.isFavorite }),
-      icon: category.isFavorite ? (
-        <HeartOffIcon className="h-full w-full" />
-      ) : (
-        <HeartIcon className="h-full w-full" />
-      ),
+      icon: category.isFavorite ? <HeartOffIcon /> : <HeartIcon />,
     },
     {
       label: 'Delete',
       onSelect: () => setDialog('deleteCategory', category),
-      icon: <Trash2Icon className="h-full w-full" />,
+      icon: <Trash2Icon />,
       intent: 'destructive' as const,
     },
   ]

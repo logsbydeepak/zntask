@@ -27,7 +27,7 @@ export default function Page({ params }: { params: { id?: string } }) {
       <Layout.Content>
         <Layout.Empty.Container>
           <Layout.Empty.Icon>
-            <CheckCheckIcon className="h-full w-full" />
+            <CheckCheckIcon />
           </Layout.Empty.Icon>
           <Layout.Empty.Label>No task</Layout.Empty.Label>
         </Layout.Empty.Container>

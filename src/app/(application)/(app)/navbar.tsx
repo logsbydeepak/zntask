@@ -57,7 +57,9 @@ export function Navbar({
       <div className="flex h-14 items-center justify-between px-4 md:px-5">
         <Link href="/" className="flex items-center space-x-2">
           <span className="flex h-7 w-7 items-center justify-center rounded-full bg-orange-600 text-white">
-            <LogoIcon className="h-3 w-3" />
+            <span className="h-3 w-3">
+              <LogoIcon />
+            </span>
           </span>
           <span className="text-sm font-medium">zntask</span>
         </Link>
@@ -66,22 +68,18 @@ export function Navbar({
             <Search />
 
             <Icon onClick={() => setIsSidebarOpen((open) => !open)}>
-              {isSidebarOpen ? (
-                <MenuSquareIcon className="h-full w-full" />
-              ) : (
-                <PanelLeftIcon className="h-full w-full" />
-              )}
+              {isSidebarOpen ? <MenuSquareIcon /> : <PanelLeftIcon />}
             </Icon>
           </div>
           <div className="my-1 w-[1px] bg-gray-200" />
 
           <div className="flex space-x-3">
             <Icon onClick={() => setDialog('createCategory', true)}>
-              <FolderPlusIcon className="h-full w-full" />
+              <FolderPlusIcon />
             </Icon>
 
             <Icon onClick={() => setDialog('createTask', true)}>
-              <PlusIcon className="h-full w-full" />
+              <PlusIcon />
             </Icon>
           </div>
 
@@ -136,17 +134,17 @@ function UserMenu({
       >
         <DropdownMenuRadioItem value="light" asChild>
           <ThemeItem>
-            <SunIcon className="h-full w-full" />
+            <SunIcon />
           </ThemeItem>
         </DropdownMenuRadioItem>
         <DropdownMenuRadioItem value="dark" asChild>
           <ThemeItem>
-            <MoonStarIcon className="h-full w-full" />
+            <MoonStarIcon />
           </ThemeItem>
         </DropdownMenuRadioItem>
         <DropdownMenuRadioItem value="system" asChild>
           <ThemeItem>
-            <MonitorIcon className="h-full w-full" />
+            <MonitorIcon />
           </ThemeItem>
         </DropdownMenuRadioItem>
       </DropdownMenuRadioGroup>
@@ -155,7 +153,7 @@ function UserMenu({
         intent="destructive"
       >
         <MenuIcon intent="destructive">
-          <LogOutIcon className="h-full w-full" />
+          <LogOutIcon />
         </MenuIcon>
         <span>Logout</span>
       </DropdownMenuItem>
@@ -227,13 +225,13 @@ function Search() {
   return (
     <button className="group flex items-center rounded-lg border border-gray-200 bg-gray-50 px-[7px] hover:bg-gray-100 hover:text-gray-950 md:pl-3 md:pr-1.5">
       <span className="h-4 w-4 text-gray-500 group-hover:text-gray-950">
-        <SearchIcon className="h-full w-full" />
+        <SearchIcon />
       </span>
       <span className="hidden md:flex md:items-center">
         <span className="ml-2 mr-4 text-xs text-gray-500">Search</span>
         <span className="flex items-center space-x-1 rounded-md border border-gray-200 px-1.5 text-xs text-gray-500">
           <span className="inline-block h-2.5 w-2.5">
-            <CommandIcon className="h-full w-full" />
+            <CommandIcon />
           </span>
           <span className="font-mono text-[10px]">K</span>
         </span>

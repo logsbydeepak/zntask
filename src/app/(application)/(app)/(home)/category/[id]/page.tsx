@@ -37,7 +37,7 @@ export default function Page({ params }: { params: { id?: string } }) {
         {tasks.length === 0 && (
           <Layout.Empty.Container>
             <Layout.Empty.Icon>
-              <CheckCheckIcon className="h-full w-full" />
+              <CheckCheckIcon />
             </Layout.Empty.Icon>
             <Layout.Empty.Label>No task</Layout.Empty.Label>
           </Layout.Empty.Container>

@@ -213,7 +213,7 @@ function TaskDialogContent({
                 }}
               >
                 <HelperIcon>
-                  <CalendarIcon className="h-full w-full" strokeWidth={2.5} />
+                  <CalendarIcon strokeWidth={2.5} />
                 </HelperIcon>
                 <HelperText>clear date</HelperText>
               </HelperButton>
@@ -226,7 +226,7 @@ function TaskDialogContent({
                 }}
               >
                 <HelperIcon>
-                  <HourglassIcon className="h-full w-full" strokeWidth={2.5} />
+                  <HourglassIcon strokeWidth={2.5} />
                 </HelperIcon>
                 <HelperText>clear time</HelperText>
               </HelperButton>

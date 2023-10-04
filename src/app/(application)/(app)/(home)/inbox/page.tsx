@@ -24,7 +24,7 @@ export default function Page() {
         {tasks.length === 0 && (
           <Layout.Empty.Container>
             <Layout.Empty.Icon>
-              <InboxIcon className="h-full w-full" />
+              <InboxIcon />
             </Layout.Empty.Icon>
             <Layout.Empty.Label>No task</Layout.Empty.Label>
           </Layout.Empty.Container>

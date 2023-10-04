@@ -26,7 +26,7 @@ export default function Page() {
           {favorites.length === 0 && (
             <Layout.Empty.Container>
               <Layout.Empty.Icon>
-                <HeartIcon className="h-full w-full" />
+                <HeartIcon />
               </Layout.Empty.Icon>
               <Layout.Empty.Label>No favorite</Layout.Empty.Label>
             </Layout.Empty.Container>

@@ -155,7 +155,7 @@ export function Action() {
           onClick={() => router.push('/')}
         >
           <div className="mr-2 h-4 w-4">
-            <HomeIcon className="h-full w-full" />
+            <HomeIcon />
           </div>
           <span>Return to home</span>
         </Button>

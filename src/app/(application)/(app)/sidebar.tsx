@@ -59,7 +59,7 @@ function QuickSection() {
 
   const item = [
     {
-      icon: <CalendarClockIcon className="h-full w-full" />,
+      icon: <CalendarClockIcon />,
       label: 'today',
       href: '/today',
       isActive: pathname.startsWith('/today') || pathname === '/',
@@ -67,25 +67,25 @@ function QuickSection() {
     {
       label: 'inbox',
       href: '/inbox',
-      icon: <InboxIcon className="h-full w-full" />,
+      icon: <InboxIcon />,
       isActive: pathname.startsWith('/inbox'),
     },
     {
       label: 'upcoming',
       href: '/upcoming',
-      icon: <GanttChartIcon className="h-full w-full" />,
+      icon: <GanttChartIcon />,
       isActive: pathname.startsWith('/upcoming'),
     },
     {
       label: 'favorite',
       href: '/favorite',
-      icon: <HeartIcon className="h-full w-full" />,
+      icon: <HeartIcon />,
       isActive: pathname === '/favorite',
     },
     {
       label: 'category',
       href: '/category',
-      icon: <FolderIcon className="h-full w-full" />,
+      icon: <FolderIcon />,
       isActive: pathname === '/category',
     },
   ]
@@ -245,7 +245,7 @@ function CategoryItem({
                 <DropdownMenuTrigger asChild>
                   <button className="flex h-6 w-6 items-center justify-center text-gray-400 hover:text-gray-800 data-[state=open]:text-gray-800">
                     <span className="inline-block h-4 w-4">
-                      <MoreVerticalIcon className="h-full w-full" />
+                      <MoreVerticalIcon />
                     </span>
                   </button>
                 </DropdownMenuTrigger>
@@ -268,7 +268,7 @@ function EmptyFavorite() {
   return (
     <EmptyContainer>
       <EmptyIcon>
-        <HeartIcon className="h-full w-full" />
+        <HeartIcon />
       </EmptyIcon>
       <EmptyLabel>no favorite</EmptyLabel>
     </EmptyContainer>
@@ -279,7 +279,7 @@ function EmptyCategory() {
   return (
     <EmptyContainer>
       <EmptyIcon>
-        <FolderIcon className="h-full w-full" />
+        <FolderIcon />
       </EmptyIcon>
       <EmptyLabel>no category</EmptyLabel>
     </EmptyContainer>

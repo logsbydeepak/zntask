@@ -96,7 +96,7 @@ function EmptyState() {
   return (
     <Layout.Empty.Container>
       <Layout.Empty.Icon>
-        <CalendarClockIcon className="h-full w-full" />
+        <CalendarClockIcon />
       </Layout.Empty.Icon>
       <Layout.Empty.Label>No task</Layout.Empty.Label>
     </Layout.Empty.Container>

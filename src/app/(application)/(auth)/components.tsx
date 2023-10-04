@@ -80,7 +80,7 @@ export function ResetPassword({ onClick }: { onClick: () => void }) {
       className="mr-2 inline-flex items-center rounded-full bg-orange-600 px-2 py-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-600 focus-visible:ring-offset-1"
     >
       <span className="mr-1 h-2 w-2 text-white">
-        <KeyIcon className="h-full w-full" strokeWidth={3} />
+        <KeyIcon strokeWidth={3} />
       </span>
       <span className="text-xs font-medium text-white">reset password</span>
     </button>
@@ -102,9 +102,9 @@ export function PasswordVisibilityToggle({
     >
       <span className="mr-1 h-2 w-2 text-white">
         {!isVisible ? (
-          <EyeIcon className="h-full w-full" strokeWidth={3} />
+          <EyeIcon strokeWidth={3} />
         ) : (
-          <EyeOffIcon className="h-full w-full" strokeWidth={3} />
+          <EyeOffIcon strokeWidth={3} />
         )}
       </span>
       <span className="text-xs font-medium text-white">
@@ -189,9 +189,9 @@ export function PasswordChecklistItem({
       <div className="flex items-center">
         <span className="mr-1 h-2 w-2 text-gray-500">
           {isValid ? (
-            <CheckCircleIcon className="h-full w-full" strokeWidth={3} />
+            <CheckCircleIcon strokeWidth={3} />
           ) : (
-            <CircleIcon className="h-full w-full" strokeWidth={3} />
+            <CircleIcon strokeWidth={3} />
           )}
         </span>
 

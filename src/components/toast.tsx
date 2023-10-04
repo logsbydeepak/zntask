@@ -36,13 +36,13 @@ function Item({ toast }: { toast: Toast }) {
         <div className="mr-3">
           {isError && (
             <Icon className="bg-red-700 text-red-50">
-              <AlertCircle className="h-full w-full" strokeWidth={2.5} />
+              <AlertCircle strokeWidth={2.5} />
             </Icon>
           )}
 
           {isSuccess && (
             <Icon className="bg-green-700 text-green-50">
-              <CheckCheckIcon className="h-full w-full" strokeWidth={2.5} />
+              <CheckCheckIcon strokeWidth={2.5} />
             </Icon>
           )}
         </div>

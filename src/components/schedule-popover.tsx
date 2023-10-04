@@ -83,10 +83,10 @@ export const SchedulePopover = React.forwardRef<
               }}
             >
               <ActionIcon>
-                <CalendarIcon className="h-full w-full" />
+                <CalendarIcon />
               </ActionIcon>
               <ActionIcon>
-                <HourglassIcon className="h-full w-full" />
+                <HourglassIcon />
               </ActionIcon>
             </ActionContainer>
           )}
@@ -99,7 +99,7 @@ export const SchedulePopover = React.forwardRef<
               }}
             >
               <ActionIcon>
-                <CalendarIcon className="h-full w-full" />
+                <CalendarIcon />
               </ActionIcon>
               <ActionText>
                 {format(actionDate ?? new Date(), 'MMM d')}
@@ -114,7 +114,7 @@ export const SchedulePopover = React.forwardRef<
               }}
             >
               <ActionIcon>
-                <HourglassIcon className="h-full w-full" />
+                <HourglassIcon />
               </ActionIcon>
               <ActionText>
                 {format(actionTime ?? new Date(), 'h:mm a')}
@@ -129,7 +129,7 @@ export const SchedulePopover = React.forwardRef<
             }}
           >
             <ActionIcon>
-              <CalendarIcon className="h-full w-full" />
+              <CalendarIcon />
             </ActionIcon>
             <ActionText>today</ActionText>
           </ActionContainer>
@@ -141,7 +141,7 @@ export const SchedulePopover = React.forwardRef<
             }}
           >
             <ActionIcon>
-              <CalendarIcon className="h-full w-full" />
+              <CalendarIcon />
             </ActionIcon>
             <ActionText>tomorrow</ActionText>
           </ActionContainer>
