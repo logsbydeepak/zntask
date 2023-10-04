@@ -7,18 +7,23 @@ import {
   Trigger as TriggerPrimitives,
 } from '@radix-ui/react-tabs'
 
+import { cn } from '@/utils/style'
+
 export const TabsRoot = RootPrimitives
 export const TabsContent = ContentPrimitives
 
 export const TabsList = React.forwardRef<
   React.ElementRef<typeof ListPrimitives>,
   React.ComponentProps<typeof ListPrimitives>
->((props, ref) => {
+>(({ className, ...props }, ref) => {
   return (
     <ListPrimitives
-      {...props}
       ref={ref}
-      className="inline-flex space-x-2 rounded-lg bg-gray-100 p-1.5"
+      {...props}
+      className={cn(
+        'inline-flex space-x-2 rounded-lg bg-gray-100 p-1.5',
+        className
+      )}
     />
   )
 })
