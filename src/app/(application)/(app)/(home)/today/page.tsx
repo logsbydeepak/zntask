@@ -1,7 +1,6 @@
 'use client'
 
 import React from 'react'
-import * as Tabs from '@radix-ui/react-tabs'
 import { isToday } from 'date-fns'
 import { CalendarClockIcon } from 'lucide-react'
 import { useShallow } from 'zustand/shallow'
@@ -10,6 +9,7 @@ import * as Layout from '@/app/(application)/(app)/layout-components'
 import { Head } from '@/components/head'
 import { useAppStore } from '@/store/app'
 import { Task, useTaskStore } from '@/store/task'
+import { TabsContent, TabsList, TabsRoot, TabsTrigger } from '@ui/tabs'
 
 export default function Page() {
   return (
@@ -19,34 +19,22 @@ export default function Page() {
         <Head title="Today" />
       </Layout.Header>
       <Layout.Content>
-        <Tabs.Root defaultValue="planed">
-          <Tabs.List className="inline-flex space-x-2 rounded-lg bg-gray-100 p-1.5">
+        <TabsRoot defaultValue="planed">
+          <TabsList>
             <TabsTrigger value="planed">Planed</TabsTrigger>
             <TabsTrigger value="completed">Completed</TabsTrigger>
-          </Tabs.List>
-          <Tabs.Content value="planed">
+          </TabsList>
+          <TabsContent value="planed">
             <PlanedTab />
-          </Tabs.Content>
-          <Tabs.Content value="completed">
+          </TabsContent>
+          <TabsContent value="completed">
             <CompletedTab />
-          </Tabs.Content>
-        </Tabs.Root>
+          </TabsContent>
+        </TabsRoot>
       </Layout.Content>
     </Layout.Root>
   )
 }
-
-const TabsTrigger = React.forwardRef<
-  React.ElementRef<typeof Tabs.Trigger>,
-  React.ComponentProps<typeof Tabs.Trigger>
->((props, ref) => (
-  <Tabs.Trigger
-    {...props}
-    ref={ref}
-    className="rounded-md bg-gray-100 px-3 py-1 text-xs text-gray-600 hover:text-gray-950 aria-[selected=true]:bg-white aria-[selected=true]:text-gray-950 aria-[selected=true]:shadow-sm aria-[selected=true]:drop-shadow-sm"
-  />
-))
-TabsTrigger.displayName = Tabs.Trigger.displayName
 
 function PlanedTab() {
   const tasks = useTaskStore(
