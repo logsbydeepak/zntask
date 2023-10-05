@@ -37,7 +37,9 @@ export default function Page() {
 }
 
 function AllTab() {
-  const categories = useCategoryStore(useShallow((s) => s.categories))
+  const categories = useCategoryStore(
+    useShallow((s) => s.categories.filter((c) => !c.isArchived))
+  )
 
   return (
     <>
@@ -53,7 +55,9 @@ function AllTab() {
 }
 
 function ArchiveTab() {
-  const categories: CategoryType[] = []
+  const categories = useCategoryStore(
+    useShallow((s) => s.categories.filter((c) => c.isArchived))
+  )
 
   return (
     <>

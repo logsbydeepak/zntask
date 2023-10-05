@@ -155,7 +155,9 @@ function FavoriteSection() {
 function CategorySection() {
   const pathname = usePathname()
   const [isCollapsibleOpen, setIsCollapsibleOpen] = React.useState(false)
-  const categories = useCategoryStore((s) => s.categories)
+  const categories = useCategoryStore(
+    useShallow((s) => s.categories.filter((c) => !c.isArchived))
+  )
 
   const categoriesToDisplay = categories.slice(
     0,

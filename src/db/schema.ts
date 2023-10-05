@@ -37,6 +37,7 @@ export const categories = mysqlTable('categories', {
     .default(categoryDefaultIndicatorOption.label)
     .notNull(),
   isFavorite: boolean('is_favorite').notNull(),
+  isArchived: boolean('is_archived').notNull(),
   orderId: varchar('order_id', { length: 26 }).notNull(),
 })
 

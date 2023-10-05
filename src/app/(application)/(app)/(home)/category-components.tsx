@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import {
+  ArchiveRestoreIcon,
   EditIcon,
   HeartIcon,
   HeartOffIcon,
@@ -114,6 +115,21 @@ export function CategoryMenuContent({
         editCategory({ ...category, isFavorite: !category.isFavorite }),
       icon: category.isFavorite ? <HeartOffIcon /> : <HeartIcon />,
     },
+    {
+      label: category.isArchived ? 'Unarchive' : 'Archive',
+      onSelect: () =>
+        editCategory({
+          ...category,
+          isArchived: !category.isArchived,
+          isFavorite: false,
+        }),
+      icon: category.isArchived ? (
+        <ArchiveRestoreIcon />
+      ) : (
+        <ArchiveRestoreIcon />
+      ),
+    },
+
     {
       label: 'Delete',
       onSelect: () => setDialog('deleteCategory', category),

@@ -36,6 +36,7 @@ export const zCategory = z.object({
   indicator: z.enum(categoryIndicatorLabel),
   isFavorite: z.boolean(),
   orderId: zRequired.refine(isValid, { message: 'Invalid ulid' }),
+  isArchived: z.boolean(),
 })
 
 export type CategoryType = z.infer<typeof zCategory>

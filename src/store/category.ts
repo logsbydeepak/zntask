@@ -11,9 +11,7 @@ const initialState = {
 type State = typeof initialState
 
 interface Actions {
-  addCategory: (
-    category: Omit<Omit<Omit<Category, 'id'>, 'isFavorite'>, 'orderId'>
-  ) => Category
+  addCategory: (category: Pick<Category, 'title' | 'indicator'>) => Category
   getCategory: (id: string | null) => undefined | Category
   editCategory: (category: Category) => void
   deleteCategory: (category: Category) => void
@@ -30,6 +28,7 @@ const categoryStore: StateCreator<State & Actions> = (set, get) => ({
       title: category.title,
       indicator: category.indicator,
       isFavorite: false,
+      isArchived: false,
       orderId: ulid(),
     }
 
