@@ -8,6 +8,8 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
   HourglassIcon,
+  XCircleIcon,
+  XIcon,
 } from 'lucide-react'
 import { DayPicker } from 'react-day-picker'
 import { useDebounce } from 'use-debounce'
@@ -56,6 +58,7 @@ export const SchedulePopover = React.forwardRef<
       {...props}
       ref={ref}
       align="center"
+      side="top"
       sideOffset={5}
       className="category-popover w-[290px] space-y-4 rounded-lg border border-gray-200 bg-white shadow-sm"
       autoFocus={true}
@@ -145,6 +148,35 @@ export const SchedulePopover = React.forwardRef<
             </ActionIcon>
             <ActionText>tomorrow</ActionText>
           </ActionContainer>
+
+          {date && (
+            <ActionContainer
+              onClick={() => {
+                setDate(null)
+                setTime(null)
+                handleClose()
+              }}
+            >
+              <ActionIcon>
+                <XCircleIcon />
+              </ActionIcon>
+              <ActionText>clear date</ActionText>
+            </ActionContainer>
+          )}
+
+          {time && (
+            <ActionContainer
+              onClick={() => {
+                setTime(null)
+                handleClose()
+              }}
+            >
+              <ActionIcon>
+                <XCircleIcon />
+              </ActionIcon>
+              <ActionText>clear time</ActionText>
+            </ActionContainer>
+          )}
         </div>
       </div>
 
