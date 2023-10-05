@@ -59,8 +59,8 @@ export const SchedulePopover = React.forwardRef<
       ref={ref}
       align="center"
       side="top"
-      sideOffset={5}
-      className="category-popover w-[290px] space-y-4 rounded-lg border border-gray-200 bg-white shadow-sm"
+      sideOffset={10}
+      className="category-popover w-72 space-y-4 rounded-lg border border-gray-200 bg-white shadow-sm"
       autoFocus={true}
       tabIndex={20}
     >
@@ -112,6 +112,7 @@ export const SchedulePopover = React.forwardRef<
           {actionTime && (
             <ActionContainer
               onClick={() => {
+                if (!date) setDate(new Date())
                 setTime(actionDate)
                 handleClose()
               }}
@@ -193,8 +194,7 @@ export const SchedulePopover = React.forwardRef<
           showOutsideDays={true}
           classNames={{
             month: 'space-y-4',
-
-            caption: 'flex justify-center pt-1 relative font-medium',
+            caption: 'flex justify-center relative font-medium',
             nav: 'space-x-1 flex items-center justify-center',
             nav_button_next: 'absolute right-1',
             nav_button_previous: 'absolute left-1',
@@ -229,7 +229,7 @@ function ActionContainer({
 }) {
   return (
     <button
-      className="group inline-flex items-center space-x-1 rounded-full border border-gray-200 px-2 py-0.5 text-xs font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-950"
+      className="group inline-flex items-center space-x-1 rounded-full border border-gray-200 px-2 py-0.5 text-xs font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-950 focus-visible:outline-gray-950"
       onClick={onClick}
     >
       {children}
