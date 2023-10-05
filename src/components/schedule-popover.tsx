@@ -55,8 +55,8 @@ export const SchedulePopover = React.forwardRef<
     <PopoverContent
       {...props}
       ref={ref}
-      side="top"
-      sideOffset={15}
+      align="center"
+      sideOffset={5}
       className="category-popover w-[290px] space-y-4 rounded-lg border border-gray-200 bg-white shadow-sm"
       autoFocus={true}
       tabIndex={20}

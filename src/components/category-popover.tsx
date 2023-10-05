@@ -36,8 +36,9 @@ export const CategoryPopover = React.forwardRef<
   return (
     <PopoverContent
       ref={ref}
-      className="category-popover w-full rounded-lg border border-gray-200 bg-white shadow-sm sm:w-96"
-      sideOffset={10}
+      className="category-popover w-full rounded-lg border border-gray-200 bg-white shadow-sm sm:w-60"
+      sideOffset={5}
+      align="center"
       onKeyDown={(e) => {
         if (e.key === 'Enter' && e.shiftKey) {
           e.preventDefault()
@@ -66,7 +67,7 @@ export const CategoryPopover = React.forwardRef<
         }}
         onValueChange={(v) => setCommandValue(v)}
       >
-        <div className="flex items-center border-b border-gray-200 px-4 py-2.5">
+        <div className="flex items-center border-b border-gray-200 px-2.5 py-2.5">
           <SearchIcon className="h-3 w-3 text-gray-400" />
           <Command.Input
             ref={searchInputRef}
@@ -77,13 +78,13 @@ export const CategoryPopover = React.forwardRef<
           />
         </div>
 
-        <Command.List className="container-scroll my-3 ml-4 mr-2 h-48 overflow-y-scroll pr-2">
-          <Command.Empty className="flex h-48 items-center justify-center">
-            <div className="flex h-28 w-28 flex-col items-center justify-center space-y-1 rounded-md border shadow-sm">
+        <Command.List className="container-scroll my-3 ml-2 mr-1 h-40 overflow-y-scroll pr-2">
+          <Command.Empty className="flex h-40 items-center justify-center">
+            <div className="flex flex-col items-center justify-center space-y-1 rounded-md border px-4 py-4 shadow-sm">
               <span className="inline-block h-5 w-5">
                 <FolderIcon />
               </span>
-              <p className="text-xs text-gray-600">No category</p>
+              <p className="text-xs text-gray-600">not found</p>
             </div>
           </Command.Empty>
 
@@ -157,7 +158,7 @@ export const CategoryPopover = React.forwardRef<
       </Command>
 
       <div
-        className="border-t border-gray-200 px-4 py-1.5"
+        className="border-t border-gray-200 px-2.5 py-1.5"
         onKeyDown={(e) => {
           if (e.key === '/') {
             e.preventDefault()
@@ -255,7 +256,7 @@ function ActionButton({ children, ...props }: React.ComponentProps<'button'>) {
   return (
     <button
       {...props}
-      className="group flex items-center space-x-2 rounded-md px-2 py-1 text-xs font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-950 focus-visible:outline-gray-950"
+      className="group flex items-center space-x-2 rounded-md px-1.5 py-1 text-xs font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-950 focus-visible:outline-gray-950"
     >
       {children}
     </button>

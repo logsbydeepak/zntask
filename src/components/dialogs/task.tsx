@@ -14,7 +14,7 @@ import { Task, useTaskStore } from '@/store/task'
 import { getCategoryColor } from '@/utils/category'
 import { cn } from '@/utils/style'
 import { zRequired } from '@/utils/zod'
-import { Button } from '@ui/button'
+import { Button, buttonStyle } from '@ui/button'
 import * as Dialog from '@ui/dialog'
 import * as Form from '@ui/form'
 
@@ -130,39 +130,31 @@ function TaskDialogContent({
             {errors.title && <Form.Error>{errors.title?.message}</Form.Error>}
           </Form.Root>
           <div>
-            <Form.Label htmlFor="category">Category</Form.Label>
             <Popover.Root
               open={isCategoryPickerOpen}
               onOpenChange={setIsCategoryPickerOpen}
             >
               <Popover.Trigger asChild>
-                <button
-                  className={cn(
-                    Form.formInputStyle(),
-                    'flex items-center text-left'
-                  )}
-                  id="category"
-                  type="button"
-                >
-                  <div className="mr-2 flex h-3.5 w-3.5 items-center justify-center">
+                <InfoButton>
+                  <InfoIcon>
                     {!currentCategory && (
                       <InboxIcon className="h-full w-full text-gray-600" />
                     )}
                     {currentCategory && (
                       <div
                         className={cn(
-                          'h-3 w-3 rounded-[4.5px]',
+                          'h-2.5 w-2.5 rounded-[4.5px]',
                           `bg-${getCategoryColor(
                             currentCategory.indicator
                           )}-600`
                         )}
                       />
                     )}
-                  </div>
-                  <span>
+                  </InfoIcon>
+                  <InfoText>
                     {currentCategory ? currentCategory.title : 'Inbox'}
-                  </span>
-                </button>
+                  </InfoText>
+                </InfoButton>
               </Popover.Trigger>
               <CategoryPopover
                 setValue={(value) => {
@@ -172,78 +164,47 @@ function TaskDialogContent({
                 currentCategory={currentCategory}
               />
             </Popover.Root>
-          </div>
-          <Form.Label htmlFor="schedule">Schedule</Form.Label>
-          <Popover.Root
-            open={isSchedulePickerOpen}
-            onOpenChange={setIsSchedulePickerOpen}
-          >
-            <Popover.Trigger asChild>
-              <button
-                className={cn(
-                  Form.formInputStyle(),
-                  'flex items-center text-left'
-                )}
-                id="schedule"
-                type="button"
-              >
-                <div className="flex w-1/2 items-center">
-                  {!date && !time && <span>None</span>}
-                  {date && (
-                    <CalendarIcon className="mr-2 h-3.5 w-3.5 text-gray-600" />
-                  )}
-                  {date && showDate(date)}
-                </div>
 
-                {time && <div className="mx-4 h-3 border-l border-gray-200" />}
+            <Popover.Root
+              open={isSchedulePickerOpen}
+              onOpenChange={setIsSchedulePickerOpen}
+            >
+              <Popover.Trigger asChild>
+                <InfoButton>
+                  <InfoIcon>
+                    <CalendarIcon />
+                  </InfoIcon>
+                  <InfoText>{date ? showDate(date) : 'select'}</InfoText>
 
-                <div className="flex w-1/2 items-center">
                   {time && (
-                    <HourglassIcon className="mr-2 h-3.5 w-3.5 text-gray-600" />
+                    <div>
+                      <div className="mx-1 h-2 border-l border-gray-200" />
+                    </div>
                   )}
-                  {time && showTime(time)}
-                </div>
-              </button>
-            </Popover.Trigger>
-            {date && (
-              <HelperButton
-                onClick={() => {
-                  setValue('date', null)
-                  setValue('time', null)
-                }}
-              >
-                <HelperIcon>
-                  <CalendarIcon strokeWidth={2.5} />
-                </HelperIcon>
-                <HelperText>clear date</HelperText>
-              </HelperButton>
-            )}
 
-            {time && (
-              <HelperButton
-                onClick={() => {
-                  setValue('time', null)
+                  {time && (
+                    <>
+                      <InfoIcon>
+                        <HourglassIcon />
+                      </InfoIcon>
+                      <InfoText>{time && showTime(time)}</InfoText>
+                    </>
+                  )}
+                </InfoButton>
+              </Popover.Trigger>
+              <SchedulePopover
+                setIsOpen={setIsSchedulePickerOpen}
+                date={date}
+                time={time}
+                setDate={(value) => {
+                  setValue('date', value)
                 }}
-              >
-                <HelperIcon>
-                  <HourglassIcon strokeWidth={2.5} />
-                </HelperIcon>
-                <HelperText>clear time</HelperText>
-              </HelperButton>
-            )}
-
-            <SchedulePopover
-              setIsOpen={setIsSchedulePickerOpen}
-              date={date}
-              time={time}
-              setDate={(value) => {
-                setValue('date', value)
-              }}
-              setTime={(value) => {
-                setValue('time', value)
-              }}
-            />
-          </Popover.Root>
+                setTime={(value) => {
+                  setValue('time', value)
+                }}
+              />
+            </Popover.Root>
+          </div>
         </div>
 
         <fieldset className="flex space-x-4">
@@ -279,28 +240,25 @@ const showTime = (time: Date) => {
   return format(time, 'h:mm a')
 }
 
-function HelperButton({
-  onClick,
-  children,
-}: {
-  onClick?: () => void
-  children: React.ReactNode
-}) {
+const InfoButton = React.forwardRef<
+  HTMLButtonElement,
+  React.ComponentPropsWithoutRef<'button'>
+>(({ ...props }, ref) => {
   return (
     <button
-      onClick={onClick}
+      {...props}
+      ref={ref}
       type="button"
-      className="mr-2 inline-flex items-center rounded-full bg-orange-600 px-2 py-0.5 text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-600 focus-visible:ring-offset-1"
-    >
-      {children}
-    </button>
+      className="mr-2 inline-flex items-center space-x-1 rounded-full border border-gray-200 px-3 py-1 text-gray-600 focus-visible:outline-gray-950"
+    />
   )
+})
+InfoButton.displayName = 'InfoButton'
+
+function InfoIcon({ children }: { children: React.ReactNode }) {
+  return <span className="grid h-3 w-3 place-content-center">{children}</span>
 }
 
-function HelperIcon({ children }: { children: React.ReactNode }) {
-  return <span className="mr-1 inline-block h-2 w-2">{children}</span>
-}
-
-function HelperText({ children }: { children: React.ReactNode }) {
+function InfoText({ children }: { children: React.ReactNode }) {
   return <span className="text-xs font-medium">{children}</span>
 }
