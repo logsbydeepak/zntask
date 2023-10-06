@@ -160,10 +160,11 @@ function TaskDialogContent({
               </Checkbox.Root>
 
               <div className="w-full">
-                <Form.Input
+                <input
                   {...register('title')}
                   id="title"
-                  className="m-0 w-full"
+                  placeholder="task"
+                  className="m-0 w-full border-0 outline-none focus-visible:ring-0"
                 />
               </div>
             </div>
