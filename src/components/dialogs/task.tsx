@@ -1,8 +1,17 @@
 import React from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
+import * as Checkbox from '@radix-ui/react-checkbox'
 import * as Popover from '@radix-ui/react-popover'
 import { format, isThisYear, isToday, isTomorrow, isYesterday } from 'date-fns'
-import { CalendarIcon, HourglassIcon, InboxIcon } from 'lucide-react'
+import {
+  CalendarIcon,
+  Check,
+  CheckCircleIcon,
+  CircleIcon,
+  HourglassIcon,
+  InboxIcon,
+} from 'lucide-react'
+import { space } from 'postcss/lib/list'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -25,6 +34,8 @@ const schema = z.object({
   categoryId: z.string().nullable(),
   date: z.date().nullable(),
   time: z.date().nullable(),
+  details: z.string().optional(),
+  isCompleted: z.boolean(),
 })
 
 export function TaskDialog() {
@@ -90,6 +101,7 @@ function TaskDialogContent({
       categoryId: isEdit?.categoryId ?? null,
       date: isEdit?.date ? new Date(isEdit.date) : null,
       time: isEdit?.time ? new Date(isEdit.time) : null,
+      isCompleted: isEdit?.isCompleted ?? false,
     },
   })
 
@@ -101,7 +113,6 @@ function TaskDialogContent({
       addTask({
         ...data,
         categoryId: getValues('categoryId'),
-        isCompleted: false,
         date,
         time,
       })
@@ -114,6 +125,8 @@ function TaskDialogContent({
   const date = watch('date')
   const time = watch('time')
 
+  const isChecked = watch('isCompleted')
+
   return (
     <>
       <Head title={title} />
@@ -123,11 +136,42 @@ function TaskDialogContent({
       </div>
 
       <div className="space-y-7">
-        <div className="space-y-2">
-          <Form.Root onSubmit={handleSubmit(onSubmit)} id="task">
-            <Form.Label htmlFor="title">Task</Form.Label>
-            <Form.Input {...register('title')} id="title" />
-            {errors.title && <Form.Error>{errors.title?.message}</Form.Error>}
+        <div className="space-y-4">
+          <Form.Root
+            onSubmit={handleSubmit(onSubmit)}
+            id="task"
+            className="space-y-2"
+          >
+            <div className="flex items-center space-x-2">
+              <Checkbox.Root
+                defaultChecked={getValues('isCompleted')}
+                checked={isChecked}
+                onCheckedChange={(value) => {
+                  if (typeof value === 'boolean') {
+                    setValue('isCompleted', value)
+                  }
+                }}
+                className="h-4 w-4 rounded-full text-gray-600 outline-offset-4 outline-gray-950"
+              >
+                {!isChecked && <CircleIcon />}
+                <Checkbox.Indicator asChild>
+                  <CheckCircleIcon />
+                </Checkbox.Indicator>
+              </Checkbox.Root>
+
+              <div className="w-full">
+                <Form.Input
+                  {...register('title')}
+                  id="title"
+                  className="m-0 w-full"
+                />
+              </div>
+            </div>
+            {errors.title && (
+              <span className="ml-6 mt-2 inline-block">
+                <Form.Error>{errors.title?.message}</Form.Error>
+              </span>
+            )}
           </Form.Root>
           <div>
             <Popover.Root
