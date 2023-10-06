@@ -5,13 +5,11 @@ import * as Popover from '@radix-ui/react-popover'
 import { format, isThisYear, isToday, isTomorrow, isYesterday } from 'date-fns'
 import {
   CalendarIcon,
-  Check,
   CheckCircleIcon,
   CircleIcon,
   HourglassIcon,
   InboxIcon,
 } from 'lucide-react'
-import { space } from 'postcss/lib/list'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -23,7 +21,7 @@ import { Task, useTaskStore } from '@/store/task'
 import { getCategoryColor } from '@/utils/category'
 import { cn } from '@/utils/style'
 import { zRequired } from '@/utils/zod'
-import { Button, buttonStyle } from '@ui/button'
+import { Button } from '@ui/button'
 import * as Dialog from '@ui/dialog'
 import * as Form from '@ui/form'
 
@@ -92,6 +90,7 @@ function TaskDialogContent({
     handleSubmit,
     formState: { errors },
     getValues,
+    control,
     setValue,
     watch,
   } = useForm<FormValues>({
@@ -106,6 +105,7 @@ function TaskDialogContent({
   })
 
   const onSubmit = (data: FormValues) => {
+    console.log(data)
     const date = data.date ? data.date.toISOString() : null
     const time = data.time ? data.time.toISOString() : null
 
@@ -142,37 +142,46 @@ function TaskDialogContent({
             id="task"
             className="space-y-2"
           >
-            <div className="flex items-center space-x-2">
-              <Checkbox.Root
-                defaultChecked={getValues('isCompleted')}
-                checked={isChecked}
-                onCheckedChange={(value) => {
-                  if (typeof value === 'boolean') {
-                    setValue('isCompleted', value)
-                  }
-                }}
-                className="h-4 w-4 rounded-full text-gray-600 outline-offset-4 outline-gray-950"
-              >
-                {!isChecked && <CircleIcon />}
-                <Checkbox.Indicator asChild>
-                  <CheckCircleIcon />
-                </Checkbox.Indicator>
-              </Checkbox.Root>
+            <div>
+              <div className="flex items-center space-x-4">
+                <Checkbox.Root
+                  defaultChecked={getValues('isCompleted')}
+                  checked={isChecked}
+                  onCheckedChange={(value) => {
+                    if (typeof value === 'boolean') {
+                      setValue('isCompleted', value)
+                    }
+                  }}
+                  className="h-4 w-4 rounded-full text-gray-600 outline-offset-4 outline-gray-950"
+                >
+                  {!isChecked && <CircleIcon />}
+                  <Checkbox.Indicator asChild>
+                    <CheckCircleIcon />
+                  </Checkbox.Indicator>
+                </Checkbox.Root>
 
-              <div className="w-full">
-                <input
-                  {...register('title')}
-                  id="title"
-                  placeholder="task"
-                  className="m-0 w-full border-0 outline-none focus-visible:ring-0"
-                />
+                <div className="w-full">
+                  <input
+                    {...register('title')}
+                    id="title"
+                    placeholder="task"
+                    className="m-0 w-full border-0 p-0 outline-none focus-visible:ring-0"
+                  />
+                </div>
               </div>
+              {errors.title && (
+                <span className="ml-6 mt-2 inline-block">
+                  <Form.Error>{errors.title?.message}</Form.Error>
+                </span>
+              )}
             </div>
-            {errors.title && (
-              <span className="ml-6 mt-2 inline-block">
-                <Form.Error>{errors.title?.message}</Form.Error>
-              </span>
-            )}
+            <div>
+              <textarea
+                {...register('details')}
+                placeholder="details"
+                className="container-scroll w-full resize-none border-0 p-0 pl-7 text-xs font-medium outline-none focus-visible:ring-0"
+              />
+            </div>
           </Form.Root>
           <div>
             <Popover.Root
