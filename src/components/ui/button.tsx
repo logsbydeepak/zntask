@@ -11,7 +11,7 @@ export const buttonStyle = cva({
       primary:
         'bg-orange-600 focus-visible:ring-orange-700 disabled:bg-gray-50 disabled:text-gray-700 disabled:border-gray-200',
       secondary:
-        'border-gray-200 text-gray-950 focus-visible:ring-gray-900 bg-white disabled:bg-gray-50 disabled:text-gray-700 disabled:border-gray-200',
+        'border-gray-200 focus-visible:ring-gray-900 bg-white disabled:bg-gray-50 disabled:text-gray-700 disabled:border-gray-200 text-gray-600',
       destructive: 'bg-red-600 focus-visible:ring-red-600',
     },
   },

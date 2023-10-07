@@ -130,9 +130,46 @@ function TaskDialogContent({
   return (
     <>
       <Head title={title} />
-      <div>
-        <Dialog.Title>{title}</Dialog.Title>
-        <Dialog.Description>Add a new task.</Dialog.Description>
+      <div className="flex justify-between">
+        <div>
+          <Dialog.Title>{title}</Dialog.Title>
+          <Dialog.Description>Add a new task.</Dialog.Description>
+        </div>
+
+        <div>
+          <Popover.Root
+            open={isCategoryPickerOpen}
+            onOpenChange={setIsCategoryPickerOpen}
+          >
+            <Popover.Trigger asChild>
+              <InfoButton>
+                <InfoIcon>
+                  {!currentCategory && (
+                    <InboxIcon className="h-full w-full text-gray-600" />
+                  )}
+                  {currentCategory && (
+                    <div
+                      className={cn(
+                        'h-2.5 w-2.5 rounded-[4.5px]',
+                        `bg-${getCategoryColor(currentCategory.indicator)}-600`
+                      )}
+                    />
+                  )}
+                </InfoIcon>
+                <InfoText>
+                  {currentCategory ? currentCategory.title : 'Inbox'}
+                </InfoText>
+              </InfoButton>
+            </Popover.Trigger>
+            <CategoryPopover
+              setValue={(value) => {
+                setValue('categoryId', value)
+              }}
+              setIsOpen={setIsCategoryPickerOpen}
+              currentCategory={currentCategory}
+            />
+          </Popover.Root>
+        </div>
       </div>
 
       <div className="space-y-7">
@@ -166,6 +203,7 @@ function TaskDialogContent({
                     id="title"
                     placeholder="task"
                     className="m-0 w-full border-0 p-0 outline-none focus-visible:ring-0"
+                    autoFocus
                   />
                 </div>
               </div>
@@ -175,90 +213,53 @@ function TaskDialogContent({
                 </span>
               )}
             </div>
-            <div>
+            <div className="pl-7">
               <textarea
                 {...register('details')}
                 placeholder="details"
-                className="container-scroll w-full resize-none border-0 p-0 pl-7 text-xs font-medium outline-none focus-visible:ring-0"
+                className="container-scroll w-full resize-none border-0 p-0 text-xs font-medium outline-none focus-visible:ring-0"
               />
+              <Popover.Root
+                open={isSchedulePickerOpen}
+                onOpenChange={setIsSchedulePickerOpen}
+              >
+                <Popover.Trigger asChild>
+                  <InfoButton>
+                    <InfoIcon>
+                      <CalendarIcon />
+                    </InfoIcon>
+                    <InfoText>{date ? showDate(date) : 'select'}</InfoText>
+
+                    {time && (
+                      <div>
+                        <div className="mx-1 h-2 border-l border-gray-200" />
+                      </div>
+                    )}
+
+                    {time && (
+                      <>
+                        <InfoIcon>
+                          <HourglassIcon />
+                        </InfoIcon>
+                        <InfoText>{time && showTime(time)}</InfoText>
+                      </>
+                    )}
+                  </InfoButton>
+                </Popover.Trigger>
+                <SchedulePopover
+                  setIsOpen={setIsSchedulePickerOpen}
+                  date={date}
+                  time={time}
+                  setDate={(value) => {
+                    setValue('date', value)
+                  }}
+                  setTime={(value) => {
+                    setValue('time', value)
+                  }}
+                />
+              </Popover.Root>
             </div>
           </Form.Root>
-          <div>
-            <Popover.Root
-              open={isCategoryPickerOpen}
-              onOpenChange={setIsCategoryPickerOpen}
-            >
-              <Popover.Trigger asChild>
-                <InfoButton>
-                  <InfoIcon>
-                    {!currentCategory && (
-                      <InboxIcon className="h-full w-full text-gray-600" />
-                    )}
-                    {currentCategory && (
-                      <div
-                        className={cn(
-                          'h-2.5 w-2.5 rounded-[4.5px]',
-                          `bg-${getCategoryColor(
-                            currentCategory.indicator
-                          )}-600`
-                        )}
-                      />
-                    )}
-                  </InfoIcon>
-                  <InfoText>
-                    {currentCategory ? currentCategory.title : 'Inbox'}
-                  </InfoText>
-                </InfoButton>
-              </Popover.Trigger>
-              <CategoryPopover
-                setValue={(value) => {
-                  setValue('categoryId', value)
-                }}
-                setIsOpen={setIsCategoryPickerOpen}
-                currentCategory={currentCategory}
-              />
-            </Popover.Root>
-
-            <Popover.Root
-              open={isSchedulePickerOpen}
-              onOpenChange={setIsSchedulePickerOpen}
-            >
-              <Popover.Trigger asChild>
-                <InfoButton>
-                  <InfoIcon>
-                    <CalendarIcon />
-                  </InfoIcon>
-                  <InfoText>{date ? showDate(date) : 'select'}</InfoText>
-
-                  {time && (
-                    <div>
-                      <div className="mx-1 h-2 border-l border-gray-200" />
-                    </div>
-                  )}
-
-                  {time && (
-                    <>
-                      <InfoIcon>
-                        <HourglassIcon />
-                      </InfoIcon>
-                      <InfoText>{time && showTime(time)}</InfoText>
-                    </>
-                  )}
-                </InfoButton>
-              </Popover.Trigger>
-              <SchedulePopover
-                setIsOpen={setIsSchedulePickerOpen}
-                date={date}
-                time={time}
-                setDate={(value) => {
-                  setValue('date', value)
-                }}
-                setTime={(value) => {
-                  setValue('time', value)
-                }}
-              />
-            </Popover.Root>
-          </div>
         </div>
 
         <fieldset className="flex space-x-4">
@@ -268,7 +269,7 @@ function TaskDialogContent({
             </Button>
           </Dialog.Close>
           <Button className="w-full" type="submit" form="task">
-            Submit
+            Save
           </Button>
         </fieldset>
       </div>

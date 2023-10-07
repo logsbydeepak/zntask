@@ -152,7 +152,7 @@ function CategoryDialogContent({
             </Button>
           </Dialog.Close>
           <Button className="w-full" type="submit">
-            Submit
+            Save
           </Button>
         </fieldset>
       </Form.Root>
