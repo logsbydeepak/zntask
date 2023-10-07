@@ -10,7 +10,7 @@ import {
   HourglassIcon,
   InboxIcon,
 } from 'lucide-react'
-import { useForm } from 'react-hook-form'
+import { useFieldArray, useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 import { CategoryPopover } from '@/components/category-popover'
@@ -28,12 +28,16 @@ import * as Form from '@ui/form'
 import { SchedulePopover } from '../schedule-popover'
 
 const schema = z.object({
-  title: zRequired,
   categoryId: z.string().nullable(),
-  date: z.date().nullable(),
-  time: z.date().nullable(),
-  details: z.string().optional(),
-  isCompleted: z.boolean(),
+  tasks: z.array(
+    z.object({
+      title: zRequired,
+      date: z.date().nullable(),
+      time: z.date().nullable(),
+      details: z.string().optional(),
+      isCompleted: z.boolean(),
+    })
+  ),
 })
 
 export function TaskDialog() {
@@ -90,42 +94,53 @@ function TaskDialogContent({
     handleSubmit,
     formState: { errors },
     getValues,
-    control,
     setValue,
     watch,
+    control,
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
-      title: isEdit?.title ?? '',
       categoryId: isEdit?.categoryId ?? null,
-      date: isEdit?.date ? new Date(isEdit.date) : null,
-      time: isEdit?.time ? new Date(isEdit.time) : null,
-      isCompleted: isEdit?.isCompleted ?? false,
+      tasks: [
+        {
+          title: isEdit?.title ?? '',
+          date: isEdit?.date ? new Date(isEdit.date) : null,
+          time: isEdit?.time ? new Date(isEdit.time) : null,
+          isCompleted: isEdit?.isCompleted ?? false,
+        },
+      ],
     },
+  })
+
+  const { fields, append, remove } = useFieldArray({
+    name: 'tasks',
+    control,
   })
 
   const onSubmit = (data: FormValues) => {
     console.log(data)
-    const date = data.date ? data.date.toISOString() : null
-    const time = data.time ? data.time.toISOString() : null
+    const dataTask = data.tasks[0]
 
-    if (isCreate)
-      addTask({
-        ...data,
-        categoryId: getValues('categoryId'),
-        date,
-        time,
-      })
-    if (isEdit) editTask({ ...isEdit, ...data, date, time })
-    handleClose()
+    // const date = dataTask.date ? dataTask.date.toISOString() : null
+    // const time = dataTask.time ? dataTask.time.toISOString() : null
+
+    // if (isCreate)
+    //   addTask({
+    //     ...dataTask,
+    //     categoryId: getValues('categoryId'),
+    //     date,
+    //     time,
+    //   })
+    // if (isEdit) editTask({ ...isEdit, ...dataTask, date, time })
+    // handleClose()
   }
   const categoryId = watch('categoryId')
   const title = isEdit ? `Edit ${isEdit?.title}` : 'Create Task'
   const currentCategory = getCategory(categoryId)
-  const date = watch('date')
-  const time = watch('time')
+  // const date = watch('date')
+  // const time = watch('time')
 
-  const isChecked = watch('isCompleted')
+  // const isChecked = watch('isCompleted')
 
   return (
     <>
@@ -173,94 +188,114 @@ function TaskDialogContent({
       </div>
 
       <div className="space-y-7">
-        <div className="space-y-4">
-          <Form.Root
-            onSubmit={handleSubmit(onSubmit)}
-            id="task"
-            className="space-y-2"
-          >
-            <div>
-              <div className="flex items-center space-x-4">
-                <Checkbox.Root
-                  defaultChecked={getValues('isCompleted')}
-                  checked={isChecked}
-                  onCheckedChange={(value) => {
-                    if (typeof value === 'boolean') {
-                      setValue('isCompleted', value)
-                    }
-                  }}
-                  className="h-4 w-4 rounded-full text-gray-600 outline-offset-4 outline-gray-950"
-                >
-                  {!isChecked && <CircleIcon />}
-                  <Checkbox.Indicator asChild>
-                    <CheckCircleIcon />
-                  </Checkbox.Indicator>
-                </Checkbox.Root>
-
-                <div className="w-full">
-                  <input
-                    {...register('title')}
-                    id="title"
-                    placeholder="task"
-                    className="m-0 w-full border-0 p-0 outline-none focus-visible:ring-0"
-                    autoFocus
-                  />
-                </div>
-              </div>
-              {errors.title && (
-                <span className="ml-6 mt-2 inline-block">
-                  <Form.Error>{errors.title?.message}</Form.Error>
-                </span>
-              )}
-            </div>
-            <div className="pl-7">
-              <textarea
-                {...register('details')}
-                placeholder="details"
-                className="container-scroll w-full resize-none border-0 p-0 text-xs font-medium outline-none focus-visible:ring-0"
-              />
-              <Popover.Root
-                open={isSchedulePickerOpen}
-                onOpenChange={setIsSchedulePickerOpen}
+        {fields.map((field, index) => (
+          <React.Fragment key={index}>
+            <div className="space-y-4">
+              <Form.Root
+                onSubmit={handleSubmit(onSubmit)}
+                id="task"
+                className="space-y-2"
               >
-                <Popover.Trigger asChild>
-                  <InfoButton>
-                    <InfoIcon>
-                      <CalendarIcon />
-                    </InfoIcon>
-                    <InfoText>{date ? showDate(date) : 'select'}</InfoText>
+                <div>
+                  <div className="flex items-center">
+                    <div className="w-7">
+                      <Checkbox.Root
+                        defaultChecked={getValues(`tasks.${index}.isCompleted`)}
+                        checked={watch(`tasks.${index}.isCompleted`)}
+                        onCheckedChange={(value) => {
+                          if (typeof value === 'boolean') {
+                            setValue(`tasks.${index}.isCompleted`, value)
+                          }
+                        }}
+                        className="h-4 w-4 rounded-full text-gray-600 outline-offset-4 outline-gray-950"
+                      >
+                        {!watch(`tasks.${index}.isCompleted`) && <CircleIcon />}
+                        <Checkbox.Indicator asChild>
+                          <CheckCircleIcon />
+                        </Checkbox.Indicator>
+                      </Checkbox.Root>
+                    </div>
 
-                    {time && (
-                      <div>
-                        <div className="mx-1 h-2 border-l border-gray-200" />
-                      </div>
-                    )}
-
-                    {time && (
-                      <>
+                    <div className="w-full">
+                      <input
+                        {...register(`tasks.${index}.title`)}
+                        id="title"
+                        placeholder="task"
+                        className="m-0 w-full border-0 p-0 outline-none focus-visible:ring-0"
+                        autoFocus
+                      />
+                    </div>
+                  </div>
+                  {errors.tasks && errors.tasks[index]?.title?.message && (
+                    <span className="ml-7 mt-2 inline-block">
+                      <Form.Error>
+                        {errors.tasks[index]?.title?.message}
+                      </Form.Error>
+                    </span>
+                  )}
+                </div>
+                <div className="pl-7">
+                  <textarea
+                    {...register(`tasks.${index}.details`)}
+                    placeholder="details"
+                    className="container-scroll w-full resize-none border-0 p-0 text-xs font-medium outline-none focus-visible:ring-0"
+                  />
+                  {/* <Popover.Root
+                    open={isSchedulePickerOpen}
+                    onOpenChange={setIsSchedulePickerOpen}
+                  >
+                    <Popover.Trigger asChild>
+                      <InfoButton>
                         <InfoIcon>
-                          <HourglassIcon />
+                          <CalendarIcon />
                         </InfoIcon>
-                        <InfoText>{time && showTime(time)}</InfoText>
-                      </>
-                    )}
-                  </InfoButton>
-                </Popover.Trigger>
-                <SchedulePopover
-                  setIsOpen={setIsSchedulePickerOpen}
-                  date={date}
-                  time={time}
-                  setDate={(value) => {
-                    setValue('date', value)
-                  }}
-                  setTime={(value) => {
-                    setValue('time', value)
-                  }}
-                />
-              </Popover.Root>
+                        <InfoText>{date ? showDate(date) : 'select'}</InfoText>
+
+                        {time && (
+                          <div>
+                            <div className="mx-1 h-2 border-l border-gray-200" />
+                          </div>
+                        )}
+
+                        {time && (
+                          <>
+                            <InfoIcon>
+                              <HourglassIcon />
+                            </InfoIcon>
+                            <InfoText>{time && showTime(time)}</InfoText>
+                          </>
+                        )}
+                      </InfoButton>
+                    </Popover.Trigger>
+                    <SchedulePopover
+                      setIsOpen={setIsSchedulePickerOpen}
+                      date={date}
+                      time={time}
+                      setDate={(value) => {
+                        setValue('date', value)
+                      }}
+                      setTime={(value) => {
+                        setValue('time', value)
+                      }}
+                    />
+                  </Popover.Root> */}
+                </div>
+              </Form.Root>
             </div>
-          </Form.Root>
-        </div>
+          </React.Fragment>
+        ))}
+        <button
+          onClick={() => {
+            append({
+              title: '',
+              date: null,
+              time: null,
+              isCompleted: false,
+            })
+          }}
+        >
+          add subtask
+        </button>
 
         <fieldset className="flex space-x-4">
           <Dialog.Close asChild>
