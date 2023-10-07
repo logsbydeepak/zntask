@@ -10,7 +10,12 @@ import {
   HourglassIcon,
   InboxIcon,
 } from 'lucide-react'
-import { useFieldArray, useForm } from 'react-hook-form'
+import {
+  useFieldArray,
+  useForm,
+  UseFormSetValue,
+  UseFormWatch,
+} from 'react-hook-form'
 import { z } from 'zod'
 
 import { CategoryPopover } from '@/components/category-popover'
@@ -137,10 +142,6 @@ function TaskDialogContent({
   const categoryId = watch('categoryId')
   const title = isEdit ? `Edit ${isEdit?.title}` : 'Create Task'
   const currentCategory = getCategory(categoryId)
-  // const date = watch('date')
-  // const time = watch('time')
-
-  // const isChecked = watch('isCompleted')
 
   return (
     <>
@@ -240,45 +241,11 @@ function TaskDialogContent({
                     placeholder="details"
                     className="container-scroll w-full resize-none border-0 p-0 text-xs font-medium outline-none focus-visible:ring-0"
                   />
-                  {/* <Popover.Root
-                    open={isSchedulePickerOpen}
-                    onOpenChange={setIsSchedulePickerOpen}
-                  >
-                    <Popover.Trigger asChild>
-                      <InfoButton>
-                        <InfoIcon>
-                          <CalendarIcon />
-                        </InfoIcon>
-                        <InfoText>{date ? showDate(date) : 'select'}</InfoText>
-
-                        {time && (
-                          <div>
-                            <div className="mx-1 h-2 border-l border-gray-200" />
-                          </div>
-                        )}
-
-                        {time && (
-                          <>
-                            <InfoIcon>
-                              <HourglassIcon />
-                            </InfoIcon>
-                            <InfoText>{time && showTime(time)}</InfoText>
-                          </>
-                        )}
-                      </InfoButton>
-                    </Popover.Trigger>
-                    <SchedulePopover
-                      setIsOpen={setIsSchedulePickerOpen}
-                      date={date}
-                      time={time}
-                      setDate={(value) => {
-                        setValue('date', value)
-                      }}
-                      setTime={(value) => {
-                        setValue('time', value)
-                      }}
-                    />
-                  </Popover.Root> */}
+                  <DateAndTimePicker
+                    watch={watch}
+                    setValue={setValue}
+                    index={index}
+                  />
                 </div>
               </Form.Root>
             </div>
@@ -309,6 +276,59 @@ function TaskDialogContent({
         </fieldset>
       </div>
     </>
+  )
+}
+
+function DateAndTimePicker({
+  watch,
+  setValue,
+  index,
+}: {
+  watch: UseFormWatch<FormValues>
+  setValue: UseFormSetValue<FormValues>
+  index: number
+}) {
+  const [isOpen, setIsOpen] = React.useState(false)
+  const date = watch(`tasks.${index}.date`)
+  const time = watch(`tasks.${index}.time`)
+
+  return (
+    <Popover.Root open={isOpen} onOpenChange={setIsOpen}>
+      <Popover.Trigger asChild>
+        <InfoButton>
+          <InfoIcon>
+            <CalendarIcon />
+          </InfoIcon>
+          <InfoText>{date ? showDate(date) : 'select'}</InfoText>
+
+          {time && (
+            <div>
+              <div className="mx-1 h-2 border-l border-gray-200" />
+            </div>
+          )}
+
+          {time && (
+            <>
+              <InfoIcon>
+                <HourglassIcon />
+              </InfoIcon>
+              <InfoText>{time && showTime(time)}</InfoText>
+            </>
+          )}
+        </InfoButton>
+      </Popover.Trigger>
+      <SchedulePopover
+        setIsOpen={setIsOpen}
+        date={date}
+        time={time}
+        setDate={(value) => {
+          setValue(`tasks.${index}.date`, value)
+        }}
+        setTime={(value) => {
+          setValue(`tasks.${index}.time`, value)
+        }}
+      />
+    </Popover.Root>
   )
 }
 
