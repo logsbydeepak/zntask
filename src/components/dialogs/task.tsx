@@ -9,6 +9,7 @@ import {
   CircleIcon,
   HourglassIcon,
   InboxIcon,
+  PlusIcon,
 } from 'lucide-react'
 import {
   useFieldArray,
@@ -241,28 +242,35 @@ function TaskDialogContent({
                     placeholder="details"
                     className="container-scroll w-full resize-none border-0 p-0 text-xs font-medium outline-none focus-visible:ring-0"
                   />
-                  <DateAndTimePicker
-                    watch={watch}
-                    setValue={setValue}
-                    index={index}
-                  />
+                  <div className="flex flex-wrap gap-x-1.5 gap-y-2">
+                    <DateAndTimePicker
+                      watch={watch}
+                      setValue={setValue}
+                      index={index}
+                    />
+                    {index === 0 && (
+                      <InfoButton
+                        onClick={() => {
+                          append({
+                            title: '',
+                            date: null,
+                            time: null,
+                            isCompleted: false,
+                          })
+                        }}
+                      >
+                        <InfoIcon>
+                          <PlusIcon />
+                        </InfoIcon>
+                        <InfoText>subtask</InfoText>
+                      </InfoButton>
+                    )}
+                  </div>
                 </div>
               </Form.Root>
             </div>
           </React.Fragment>
         ))}
-        <button
-          onClick={() => {
-            append({
-              title: '',
-              date: null,
-              time: null,
-              isCompleted: false,
-            })
-          }}
-        >
-          add subtask
-        </button>
 
         <fieldset className="flex space-x-4">
           <Dialog.Close asChild>
