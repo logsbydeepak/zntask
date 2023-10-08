@@ -10,6 +10,7 @@ import {
   HourglassIcon,
   InboxIcon,
   PlusIcon,
+  XIcon,
 } from 'lucide-react'
 import {
   useFieldArray,
@@ -231,6 +232,7 @@ function TaskDialogContent({
                           id="title"
                           placeholder="task"
                           className="m-0 w-full border-0 p-0 outline-none focus-visible:ring-0"
+                          autoComplete="off"
                           autoFocus
                         />
                       </div>
@@ -272,6 +274,19 @@ function TaskDialogContent({
                           <InfoText>subtask</InfoText>
                         </InfoButton>
                       )}
+
+                      {index !== 0 && (
+                        <InfoButton
+                          onClick={() => {
+                            remove(index)
+                          }}
+                        >
+                          <InfoIcon>
+                            <XIcon />
+                          </InfoIcon>
+                          <InfoText>remove</InfoText>
+                        </InfoButton>
+                      )}
                     </div>
                   </div>
                 </Form.Root>
@@ -281,7 +296,7 @@ function TaskDialogContent({
         </div>
       </div>
 
-      <fieldset className="flex space-x-4 px-6 pb-6">
+      <fieldset className="flex space-x-4 border-t border-gray-200 bg-gray-50 px-6 py-6">
         <Dialog.Close asChild>
           <Button intent="secondary" className="w-full">
             Cancel
