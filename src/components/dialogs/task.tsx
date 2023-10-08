@@ -177,48 +177,39 @@ function TaskDialogContent({
     <>
       <Head title={title} />
       <div className="container-scroll max-h-[400px] space-y-6 overflow-y-scroll px-6 pt-6">
-        <div className="flex justify-between">
-          <div>
-            <Dialog.Title>{title}</Dialog.Title>
-            <Dialog.Description>Add a new task.</Dialog.Description>
-          </div>
-
-          <div>
-            <Popover.Root
-              open={isCategoryPickerOpen}
-              onOpenChange={setIsCategoryPickerOpen}
-            >
-              <Popover.Trigger asChild>
-                <InfoButton>
-                  <InfoIcon>
-                    {!currentCategory && (
-                      <InboxIcon className="h-full w-full text-gray-600" />
-                    )}
-                    {currentCategory && (
-                      <div
-                        className={cn(
-                          'h-2.5 w-2.5 rounded-[4.5px]',
-                          `bg-${getCategoryColor(
-                            currentCategory.indicator
-                          )}-600`
-                        )}
-                      />
-                    )}
-                  </InfoIcon>
-                  <InfoText>
-                    {currentCategory ? currentCategory.title : 'Inbox'}
-                  </InfoText>
-                </InfoButton>
-              </Popover.Trigger>
-              <CategoryPopover
-                setValue={(value) => {
-                  setValue('categoryId', value)
-                }}
-                setIsOpen={setIsCategoryPickerOpen}
-                currentCategory={currentCategory}
-              />
-            </Popover.Root>
-          </div>
+        <div>
+          <Popover.Root
+            open={isCategoryPickerOpen}
+            onOpenChange={setIsCategoryPickerOpen}
+          >
+            <Popover.Trigger asChild>
+              <InfoButton>
+                <InfoIcon>
+                  {!currentCategory && (
+                    <InboxIcon className="h-full w-full text-gray-600" />
+                  )}
+                  {currentCategory && (
+                    <div
+                      className={cn(
+                        'h-2.5 w-2.5 rounded-[4.5px]',
+                        `bg-${getCategoryColor(currentCategory.indicator)}-600`
+                      )}
+                    />
+                  )}
+                </InfoIcon>
+                <InfoText>
+                  {currentCategory ? currentCategory.title : 'Inbox'}
+                </InfoText>
+              </InfoButton>
+            </Popover.Trigger>
+            <CategoryPopover
+              setValue={(value) => {
+                setValue('categoryId', value)
+              }}
+              setIsOpen={setIsCategoryPickerOpen}
+              currentCategory={currentCategory}
+            />
+          </Popover.Root>
         </div>
 
         <div className="space-y-7">
