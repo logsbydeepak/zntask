@@ -67,7 +67,7 @@ export function TaskDialog() {
   return (
     <Dialog.Root open={isOpen} onOpenChange={handleClose}>
       <Dialog.Portal>
-        <Dialog.Content className="space-y-4 focus:outline-none">
+        <Dialog.Content className="space-y-4 p-0 focus:outline-none sm:p-0">
           <TaskDialogContent
             handleClose={handleClose}
             isEdit={isEdit}
@@ -147,142 +147,150 @@ function TaskDialogContent({
   return (
     <>
       <Head title={title} />
-      <div className="flex justify-between">
-        <div>
-          <Dialog.Title>{title}</Dialog.Title>
-          <Dialog.Description>Add a new task.</Dialog.Description>
-        </div>
+      <div className="container-scroll max-h-[400px] space-y-6 overflow-y-scroll px-6 pt-6">
+        <div className="flex justify-between">
+          <div>
+            <Dialog.Title>{title}</Dialog.Title>
+            <Dialog.Description>Add a new task.</Dialog.Description>
+          </div>
 
-        <div>
-          <Popover.Root
-            open={isCategoryPickerOpen}
-            onOpenChange={setIsCategoryPickerOpen}
-          >
-            <Popover.Trigger asChild>
-              <InfoButton>
-                <InfoIcon>
-                  {!currentCategory && (
-                    <InboxIcon className="h-full w-full text-gray-600" />
-                  )}
-                  {currentCategory && (
-                    <div
-                      className={cn(
-                        'h-2.5 w-2.5 rounded-[4.5px]',
-                        `bg-${getCategoryColor(currentCategory.indicator)}-600`
-                      )}
-                    />
-                  )}
-                </InfoIcon>
-                <InfoText>
-                  {currentCategory ? currentCategory.title : 'Inbox'}
-                </InfoText>
-              </InfoButton>
-            </Popover.Trigger>
-            <CategoryPopover
-              setValue={(value) => {
-                setValue('categoryId', value)
-              }}
-              setIsOpen={setIsCategoryPickerOpen}
-              currentCategory={currentCategory}
-            />
-          </Popover.Root>
-        </div>
-      </div>
-
-      <div className="space-y-7">
-        {fields.map((field, index) => (
-          <React.Fragment key={index}>
-            <div className="space-y-4">
-              <Form.Root
-                onSubmit={handleSubmit(onSubmit)}
-                id="task"
-                className="space-y-2"
-              >
-                <div>
-                  <div className="flex items-center">
-                    <div className="w-7">
-                      <Checkbox.Root
-                        defaultChecked={getValues(`tasks.${index}.isCompleted`)}
-                        checked={watch(`tasks.${index}.isCompleted`)}
-                        onCheckedChange={(value) => {
-                          if (typeof value === 'boolean') {
-                            setValue(`tasks.${index}.isCompleted`, value)
-                          }
-                        }}
-                        className="h-4 w-4 rounded-full text-gray-600 outline-offset-4 outline-gray-950"
-                      >
-                        {!watch(`tasks.${index}.isCompleted`) && <CircleIcon />}
-                        <Checkbox.Indicator asChild>
-                          <CheckCircleIcon />
-                        </Checkbox.Indicator>
-                      </Checkbox.Root>
-                    </div>
-
-                    <div className="w-full">
-                      <input
-                        {...register(`tasks.${index}.title`)}
-                        id="title"
-                        placeholder="task"
-                        className="m-0 w-full border-0 p-0 outline-none focus-visible:ring-0"
-                        autoFocus
+          <div>
+            <Popover.Root
+              open={isCategoryPickerOpen}
+              onOpenChange={setIsCategoryPickerOpen}
+            >
+              <Popover.Trigger asChild>
+                <InfoButton>
+                  <InfoIcon>
+                    {!currentCategory && (
+                      <InboxIcon className="h-full w-full text-gray-600" />
+                    )}
+                    {currentCategory && (
+                      <div
+                        className={cn(
+                          'h-2.5 w-2.5 rounded-[4.5px]',
+                          `bg-${getCategoryColor(
+                            currentCategory.indicator
+                          )}-600`
+                        )}
                       />
+                    )}
+                  </InfoIcon>
+                  <InfoText>
+                    {currentCategory ? currentCategory.title : 'Inbox'}
+                  </InfoText>
+                </InfoButton>
+              </Popover.Trigger>
+              <CategoryPopover
+                setValue={(value) => {
+                  setValue('categoryId', value)
+                }}
+                setIsOpen={setIsCategoryPickerOpen}
+                currentCategory={currentCategory}
+              />
+            </Popover.Root>
+          </div>
+        </div>
+
+        <div className="space-y-7">
+          {fields.map((field, index) => (
+            <React.Fragment key={index}>
+              <div className={cn('space-y-4', index !== 0 && 'pl-7')}>
+                <Form.Root
+                  onSubmit={handleSubmit(onSubmit)}
+                  id="task"
+                  className="space-y-2"
+                >
+                  <div>
+                    <div className="flex items-center">
+                      <div className="w-7">
+                        <Checkbox.Root
+                          defaultChecked={getValues(
+                            `tasks.${index}.isCompleted`
+                          )}
+                          checked={watch(`tasks.${index}.isCompleted`)}
+                          onCheckedChange={(value) => {
+                            if (typeof value === 'boolean') {
+                              setValue(`tasks.${index}.isCompleted`, value)
+                            }
+                          }}
+                          className="h-4 w-4 rounded-full text-gray-600 outline-offset-4 outline-gray-950"
+                        >
+                          {!watch(`tasks.${index}.isCompleted`) && (
+                            <CircleIcon />
+                          )}
+                          <Checkbox.Indicator asChild>
+                            <CheckCircleIcon />
+                          </Checkbox.Indicator>
+                        </Checkbox.Root>
+                      </div>
+
+                      <div className="w-full">
+                        <input
+                          {...register(`tasks.${index}.title`)}
+                          id="title"
+                          placeholder="task"
+                          className="m-0 w-full border-0 p-0 outline-none focus-visible:ring-0"
+                          autoFocus
+                        />
+                      </div>
                     </div>
-                  </div>
-                  {errors.tasks && errors.tasks[index]?.title?.message && (
-                    <span className="ml-7 mt-2 inline-block">
-                      <Form.Error>
-                        {errors.tasks[index]?.title?.message}
-                      </Form.Error>
-                    </span>
-                  )}
-                </div>
-                <div className="pl-7">
-                  <textarea
-                    {...register(`tasks.${index}.details`)}
-                    placeholder="details"
-                    className="container-scroll w-full resize-none border-0 p-0 text-xs font-medium outline-none focus-visible:ring-0"
-                  />
-                  <div className="flex flex-wrap gap-x-1.5 gap-y-2">
-                    <DateAndTimePicker
-                      watch={watch}
-                      setValue={setValue}
-                      index={index}
-                    />
-                    {index === 0 && (
-                      <InfoButton
-                        onClick={() => {
-                          append({
-                            title: '',
-                            date: null,
-                            time: null,
-                            isCompleted: false,
-                          })
-                        }}
-                      >
-                        <InfoIcon>
-                          <PlusIcon />
-                        </InfoIcon>
-                        <InfoText>subtask</InfoText>
-                      </InfoButton>
+                    {errors.tasks && errors.tasks[index]?.title?.message && (
+                      <span className="ml-7 mt-2 inline-block">
+                        <Form.Error>
+                          {errors.tasks[index]?.title?.message}
+                        </Form.Error>
+                      </span>
                     )}
                   </div>
-                </div>
-              </Form.Root>
-            </div>
-          </React.Fragment>
-        ))}
-
-        <fieldset className="flex space-x-4">
-          <Dialog.Close asChild>
-            <Button intent="secondary" className="w-full">
-              Cancel
-            </Button>
-          </Dialog.Close>
-          <Button className="w-full" type="submit" form="task">
-            Save
-          </Button>
-        </fieldset>
+                  <div className="pl-7">
+                    <textarea
+                      {...register(`tasks.${index}.details`)}
+                      placeholder="details"
+                      className="container-scroll w-full resize-none border-0 p-0 text-xs font-medium outline-none focus-visible:ring-0"
+                    />
+                    <div className="flex flex-wrap gap-x-1.5 gap-y-2">
+                      <DateAndTimePicker
+                        watch={watch}
+                        setValue={setValue}
+                        index={index}
+                      />
+                      {index === 0 && (
+                        <InfoButton
+                          onClick={() => {
+                            append({
+                              title: '',
+                              date: null,
+                              time: null,
+                              isCompleted: false,
+                            })
+                          }}
+                        >
+                          <InfoIcon>
+                            <PlusIcon />
+                          </InfoIcon>
+                          <InfoText>subtask</InfoText>
+                        </InfoButton>
+                      )}
+                    </div>
+                  </div>
+                </Form.Root>
+              </div>
+            </React.Fragment>
+          ))}
+        </div>
       </div>
+
+      <fieldset className="flex space-x-4 px-6 pb-6">
+        <Dialog.Close asChild>
+          <Button intent="secondary" className="w-full">
+            Cancel
+          </Button>
+        </Dialog.Close>
+        <Button className="w-full" type="submit" form="task">
+          Save
+        </Button>
+      </fieldset>
     </>
   )
 }
