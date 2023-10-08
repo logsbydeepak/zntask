@@ -8,7 +8,7 @@ import { useShallow } from 'zustand/shallow'
 import * as Layout from '@/app/(application)/(app)/layout-components'
 import { Head } from '@/components/head'
 import { useAppStore } from '@/store/app'
-import { Task, useTaskStore } from '@/store/task'
+import { ParentTask, useTaskStore } from '@/store/task'
 import { TabsContent, TabsList, TabsRoot, TabsTrigger } from '@ui/tabs'
 
 export default function Page() {
@@ -39,7 +39,7 @@ export default function Page() {
 function PlanedTab() {
   const tasks = useTaskStore(
     useShallow((s) =>
-      s.tasks.filter((i) => i.date && isToday(new Date(i.date)))
+      s.parentTasks.filter((i) => i.date && isToday(new Date(i.date)))
     )
   )
 
@@ -59,7 +59,7 @@ function PlanedTab() {
 }
 
 function CompletedTab() {
-  const tasks: Task[] = []
+  const tasks: ParentTask[] = []
 
   const setDialog = useAppStore((s) => s.setDialog)
 
@@ -77,7 +77,7 @@ function CompletedTab() {
 }
 
 function ArchivedTab() {
-  const tasks: Task[] = []
+  const tasks: ParentTask[] = []
   const setDialog = useAppStore((s) => s.setDialog)
 
   return (

@@ -6,11 +6,14 @@ import { useShallow } from 'zustand/shallow'
 import * as Layout from '@/app/(application)/(app)/layout-components'
 import { Head } from '@/components/head'
 import { useAppStore } from '@/store/app'
-import { useTaskStore } from '@/store/task'
+import { ParentTask, useTaskStore } from '@/store/task'
 
 export default function Page() {
+  // const tasks = useTaskStore(
+  //   useShallow((s) => s.parentTask.filter((i) => !i.categoryId))
+  // )
   const tasks = useTaskStore(
-    useShallow((s) => s.tasks.filter((i) => !i.categoryId))
+    useShallow((s) => s.parentTasks.filter((i) => !i.categoryId))
   )
   const setDialog = useAppStore((s) => s.setDialog)
 

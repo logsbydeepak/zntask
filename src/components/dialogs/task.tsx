@@ -2,7 +2,14 @@ import React from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as Checkbox from '@radix-ui/react-checkbox'
 import * as Popover from '@radix-ui/react-popover'
-import { format, isThisYear, isToday, isTomorrow, isYesterday } from 'date-fns'
+import {
+  format,
+  isThisYear,
+  isToday,
+  isTomorrow,
+  isYesterday,
+  sub,
+} from 'date-fns'
 import {
   CalendarIcon,
   CheckCircleIcon,
@@ -19,12 +26,13 @@ import {
   UseFormWatch,
 } from 'react-hook-form'
 import { z } from 'zod'
+import { useShallow } from 'zustand/shallow'
 
 import { CategoryPopover } from '@/components/category-popover'
 import { Head } from '@/components/head'
 import { useAppStore } from '@/store/app'
 import { useCategoryStore } from '@/store/category'
-import { Task, useTaskStore } from '@/store/task'
+import { ParentTask, useTaskStore } from '@/store/task'
 import { getCategoryColor } from '@/utils/category'
 import { cn } from '@/utils/style'
 import { zRequired } from '@/utils/zod'
@@ -41,7 +49,7 @@ const schema = z.object({
       title: zRequired,
       date: z.date().nullable(),
       time: z.date().nullable(),
-      details: z.string().optional(),
+      details: z.string().nullable(),
       isCompleted: z.boolean(),
     })
   ),
@@ -88,13 +96,24 @@ function TaskDialogContent({
 }: {
   handleClose: () => void
   isCreate: boolean
-  isEdit: null | Task
+  isEdit: null | ParentTask
 }) {
   const [isCategoryPickerOpen, setIsCategoryPickerOpen] = React.useState(false)
   const [isSchedulePickerOpen, setIsSchedulePickerOpen] = React.useState(false)
   const addTask = useTaskStore((state) => state.addTask)
   const editTask = useTaskStore((state) => state.editTask)
   const getCategory = useCategoryStore((state) => state.getCategory)
+  const subTasks = useTaskStore(
+    useShallow((s) =>
+      s.childTasks
+        .filter((i) => i.parentId === isEdit?.id)
+        .map((i) => ({
+          ...i,
+          date: i.date ? new Date(i.date) : null,
+          time: i.time ? new Date(i.time) : null,
+        }))
+    )
+  )
 
   const {
     register,
@@ -115,6 +134,7 @@ function TaskDialogContent({
           time: isEdit?.time ? new Date(isEdit.time) : null,
           isCompleted: isEdit?.isCompleted ?? false,
         },
+        ...subTasks,
       ],
     },
   })
@@ -125,21 +145,29 @@ function TaskDialogContent({
   })
 
   const onSubmit = (data: FormValues) => {
-    console.log(data)
-    const dataTask = data.tasks[0]
+    console.log({ data })
+    if (isCreate) {
+      const parentTask = data.tasks[0]
+      const childrenTasks = data.tasks.slice(1).map((i) => ({
+        ...i,
+        date: i.date ? i.date.toISOString() : null,
+        time: i.time ? i.time.toISOString() : null,
+      }))
 
-    // const date = dataTask.date ? dataTask.date.toISOString() : null
-    // const time = dataTask.time ? dataTask.time.toISOString() : null
+      addTask(
+        {
+          title: parentTask.title,
+          details: parentTask.details,
+          date: parentTask.date ? parentTask.date.toISOString() : null,
+          time: parentTask.time ? parentTask.time.toISOString() : null,
+          categoryId: data.categoryId,
+          isCompleted: parentTask.isCompleted,
+        },
+        childrenTasks
+      )
+    }
 
-    // if (isCreate)
-    //   addTask({
-    //     ...dataTask,
-    //     categoryId: getValues('categoryId'),
-    //     date,
-    //     time,
-    //   })
-    // if (isEdit) editTask({ ...isEdit, ...dataTask, date, time })
-    // handleClose()
+    handleClose()
   }
   const categoryId = watch('categoryId')
   const title = isEdit ? `Edit ${isEdit?.title}` : 'Create Task'
@@ -265,6 +293,7 @@ function TaskDialogContent({
                               date: null,
                               time: null,
                               isCompleted: false,
+                              details: null,
                             })
                           }}
                         >

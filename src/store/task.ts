@@ -1,76 +1,109 @@
 import { ulid } from 'ulidx'
 import { create, StateCreator } from 'zustand'
 
-import { useActivityStore } from './activity'
-
-export interface Task {
+interface Task {
   id: string
   title: string
   isCompleted: boolean
-  categoryId: string | null
   orderId: string
   date: string | null
   time: string | null
+  details: string | null
+}
+
+export interface ParentTask extends Task {
+  categoryId: string | null
+}
+
+export interface ChildTask extends Task {
+  parentId: string
 }
 
 const initialState = {
-  tasks: [] as Task[],
+  parentTasks: [] as ParentTask[],
+  childTasks: [] as ChildTask[],
 }
 type State = typeof initialState
 
 interface Actions {
-  addTask: (task: Omit<Omit<Task, 'id'>, 'orderId'>) => void
-  editTask: (task: Task) => void
-  deleteTask: (task: Task) => void
+  addTask: (
+    parentTask: Omit<ParentTask, 'id' | 'orderId'>,
+    childTasks: Omit<ChildTask, 'id' | 'orderId' | 'parentId'>[]
+  ) => void
+  editTask: (parentTask: ParentTask, childTasks: ChildTask[]) => void
+  deleteTask: (id: string) => void
 }
 
 const taskStore: StateCreator<State & Actions> = (set, get) => ({
   ...initialState,
 
-  addTask: async (task) => {
+  addTask: async (parentTask, childTasks) => {
     const id = ulid()
-    const newTask: Task = {
+
+    const newParentTask: ParentTask = {
       id: id,
-      ...task,
       orderId: ulid(),
+      ...parentTask,
     }
 
-    set((state) => ({
-      tasks: [newTask, ...state.tasks],
+    const newChildTasks = childTasks.map((item) => ({
+      id: ulid(),
+      orderId: ulid(),
+      parentId: id,
+      ...item,
     }))
 
-    useActivityStore.getState().addActivity({
-      type: 'task',
-      taskId: id,
-      action: 'CREATE',
-    })
+    set((state) => ({
+      parentTasks: [newParentTask, ...state.parentTasks],
+      childTasks: [...newChildTasks, ...state.childTasks],
+    }))
+
+    // useActivityStore.getState().addActivity({
+    //   type: 'task',
+    //   taskId: id,
+    //   action: 'CREATE',
+    // })
   },
 
-  editTask(task) {
+  editTask(parentTask, childTasks) {
     set((state) => ({
-      tasks: state.tasks.map((item) => {
-        if (item.id === task.id) return task
+      parentTasks: state.parentTasks.map((item) => {
+        if (item.id === parentTask.id) return parentTask
+        return item
+      }),
+      childTasks: state.childTasks.map((item) => {
+        childTasks.map((childTask) => {
+          if (item.id === childTask.id) return childTask
+        })
+
         return item
       }),
     }))
 
-    useActivityStore.getState().addActivity({
-      type: 'task',
-      taskId: task.id,
-      action: 'EDIT',
-    })
+    // set((state) => ({
+    //   tasks: state.tasks.map((item) => {
+    //     if (item.id === task.id) return task
+    //     return item
+    //   }),
+    // }))
+    // useActivityStore.getState().addActivity({
+    //   type: 'task',
+    //   taskId: task.id,
+    //   action: 'EDIT',
+    // })
   },
 
-  deleteTask(task) {
+  deleteTask(id) {
     set((state) => ({
-      tasks: state.tasks.filter((item) => item.id !== task.id),
+      parentTasks: state.parentTasks.filter((item) => item.id !== id),
+      childTasks: state.childTasks.filter((item) => item.parentId !== id),
     }))
 
-    useActivityStore.getState().addActivity({
-      type: 'task',
-      taskId: task.id,
-      action: 'DELETE',
-    })
+    // useActivityStore.getState().addActivity({
+    //   type: 'task',
+    //   taskId: task.id,
+    //   action: 'DELETE',
+    // })
   },
 })
 
