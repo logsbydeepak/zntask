@@ -30,7 +30,7 @@ import {
   UseFormWatch,
 } from 'react-hook-form'
 import { z } from 'zod'
-import { useShallow } from 'zustand/shallow'
+import { useShallow } from 'zustand/react/shallow'
 
 import { CategoryPopover } from '@/components/category-popover'
 import { Head } from '@/components/head'

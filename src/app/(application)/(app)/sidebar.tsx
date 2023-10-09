@@ -15,7 +15,7 @@ import {
   InboxIcon,
   MoreVerticalIcon,
 } from 'lucide-react'
-import { useShallow } from 'zustand/shallow'
+import { useShallow } from 'zustand/react/shallow'
 
 import {
   ContextMenuContent,

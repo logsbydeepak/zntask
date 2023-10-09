@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { HeartIcon } from 'lucide-react'
-import { useShallow } from 'zustand/shallow'
+import { useShallow } from 'zustand/react/shallow'
 
 import * as Layout from '@/app/(application)/(app)/layout-components'
 import { Head } from '@/components/head'
