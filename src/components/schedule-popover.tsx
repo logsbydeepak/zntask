@@ -1,6 +1,6 @@
 import React from 'react'
 import { PopoverContent } from '@radix-ui/react-popover'
-import * as chrono from 'chrono-node'
+import { parse as chronoParse } from 'chrono-node'
 import { addDays, format } from 'date-fns'
 import {
   CalendarCheckIcon,
@@ -9,7 +9,6 @@ import {
   ChevronRightIcon,
   HourglassIcon,
   XCircleIcon,
-  XIcon,
 } from 'lucide-react'
 import { DayPicker } from 'react-day-picker'
 import { useDebounce } from 'use-debounce'
@@ -31,7 +30,7 @@ export const SchedulePopover = React.forwardRef<
 
   React.useEffect(() => {
     try {
-      const parseValue = chrono.parse(debouncedValue)[0]
+      const parseValue = chronoParse(debouncedValue)[0]
       const date = parseValue.start.date()
 
       setActionDate(date)

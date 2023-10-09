@@ -1,6 +1,9 @@
 import React from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import * as Checkbox from '@radix-ui/react-checkbox'
+import {
+  CheckboxIndicator,
+  Root as CheckboxRoot,
+} from '@radix-ui/react-checkbox'
 import * as Popover from '@radix-ui/react-popover'
 import {
   format,
@@ -22,6 +25,7 @@ import {
 import {
   useFieldArray,
   useForm,
+  UseFormGetValues,
   UseFormSetValue,
   UseFormWatch,
 } from 'react-hook-form'
@@ -76,7 +80,7 @@ export function TaskDialog() {
   return (
     <Dialog.Root open={isOpen} onOpenChange={handleClose}>
       <Dialog.Portal>
-        <Dialog.Content className="space-y-4 p-0 focus:outline-none sm:p-0">
+        <Dialog.Content className="p-0 focus:outline-none sm:p-0">
           <TaskDialogContent
             handleClose={handleClose}
             isEdit={isEdit}
@@ -98,11 +102,8 @@ function TaskDialogContent({
   isCreate: boolean
   isEdit: null | ParentTask
 }) {
-  const [isCategoryPickerOpen, setIsCategoryPickerOpen] = React.useState(false)
-  const [isSchedulePickerOpen, setIsSchedulePickerOpen] = React.useState(false)
   const addTask = useTaskStore((state) => state.addTask)
   const editTask = useTaskStore((state) => state.editTask)
-  const getCategory = useCategoryStore((state) => state.getCategory)
   const subTasks = useTaskStore(
     useShallow((s) =>
       s.childTasks
@@ -169,149 +170,97 @@ function TaskDialogContent({
 
     handleClose()
   }
-  const categoryId = watch('categoryId')
-  const title = isEdit ? `Edit ${isEdit?.title}` : 'Create Task'
-  const currentCategory = getCategory(categoryId)
 
   return (
     <>
-      <Head title={title} />
-      <div className="container-scroll max-h-[400px] space-y-6 overflow-y-scroll px-6 pt-6">
-        <div>
-          <Popover.Root
-            open={isCategoryPickerOpen}
-            onOpenChange={setIsCategoryPickerOpen}
-          >
-            <Popover.Trigger asChild>
-              <InfoButton>
-                <InfoIcon>
-                  {!currentCategory && (
-                    <InboxIcon className="h-full w-full text-gray-600" />
-                  )}
-                  {currentCategory && (
-                    <div
-                      className={cn(
-                        'h-2.5 w-2.5 rounded-[4.5px]',
-                        `bg-${getCategoryColor(currentCategory.indicator)}-600`
-                      )}
-                    />
-                  )}
-                </InfoIcon>
-                <InfoText>
-                  {currentCategory ? currentCategory.title : 'Inbox'}
-                </InfoText>
-              </InfoButton>
-            </Popover.Trigger>
-            <CategoryPopover
-              setValue={(value) => {
-                setValue('categoryId', value)
-              }}
-              setIsOpen={setIsCategoryPickerOpen}
-              currentCategory={currentCategory}
-            />
-          </Popover.Root>
-        </div>
+      <Head title={isEdit ? `Edit ${isEdit?.title}` : 'Create Task'} />
+      <div className="container-scroll max-h-[400px] space-y-6 overflow-y-scroll p-6">
+        <span>
+          <CategoryPicker watch={watch} setValue={setValue} />
+        </span>
 
         <div className="space-y-7">
-          {fields.map((field, index) => (
-            <React.Fragment key={index}>
-              <div className={cn('space-y-4', index !== 0 && 'pl-7')}>
-                <Form.Root
-                  onSubmit={handleSubmit(onSubmit)}
-                  id="task"
-                  className="space-y-2"
-                >
-                  <div>
-                    <div className="flex items-center">
-                      <div className="w-7">
-                        <Checkbox.Root
-                          defaultChecked={getValues(
-                            `tasks.${index}.isCompleted`
-                          )}
-                          checked={watch(`tasks.${index}.isCompleted`)}
-                          onCheckedChange={(value) => {
-                            if (typeof value === 'boolean') {
-                              setValue(`tasks.${index}.isCompleted`, value)
-                            }
-                          }}
-                          className="h-4 w-4 rounded-full text-gray-600 outline-offset-4 outline-gray-950"
-                        >
-                          {!watch(`tasks.${index}.isCompleted`) && (
-                            <CircleIcon />
-                          )}
-                          <Checkbox.Indicator asChild>
-                            <CheckCircleIcon />
-                          </Checkbox.Indicator>
-                        </Checkbox.Root>
-                      </div>
-
-                      <div className="w-full">
-                        <input
-                          {...register(`tasks.${index}.title`)}
-                          id="title"
-                          placeholder="task"
-                          className="m-0 w-full border-0 p-0 outline-none focus-visible:ring-0"
-                          autoComplete="off"
-                          autoFocus
-                        />
-                      </div>
-                    </div>
-                    {errors.tasks && errors.tasks[index]?.title?.message && (
-                      <span className="ml-7 mt-2 inline-block">
-                        <Form.Error>
-                          {errors.tasks[index]?.title?.message}
-                        </Form.Error>
-                      </span>
-                    )}
-                  </div>
-                  <div className="pl-7">
-                    <textarea
-                      {...register(`tasks.${index}.details`)}
-                      placeholder="details"
-                      className="container-scroll w-full resize-none border-0 p-0 text-xs font-medium outline-none focus-visible:ring-0"
+          {fields.map((_, index) => (
+            <Form.Root
+              onSubmit={handleSubmit(onSubmit)}
+              id="task"
+              className={cn('space-y-2', index !== 0 && 'pl-7')}
+              key={index}
+            >
+              <div>
+                <div className="flex items-center">
+                  <div className="w-7">
+                    <Checkbox
+                      watch={watch}
+                      setValue={setValue}
+                      index={index}
+                      getValues={getValues}
                     />
-                    <div className="flex flex-wrap gap-x-1.5 gap-y-2">
-                      <DateAndTimePicker
-                        watch={watch}
-                        setValue={setValue}
-                        index={index}
-                      />
-                      {index === 0 && (
-                        <InfoButton
-                          onClick={() => {
-                            append({
-                              title: '',
-                              date: null,
-                              time: null,
-                              isCompleted: false,
-                              details: null,
-                            })
-                          }}
-                        >
-                          <InfoIcon>
-                            <PlusIcon />
-                          </InfoIcon>
-                          <InfoText>subtask</InfoText>
-                        </InfoButton>
-                      )}
-
-                      {index !== 0 && (
-                        <InfoButton
-                          onClick={() => {
-                            remove(index)
-                          }}
-                        >
-                          <InfoIcon>
-                            <XIcon />
-                          </InfoIcon>
-                          <InfoText>remove</InfoText>
-                        </InfoButton>
-                      )}
-                    </div>
                   </div>
-                </Form.Root>
+
+                  <input
+                    {...register(`tasks.${index}.title`)}
+                    id="title"
+                    placeholder="task"
+                    className="m-0 w-full border-0 p-0 outline-none focus-visible:ring-0"
+                    autoComplete="off"
+                    autoFocus
+                  />
+                </div>
+                {errors.tasks && errors.tasks[index]?.title?.message && (
+                  <span className="ml-7 mt-2 inline-block">
+                    <Form.Error>
+                      {errors.tasks[index]?.title?.message}
+                    </Form.Error>
+                  </span>
+                )}
               </div>
-            </React.Fragment>
+              <div className="pl-7">
+                <textarea
+                  {...register(`tasks.${index}.details`)}
+                  placeholder="details"
+                  className="container-scroll w-full resize-none border-0 p-0 text-xs font-medium outline-none focus-visible:ring-0"
+                />
+                <div className="flex flex-wrap gap-x-1.5 gap-y-2">
+                  <DateAndTimePicker
+                    watch={watch}
+                    setValue={setValue}
+                    index={index}
+                  />
+                  {index === 0 && (
+                    <InfoButton
+                      onClick={() => {
+                        append({
+                          title: '',
+                          date: null,
+                          time: null,
+                          isCompleted: false,
+                          details: null,
+                        })
+                      }}
+                    >
+                      <InfoIcon>
+                        <PlusIcon />
+                      </InfoIcon>
+                      <InfoText>subtask</InfoText>
+                    </InfoButton>
+                  )}
+
+                  {index !== 0 && (
+                    <InfoButton
+                      onClick={() => {
+                        remove(index)
+                      }}
+                    >
+                      <InfoIcon>
+                        <XIcon />
+                      </InfoIcon>
+                      <InfoText>remove</InfoText>
+                    </InfoButton>
+                  )}
+                </div>
+              </div>
+            </Form.Root>
           ))}
         </div>
       </div>
@@ -327,6 +276,82 @@ function TaskDialogContent({
         </Button>
       </fieldset>
     </>
+  )
+}
+
+function Checkbox({
+  index,
+  getValues,
+  watch,
+  setValue,
+}: {
+  index: number
+  getValues: UseFormGetValues<FormValues>
+  watch: UseFormWatch<FormValues>
+  setValue: UseFormSetValue<FormValues>
+}) {
+  return (
+    <CheckboxRoot
+      defaultChecked={getValues(`tasks.${index}.isCompleted`)}
+      checked={watch(`tasks.${index}.isCompleted`)}
+      onCheckedChange={(value) => {
+        if (typeof value === 'boolean') {
+          setValue(`tasks.${index}.isCompleted`, value)
+        }
+      }}
+      className="h-4 w-4 rounded-full text-gray-600 outline-offset-4 outline-gray-950 hover:text-gray-950"
+    >
+      {!watch(`tasks.${index}.isCompleted`) && <CircleIcon />}
+      <CheckboxIndicator asChild>
+        <CheckCircleIcon />
+      </CheckboxIndicator>
+    </CheckboxRoot>
+  )
+}
+
+function CategoryPicker({
+  watch,
+  setValue,
+}: {
+  watch: UseFormWatch<FormValues>
+  setValue: UseFormSetValue<FormValues>
+}) {
+  const getCategory = useCategoryStore((state) => state.getCategory)
+  const [isOpen, setIsOpen] = React.useState(false)
+
+  const categoryId = watch('categoryId')
+  const currentCategory = getCategory(categoryId)
+
+  return (
+    <Popover.Root open={isOpen} onOpenChange={setIsOpen}>
+      <Popover.Trigger asChild>
+        <InfoButton>
+          <InfoIcon>
+            {!currentCategory && (
+              <InboxIcon className="h-full w-full text-gray-600" />
+            )}
+            {currentCategory && (
+              <div
+                className={cn(
+                  'h-2.5 w-2.5 rounded-[4.5px]',
+                  `bg-${getCategoryColor(currentCategory.indicator)}-600`
+                )}
+              />
+            )}
+          </InfoIcon>
+          <InfoText>
+            {currentCategory ? currentCategory.title : 'Inbox'}
+          </InfoText>
+        </InfoButton>
+      </Popover.Trigger>
+      <CategoryPopover
+        setValue={(value) => {
+          setValue('categoryId', value)
+        }}
+        setIsOpen={setIsOpen}
+        currentCategory={currentCategory}
+      />
+    </Popover.Root>
   )
 }
 
@@ -383,7 +408,7 @@ function DateAndTimePicker({
   )
 }
 
-const showDate = (date: Date) => {
+function showDate(date: Date) {
   return (
     (isTomorrow(date) && 'tomorrow') ||
     (isToday(date) && 'today') ||
@@ -397,7 +422,7 @@ const showDate = (date: Date) => {
   )
 }
 
-const showTime = (time: Date) => {
+function showTime(time: Date) {
   return format(time, 'h:mm a')
 }
 
@@ -410,7 +435,7 @@ const InfoButton = React.forwardRef<
       {...props}
       ref={ref}
       type="button"
-      className="mr-2 inline-flex items-center space-x-1 rounded-full border border-gray-200 px-3 py-1 text-gray-600 focus-visible:outline-gray-950"
+      className="mr-2 inline-flex items-center space-x-1 rounded-full border border-gray-200 px-3 py-1 text-gray-600 hover:bg-gray-50 hover:text-gray-950 focus-visible:outline-gray-950"
     />
   )
 })
