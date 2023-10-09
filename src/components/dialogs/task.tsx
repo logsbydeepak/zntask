@@ -36,7 +36,7 @@ import { CategoryPopover } from '@/components/category-popover'
 import { Head } from '@/components/head'
 import { useAppStore } from '@/store/app'
 import { useCategoryStore } from '@/store/category'
-import { ParentTask, useTaskStore } from '@/store/task'
+import { ChildTask, ParentTask, useTaskStore } from '@/store/task'
 import { getCategoryColor } from '@/utils/category'
 import { cn } from '@/utils/style'
 import { zRequired } from '@/utils/zod'
@@ -50,6 +50,7 @@ const schema = z.object({
   categoryId: z.string().nullable(),
   tasks: z.array(
     z.object({
+      id: z.string().nullable(),
       title: zRequired,
       date: z.date().nullable(),
       time: z.date().nullable(),
@@ -102,14 +103,23 @@ function TaskDialogContent({
   isCreate: boolean
   isEdit: null | ParentTask
 }) {
-  const addTask = useTaskStore((state) => state.addTask)
-  const editTask = useTaskStore((state) => state.editTask)
+  const addParentTask = useTaskStore((s) => s.addParentTask)
+  const addChildTask = useTaskStore((s) => s.addChildTask)
+  const editParentTask = useTaskStore((s) => s.editParentTask)
+  const editChildTask = useTaskStore((s) => s.editChildTask)
+  const removeChildTask = useTaskStore((s) => s.removeChildTask)
+
+  const [removedChildTaskIds, setRemovedChildTaskIds] = React.useState<
+    string[]
+  >([])
+
   const subTasks = useTaskStore(
     useShallow((s) =>
       s.childTasks
         .filter((i) => i.parentId === isEdit?.id)
         .map((i) => ({
           ...i,
+          id: i.id,
           date: i.date ? new Date(i.date) : null,
           time: i.time ? new Date(i.time) : null,
         }))
@@ -130,6 +140,7 @@ function TaskDialogContent({
       categoryId: isEdit?.categoryId ?? null,
       tasks: [
         {
+          id: isEdit?.id ?? null,
           title: isEdit?.title ?? '',
           date: isEdit?.date ? new Date(isEdit.date) : null,
           time: isEdit?.time ? new Date(isEdit.time) : null,
@@ -146,26 +157,96 @@ function TaskDialogContent({
   })
 
   const onSubmit = (data: FormValues) => {
-    console.log({ data })
     if (isCreate) {
       const parentTask = data.tasks[0]
-      const childrenTasks = data.tasks.slice(1).map((i) => ({
+      const childrenTasks = data.tasks.slice(1).map((i, index) => ({
         ...i,
         date: i.date ? i.date.toISOString() : null,
         time: i.time ? i.time.toISOString() : null,
+        orderId: index.toString(),
       }))
 
-      addTask(
-        {
-          title: parentTask.title,
-          details: parentTask.details,
-          date: parentTask.date ? parentTask.date.toISOString() : null,
-          time: parentTask.time ? parentTask.time.toISOString() : null,
-          categoryId: data.categoryId,
-          isCompleted: parentTask.isCompleted,
-        },
-        childrenTasks
-      )
+      const { id: parentId } = addParentTask({
+        title: parentTask.title,
+        details: parentTask.details,
+        date: parentTask.date ? parentTask.date.toISOString() : null,
+        time: parentTask.time ? parentTask.time.toISOString() : null,
+        categoryId: data.categoryId,
+        isCompleted: parentTask.isCompleted,
+      })
+
+      childrenTasks.forEach((i) => {
+        addChildTask({
+          parentId: parentId,
+          ...i,
+        })
+      })
+    }
+
+    if (isEdit) {
+      const parentTask = data.tasks[0]
+      editParentTask({
+        ...isEdit,
+        title: parentTask.title,
+        details: parentTask.details,
+        date: parentTask.date ? parentTask.date.toISOString() : null,
+        time: parentTask.time ? parentTask.time.toISOString() : null,
+        categoryId: data.categoryId,
+        isCompleted: parentTask.isCompleted,
+      })
+
+      removedChildTaskIds.forEach((id) => {
+        removeChildTask(id)
+      })
+
+      const editedTask = data.tasks
+        .slice(1)
+        .filter((i) => {
+          if (!i.id) return false
+          const originalChildTask = subTasks.find((j) => j.id === i.id)
+          if (!originalChildTask) return true
+
+          if (removedChildTaskIds.includes(i.id)) return false
+          if (originalChildTask.title !== i.title) return true
+          if (originalChildTask.details !== i.details) return true
+          if (originalChildTask.date !== i.date) return true
+          if (originalChildTask.time !== i.time) return true
+          if (originalChildTask.isCompleted !== i.isCompleted) return true
+          return false
+        })
+        .map((i, index) => ({
+          ...i,
+          date: i.date ? i.date.toISOString() : null,
+          time: i.time ? i.time.toISOString() : null,
+          orderId: index.toString(),
+          parentId: isEdit.id,
+        }))
+
+      const newTasks = data.tasks
+        .slice(1)
+        .filter((i) => !i.id)
+        .map((i, index) => ({
+          ...i,
+          date: i.date ? i.date.toISOString() : null,
+          time: i.time ? i.time.toISOString() : null,
+          orderId: index.toString(),
+        }))
+
+      newTasks.forEach((i) => {
+        addChildTask({
+          parentId: isEdit.id,
+          ...i,
+        })
+      })
+
+      editedTask.forEach((i) => {
+        if (!i.parentId) return
+        if (!i.id) {
+          addChildTask(i)
+        }
+
+        editChildTask(i as ChildTask)
+      })
     }
 
     handleClose()
@@ -231,6 +312,7 @@ function TaskDialogContent({
                     <InfoButton
                       onClick={() => {
                         append({
+                          id: null,
                           title: '',
                           date: null,
                           time: null,
@@ -249,6 +331,11 @@ function TaskDialogContent({
                   {index !== 0 && (
                     <InfoButton
                       onClick={() => {
+                        const id = getValues(`tasks.${index}.id`)
+                        if (id) {
+                          setRemovedChildTaskIds((prev) => [...prev, id])
+                        }
+
                         remove(index)
                       }}
                     >
