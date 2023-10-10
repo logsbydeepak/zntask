@@ -183,6 +183,9 @@ export const SchedulePopover = React.forwardRef<
       <div className="px-4 pb-4">
         <DayPicker
           selected={date ?? undefined}
+          formatters={{
+            formatWeekdayName: weekDayName,
+          }}
           onSelect={(value) => {
             if (!value) return
             setDate(value)
@@ -200,8 +203,10 @@ export const SchedulePopover = React.forwardRef<
             nav_button:
               'h-7 w-7 bg-transparent p-0 hover:text-gray-950 text-gray-600 flex justify-center items-center outline-gray-950 rounded-md',
 
-            head_cell: 'font-normal text-gray-600',
-            day: 'h-7 w-7 rounded-md border border-transparent hover:border-gray-200 hover:bg-gray-100 m-0.5 focus-visible:outline-gray-950 text-xs',
+            head_cell: 'font-normal text-gray-400 text-xs pb-1',
+            day_today:
+              'text-orange-600 font-medium aria-[selected=true]:text-white',
+            day: 'h-7 w-7 rounded-full border border-transparent hover:border-gray-200 hover:bg-gray-100 m-0.5 focus-visible:outline-gray-950 text-xs aria-[selected=true]:font-medium',
             day_selected:
               'bg-orange-600 text-white hover:bg-orange-600 hover:border-orange-600',
             day_outside: 'text-gray-400',
@@ -242,4 +247,16 @@ function ActionIcon({ children }: { children: React.ReactNode }) {
 
 function ActionText({ children }: { children: React.ReactNode }) {
   return <span className="font-normal">{children}</span>
+}
+
+function weekDayName(date: Date) {
+  const day = date.getDay()
+
+  if (day === 0) return 'S'
+  if (day === 1) return 'M'
+  if (day === 2) return 'T'
+  if (day === 3) return 'W'
+  if (day === 4) return 'T'
+  if (day === 5) return 'F'
+  if (day === 6) return 'S'
 }
