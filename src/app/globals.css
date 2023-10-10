@@ -32,4 +32,8 @@
   svg {
     @apply h-full w-full;
   }
+  [cmdk-list] {
+    scroll-padding-block-start: 8px;
+    scroll-padding-block-end: 8px;
+  }
 }

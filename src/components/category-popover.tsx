@@ -55,17 +55,16 @@ export const CategoryPopover = React.forwardRef<
     >
       <Command
         className="w-full"
-        value={
-          currentCategory
-            ? `${currentCategory.title} ${currentCategory.id}`
-            : 'inbox'
-        }
+        value={commandValue}
+        onValueChange={(v) => setCommandValue(v)}
+        onSelect={() => {
+          console.log('select')
+        }}
         onKeyDown={(e) => {
           if (e.key === 'Enter' && e.shiftKey) {
             e.preventDefault()
           }
         }}
-        onValueChange={(v) => setCommandValue(v)}
       >
         <div className="flex items-center border-b border-gray-200 py-2.5 pl-3.5 pr-2.5">
           <SearchIcon className="h-3 w-3 text-gray-400" />
