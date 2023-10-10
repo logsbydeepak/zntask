@@ -67,7 +67,7 @@ export const CategoryPopover = React.forwardRef<
         }}
         onValueChange={(v) => setCommandValue(v)}
       >
-        <div className="flex items-center border-b border-gray-200 px-2.5 py-2.5">
+        <div className="flex items-center border-b border-gray-200 py-2.5 pl-3.5 pr-2.5">
           <SearchIcon className="h-3 w-3 text-gray-400" />
           <Command.Input
             ref={searchInputRef}
@@ -78,8 +78,8 @@ export const CategoryPopover = React.forwardRef<
           />
         </div>
 
-        <Command.List className="container-scroll my-3 ml-2 mr-1 h-40 overflow-y-scroll pr-2">
-          <Command.Empty className="flex h-40 items-center justify-center">
+        <Command.List className="container-scroll ml-2 h-40 overflow-y-scroll py-2 pr-1">
+          <Command.Empty className="flex h-36 items-center justify-center">
             <div className="flex flex-col items-center justify-center space-y-1 rounded-md border px-4 py-4 shadow-sm">
               <span className="inline-block h-5 w-5">
                 <FolderIcon />
@@ -89,29 +89,26 @@ export const CategoryPopover = React.forwardRef<
           </Command.Empty>
 
           {currentCategory && (
-            <Command.Item
-              className="group/item"
+            <CategoryItem.Container
               value={`${currentCategory.title} ${currentCategory.id}`}
               onSelect={() => {
                 setValue(currentCategory.id)
                 handleClose()
               }}
             >
-              <CategoryItem.Container>
-                <CategoryItem.Icon>
-                  <div
-                    className={cn(
-                      'h-3 w-3 rounded-[4.5px]',
-                      `bg-${getCategoryColor(currentCategory.indicator)}-600`
-                    )}
-                  />
-                </CategoryItem.Icon>
-                <CategoryItem.Title>{currentCategory.title}</CategoryItem.Title>
-              </CategoryItem.Container>
-            </Command.Item>
+              <CategoryItem.Icon>
+                <div
+                  className={cn(
+                    'h-2.5 w-2.5 rounded-[4px]',
+                    `bg-${getCategoryColor(currentCategory.indicator)}-600`
+                  )}
+                />
+              </CategoryItem.Icon>
+              <CategoryItem.Title>{currentCategory.title}</CategoryItem.Title>
+            </CategoryItem.Container>
           )}
 
-          <Command.Item
+          <CategoryItem.Container
             className="group/item"
             value="inbox"
             onSelect={() => {
@@ -119,40 +116,35 @@ export const CategoryPopover = React.forwardRef<
               handleClose()
             }}
           >
-            <CategoryItem.Container>
-              <CategoryItem.Icon>
-                <InboxIcon className="h-3.5 w-3.5 text-gray-600" />
-              </CategoryItem.Icon>
-              <CategoryItem.Title>Inbox</CategoryItem.Title>
-            </CategoryItem.Container>
-          </Command.Item>
+            <CategoryItem.Icon>
+              <InboxIcon className="h-3.5 w-3.5 text-gray-600" />
+            </CategoryItem.Icon>
+            <CategoryItem.Title>Inbox</CategoryItem.Title>
+          </CategoryItem.Container>
 
           <Command.Separator className="mx-2 my-2 border-t border-gray-100" />
 
           {categories
             .filter((i) => i.id !== currentCategory?.id)
             .map((i) => (
-              <Command.Item
+              <CategoryItem.Container
                 key={i.id}
                 value={`${i.title} ${i.id}`}
                 onSelect={() => {
                   setValue(i.id)
                   handleClose()
                 }}
-                className="group/item"
               >
-                <CategoryItem.Container>
-                  <CategoryItem.Icon>
-                    <div
-                      className={cn(
-                        'h-3 w-3 rounded-[4.5px]',
-                        `bg-${getCategoryColor(i.indicator)}-600`
-                      )}
-                    />
-                  </CategoryItem.Icon>
-                  <CategoryItem.Title>{i.title}</CategoryItem.Title>
-                </CategoryItem.Container>
-              </Command.Item>
+                <CategoryItem.Icon>
+                  <div
+                    className={cn(
+                      'h-2.5 w-2.5 rounded-[4px]',
+                      `bg-${getCategoryColor(i.indicator)}-600`
+                    )}
+                  />
+                </CategoryItem.Icon>
+                <CategoryItem.Title>{i.title}</CategoryItem.Title>
+              </CategoryItem.Container>
             ))}
         </Command.List>
       </Command>
@@ -218,13 +210,19 @@ export const CategoryPopover = React.forwardRef<
 })
 CategoryPopover.displayName = 'CategoryPopover'
 
-function CategoryItemContainer({ children }: { children: React.ReactNode }) {
+const CategoryItemContainer = React.forwardRef<
+  React.ElementRef<typeof Command.Item>,
+  React.ComponentPropsWithoutRef<typeof Command.Item>
+>(({ ...props }, ref) => {
   return (
-    <div className="flex cursor-pointer items-center rounded-md border border-transparent px-3 py-1.5 group-data-[selected=true]/item:border-gray-200 group-data-[selected=true]/item:bg-gray-50">
-      {children}
-    </div>
+    <Command.Item
+      ref={ref}
+      {...props}
+      className="group/item my-0.5 flex cursor-pointer items-center rounded-md border border-transparent px-2 py-1.5 data-[selected=true]:border-gray-200 data-[selected=true]:bg-gray-50"
+    />
   )
-}
+})
+CategoryItemContainer.displayName = Command.Item.displayName
 
 function CategoryItemIcon({ children }: { children: React.ReactNode }) {
   return (
@@ -235,7 +233,11 @@ function CategoryItemIcon({ children }: { children: React.ReactNode }) {
 }
 
 function CategoryItemTitle({ children }: { children: React.ReactNode }) {
-  return <p className="text-sm">{children}</p>
+  return (
+    <p className="text-xs text-gray-600 group-hover/item:text-gray-950">
+      {children}
+    </p>
+  )
 }
 
 const CategoryItem = {

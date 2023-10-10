@@ -251,7 +251,6 @@ function ActionText({ children }: { children: React.ReactNode }) {
 
 function weekDayName(date: Date) {
   const day = date.getDay()
-
   if (day === 0) return 'S'
   if (day === 1) return 'M'
   if (day === 2) return 'T'
@@ -259,4 +258,5 @@ function weekDayName(date: Date) {
   if (day === 4) return 'T'
   if (day === 5) return 'F'
   if (day === 6) return 'S'
+  return 'NA'
 }
