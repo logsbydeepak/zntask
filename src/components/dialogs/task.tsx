@@ -14,12 +14,17 @@ import {
   sub,
 } from 'date-fns'
 import {
+  ArrowBigUpIcon,
+  ArrowUpLeftFromCircle,
+  ArrowUpLeftFromCircleIcon,
   CalendarIcon,
   CheckCircleIcon,
   CircleIcon,
+  CornerDownLeftIcon,
   HourglassIcon,
   InboxIcon,
   PlusIcon,
+  ShovelIcon,
   XIcon,
 } from 'lucide-react'
 import {
@@ -352,15 +357,27 @@ function TaskDialogContent({
         </div>
       </div>
 
-      <fieldset className="flex space-x-4 border-t border-gray-200 bg-gray-50 px-6 py-6">
+      <fieldset className="flex justify-between space-x-4 border-t border-gray-100 px-5 py-2">
         <Dialog.Close asChild>
-          <Button intent="secondary" className="w-full">
-            Cancel
-          </Button>
+          <ActionButton>
+            <span>Cancel</span>
+            <ShortcutIcon>
+              <ArrowUpLeftFromCircleIcon />
+            </ShortcutIcon>
+          </ActionButton>
         </Dialog.Close>
-        <Button className="w-full" type="submit" form="task">
-          Save
-        </Button>
+
+        <ActionButton type="submit" form="task">
+          <span>Save</span>
+          <div className="flex space-x-1">
+            <ShortcutIcon>
+              <ArrowBigUpIcon />
+            </ShortcutIcon>
+            <ShortcutIcon>
+              <CornerDownLeftIcon />
+            </ShortcutIcon>
+          </div>
+        </ActionButton>
       </fieldset>
     </>
   )
@@ -534,4 +551,23 @@ function InfoIcon({ children }: { children: React.ReactNode }) {
 
 function InfoText({ children }: { children: React.ReactNode }) {
   return <span className="text-xs font-medium">{children}</span>
+}
+
+function ShortcutIcon({ children }: { children: React.ReactNode }) {
+  return (
+    <span className="flex h-5 w-5 items-center justify-center rounded-md border border-gray-200 text-gray-500 group-hover:border-gray-300 group-hover:text-gray-950">
+      <span className="h-2.5 w-2.5">{children}</span>
+    </span>
+  )
+}
+
+function ActionButton({ children, ...props }: React.ComponentProps<'button'>) {
+  return (
+    <button
+      {...props}
+      className="group flex items-center space-x-2 rounded-md px-2 py-1 text-xs font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-950 focus-visible:outline-gray-950"
+    >
+      {children}
+    </button>
+  )
 }
