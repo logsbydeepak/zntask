@@ -223,18 +223,12 @@ function Icon({
 
 function Search() {
   return (
-    <button className="group flex items-center rounded-lg border border-gray-200 bg-gray-50 px-[7px] hover:bg-gray-100 hover:text-gray-950 md:pl-3 md:pr-1.5">
+    <button className="group flex items-center rounded-lg border border-gray-200 bg-gray-50 px-[7px] hover:bg-gray-100 hover:text-gray-950 sm:pl-3 sm:pr-1.5">
       <span className="h-4 w-4 text-gray-500 group-hover:text-gray-950">
         <SearchIcon />
       </span>
-      <span className="hidden md:flex md:items-center">
-        <span className="ml-2 mr-4 text-xs text-gray-500">Search</span>
-        <span className="flex items-center space-x-1 rounded-md border border-gray-200 px-1.5 text-xs text-gray-500">
-          <span className="inline-block h-2.5 w-2.5">
-            <CommandIcon />
-          </span>
-          <span className="font-mono text-[10px]">K</span>
-        </span>
+      <span className="hidden sm:inline-block">
+        <span className="ml-2 mr-8 text-xs text-gray-500">Search</span>
       </span>
     </button>
   )

@@ -360,24 +360,11 @@ function TaskDialogContent({
 
       <fieldset className="flex justify-between space-x-4 border-t border-gray-100 px-5 py-2">
         <Dialog.Close asChild>
-          <ActionButton>
-            <span>Cancel</span>
-            <ShortcutIcon>
-              <ArrowUpLeftFromCircleIcon />
-            </ShortcutIcon>
-          </ActionButton>
+          <ActionButton>Cancel</ActionButton>
         </Dialog.Close>
 
         <ActionButton type="submit" form="task">
-          <span>Save</span>
-          <div className="flex space-x-1">
-            <ShortcutIcon>
-              <ArrowBigUpIcon />
-            </ShortcutIcon>
-            <ShortcutIcon>
-              <CornerDownLeftIcon />
-            </ShortcutIcon>
-          </div>
+          Save
         </ActionButton>
       </fieldset>
     </>
@@ -556,14 +543,6 @@ function InfoIcon({ children }: { children: React.ReactNode }) {
 
 function InfoText({ children }: { children: React.ReactNode }) {
   return <span className="text-xs font-medium">{children}</span>
-}
-
-function ShortcutIcon({ children }: { children: React.ReactNode }) {
-  return (
-    <span className="flex h-5 w-5 items-center justify-center rounded-md border border-gray-200 text-gray-500 group-hover:border-gray-300 group-hover:text-gray-950">
-      <span className="h-2.5 w-2.5">{children}</span>
-    </span>
-  )
 }
 
 function ActionButton({ children, ...props }: React.ComponentProps<'button'>) {

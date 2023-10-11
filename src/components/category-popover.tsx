@@ -167,10 +167,7 @@ export const CategoryPopover = React.forwardRef<
               }
             }}
           >
-            <span>Select</span>
-            <ShortcutIcon>
-              <CornerDownLeftIcon />
-            </ShortcutIcon>
+            Select
           </ActionButton>
           <ActionButton
             type="button"
@@ -183,15 +180,7 @@ export const CategoryPopover = React.forwardRef<
               setValue(newCategory.id)
             }}
           >
-            <span>Create new</span>
-            <div className="flex space-x-1">
-              <ShortcutIcon>
-                <ArrowBigUpIcon />
-              </ShortcutIcon>
-              <ShortcutIcon>
-                <CornerDownLeftIcon />
-              </ShortcutIcon>
-            </div>
+            Create new
           </ActionButton>
         </div>
       </div>
@@ -224,7 +213,7 @@ function CategoryItemIcon({ children }: { children: React.ReactNode }) {
 
 function CategoryItemTitle({ children }: { children: React.ReactNode }) {
   return (
-    <p className="text-xs text-gray-600 group-hover/item:text-gray-950">
+    <p className="text-xs text-gray-600 group-data-[selected=true]/item:text-gray-950">
       {children}
     </p>
   )
@@ -234,14 +223,6 @@ const CategoryItem = {
   Container: CategoryItemContainer,
   Icon: CategoryItemIcon,
   Title: CategoryItemTitle,
-}
-
-function ShortcutIcon({ children }: { children: React.ReactNode }) {
-  return (
-    <span className="flex h-5 w-5 items-center justify-center rounded-md border border-gray-200 text-gray-500 group-hover:border-gray-300 group-hover:text-gray-950">
-      <span className="h-3 w-3">{children}</span>
-    </span>
-  )
 }
 
 function ActionButton({ children, ...props }: React.ComponentProps<'button'>) {
