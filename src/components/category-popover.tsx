@@ -21,20 +21,21 @@ export const CategoryPopover = React.forwardRef<
     setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
     currentCategory: Category | undefined
   }
->(({ setIsOpen, setValue, currentCategory, ...props }, ref) => {
+>(({ setIsOpen, setValue: setParentValue, currentCategory, ...props }, ref) => {
   const searchInputRef = React.useRef<HTMLInputElement>(null)
   const [search, setSearch] = React.useState('')
   const addCategory = useCategoryStore((state) => state.addCategory)
   const [commandValue, setCommandValue] = React.useState('')
   const categories = useCategoryStore((state) => state.categories)
 
-  const handleClose = () => {
-    setSearch('')
+  const setValue = (value: string | null) => {
+    setParentValue(value)
     setIsOpen(false)
   }
 
   return (
     <PopoverContent
+      {...props}
       ref={ref}
       className="category-popover w-full rounded-lg border border-gray-200 bg-white shadow-sm sm:w-60"
       sideOffset={5}
@@ -49,7 +50,6 @@ export const CategoryPopover = React.forwardRef<
             indicator: 'orange',
           })
           setValue(newCategory.id)
-          handleClose()
         }
       }}
     >
@@ -57,9 +57,6 @@ export const CategoryPopover = React.forwardRef<
         className="w-full"
         value={commandValue}
         onValueChange={(v) => setCommandValue(v)}
-        onSelect={() => {
-          console.log('select')
-        }}
         onKeyDown={(e) => {
           if (e.key === 'Enter' && e.shiftKey) {
             e.preventDefault()
@@ -92,7 +89,6 @@ export const CategoryPopover = React.forwardRef<
               value={`${currentCategory.title} ${currentCategory.id}`}
               onSelect={() => {
                 setValue(currentCategory.id)
-                handleClose()
               }}
             >
               <CategoryItem.Icon>
@@ -112,7 +108,6 @@ export const CategoryPopover = React.forwardRef<
             value="inbox"
             onSelect={() => {
               setValue(null)
-              handleClose()
             }}
           >
             <CategoryItem.Icon>
@@ -131,7 +126,6 @@ export const CategoryPopover = React.forwardRef<
                 value={`${i.title} ${i.id}`}
                 onSelect={() => {
                   setValue(i.id)
-                  handleClose()
                 }}
               >
                 <CategoryItem.Icon>
@@ -164,13 +158,11 @@ export const CategoryPopover = React.forwardRef<
               if (!commandValue) return
               if (commandValue === 'inbox') {
                 setValue(null)
-                handleClose()
                 return
               }
               const id = commandValue.split(' ')[1]
               if (isValid(id.toUpperCase())) {
                 setValue(id.toUpperCase())
-                handleClose()
                 return
               }
             }}
@@ -189,7 +181,6 @@ export const CategoryPopover = React.forwardRef<
                 indicator: 'orange',
               })
               setValue(newCategory.id)
-              handleClose()
             }}
           >
             <span>Create new</span>

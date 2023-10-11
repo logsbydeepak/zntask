@@ -23,10 +23,10 @@ export const SchedulePopover = React.forwardRef<
     time: Date | null
   }
 >(({ setIsOpen, date, time, setTime, setDate, ...props }, ref) => {
-  const [value, setValue] = React.useState('')
+  const [inputValue, setInputValue] = React.useState('')
   const [actionTime, setActionTime] = React.useState<Date | null>(null)
   const [actionDate, setActionDate] = React.useState<Date | null>(null)
-  const [debouncedValue] = useDebounce(value, 500)
+  const [debouncedValue] = useDebounce(inputValue, 500)
 
   React.useEffect(() => {
     try {
@@ -46,9 +46,6 @@ export const SchedulePopover = React.forwardRef<
   }, [debouncedValue])
 
   const handleClose = () => {
-    setValue('')
-    setActionDate(null)
-    setActionTime(null)
     setIsOpen(false)
   }
 
@@ -70,9 +67,9 @@ export const SchedulePopover = React.forwardRef<
             placeholder="today at 9am"
             autoFocus
             className="ml-2 h-5 w-full border-none p-0 text-sm outline-none placeholder:text-gray-400 focus:ring-0"
-            value={value}
+            value={inputValue}
             autoComplete="off"
-            onChange={(e) => setValue(e.target.value)}
+            onChange={(e) => setInputValue(e.target.value)}
           />
         </div>
         <div className="mt-3 flex flex-row flex-wrap gap-x-1.5 gap-y-2">
@@ -181,40 +178,12 @@ export const SchedulePopover = React.forwardRef<
       </div>
 
       <div className="px-4 pb-4">
-        <DayPicker
-          selected={date ?? undefined}
-          formatters={{
-            formatWeekdayName: weekDayName,
-          }}
+        <Calendar
+          value={date ?? undefined}
           onSelect={(value) => {
             if (!value) return
             setDate(value)
             handleClose()
-          }}
-          mode="single"
-          className="text-sm"
-          showOutsideDays={true}
-          classNames={{
-            month: 'space-y-4',
-            caption: 'flex justify-center relative font-medium',
-            nav: 'space-x-1 flex items-center justify-center',
-            nav_button_next: 'absolute right-1',
-            nav_button_previous: 'absolute left-1',
-            nav_button:
-              'h-7 w-7 bg-transparent p-0 hover:text-gray-950 text-gray-600 flex justify-center items-center outline-gray-950 rounded-md',
-
-            head_cell: 'font-normal text-gray-400 text-xs pb-1',
-            day_today:
-              'text-orange-600 font-medium aria-[selected=true]:text-white',
-            day: 'h-7 w-7 rounded-full border border-transparent hover:border-gray-200 hover:bg-gray-100 m-0.5 focus-visible:outline-gray-950 text-xs aria-[selected=true]:font-medium',
-            day_selected:
-              'bg-orange-600 text-white hover:bg-orange-600 hover:border-orange-600',
-            day_outside: 'text-gray-400',
-            table: 'w-full',
-          }}
-          components={{
-            IconLeft: () => <ChevronLeftIcon className="h-4 w-4" />,
-            IconRight: () => <ChevronRightIcon className="h-4 w-4" />,
           }}
         />
       </div>
@@ -247,6 +216,48 @@ function ActionIcon({ children }: { children: React.ReactNode }) {
 
 function ActionText({ children }: { children: React.ReactNode }) {
   return <span className="font-normal">{children}</span>
+}
+
+function Calendar({
+  value,
+  onSelect,
+}: {
+  value?: Date
+  onSelect: (value?: Date) => void
+}) {
+  return (
+    <DayPicker
+      selected={value}
+      formatters={{
+        formatWeekdayName: weekDayName,
+      }}
+      onSelect={onSelect}
+      mode="single"
+      className="text-sm"
+      showOutsideDays={true}
+      classNames={{
+        month: 'space-y-4',
+        caption: 'flex justify-center relative font-medium',
+        nav: 'space-x-1 flex items-center justify-center',
+        nav_button_next: 'absolute right-1',
+        nav_button_previous: 'absolute left-1',
+        nav_button:
+          'h-7 w-7 bg-transparent p-0 hover:text-gray-950 text-gray-600 flex justify-center items-center outline-gray-950 rounded-md',
+
+        head_cell: 'font-normal text-gray-400 text-xs pb-1',
+        day_today: 'text-orange-600 font-medium aria-[]:text-white',
+        day: 'h-7 w-7 rounded-full border border-transparent hover:border-gray-200 hover:bg-gray-100 m-0.5 focus-visible:outline-gray-950 text-xs aria-[selected=true]:font-medium',
+        day_selected:
+          'bg-orange-600 text-white hover:bg-orange-600 hover:border-orange-600',
+        day_outside: 'text-gray-400',
+        table: 'w-full',
+      }}
+      components={{
+        IconLeft: () => <ChevronLeftIcon className="h-4 w-4" />,
+        IconRight: () => <ChevronRightIcon className="h-4 w-4" />,
+      }}
+    />
+  )
 }
 
 function weekDayName(date: Date) {

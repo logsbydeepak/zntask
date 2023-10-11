@@ -34,6 +34,7 @@ import {
   UseFormSetValue,
   UseFormWatch,
 } from 'react-hook-form'
+import { ulid } from 'ulidx'
 import { z } from 'zod'
 import { useShallow } from 'zustand/react/shallow'
 
@@ -448,13 +449,15 @@ function CategoryPicker({
           </InfoText>
         </InfoButton>
       </Popover.Trigger>
-      <CategoryPopover
-        setValue={(value) => {
-          setValue('categoryId', value)
-        }}
-        setIsOpen={setIsOpen}
-        currentCategory={currentCategory}
-      />
+      {isOpen && (
+        <CategoryPopover
+          setValue={(value) => {
+            setValue('categoryId', value)
+          }}
+          setIsOpen={setIsOpen}
+          currentCategory={currentCategory}
+        />
+      )}
     </Popover.Root>
   )
 }
@@ -497,17 +500,19 @@ function DateAndTimePicker({
           )}
         </InfoButton>
       </Popover.Trigger>
-      <SchedulePopover
-        setIsOpen={setIsOpen}
-        date={date}
-        time={time}
-        setDate={(value) => {
-          setValue(`tasks.${index}.date`, value)
-        }}
-        setTime={(value) => {
-          setValue(`tasks.${index}.time`, value)
-        }}
-      />
+      {isOpen && (
+        <SchedulePopover
+          setIsOpen={setIsOpen}
+          date={date}
+          time={time}
+          setDate={(value) => {
+            setValue(`tasks.${index}.date`, value)
+          }}
+          setTime={(value) => {
+            setValue(`tasks.${index}.time`, value)
+          }}
+        />
+      )}
     </Popover.Root>
   )
 }
