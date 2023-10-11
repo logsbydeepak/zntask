@@ -248,7 +248,7 @@ function ActionButton({ children, ...props }: React.ComponentProps<'button'>) {
   return (
     <button
       {...props}
-      className="group flex items-center space-x-2 rounded-md px-1.5 py-1 text-xs font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-950 focus-visible:outline-gray-950"
+      className="group flex items-center space-x-2 rounded-md px-1.5 py-1 text-xs font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-950"
     >
       {children}
     </button>

@@ -3,6 +3,10 @@
 @tailwind utilities;
 
 @layer base {
+  *:focus-visible {
+    @apply outline-gray-950;
+  }
+
   nav,
   aside {
     padding-right: var(--removed-body-scroll-bar-size) !important;

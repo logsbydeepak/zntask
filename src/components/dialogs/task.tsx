@@ -404,7 +404,7 @@ function Checkbox({
           setValue(`tasks.${index}.isCompleted`, value)
         }
       }}
-      className="h-4 w-4 rounded-full text-gray-600 outline-offset-4 outline-gray-950 hover:text-gray-950"
+      className="h-4 w-4 rounded-full text-gray-600 outline-offset-4 hover:text-gray-950"
     >
       {!watch(`tasks.${index}.isCompleted`) && <CircleIcon />}
       <CheckboxIndicator asChild>
@@ -544,7 +544,7 @@ const InfoButton = React.forwardRef<
       {...props}
       ref={ref}
       type="button"
-      className="mr-2 inline-flex items-center space-x-1 rounded-full border border-gray-200 px-3 py-1 text-gray-600 hover:bg-gray-50 hover:text-gray-950 focus-visible:outline-gray-950"
+      className="mr-2 inline-flex items-center space-x-1 rounded-full border border-gray-200 px-3 py-1 text-gray-600 hover:bg-gray-50 hover:text-gray-950"
     />
   )
 })
@@ -570,7 +570,7 @@ function ActionButton({ children, ...props }: React.ComponentProps<'button'>) {
   return (
     <button
       {...props}
-      className="group flex items-center space-x-2 rounded-md px-2 py-1 text-xs font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-950 focus-visible:outline-gray-950"
+      className="group flex items-center space-x-2 rounded-md px-2 py-1 text-xs font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-950"
     >
       {children}
     </button>

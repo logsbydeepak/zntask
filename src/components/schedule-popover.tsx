@@ -202,7 +202,7 @@ function ActionContainer({
 }) {
   return (
     <button
-      className="group inline-flex items-center space-x-1 rounded-full border border-gray-200 px-2 py-0.5 text-xs font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-950 focus-visible:outline-gray-950"
+      className="group inline-flex items-center space-x-1 rounded-full border border-gray-200 px-2 py-0.5 text-xs font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-950"
       onClick={onClick}
     >
       {children}
@@ -242,11 +242,11 @@ function Calendar({
         nav_button_next: 'absolute right-1',
         nav_button_previous: 'absolute left-1',
         nav_button:
-          'h-7 w-7 bg-transparent p-0 hover:text-gray-950 text-gray-600 flex justify-center items-center outline-gray-950 rounded-md',
+          'h-7 w-7 bg-transparent p-0 hover:text-gray-950 text-gray-600 flex justify-center items-center rounded-md',
 
         head_cell: 'font-normal text-gray-400 text-xs pb-1',
         day_today: 'text-orange-600 font-medium aria-[]:text-white',
-        day: 'h-7 w-7 rounded-full border border-transparent hover:border-gray-200 hover:bg-gray-100 m-0.5 focus-visible:outline-gray-950 text-xs aria-[selected=true]:font-medium',
+        day: 'h-7 w-7 rounded-full border border-transparent hover:border-gray-200 hover:bg-gray-100 m-0.5 text-xs aria-[selected=true]:font-medium',
         day_selected:
           'bg-orange-600 text-white hover:bg-orange-600 hover:border-orange-600',
         day_outside: 'text-gray-400',
