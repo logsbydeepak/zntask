@@ -417,7 +417,7 @@ function CategoryPicker({
   return (
     <Popover.Root open={isOpen} onOpenChange={setIsOpen}>
       <Popover.Trigger asChild>
-        <InfoButton>
+        <InfoButton className="max-w-[95%] overflow-hidden">
           <InfoIcon>
             {!currentCategory && (
               <InboxIcon className="h-full w-full text-gray-600" />
@@ -431,7 +431,7 @@ function CategoryPicker({
               />
             )}
           </InfoIcon>
-          <InfoText>
+          <InfoText className="w-full overflow-hidden overflow-ellipsis">
             {currentCategory ? currentCategory.title : 'Inbox'}
           </InfoText>
         </InfoButton>
@@ -525,13 +525,16 @@ function showTime(time: Date) {
 const InfoButton = React.forwardRef<
   HTMLButtonElement,
   React.ComponentPropsWithoutRef<'button'>
->(({ ...props }, ref) => {
+>(({ className, ...props }, ref) => {
   return (
     <button
       {...props}
       ref={ref}
       type="button"
-      className="mr-2 inline-flex items-center space-x-1 rounded-full border border-gray-200 px-3 py-1 text-gray-600 hover:bg-gray-50 hover:text-gray-950"
+      className={cn(
+        'mr-2 inline-flex items-center space-x-1 rounded-full border border-gray-200 px-3 py-1 text-gray-600 hover:bg-gray-50 hover:text-gray-950',
+        className
+      )}
     />
   )
 })
@@ -541,8 +544,16 @@ function InfoIcon({ children }: { children: React.ReactNode }) {
   return <span className="grid h-3 w-3 place-content-center">{children}</span>
 }
 
-function InfoText({ children }: { children: React.ReactNode }) {
-  return <span className="text-xs font-medium">{children}</span>
+function InfoText({
+  children,
+  className,
+}: {
+  children: React.ReactNode
+  className?: string
+}) {
+  return (
+    <span className={cn('text-xs font-medium', className)}>{children}</span>
+  )
 }
 
 function ActionButton({ children, ...props }: React.ComponentProps<'button'>) {

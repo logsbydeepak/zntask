@@ -1,7 +1,11 @@
 import { cn } from '@/utils/style'
 
 export function Title({ children }: { children: React.ReactNode }) {
-  return <h1 className="text-lg font-medium">{children}</h1>
+  return (
+    <h1 className="max-w-[90%] overflow-hidden overflow-ellipsis text-lg font-medium">
+      {children}
+    </h1>
+  )
 }
 
 export function Root({ children }: { children: React.ReactNode }) {

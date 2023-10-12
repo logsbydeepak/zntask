@@ -213,7 +213,7 @@ function CategoryItemIcon({ children }: { children: React.ReactNode }) {
 
 function CategoryItemTitle({ children }: { children: React.ReactNode }) {
   return (
-    <p className="text-xs text-gray-600 group-data-[selected=true]/item:text-gray-950">
+    <p className="overflow-hidden overflow-ellipsis text-xs text-gray-600 group-data-[selected=true]/item:text-gray-950">
       {children}
     </p>
   )
