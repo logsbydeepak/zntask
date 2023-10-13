@@ -58,7 +58,7 @@ export function Navbar({
 
   const name = `${firstName} ${lastName}`
   return (
-    <nav className="fixed z-40 w-full border-b border-gray-200 bg-white bg-opacity-50 backdrop-blur-sm">
+    <nav className="fixed z-20 w-full border-b border-gray-200 bg-white bg-opacity-50 backdrop-blur-sm">
       <div className="flex h-14 items-center justify-between px-4 md:px-5">
         <Link href="/" className="flex items-center space-x-2">
           <span className="flex h-7 w-7 items-center justify-center rounded-full bg-orange-600 text-white">

@@ -38,7 +38,7 @@ export function Sidebar() {
 
   if (!isSidebarOpen) return null
   return (
-    <aside className="fixed bottom-0 top-14 w-full overflow-y-scroll border-r-0 border-gray-200 bg-white pr-1 md:w-56 md:border-r">
+    <aside className="fixed bottom-0 top-14 z-10 w-full overflow-y-scroll border-r-0 border-gray-200 bg-white pr-1 md:w-56 md:border-r">
       <div className="my-4 space-y-6 pr-1">
         <div className="space-y-2">
           <QuickSection />

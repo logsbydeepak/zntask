@@ -11,7 +11,7 @@ export const Portal = ({ children, ...props }: Dialog.DialogPortalProps) => (
     <Dialog.Overlay
       {...props}
       className={cn(
-        'fixed inset-0 z-40 bg-white/80 bg-opacity-50 backdrop-blur-sm'
+        'fixed inset-0 z-30 bg-white/80 bg-opacity-50 backdrop-blur-sm'
       )}
     />
     {children}
