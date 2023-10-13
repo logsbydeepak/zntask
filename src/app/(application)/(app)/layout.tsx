@@ -11,6 +11,7 @@ import { Navbar } from './navbar'
 import { Sidebar } from './sidebar'
 import { SplashScreen } from './splash-screen'
 import { Sync } from './sync'
+import { getTasks } from './task.h'
 
 export default async function Layout({
   children,
@@ -33,7 +34,7 @@ export default async function Layout({
 
 async function GetUser() {
   const user = await getUser()
-  const categoriesRes = await getCategories()
+  const categories = await getCategories()
 
   return (
     <>
@@ -43,7 +44,7 @@ async function GetUser() {
         profilePicture={user.profilePicture}
         email={user.email}
       />
-      <InitStore categories={categoriesRes.categories} />
+      <InitStore categories={categories.categories} />
     </>
   )
 }
