@@ -105,7 +105,7 @@ function CommandPalletContent({ handleClose }: { handleClose: () => void }) {
             className="ml-2 h-5 w-full border-none p-0 text-sm outline-none placeholder:text-gray-400 focus:ring-0"
           />
         </div>
-        <Command.List className="container-scroll ml-2 h-40 overflow-y-scroll py-2 pr-1">
+        <Command.List className="container-scroll ml-2 h-40 overflow-y-scroll py-2 pb-5 pr-1 [&>[cmdk-list-sizer]]:space-y-3">
           <Command.Empty className="flex h-[calc(100%-5%)] items-center justify-center">
             <div className="flex flex-col items-center justify-center space-y-1 rounded-md border px-4 py-4 shadow-sm">
               <span className="inline-block h-5 w-5">
@@ -116,23 +116,23 @@ function CommandPalletContent({ handleClose }: { handleClose: () => void }) {
           </Command.Empty>
           {!page && (
             <>
-              <Command.Group heading="Pages">
+              <CommandItem.Group heading="Pages">
                 {pagesGroups.map((i) => (
                   <CommandItem.Container key={i.label} onSelect={() => {}}>
                     <CommandItem.Icon>{i.icon}</CommandItem.Icon>
                     <CommandItem.Title>{i.label}</CommandItem.Title>
                   </CommandItem.Container>
                 ))}
-              </Command.Group>
+              </CommandItem.Group>
 
-              <Command.Group heading="Actions">
+              <CommandItem.Group heading="Actions">
                 {actionsGroup.map((i) => (
                   <CommandItem.Container key={i.label} onSelect={() => {}}>
                     <CommandItem.Icon>{i.icon}</CommandItem.Icon>
                     <CommandItem.Title>{i.label}</CommandItem.Title>
                   </CommandItem.Container>
                 ))}
-              </Command.Group>
+              </CommandItem.Group>
             </>
           )}
         </Command.List>
@@ -155,9 +155,23 @@ const CommandItemContainer = React.forwardRef<
 })
 CommandItemContainer.displayName = Command.Item.displayName
 
+const CommandItemGroup = React.forwardRef<
+  React.ElementRef<typeof Command.Group>,
+  React.ComponentPropsWithoutRef<typeof Command.Group>
+>(({ ...props }, ref) => {
+  return (
+    <Command.Group
+      ref={ref}
+      {...props}
+      className="space-y-1 text-xs font-medium text-gray-400 last:pb-2"
+    />
+  )
+})
+CommandItemGroup.displayName = Command.Group.displayName
+
 function CommandItemIcon({ children }: { children: React.ReactNode }) {
   return (
-    <div className="mr-2 flex h-4 w-4 items-center justify-center">
+    <div className="mr-2 flex h-4 w-4 items-center justify-center text-gray-600 group-data-[selected=true]/item:text-gray-950">
       {children}
     </div>
   )
@@ -175,4 +189,5 @@ const CommandItem = {
   Container: CommandItemContainer,
   Icon: CommandItemIcon,
   Title: CommandItemTitle,
+  Group: CommandItemGroup,
 }
