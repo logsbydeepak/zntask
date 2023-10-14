@@ -1,3 +1,4 @@
+import React from 'react'
 import * as Dialog from '@radix-ui/react-dialog'
 import { Command } from 'cmdk'
 import { useAtom } from 'jotai'
@@ -23,15 +24,38 @@ export function CommandPalletDialog() {
 }
 
 function CommandPalletContent({ handleClose }: { handleClose: () => void }) {
+  const [search, setSearch] = React.useState('')
+  const [pages, setPages] = React.useState([])
+  const page = pages[pages.length - 1]
+
   return (
     <>
-      {/* <input type="text" /> */}
       <Command>
-        <Command.Input />
+        <Command.Input
+          value={search}
+          onValueChange={setSearch}
+          className="w-full"
+        />
         <Command.List>
           <Command.Empty>no found</Command.Empty>
-          <Command.Item>new task</Command.Item>
-          <Command.Item>new category</Command.Item>
+          {!page && (
+            <>
+              <Command.Group heading="Pages">
+                <Command.Item>inbox</Command.Item>
+                <Command.Item>today</Command.Item>
+                <Command.Item>favorite</Command.Item>
+                <Command.Item>category</Command.Item>
+              </Command.Group>
+
+              <Command.Group heading="Actions">
+                <Command.Item>new task</Command.Item>
+                <Command.Item>new category</Command.Item>
+                <Command.Item>search category</Command.Item>
+                <Command.Item>search favorite</Command.Item>
+                <Command.Item>search task</Command.Item>
+              </Command.Group>
+            </>
+          )}
         </Command.List>
       </Command>
     </>
