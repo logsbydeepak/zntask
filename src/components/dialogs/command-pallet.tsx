@@ -2,6 +2,7 @@ import React from 'react'
 import * as Dialog from '@radix-ui/react-dialog'
 import { Command } from 'cmdk'
 import { useAtom } from 'jotai'
+import { FolderIcon, SearchIcon } from 'lucide-react'
 
 import { isCommandPaletteOpenAtom } from '@/store/app'
 
@@ -24,6 +25,7 @@ export function CommandPalletDialog() {
 }
 
 function CommandPalletContent({ handleClose }: { handleClose: () => void }) {
+  const searchInputRef = React.useRef<HTMLInputElement>(null)
   const [search, setSearch] = React.useState('')
   const [pages, setPages] = React.useState([])
   const page = pages[pages.length - 1]
@@ -31,13 +33,25 @@ function CommandPalletContent({ handleClose }: { handleClose: () => void }) {
   return (
     <>
       <Command>
-        <Command.Input
-          value={search}
-          onValueChange={setSearch}
-          className="w-full"
-        />
-        <Command.List>
-          <Command.Empty>no found</Command.Empty>
+        <div className="flex items-center border-b border-gray-200 py-2.5 pl-3.5 pr-2.5">
+          <SearchIcon className="h-3 w-3 text-gray-400" />
+          <Command.Input
+            ref={searchInputRef}
+            value={search}
+            placeholder="search"
+            onValueChange={setSearch}
+            className="ml-2 h-5 w-full border-none p-0 text-sm outline-none placeholder:text-gray-400 focus:ring-0"
+          />
+        </div>
+        <Command.List className="container-scroll ml-2 h-56 overflow-y-scroll py-2 pr-1">
+          <Command.Empty className="flex h-[calc(100%-5%)] items-center justify-center">
+            <div className="flex flex-col items-center justify-center space-y-1 rounded-md border px-4 py-4 shadow-sm">
+              <span className="inline-block h-5 w-5">
+                <SearchIcon />
+              </span>
+              <p className="text-xs text-gray-600">not result</p>
+            </div>
+          </Command.Empty>
           {!page && (
             <>
               <Command.Group heading="Pages">

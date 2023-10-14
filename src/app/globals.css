@@ -40,4 +40,8 @@
     scroll-padding-block-start: 8px;
     scroll-padding-block-end: 8px;
   }
+
+  [cmdk-list-sizer] {
+    @apply h-full;
+  }
 }
