@@ -45,15 +45,20 @@ export function CommandPalletDialog() {
   )
 }
 
+type Page = 'SEARCH_CATEGORY'
 function CommandPalletContent({ handleClose }: { handleClose: () => void }) {
   const searchInputRef = React.useRef<HTMLInputElement>(null)
   const [search, setSearch] = React.useState('')
-  const [pages, setPages] = React.useState([])
+  const [pages, setPages] = React.useState<string[]>([])
   const page = pages[pages.length - 1]
 
   const router = useRouter()
   const setDialog = useAppStore((s) => s.setDialog)
   const setIsSidebarOpen = useSetAtom(isSidebarOpenAtom)
+
+  const changePage = React.useCallback((page: Page) => {
+    setPages((i) => [...i, page])
+  }, [])
 
   const pagesGroups = [
     {
@@ -130,7 +135,9 @@ function CommandPalletContent({ handleClose }: { handleClose: () => void }) {
     {
       label: 'category',
       icon: <FolderSearchIcon />,
-      onSelect: () => {},
+      onSelect: () => {
+        changePage('SEARCH_CATEGORY')
+      },
     },
     {
       label: 'task',
@@ -141,7 +148,16 @@ function CommandPalletContent({ handleClose }: { handleClose: () => void }) {
 
   return (
     <>
-      <Command>
+      <Command
+        onKeyDown={(e) => {
+          if (e.key === 'Escape') {
+            if (pages.length !== 0) {
+              e.preventDefault()
+              setPages((pages) => pages.slice(0, -1))
+            }
+          }
+        }}
+      >
         <div className="flex items-center border-b border-gray-200 py-2.5 pl-3.5 pr-2.5">
           <SearchIcon className="h-3 w-3 text-gray-400" />
           <Command.Input
@@ -201,6 +217,12 @@ function CommandPalletContent({ handleClose }: { handleClose: () => void }) {
                   </CommandItem.Container>
                 ))}
               </CommandItem.Group>
+            </>
+          )}
+
+          {page === 'SEARCH_CATEGORY' && (
+            <>
+              <p>search category</p>
             </>
           )}
         </Command.List>
