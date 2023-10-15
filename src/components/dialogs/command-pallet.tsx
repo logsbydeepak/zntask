@@ -2,9 +2,12 @@ import React from 'react'
 import { useRouter } from 'next/navigation'
 import * as Dialog from '@radix-ui/react-dialog'
 import { Command } from 'cmdk'
-import { useAtom } from 'jotai'
+import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import {
+  ArchiveIcon,
   CalendarClockIcon,
+  CheckCircleIcon,
+  FolderHeartIcon,
   FolderIcon,
   FolderPlusIcon,
   FolderSearch2Icon,
@@ -15,9 +18,14 @@ import {
   PlusIcon,
   ScanSearchIcon,
   SearchIcon,
+  SidebarIcon,
 } from 'lucide-react'
 
-import { isCommandPaletteOpenAtom, useAppStore } from '@/store/app'
+import {
+  isCommandPaletteOpenAtom,
+  isSidebarOpenAtom,
+  useAppStore,
+} from '@/store/app'
 
 export function CommandPalletDialog() {
   const [isOpen, setIsOpen] = useAtom(isCommandPaletteOpenAtom)
@@ -44,8 +52,8 @@ function CommandPalletContent({ handleClose }: { handleClose: () => void }) {
   const page = pages[pages.length - 1]
 
   const router = useRouter()
-
   const setDialog = useAppStore((s) => s.setDialog)
+  const setIsSidebarOpen = useSetAtom(isSidebarOpenAtom)
 
   const pagesGroups = [
     {
@@ -109,18 +117,24 @@ function CommandPalletContent({ handleClose }: { handleClose: () => void }) {
       },
     },
     {
-      label: 'search category',
+      label: 'toggle sidebar',
+      icon: <SidebarIcon />,
+      onSelect: () => {
+        setIsSidebarOpen((s) => !s)
+        handleClose()
+      },
+    },
+  ]
+
+  const searchGroups = [
+    {
+      label: 'category',
       icon: <FolderSearchIcon />,
       onSelect: () => {},
     },
     {
-      label: 'search favorite',
-      icon: <FolderSearch2Icon />,
-      onSelect: () => {},
-    },
-    {
-      label: 'search task',
-      icon: <ScanSearchIcon />,
+      label: 'task',
+      icon: <CheckCircleIcon />,
       onSelect: () => {},
     },
   ]
@@ -155,6 +169,19 @@ function CommandPalletContent({ handleClose }: { handleClose: () => void }) {
                     key={i.label}
                     onSelect={i.onSelect}
                     value={`pages ${i.label}`}
+                  >
+                    <CommandItem.Icon>{i.icon}</CommandItem.Icon>
+                    <CommandItem.Title>{i.label}</CommandItem.Title>
+                  </CommandItem.Container>
+                ))}
+              </CommandItem.Group>
+
+              <CommandItem.Group heading="Search">
+                {searchGroups.map((i) => (
+                  <CommandItem.Container
+                    key={i.label}
+                    onSelect={i.onSelect}
+                    value={`search ${i.label}`}
                   >
                     <CommandItem.Icon>{i.icon}</CommandItem.Icon>
                     <CommandItem.Title>{i.label}</CommandItem.Title>
@@ -220,7 +247,7 @@ function CommandItemIcon({ children }: { children: React.ReactNode }) {
 
 function CommandItemTitle({ children }: { children: React.ReactNode }) {
   return (
-    <p className="overflow-hidden overflow-ellipsis text-xs text-gray-600 group-data-[selected=true]/item:text-gray-950">
+    <p className="overflow-hidden overflow-ellipsis text-xs font-normal text-gray-600 group-data-[selected=true]/item:text-gray-950">
       {children}
     </p>
   )
