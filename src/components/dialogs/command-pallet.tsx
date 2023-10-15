@@ -1,4 +1,5 @@
 import React from 'react'
+import { useRouter } from 'next/navigation'
 import * as Dialog from '@radix-ui/react-dialog'
 import { Command } from 'cmdk'
 import { useAtom } from 'jotai'
@@ -8,6 +9,7 @@ import {
   FolderPlusIcon,
   FolderSearch2Icon,
   FolderSearchIcon,
+  GanttChartIcon,
   HeartIcon,
   InboxIcon,
   PlusIcon,
@@ -15,7 +17,7 @@ import {
   SearchIcon,
 } from 'lucide-react'
 
-import { isCommandPaletteOpenAtom } from '@/store/app'
+import { isCommandPaletteOpenAtom, useAppStore } from '@/store/app'
 
 export function CommandPalletDialog() {
   const [isOpen, setIsOpen] = useAtom(isCommandPaletteOpenAtom)
@@ -41,26 +43,51 @@ function CommandPalletContent({ handleClose }: { handleClose: () => void }) {
   const [pages, setPages] = React.useState([])
   const page = pages[pages.length - 1]
 
+  const router = useRouter()
+
+  const setDialog = useAppStore((s) => s.setDialog)
+
   const pagesGroups = [
     {
       label: 'today',
       icon: <CalendarClockIcon />,
-      onSelect: () => {},
+      onSelect: () => {
+        router.push('/today')
+        handleClose()
+      },
+    },
+    {
+      label: 'upcoming',
+      icon: <GanttChartIcon />,
+      onSelect: () => {
+        router.push('/upcoming')
+
+        handleClose()
+      },
     },
     {
       label: 'inbox',
       icon: <InboxIcon />,
-      onSelect: () => {},
+      onSelect: () => {
+        router.push('/inbox')
+        handleClose()
+      },
     },
     {
       label: 'favorite',
       icon: <HeartIcon />,
-      onSelect: () => {},
+      onSelect: () => {
+        router.push('/favorite')
+        handleClose()
+      },
     },
     {
       label: 'category',
       icon: <FolderIcon />,
-      onSelect: () => {},
+      onSelect: () => {
+        router.push('/category')
+        handleClose()
+      },
     },
   ]
 
@@ -68,12 +95,18 @@ function CommandPalletContent({ handleClose }: { handleClose: () => void }) {
     {
       label: 'new task',
       icon: <PlusIcon />,
-      onSelect: () => {},
+      onSelect: () => {
+        setDialog('createTask', true)
+        handleClose()
+      },
     },
     {
       label: 'new category',
       icon: <FolderPlusIcon />,
-      onSelect: () => {},
+      onSelect: () => {
+        setDialog('createCategory', true)
+        handleClose()
+      },
     },
     {
       label: 'search category',
@@ -118,7 +151,11 @@ function CommandPalletContent({ handleClose }: { handleClose: () => void }) {
             <>
               <CommandItem.Group heading="Pages">
                 {pagesGroups.map((i) => (
-                  <CommandItem.Container key={i.label} onSelect={() => {}}>
+                  <CommandItem.Container
+                    key={i.label}
+                    onSelect={i.onSelect}
+                    value={`pages ${i.label}`}
+                  >
                     <CommandItem.Icon>{i.icon}</CommandItem.Icon>
                     <CommandItem.Title>{i.label}</CommandItem.Title>
                   </CommandItem.Container>
@@ -127,7 +164,11 @@ function CommandPalletContent({ handleClose }: { handleClose: () => void }) {
 
               <CommandItem.Group heading="Actions">
                 {actionsGroup.map((i) => (
-                  <CommandItem.Container key={i.label} onSelect={() => {}}>
+                  <CommandItem.Container
+                    key={i.label}
+                    onSelect={i.onSelect}
+                    value={`actions ${i.label}`}
+                  >
                     <CommandItem.Icon>{i.icon}</CommandItem.Icon>
                     <CommandItem.Title>{i.label}</CommandItem.Title>
                   </CommandItem.Container>
