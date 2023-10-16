@@ -26,7 +26,7 @@ export const Input = React.forwardRef<
   HTMLInputElement,
   React.InputHTMLAttributes<HTMLInputElement>
 >(({ className, ...props }, ref) => (
-  <input className={cn(formInputStyle(), className)} {...props} ref={ref} />
+  <input ref={ref} {...props} className={cn(formInputStyle(), className)} />
 ))
 Input.displayName = 'Form.Input'
 

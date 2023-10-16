@@ -1,3 +1,4 @@
+import { setFips } from 'crypto'
 import React from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
@@ -266,14 +267,13 @@ function TaskDialogContent({
           <CategoryPicker watch={watch} setValue={setValue} />
         </span>
 
-        <div className="space-y-7">
+        <Form.Root
+          className="space-y-7"
+          onSubmit={handleSubmit(onSubmit)}
+          id="task"
+        >
           {fields.map((_, index) => (
-            <Form.Root
-              onSubmit={handleSubmit(onSubmit)}
-              id="task"
-              className={cn('space-y-2', index !== 0 && 'pl-7')}
-              key={index}
-            >
+            <div className={cn('space-y-2', index !== 0 && 'pl-7')} key={index}>
               <div>
                 <div className="flex items-center">
                   <div className="w-7">
@@ -291,7 +291,7 @@ function TaskDialogContent({
                     placeholder="task"
                     className="m-0 w-full border-0 p-0 outline-none focus-visible:ring-0"
                     autoComplete="off"
-                    autoFocus
+                    autoFocus={index === 0}
                   />
                 </div>
                 {errors.tasks && errors.tasks[index]?.title?.message && (
@@ -306,6 +306,7 @@ function TaskDialogContent({
                 <textarea
                   {...register(`tasks.${index}.details`)}
                   placeholder="details"
+                  id="details"
                   className="container-scroll w-full resize-none border-0 p-0 text-xs font-medium outline-none focus-visible:ring-0"
                 />
                 <div className="flex flex-wrap gap-x-1.5 gap-y-2">
@@ -353,9 +354,9 @@ function TaskDialogContent({
                   )}
                 </div>
               </div>
-            </Form.Root>
+            </div>
           ))}
-        </div>
+        </Form.Root>
       </div>
 
       <fieldset className="flex justify-between space-x-4 border-t border-gray-100 px-5 py-2">
@@ -392,6 +393,7 @@ function Checkbox({
         }
       }}
       className="h-4 w-4 rounded-full text-gray-600 outline-offset-4 hover:text-gray-950"
+      name="task status"
     >
       {!watch(`tasks.${index}.isCompleted`) && <CircleIcon />}
       <CheckboxIndicator asChild>

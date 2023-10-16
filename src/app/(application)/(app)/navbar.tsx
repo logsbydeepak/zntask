@@ -11,6 +11,7 @@ import {
 import Avvvatars from 'avvvatars-react'
 import { useAtomValue, useSetAtom } from 'jotai'
 import {
+  CheckCircleIcon,
   CommandIcon,
   FolderPlusIcon,
   LogOutIcon,
@@ -84,7 +85,7 @@ export function Navbar({
             </Icon>
 
             <Icon onClick={() => setDialog('createTask', true)}>
-              <PlusIcon />
+              <CheckCircleIcon />
             </Icon>
           </div>
 
