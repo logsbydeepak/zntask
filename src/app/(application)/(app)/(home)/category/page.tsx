@@ -1,17 +1,21 @@
 'use client'
 
+import { useRouter, useSearchParams } from 'next/navigation'
 import { FolderIcon } from 'lucide-react'
 import { useShallow } from 'zustand/react/shallow'
 
 import * as Layout from '@/app/(application)/(app)/layout-components'
 import { Head } from '@/components/head'
 import { useCategoryStore } from '@/store/category'
-import { CategoryType } from '@/utils/category'
 import { TabsContent, TabsList, TabsRoot, TabsTrigger } from '@ui/tabs'
 
 import { CategoryContainer, CategoryItem } from '../category-components'
 
 export default function Page() {
+  const statusParams = useSearchParams().get('status')
+  const activeTab = statusParams === 'archive' ? 'archive' : 'active'
+  const router = useRouter()
+
   return (
     <Layout.Root>
       <Layout.Header>
@@ -19,7 +23,10 @@ export default function Page() {
         <Head title="Category" />
       </Layout.Header>
       <Layout.Content>
-        <TabsRoot defaultValue="active">
+        <TabsRoot
+          value={activeTab}
+          onValueChange={(value) => router.push(`/category?status=${value}`)}
+        >
           <TabsList className="mb-4">
             <TabsTrigger value="active">Active</TabsTrigger>
             <TabsTrigger value="archive">Archive</TabsTrigger>
