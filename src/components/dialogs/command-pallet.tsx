@@ -7,6 +7,7 @@ import {
   ArchiveIcon,
   CalendarClockIcon,
   CheckCircleIcon,
+  FolderArchive,
   FolderHeartIcon,
   FolderIcon,
   FolderPlusIcon,
@@ -95,10 +96,18 @@ function CommandPalletContent({ handleClose }: { handleClose: () => void }) {
       },
     },
     {
-      label: 'category',
+      label: 'active category',
       icon: <FolderIcon />,
       onSelect: () => {
         router.push('/category')
+        handleClose()
+      },
+    },
+    {
+      label: 'archive category',
+      icon: <FolderArchive />,
+      onSelect: () => {
+        router.push('/category?status=archive')
         handleClose()
       },
     },
