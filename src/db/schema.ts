@@ -6,11 +6,11 @@ import {
   categoryIndicatorLabel,
 } from '../utils/category'
 
-const id = varchar('id', { length: 26 })
+const id = (name?: string) => varchar(name || 'id', { length: 26 })
 
 const tasks = {
-  id: varchar('id', { length: 26 }).primaryKey(),
-  userId: varchar('user_id', { length: 26 }).primaryKey(),
+  id: id().primaryKey(),
+  userId: id('user_id').notNull(),
   isCompleted: boolean('is_completed').notNull(),
   title: varchar('title', { length: 256 }).notNull(),
   orderId: varchar('order_id', { length: 26 }).notNull(),
@@ -19,7 +19,7 @@ const tasks = {
 }
 
 export const users = mysqlTable('users', {
-  id: varchar('id', { length: 26 }).primaryKey(),
+  id: id().primaryKey(),
   firstName: varchar('first_name', { length: 256 }).notNull(),
   lastName: varchar('last_name', { length: 256 }),
   email: varchar('email', { length: 256 }).unique().notNull(),
@@ -27,20 +27,20 @@ export const users = mysqlTable('users', {
 })
 
 export const credentialAuth = mysqlTable('credential_auth', {
-  id: varchar('id', { length: 26 }).primaryKey(),
-  userId: varchar('user_id', { length: 26 }).notNull(),
+  id: id().primaryKey(),
+  userId: id('user_id').notNull(),
   password: varchar('password', { length: 256 }).notNull(),
 })
 
 export const googleAuth = mysqlTable('google_auth', {
-  id: varchar('id', { length: 26 }).primaryKey(),
-  userId: varchar('user_id', { length: 26 }).notNull(),
+  id: id().primaryKey(),
+  userId: id('user_id').notNull(),
   googleId: varchar('google_id', { length: 256 }).notNull(),
 })
 
 export const categories = mysqlTable('categories', {
-  id: varchar('id', { length: 26 }).primaryKey(),
-  userId: varchar('user_id', { length: 26 }).notNull(),
+  id: id().primaryKey(),
+  userId: id('user_id').notNull(),
   title: varchar('title', { length: 256 }).notNull(),
   indicator: varchar('indicator', {
     length: 256,
@@ -55,12 +55,12 @@ export const categories = mysqlTable('categories', {
 
 export const parentTasks = mysqlTable('parent_tasks', {
   ...tasks,
-  categoryId: id,
+  categoryId: id('category_id'),
 })
 
 export const childTask = mysqlTable('child_tasks', {
   ...tasks,
-  parentId: id,
+  parentId: id('parent_id'),
 })
 
 export const categoryRelations = relations(categories, ({ one, many }) => ({
