@@ -1,3 +1,5 @@
+'use server'
+
 import { isValid } from 'ulidx'
 import { z } from 'zod'
 

@@ -6,8 +6,11 @@ import { useAtom, useSetAtom } from 'jotai'
 import { useActivityStore } from '@/store/activity'
 import { isAppSyncingAtom } from '@/store/app'
 import { useCategoryStore } from '@/store/category'
+import { useTaskStore } from '@/store/task'
 
+import { Action } from '../(auth)/add-password/form'
 import { addCategory, deleteCategory, editCategory } from './category.h'
+import { createChildTask, createParentTask } from './task.h'
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
@@ -20,6 +23,8 @@ export function Sync() {
   const setActivitySynced = useActivityStore((s) => s.setActivitySynced)
 
   const getCategory = useCategoryStore((s) => s.getCategory)
+  const getParentTask = useTaskStore((s) => s.getParentTask)
+  const getChildTask = useTaskStore((s) => s.getChildTask)
 
   React.useEffect(() => {
     if (isAppSyncing) return
@@ -64,6 +69,43 @@ export function Sync() {
             }
           }
         }
+
+        if (activity.type === 'parentTask') {
+          const action = activity.action
+          const id = activity.taskId
+
+          if (action === 'CREATE') {
+            const parentTask = getParentTask(id)
+            if (!parentTask) {
+              removeActivity(activity.id)
+              return
+            }
+
+            setActivitySynced(activity.id)
+            await createParentTask(parentTask)
+            removeActivity(activity.id)
+            return
+          }
+        }
+
+        if (activity.type === 'childTask') {
+          const action = activity.action
+          const id = activity.taskId
+
+          if (action === 'CREATE') {
+            const childTask = getChildTask(id)
+            if (!childTask) {
+              removeActivity(activity.id)
+              return
+            }
+
+            setActivitySynced(activity.id)
+            await createChildTask(childTask)
+            removeActivity(activity.id)
+            return
+          }
+        }
+        return
       } catch (error) {
         await sleep(5000)
         console.log(error)
@@ -74,6 +116,8 @@ export function Sync() {
   }, [
     activities,
     getCategory,
+    getChildTask,
+    getParentTask,
     removeActivity,
     setActivitySynced,
     isAppSyncing,

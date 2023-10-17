@@ -1,6 +1,8 @@
 import { ulid } from 'ulidx'
 import { create, StateCreator } from 'zustand'
 
+import { useActivityStore } from './activity'
+
 interface Task {
   id: string
   title: string
@@ -34,10 +36,21 @@ interface Actions {
   editChildTask: (childTask: ChildTask) => void
 
   removeChildTask: (id: string) => void
+  getParentTask: (id: string) => ParentTask | undefined
+  getChildTask: (id: string) => ChildTask | undefined
 }
 
 const taskStore: StateCreator<State & Actions> = (set, get) => ({
   ...initialState,
+
+  getParentTask(id) {
+    return get().parentTasks.find((item) => item.id === id)
+  },
+
+  getChildTask(id) {
+    return get().childTasks.find((item) => item.id === id)
+  },
+
   addParentTask: (parentTask) => {
     const id = ulid()
 
@@ -50,6 +63,12 @@ const taskStore: StateCreator<State & Actions> = (set, get) => ({
     set((state) => ({
       parentTasks: [newParentTask, ...state.parentTasks],
     }))
+
+    useActivityStore.getState().addActivity({
+      type: 'parentTask',
+      action: 'CREATE',
+      taskId: id,
+    })
 
     return { id }
   },
@@ -65,6 +84,12 @@ const taskStore: StateCreator<State & Actions> = (set, get) => ({
     set((state) => ({
       childTasks: [...state.childTasks, newChildTask],
     }))
+
+    useActivityStore.getState().addActivity({
+      type: 'childTask',
+      action: 'CREATE',
+      taskId: id,
+    })
   },
 
   editParentTask(parentTask) {
@@ -74,6 +99,12 @@ const taskStore: StateCreator<State & Actions> = (set, get) => ({
         return item
       }),
     }))
+
+    useActivityStore.getState().addActivity({
+      type: 'parentTask',
+      action: 'EDIT',
+      taskId: parentTask.id,
+    })
   },
 
   editChildTask(childTask) {
@@ -83,12 +114,24 @@ const taskStore: StateCreator<State & Actions> = (set, get) => ({
         return item
       }),
     }))
+
+    useActivityStore.getState().addActivity({
+      type: 'childTask',
+      action: 'EDIT',
+      taskId: childTask.id,
+    })
   },
 
   removeChildTask(id) {
     set((state) => ({
       childTasks: state.childTasks.filter((item) => item.id !== id),
     }))
+
+    useActivityStore.getState().addActivity({
+      type: 'childTask',
+      action: 'DELETE',
+      taskId: id,
+    })
   },
 })
 

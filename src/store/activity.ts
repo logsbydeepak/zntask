@@ -11,7 +11,14 @@ type Activity =
     }
   | {
       id: string
-      type: 'task'
+      type: 'parentTask'
+      action: 'CREATE' | 'DELETE' | 'EDIT'
+      taskId: string
+      isSynced: boolean
+    }
+  | {
+      id: string
+      type: 'childTask'
       action: 'CREATE' | 'DELETE' | 'EDIT'
       taskId: string
       isSynced: boolean
@@ -25,7 +32,12 @@ type State = typeof initialState
 
 type AddTaskType =
   | {
-      type: 'task'
+      type: 'parentTask'
+      taskId: string
+      action: 'CREATE' | 'DELETE' | 'EDIT'
+    }
+  | {
+      type: 'childTask'
       taskId: string
       action: 'CREATE' | 'DELETE' | 'EDIT'
     }
@@ -58,7 +70,20 @@ const activityStore: StateCreator<State & Action> = (set, get) => ({
       }))
     }
 
-    if (activity.type === 'task') {
+    if (activity.type === 'parentTask') {
+      set((state) => ({
+        activities: [
+          {
+            ...activity,
+            isSynced: false,
+            id: ulid(),
+          },
+          ...state.activities,
+        ],
+      }))
+    }
+
+    if (activity.type === 'childTask') {
       set((state) => ({
         activities: [
           {
