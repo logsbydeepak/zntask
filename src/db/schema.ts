@@ -6,6 +6,18 @@ import {
   categoryIndicatorLabel,
 } from '../utils/category'
 
+const id = varchar('id', { length: 26 })
+
+const tasks = {
+  id: varchar('id', { length: 26 }).primaryKey(),
+  userId: varchar('user_id', { length: 26 }).primaryKey(),
+  isCompleted: boolean('is_completed').notNull(),
+  title: varchar('title', { length: 256 }).notNull(),
+  orderId: varchar('order_id', { length: 26 }).notNull(),
+  date: varchar('date', { length: 30 }),
+  time: varchar('time', { length: 30 }),
+}
+
 export const users = mysqlTable('users', {
   id: varchar('id', { length: 26 }).primaryKey(),
   firstName: varchar('first_name', { length: 256 }).notNull(),
@@ -41,13 +53,14 @@ export const categories = mysqlTable('categories', {
   orderId: varchar('order_id', { length: 26 }).notNull(),
 })
 
-export const tasks = mysqlTable('tasks', {
-  id: varchar('id', { length: 26 }).primaryKey(),
-  userId: varchar('user_id', { length: 26 }).primaryKey(),
-  isCompleted: boolean('is_completed').notNull(),
-  title: varchar('title', { length: 256 }).notNull(),
-  categoryId: varchar('category_id', { length: 26 }).notNull(),
-  orderId: varchar('order_id', { length: 26 }).notNull(),
+export const parentTasks = mysqlTable('parent_tasks', {
+  ...tasks,
+  categoryId: id,
+})
+
+export const childTask = mysqlTable('child_tasks', {
+  ...tasks,
+  parentId: id,
 })
 
 export const categoryRelations = relations(categories, ({ one, many }) => ({
