@@ -16,6 +16,7 @@ const tasks = {
   orderId: varchar('order_id', { length: 26 }).notNull(),
   date: varchar('date', { length: 30 }),
   time: varchar('time', { length: 30 }),
+  details: varchar('details', { length: 256 }),
 }
 
 export const users = mysqlTable('users', {
@@ -60,7 +61,7 @@ export const parentTasks = mysqlTable('parent_tasks', {
 
 export const childTask = mysqlTable('child_tasks', {
   ...tasks,
-  parentId: id('parent_id'),
+  parentId: id('parent_id').notNull(),
 })
 
 export const categoryRelations = relations(categories, ({ one, many }) => ({

@@ -38,10 +38,19 @@ interface Actions {
   removeChildTask: (id: string) => void
   getParentTask: (id: string) => ParentTask | undefined
   getChildTask: (id: string) => ChildTask | undefined
+  setNewParentTask: (parentTask: ParentTask[]) => void
+  setNewChildTask: (childTask: ChildTask[]) => void
 }
 
 const taskStore: StateCreator<State & Actions> = (set, get) => ({
   ...initialState,
+
+  setNewParentTask(parentTask) {
+    set({ parentTasks: parentTask })
+  },
+  setNewChildTask(childTask) {
+    set({ childTasks: childTask })
+  },
 
   getParentTask(id) {
     return get().parentTasks.find((item) => item.id === id)

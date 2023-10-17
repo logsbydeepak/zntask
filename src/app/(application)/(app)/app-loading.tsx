@@ -6,6 +6,7 @@ import { useSetAtom } from 'jotai'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import { isSidebarOpenAtom } from '@/store/app'
 import { useCategoryStore } from '@/store/category'
+import { ChildTask, ParentTask, useTaskStore } from '@/store/task'
 import { CategoryType } from '@/utils/category'
 
 export function SidebarState() {
@@ -23,15 +24,34 @@ export function SidebarState() {
   return null
 }
 
-export function InitStore({ categories }: { categories: CategoryType[] }) {
+export function InitStore({
+  categories,
+  parentTask,
+  childTask,
+}: {
+  categories: CategoryType[]
+  parentTask: ParentTask[]
+  childTask: ChildTask[]
+}) {
   const init = React.useRef(false)
   const setNewCategories = useCategoryStore((s) => s.setNewCategories)
+  const setNewParentTask = useTaskStore((s) => s.setNewParentTask)
+  const setNewChildTask = useTaskStore((s) => s.setNewChildTask)
 
   React.useEffect(() => {
     if (init.current) return
     init.current = true
     setNewCategories(categories)
-  }, [categories, setNewCategories])
+    setNewParentTask(parentTask)
+    setNewChildTask(childTask)
+  }, [
+    categories,
+    parentTask,
+    childTask,
+    setNewCategories,
+    setNewParentTask,
+    setNewChildTask,
+  ])
 
   return null
 }

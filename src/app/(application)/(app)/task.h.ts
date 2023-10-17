@@ -8,22 +8,31 @@ import { h, r } from '@/utils/handler'
 import { zRequired } from '@/utils/zod'
 
 export const getTasks = h('AUTH', async ({ userId }) => {
-  // const tasks = await db.query.tasks.findMany({
-  //   where(fields, operators) {
-  //     return operators.eq(fields.userId, userId)
-  //   },
-  // })
+  const parentTask = await db.query.parentTasks.findMany({
+    where(fields, operators) {
+      return operators.eq(fields.userId, userId)
+    },
+  })
 
-  // if (!tasks) throw new Error('No tasks found')
-  // if (tasks.length === 0) return r('OK', { tasks })
+  const childTask = await db.query.childTask.findMany({
+    where(fields, operators) {
+      return operators.eq(fields.userId, userId)
+    },
+  })
 
-  // const modTasks = tasks.map((task) => {
-  //   const { userId, ...rest } = task
-  //   return rest
-  // })
+  if (!parentTask && !childTask) throw new Error('No tasks found')
 
-  // return r('OK', { tasks: modTasks })
-  return r('OK', { tasks: [] })
+  const modParentTask = parentTask.map((task) => {
+    const { userId, ...rest } = task
+    return rest
+  })
+
+  const modChildTask = childTask.map((task) => {
+    const { userId, ...rest } = task
+    return rest
+  })
+
+  return r('OK', { parentTask: modParentTask, childTask: modChildTask })
 })
 
 const zTask = z.object({

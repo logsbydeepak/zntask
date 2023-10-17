@@ -35,6 +35,7 @@ export default async function Layout({
 async function GetUser() {
   const user = await getUser()
   const categories = await getCategories()
+  const tasks = await getTasks()
 
   return (
     <>
@@ -44,7 +45,11 @@ async function GetUser() {
         profilePicture={user.profilePicture}
         email={user.email}
       />
-      <InitStore categories={categories.categories} />
+      <InitStore
+        categories={categories.categories}
+        parentTask={tasks.parentTask}
+        childTask={tasks.childTask}
+      />
     </>
   )
 }
