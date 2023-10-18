@@ -10,7 +10,12 @@ import { useTaskStore } from '@/store/task'
 
 import { Action } from '../(auth)/add-password/form'
 import { addCategory, deleteCategory, editCategory } from './category.h'
-import { createChildTask, createParentTask } from './task.h'
+import {
+  createChildTask,
+  createParentTask,
+  editChildTask,
+  editParentTask,
+} from './task.h'
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
@@ -86,6 +91,19 @@ export function Sync() {
             removeActivity(activity.id)
             return
           }
+
+          if (action === 'EDIT') {
+            const parentTask = getParentTask(id)
+            if (!parentTask) {
+              removeActivity(activity.id)
+              return
+            }
+
+            setActivitySynced(activity.id)
+            await editParentTask(parentTask)
+            removeActivity(activity.id)
+            return
+          }
         }
 
         if (activity.type === 'childTask') {
@@ -101,6 +119,19 @@ export function Sync() {
 
             setActivitySynced(activity.id)
             await createChildTask(childTask)
+            removeActivity(activity.id)
+            return
+          }
+
+          if (action === 'EDIT') {
+            const childTask = getChildTask(id)
+            if (!childTask) {
+              removeActivity(activity.id)
+              return
+            }
+
+            setActivitySynced(activity.id)
+            await editChildTask(childTask)
             removeActivity(activity.id)
             return
           }
