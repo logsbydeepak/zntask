@@ -1,5 +1,6 @@
 'use server'
 
+import { eq } from 'drizzle-orm'
 import { isValid } from 'ulidx'
 import { z } from 'zod'
 
@@ -64,12 +65,37 @@ export const createParentTask = h(
     return r('OK', { input })
   }
 )
-
 export const createChildTask = h(
   'AUTH',
   zChildTask,
   async ({ userId, input }) => {
     await db.insert(dbSchema.childTask).values({ ...input, userId })
     return r('OK', { input })
+  }
+)
+
+export const editParentTask = h(
+  'AUTH',
+  zParentTask,
+  async ({ input, userId }) => {
+    await db
+      .update(dbSchema.parentTasks)
+      .set(input)
+      .where(eq(dbSchema.parentTasks.id, input.id))
+
+    return r('OK')
+  }
+)
+
+export const editChildTask = h(
+  'AUTH',
+  zChildTask,
+  async ({ input, userId }) => {
+    await db
+      .update(dbSchema.childTask)
+      .set(input)
+      .where(eq(dbSchema.childTask.id, input.id))
+
+    return r('OK')
   }
 )
