@@ -13,6 +13,8 @@ import { addCategory, deleteCategory, editCategory } from './category.h'
 import {
   createChildTask,
   createParentTask,
+  deleteChildTask,
+  deleteParentTask,
   editChildTask,
   editParentTask,
 } from './task.h'
@@ -104,6 +106,13 @@ export function Sync() {
             removeActivity(activity.id)
             return
           }
+
+          if (action === 'DELETE') {
+            setActivitySynced(activity.id)
+            await deleteParentTask({ id: activity.taskId })
+            removeActivity(activity.id)
+            return
+          }
         }
 
         if (activity.type === 'childTask') {
@@ -132,6 +141,13 @@ export function Sync() {
 
             setActivitySynced(activity.id)
             await editChildTask(childTask)
+            removeActivity(activity.id)
+            return
+          }
+
+          if (action === 'DELETE') {
+            setActivitySynced(activity.id)
+            await deleteChildTask({ id: activity.taskId })
             removeActivity(activity.id)
             return
           }
