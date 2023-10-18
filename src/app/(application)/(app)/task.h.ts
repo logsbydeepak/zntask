@@ -99,3 +99,29 @@ export const editChildTask = h(
     return r('OK')
   }
 )
+
+const zDeleteTask = z.object({
+  id: zRequired.refine(isValid, { message: 'Invalid ulid' }),
+})
+
+export const deleteParentTask = h(
+  'AUTH',
+  zDeleteTask,
+  async ({ input, userId }) => {
+    await db
+      .delete(dbSchema.parentTasks)
+      .where(eq(dbSchema.parentTasks.id, input.id))
+    return r('OK', { input })
+  }
+)
+
+export const deleteChildTask = h(
+  'AUTH',
+  zDeleteTask,
+  async ({ input, userId }) => {
+    await db
+      .delete(dbSchema.childTask)
+      .where(eq(dbSchema.childTask.id, input.id))
+    return r('OK', { input })
+  }
+)
