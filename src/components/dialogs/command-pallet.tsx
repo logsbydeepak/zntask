@@ -21,12 +21,16 @@ import {
   SearchIcon,
   SidebarIcon,
 } from 'lucide-react'
+import { useShallow } from 'zustand/react/shallow'
 
 import {
   isCommandPaletteOpenAtom,
   isSidebarOpenAtom,
   useAppStore,
 } from '@/store/app'
+import { useCategoryStore } from '@/store/category'
+import { getCategoryColor } from '@/utils/category'
+import { cn } from '@/utils/style'
 
 export function CommandPalletDialog() {
   const [isOpen, setIsOpen] = useAtom(isCommandPaletteOpenAtom)
@@ -56,6 +60,9 @@ function CommandPalletContent({ handleClose }: { handleClose: () => void }) {
   const router = useRouter()
   const setDialog = useAppStore((s) => s.setDialog)
   const setIsSidebarOpen = useSetAtom(isSidebarOpenAtom)
+  const activeCategory = useCategoryStore(
+    useShallow((s) => s.categories.filter((i) => !i.isArchived))
+  )
 
   const changePage = React.useCallback((page: Page) => {
     setPages((i) => [...i, page])
@@ -146,6 +153,7 @@ function CommandPalletContent({ handleClose }: { handleClose: () => void }) {
       icon: <FolderSearchIcon />,
       onSelect: () => {
         changePage('SEARCH_CATEGORY')
+        setSearch('')
       },
     },
     {
@@ -177,7 +185,7 @@ function CommandPalletContent({ handleClose }: { handleClose: () => void }) {
             className="ml-2 h-5 w-full border-none p-0 text-sm outline-none placeholder:text-gray-400 focus:ring-0"
           />
         </div>
-        <Command.List className="container-scroll ml-2 h-40 overflow-y-scroll py-2 pb-5 pr-1 [&>[cmdk-list-sizer]]:space-y-3">
+        <Command.List className="container-scroll ml-2 h-40 overflow-y-scroll py-2 pb-5 pr-1 [&>[cmdk-list-sizer]]:space-y-2">
           <Command.Empty className="flex h-[calc(100%-5%)] items-center justify-center">
             <div className="flex flex-col items-center justify-center space-y-1 rounded-md border px-4 py-4 shadow-sm">
               <span className="inline-block h-5 w-5">
@@ -231,7 +239,27 @@ function CommandPalletContent({ handleClose }: { handleClose: () => void }) {
 
           {page === 'SEARCH_CATEGORY' && (
             <>
-              <p>search category</p>
+              {activeCategory.map((i) => (
+                <CommandItem.Container
+                  value={`${i.title} ${i.id}`}
+                  key={i.id}
+                  onSelect={() => {
+                    router.push(`/category/${i.id}`)
+                    handleClose()
+                  }}
+                >
+                  <CommandItem.Icon>
+                    <div
+                      className={cn(
+                        'h-2.5 w-2.5 rounded-[4px]',
+                        `bg-${getCategoryColor(i.indicator)}-600`
+                      )}
+                    />
+                  </CommandItem.Icon>
+
+                  <CommandItem.Title>{i.title}</CommandItem.Title>
+                </CommandItem.Container>
+              ))}
             </>
           )}
         </Command.List>
