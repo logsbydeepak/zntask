@@ -16,13 +16,13 @@ export default function Page({ params }: { params: { id?: string } }) {
     useShallow((s) => s.categories.find((c) => c.id === params.id))
   )
 
-  // const tasks = useTaskStore(
-  //   useShallow((s) => {
-  //     if (!category) return []
-  //     return s.tasks.filter((i) => i.categoryId === category.id)
-  //   })
-  // )
-  const tasks: ParentTask[] = []
+  const tasks = useTaskStore(
+    useShallow((s) => {
+      if (!category) return []
+      return s.parentTasks.filter((i) => i.categoryId === category.id)
+    })
+  )
+  // const tasks: ParentTask[] = []
 
   if (!category || !params.id) {
     return <Layout.NotFound />

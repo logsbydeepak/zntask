@@ -43,7 +43,7 @@ import { CategoryPopover } from '@/components/category-popover'
 import { Head } from '@/components/head'
 import { useAppStore } from '@/store/app'
 import { useCategoryStore } from '@/store/category'
-import { ChildTask, ParentTask, useTaskStore } from '@/store/task'
+import { ChildTask, ParentTask, Task, useTaskStore } from '@/store/task'
 import { getCategoryColor } from '@/utils/category'
 import { cn } from '@/utils/style'
 import { zRequired } from '@/utils/zod'
@@ -165,94 +165,92 @@ function TaskDialogContent({
 
   const onSubmit = (data: FormValues) => {
     if (isCreate) {
-      const parentTask = data.tasks[0]
-      const childrenTasks = data.tasks.slice(1).map((i, index) => ({
-        ...i,
-        date: i.date ? i.date.toISOString() : null,
-        time: i.time ? i.time.toISOString() : null,
-        orderId: index.toString(),
-      }))
+      let parentId = ''
 
-      const { id: parentId } = addParentTask({
-        title: parentTask.title,
-        details: parentTask.details,
-        date: parentTask.date ? parentTask.date.toISOString() : null,
-        time: parentTask.time ? parentTask.time.toISOString() : null,
-        categoryId: data.categoryId,
-        isCompleted: parentTask.isCompleted,
-      })
+      data.tasks.forEach((i, index) => {
+        const task = {
+          title: i.title,
+          details: i.details,
+          date: i.date ? i.date.toISOString() : null,
+          time: i.time ? i.time.toISOString() : null,
+          isCompleted: i.isCompleted,
+        }
 
-      childrenTasks.forEach((i) => {
+        if (index === 0) {
+          const { id } = addParentTask({
+            ...task,
+            categoryId: data.categoryId,
+          })
+          parentId = id
+          return
+        }
+
+        if (!parentId) return
         addChildTask({
-          parentId: parentId,
-          ...i,
+          ...task,
+          parentId,
+          orderId: index.toString(),
         })
       })
     }
 
     if (isEdit) {
-      const parentTask = data.tasks[0]
-      editParentTask({
-        ...isEdit,
-        title: parentTask.title,
-        details: parentTask.details,
-        date: parentTask.date ? parentTask.date.toISOString() : null,
-        time: parentTask.time ? parentTask.time.toISOString() : null,
-        categoryId: data.categoryId,
-        isCompleted: parentTask.isCompleted,
-      })
+      removedChildTaskIds.forEach((i) => removeChildTask(i))
 
-      removedChildTaskIds.forEach((id) => {
-        removeChildTask(id)
-      })
-
-      const editedTask = data.tasks
-        .slice(1)
-        .filter((i) => {
-          if (!i.id) return false
-          const originalChildTask = subTasks.find((j) => j.id === i.id)
-          if (!originalChildTask) return true
-
-          if (removedChildTaskIds.includes(i.id)) return false
-          if (originalChildTask.title !== i.title) return true
-          if (originalChildTask.details !== i.details) return true
-          if (originalChildTask.date !== i.date) return true
-          if (originalChildTask.time !== i.time) return true
-          if (originalChildTask.isCompleted !== i.isCompleted) return true
-          return false
-        })
-        .map((i, index) => ({
-          ...i,
+      const parentId = isEdit.id
+      data.tasks.forEach((i, index) => {
+        const task = {
+          title: i.title,
+          details: i.details,
           date: i.date ? i.date.toISOString() : null,
           time: i.time ? i.time.toISOString() : null,
-          orderId: index.toString(),
-          parentId: isEdit.id,
-        }))
-
-      const newTasks = data.tasks
-        .slice(1)
-        .filter((i) => !i.id)
-        .map((i, index) => ({
-          ...i,
-          date: i.date ? i.date.toISOString() : null,
-          time: i.time ? i.time.toISOString() : null,
-          orderId: index.toString(),
-        }))
-
-      newTasks.forEach((i) => {
-        addChildTask({
-          parentId: isEdit.id,
-          ...i,
-        })
-      })
-
-      editedTask.forEach((i) => {
-        if (!i.parentId) return
-        if (!i.id) {
-          addChildTask(i)
+          isCompleted: i.isCompleted,
         }
 
-        editChildTask(i as ChildTask)
+        if (index === 0) {
+          let isParentTaskEdited = false
+          if (isEdit.title !== task.title) isParentTaskEdited = true
+          if (isEdit.details !== task.details) isParentTaskEdited = true
+          if (isEdit.date !== task.date) isParentTaskEdited = true
+          if (isEdit.time !== task.time) isParentTaskEdited = true
+          if (isEdit.categoryId !== data.categoryId) isParentTaskEdited = true
+          if (isEdit.isCompleted !== task.isCompleted) isParentTaskEdited = true
+          if (isParentTaskEdited) {
+            editParentTask({
+              ...isEdit,
+              ...task,
+              categoryId: data.categoryId,
+            })
+          }
+          return
+        }
+
+        if (!i.id) {
+          addChildTask({
+            ...task,
+            parentId,
+            orderId: index.toString(),
+          })
+          return
+        }
+
+        let isChildTaskEdited = false
+        const originalChildTask = subTasks.find((j) => j.id === i.id)
+        if (!originalChildTask) return
+        if (originalChildTask.title !== i.title) isChildTaskEdited = true
+        if (originalChildTask.details !== i.details) isChildTaskEdited = true
+        if (originalChildTask.date !== i.date) isChildTaskEdited = true
+        if (originalChildTask.time !== i.time) isChildTaskEdited = true
+        if (originalChildTask.isCompleted !== i.isCompleted)
+          isChildTaskEdited = true
+        if (isChildTaskEdited) {
+          editChildTask({
+            ...task,
+            id: i.id,
+            parentId,
+            orderId: index.toString(),
+          })
+        }
       })
     }
 

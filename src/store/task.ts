@@ -3,7 +3,7 @@ import { create, StateCreator } from 'zustand'
 
 import { useActivityStore } from './activity'
 
-interface Task {
+export interface Task {
   id: string
   title: string
   isCompleted: boolean
