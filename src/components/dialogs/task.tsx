@@ -22,10 +22,12 @@ import {
   CheckCircleIcon,
   CircleIcon,
   CornerDownLeftIcon,
+  DeleteIcon,
   HourglassIcon,
   InboxIcon,
   PlusIcon,
   ShovelIcon,
+  TrashIcon,
   XIcon,
 } from 'lucide-react'
 import {
@@ -115,6 +117,7 @@ function TaskDialogContent({
   const editParentTask = useTaskStore((s) => s.editParentTask)
   const editChildTask = useTaskStore((s) => s.editChildTask)
   const removeChildTask = useTaskStore((s) => s.removeChildTask)
+  const removeParentTask = useTaskStore((s) => s.removeParentTask)
 
   const [removedChildTaskIds, setRemovedChildTaskIds] = React.useState<
     string[]
@@ -313,6 +316,21 @@ function TaskDialogContent({
                     setValue={setValue}
                     index={index}
                   />
+
+                  {index === 0 && isEdit && (
+                    <InfoButton
+                      onClick={() => {
+                        removeParentTask(isEdit.id)
+                        handleClose()
+                      }}
+                    >
+                      <InfoIcon>
+                        <TrashIcon />
+                      </InfoIcon>
+                      <InfoText>delete</InfoText>
+                    </InfoButton>
+                  )}
+
                   {index === 0 && (
                     <InfoButton
                       onClick={() => {

@@ -111,6 +111,11 @@ export const deleteParentTask = h(
     await db
       .delete(dbSchema.parentTasks)
       .where(eq(dbSchema.parentTasks.id, input.id))
+
+    await db
+      .delete(dbSchema.childTask)
+      .where(eq(dbSchema.childTask.parentId, input.id))
+
     return r('OK', { input })
   }
 )

@@ -9,9 +9,6 @@ import { useAppStore } from '@/store/app'
 import { ParentTask, useTaskStore } from '@/store/task'
 
 export default function Page() {
-  // const tasks = useTaskStore(
-  //   useShallow((s) => s.parentTask.filter((i) => !i.categoryId))
-  // )
   const tasks = useTaskStore(
     useShallow((s) => s.parentTasks.filter((i) => !i.categoryId))
   )

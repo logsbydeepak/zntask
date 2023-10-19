@@ -36,6 +36,7 @@ interface Actions {
   editChildTask: (childTask: ChildTask) => void
 
   removeChildTask: (id: string) => void
+  removeParentTask: (id: string) => void
   getParentTask: (id: string) => ParentTask | undefined
   getChildTask: (id: string) => ChildTask | undefined
   setNewParentTask: (parentTask: ParentTask[]) => void
@@ -138,6 +139,19 @@ const taskStore: StateCreator<State & Actions> = (set, get) => ({
 
     useActivityStore.getState().addActivity({
       type: 'childTask',
+      action: 'DELETE',
+      taskId: id,
+    })
+  },
+
+  removeParentTask(id) {
+    set((state) => ({
+      parentTasks: state.parentTasks.filter((item) => item.id !== id),
+      childTasks: state.childTasks.filter((item) => item.parentId !== id),
+    }))
+
+    useActivityStore.getState().addActivity({
+      type: 'parentTask',
       action: 'DELETE',
       taskId: id,
     })
