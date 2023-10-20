@@ -50,12 +50,15 @@ export function CommandPalletDialog() {
   )
 }
 
-type Page = 'SEARCH_CATEGORY'
+type Page =
+  | 'SEARCH_ACTIVE_CATEGORY'
+  | 'SEARCH_ARCHIVE_CATEGORY'
+  | 'SEARCH_ALL_CATEGORY'
 function CommandPalletContent({ handleClose }: { handleClose: () => void }) {
   const searchInputRef = React.useRef<HTMLInputElement>(null)
   const [search, setSearch] = React.useState('')
   const [pages, setPages] = React.useState<string[]>([])
-  const page = pages[pages.length - 1]
+  const page = pages[pages.length - 1] as Page | undefined
 
   const router = useRouter()
   const setDialog = useAppStore((s) => s.setDialog)
@@ -63,6 +66,10 @@ function CommandPalletContent({ handleClose }: { handleClose: () => void }) {
   const activeCategory = useCategoryStore(
     useShallow((s) => s.categories.filter((i) => !i.isArchived))
   )
+  const archiveCategory = useCategoryStore(
+    useShallow((s) => s.categories.filter((i) => i.isArchived))
+  )
+  const categories = useCategoryStore(useShallow((s) => s.categories))
 
   const changePage = React.useCallback((page: Page) => {
     setPages((i) => [...i, page])
@@ -149,13 +156,30 @@ function CommandPalletContent({ handleClose }: { handleClose: () => void }) {
 
   const searchGroups = [
     {
-      label: 'category',
+      label: 'active category',
       icon: <FolderSearchIcon />,
       onSelect: () => {
-        changePage('SEARCH_CATEGORY')
+        changePage('SEARCH_ACTIVE_CATEGORY')
         setSearch('')
       },
     },
+    {
+      label: 'archive category',
+      icon: <ArchiveIcon />,
+      onSelect: () => {
+        changePage('SEARCH_ARCHIVE_CATEGORY')
+        setSearch('')
+      },
+    },
+    {
+      label: 'all category',
+      icon: <ScanSearchIcon />,
+      onSelect: () => {
+        changePage('SEARCH_ALL_CATEGORY')
+        setSearch('')
+      },
+    },
+
     {
       label: 'task',
       icon: <CheckCircleIcon />,
@@ -237,9 +261,61 @@ function CommandPalletContent({ handleClose }: { handleClose: () => void }) {
             </>
           )}
 
-          {page === 'SEARCH_CATEGORY' && (
+          {page === 'SEARCH_ACTIVE_CATEGORY' && (
             <>
               {activeCategory.map((i) => (
+                <CommandItem.Container
+                  value={`${i.title} ${i.id}`}
+                  key={i.id}
+                  onSelect={() => {
+                    router.push(`/category/${i.id}`)
+                    handleClose()
+                  }}
+                >
+                  <CommandItem.Icon>
+                    <div
+                      className={cn(
+                        'h-2.5 w-2.5 rounded-[4px]',
+                        `bg-${getCategoryColor(i.indicator)}-600`
+                      )}
+                    />
+                  </CommandItem.Icon>
+
+                  <CommandItem.Title>{i.title}</CommandItem.Title>
+                </CommandItem.Container>
+              ))}
+            </>
+          )}
+
+          {page === 'SEARCH_ARCHIVE_CATEGORY' && (
+            <>
+              {archiveCategory.map((i) => (
+                <CommandItem.Container
+                  value={`${i.title} ${i.id}`}
+                  key={i.id}
+                  onSelect={() => {
+                    router.push(`/category/${i.id}`)
+                    handleClose()
+                  }}
+                >
+                  <CommandItem.Icon>
+                    <div
+                      className={cn(
+                        'h-2.5 w-2.5 rounded-[4px]',
+                        `bg-${getCategoryColor(i.indicator)}-600`
+                      )}
+                    />
+                  </CommandItem.Icon>
+
+                  <CommandItem.Title>{i.title}</CommandItem.Title>
+                </CommandItem.Container>
+              ))}
+            </>
+          )}
+
+          {page === 'SEARCH_ALL_CATEGORY' && (
+            <>
+              {categories.map((i) => (
                 <CommandItem.Container
                   value={`${i.title} ${i.id}`}
                   key={i.id}
