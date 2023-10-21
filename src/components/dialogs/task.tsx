@@ -12,6 +12,7 @@ import {
   isToday,
   isTomorrow,
   isYesterday,
+  setDate,
   sub,
 } from 'date-fns'
 import {
@@ -259,7 +260,10 @@ function TaskDialogContent({
       <Head title={isEdit ? `Edit ${isEdit?.title}` : 'Create Task'} />
       <div className="container-scroll max-h-[400px] space-y-6 overflow-y-scroll p-6">
         <span>
-          <CategoryPicker watch={watch} setValue={setValue} />
+          <CategoryPicker
+            value={watch('categoryId')}
+            setValue={(value) => setValue('categoryId', value)}
+          />
         </span>
 
         <Form.Root
@@ -307,9 +311,10 @@ function TaskDialogContent({
                 />
                 <div className="flex flex-wrap gap-x-1.5 gap-y-2">
                   <DateAndTimePicker
-                    watch={watch}
-                    setValue={setValue}
-                    index={index}
+                    date={watch(`tasks.${index}.date`)}
+                    time={watch(`tasks.${index}.time`)}
+                    setDate={(value) => setValue(`tasks.${index}.date`, value)}
+                    setTime={(value) => setValue(`tasks.${index}.time`, value)}
                   />
 
                   {index === 0 && isEdit && (
@@ -412,17 +417,15 @@ function Checkbox({
 }
 
 function CategoryPicker({
-  watch,
+  value,
   setValue,
 }: {
-  watch: UseFormWatch<FormValues>
-  setValue: UseFormSetValue<FormValues>
+  value: string | null
+  setValue: (id: string | null) => void
 }) {
   const getCategory = useCategoryStore((state) => state.getCategory)
   const [isOpen, setIsOpen] = React.useState(false)
-
-  const categoryId = watch('categoryId')
-  const currentCategory = getCategory(categoryId)
+  const currentCategory = getCategory(value)
 
   return (
     <Popover.Root open={isOpen} onOpenChange={setIsOpen}>
@@ -448,11 +451,9 @@ function CategoryPicker({
       </Popover.Trigger>
       {isOpen && (
         <CategoryPopover
-          setValue={(value) => {
-            setValue('categoryId', value)
-          }}
-          setIsOpen={setIsOpen}
+          setValue={setValue}
           currentCategory={currentCategory}
+          setIsOpen={setIsOpen}
         />
       )}
     </Popover.Root>
@@ -460,17 +461,17 @@ function CategoryPicker({
 }
 
 function DateAndTimePicker({
-  watch,
-  setValue,
-  index,
+  date,
+  time,
+  setDate,
+  setTime,
 }: {
-  watch: UseFormWatch<FormValues>
-  setValue: UseFormSetValue<FormValues>
-  index: number
+  date: Date | null
+  time: Date | null
+  setDate: (date: Date | null) => void
+  setTime: (date: Date | null) => void
 }) {
   const [isOpen, setIsOpen] = React.useState(false)
-  const date = watch(`tasks.${index}.date`)
-  const time = watch(`tasks.${index}.time`)
 
   return (
     <Popover.Root open={isOpen} onOpenChange={setIsOpen}>
@@ -502,12 +503,8 @@ function DateAndTimePicker({
           setIsOpen={setIsOpen}
           date={date}
           time={time}
-          setDate={(value) => {
-            setValue(`tasks.${index}.date`, value)
-          }}
-          setTime={(value) => {
-            setValue(`tasks.${index}.time`, value)
-          }}
+          setDate={setDate}
+          setTime={setTime}
         />
       )}
     </Popover.Root>
