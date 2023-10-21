@@ -28,21 +28,33 @@ const initialState = {
 
 type State = typeof initialState
 
+type RequireOnlyOne<T, Keys extends keyof T = keyof T> = Pick<
+  T,
+  Exclude<keyof T, Keys>
+> &
+  {
+    [K in Keys]-?: Required<Pick<T, K>> &
+      Partial<Record<Exclude<Keys, K>, undefined>>
+  }[Keys]
+
 interface Actions {
-  setDialog: <KEY extends keyof typeof dialogState>(
-    key: keyof typeof dialogState,
-    value: (typeof dialogState)[KEY]
+  setDialog: <
+    T extends RequireOnlyOne<{
+      [key in keyof typeof dialogState]: (typeof dialogState)[key]
+    }>,
+  >(
+    state: T
   ) => void
   resetAppState: () => void
 }
 
 const appStore: StateCreator<State & Actions> = (set) => ({
   ...initialState,
-  setDialog(key, value) {
+  setDialog(state) {
     set(() => ({
       dialog: {
         ...dialogState,
-        [key]: value,
+        ...state,
       },
     }))
   },

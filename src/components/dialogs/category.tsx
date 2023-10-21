@@ -32,8 +32,8 @@ export function CategoryDialog() {
   const isOpen = isCreate || !!isEdit
   const setIsOpen = React.useCallback(
     (isOpen: boolean) => {
-      if (isCreate) return setDialog('createCategory', isOpen)
-      if (isEdit) return setDialog('editCategory', null)
+      if (isCreate) return setDialog({ createCategory: isOpen })
+      if (isEdit) return setDialog({ editCategory: null })
     },
     [setDialog, isCreate, isEdit]
   )

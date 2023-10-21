@@ -80,11 +80,11 @@ export function Navbar({
           <div className="my-1 w-[1px] bg-gray-200" />
 
           <div className="flex space-x-3">
-            <Icon onClick={() => setDialog('createCategory', true)}>
+            <Icon onClick={() => setDialog({ createCategory: true })}>
               <FolderPlusIcon />
             </Icon>
 
-            <Icon onClick={() => setDialog('createTask', true)}>
+            <Icon onClick={() => setDialog({ createTask: true })}>
               <CheckCircleIcon />
             </Icon>
           </div>
@@ -155,7 +155,7 @@ function UserMenu({
         </DropdownMenuRadioItem>
       </DropdownMenuRadioGroup>
       <DropdownMenuItem
-        onSelect={() => setDialog('logout', true)}
+        onSelect={() => setDialog({ logout: true })}
         intent="destructive"
       >
         <MenuIcon intent="destructive">

@@ -57,7 +57,7 @@ function ParentTaskItem({ task }: { task: ParentTask }) {
       <button
         className="w-full text-left"
         onClick={() => {
-          setDialog('editTask', task)
+          setDialog({ editTask: task })
         }}
       >
         <p>{task.title}</p>

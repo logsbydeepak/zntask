@@ -13,22 +13,17 @@ export function LogoutDialog() {
   const setDialog = useAppStore((s) => s.setDialog)
   const [isPending, startTransition] = React.useTransition()
 
-  const setIsOpen = React.useCallback(
-    (isOpen: boolean) => setDialog('logout', isOpen),
-    [setDialog]
-  )
-
-  const handleClose = () => {
+  const closeDialog = () => {
     if (isPending) return
-    setIsOpen(false)
+    setDialog({ logout: false })
   }
 
   return (
-    <Dialog.Root open={isOpen} onOpenChange={handleClose}>
+    <Dialog.Root open={isOpen} onOpenChange={closeDialog}>
       <Dialog.Portal>
         <Dialog.Content className="space-y-4 text-center">
           <LogoutDialogContent
-            handleClose={handleClose}
+            handleClose={closeDialog}
             isPending={isPending}
             startTransition={startTransition}
           />

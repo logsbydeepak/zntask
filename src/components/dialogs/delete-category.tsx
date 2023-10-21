@@ -11,21 +11,14 @@ export function DeleteCategoryDialog() {
   const setDialog = useAppStore((s) => s.setDialog)
 
   const isOpen = !!category
-  const setIsOpen = React.useCallback(
-    (isOpen: boolean) => setDialog('deleteCategory', isOpen),
-    [setDialog]
-  )
-
-  const handleClose = () => {
-    setIsOpen(false)
-  }
+  const closeDialog = () => setDialog({ deleteCategory: null })
 
   if (!category) return null
   return (
-    <Dialog.Root open={isOpen} onOpenChange={handleClose}>
+    <Dialog.Root open={isOpen} onOpenChange={closeDialog}>
       <Dialog.Portal>
         <Dialog.Content className="space-y-4 text-center">
-          <DeleteDialogContent handleClose={handleClose} category={category} />
+          <DeleteDialogContent handleClose={closeDialog} category={category} />
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>

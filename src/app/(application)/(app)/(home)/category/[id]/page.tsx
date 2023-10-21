@@ -44,7 +44,7 @@ export default function Page({ params }: { params: { id?: string } }) {
         )}
 
         {tasks.map((i) => (
-          <p key={i.id} onClick={() => setDialog('editTask', i)}>
+          <p key={i.id} onClick={() => setDialog({ editTask: i })}>
             {i.title}
           </p>
         ))}

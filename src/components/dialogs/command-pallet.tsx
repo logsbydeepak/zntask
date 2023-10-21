@@ -132,7 +132,7 @@ function CommandPalletContent({ handleClose }: { handleClose: () => void }) {
       label: 'new task',
       icon: <PlusIcon />,
       onSelect: () => {
-        setDialog('createTask', true)
+        setDialog({ createTask: true })
         handleClose()
       },
     },
@@ -140,7 +140,7 @@ function CommandPalletContent({ handleClose }: { handleClose: () => void }) {
       label: 'new category',
       icon: <FolderPlusIcon />,
       onSelect: () => {
-        setDialog('createCategory', true)
+        setDialog({ createCategory: true })
         handleClose()
       },
     },

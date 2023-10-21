@@ -75,24 +75,18 @@ export function TaskDialog() {
   const setDialog = useAppStore((state) => state.setDialog)
 
   const isOpen = isCreate || !!isEdit
-  const setIsOpen = React.useCallback(
-    (isOpen: boolean) => {
-      if (isCreate) return setDialog('createTask', isOpen)
-      if (isEdit) return setDialog('editTask', null)
-    },
-    [setDialog, isCreate, isEdit]
-  )
 
-  const handleClose = () => {
-    setIsOpen(false)
+  const closeDialog = () => {
+    if (isCreate) return setDialog({ createTask: false })
+    if (isEdit) return setDialog({ editTask: null })
   }
 
   return (
-    <Dialog.Root open={isOpen} onOpenChange={handleClose}>
+    <Dialog.Root open={isOpen} onOpenChange={closeDialog}>
       <Dialog.Portal>
         <Dialog.Content className="p-0 focus:outline-none sm:p-0">
           <TaskDialogContent
-            handleClose={handleClose}
+            handleClose={closeDialog}
             isEdit={isEdit}
             isCreate={isCreate}
           />
