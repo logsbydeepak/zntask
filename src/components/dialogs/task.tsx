@@ -273,10 +273,11 @@ function TaskDialogContent({
                 <div className="flex items-center">
                   <div className="w-7">
                     <Checkbox
-                      watch={watch}
-                      setValue={setValue}
+                      value={watch(`tasks.${index}.isCompleted`)}
+                      setValue={(value) =>
+                        setValue(`tasks.${index}.isCompleted`, value)
+                      }
                       index={index}
-                      getValues={getValues}
                     />
                   </div>
 
@@ -384,28 +385,25 @@ function TaskDialogContent({
 
 function Checkbox({
   index,
-  getValues,
-  watch,
+  value,
   setValue,
 }: {
   index: number
-  getValues: UseFormGetValues<FormValues>
-  watch: UseFormWatch<FormValues>
-  setValue: UseFormSetValue<FormValues>
+  value: boolean
+  setValue: (value: boolean) => void
 }) {
   return (
     <CheckboxRoot
-      defaultChecked={getValues(`tasks.${index}.isCompleted`)}
-      checked={watch(`tasks.${index}.isCompleted`)}
+      checked={value}
       onCheckedChange={(value) => {
         if (typeof value === 'boolean') {
-          setValue(`tasks.${index}.isCompleted`, value)
+          setValue(value)
         }
       }}
       className="h-4 w-4 rounded-full text-gray-600 outline-offset-4 hover:text-gray-950"
       name="task status"
     >
-      {!watch(`tasks.${index}.isCompleted`) && <CircleIcon />}
+      {!value && <CircleIcon />}
       <CheckboxIndicator asChild>
         <CheckCircleIcon />
       </CheckboxIndicator>
