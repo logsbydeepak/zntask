@@ -29,6 +29,7 @@ import {
   useAppStore,
 } from '@/store/app'
 import { useCategoryStore } from '@/store/category'
+import { useTaskStore } from '@/store/task'
 import { getCategoryColor } from '@/utils/category'
 import { cn } from '@/utils/style'
 
@@ -55,6 +56,7 @@ type Page =
   | 'SEARCH_ACTIVE_CATEGORY'
   | 'SEARCH_ARCHIVE_CATEGORY'
   | 'SEARCH_ALL_CATEGORY'
+  | 'SEARCH_TASK'
 function CommandPalletContent({ handleClose }: { handleClose: () => void }) {
   const searchInputRef = React.useRef<HTMLInputElement>(null)
   const [search, setSearch] = React.useState('')
@@ -71,6 +73,8 @@ function CommandPalletContent({ handleClose }: { handleClose: () => void }) {
     useShallow((s) => s.categories.filter((i) => i.isArchived))
   )
   const categories = useCategoryStore(useShallow((s) => s.categories))
+  const parentTask = useTaskStore(useShallow((s) => s.parentTasks))
+  const childTasks = useTaskStore(useShallow((s) => s.childTasks))
 
   const changePage = React.useCallback((page: Page) => {
     setPages((i) => [...i, page])
@@ -184,7 +188,10 @@ function CommandPalletContent({ handleClose }: { handleClose: () => void }) {
     {
       label: 'task',
       icon: <CheckCircleIcon />,
-      onSelect: () => {},
+      onSelect: () => {
+        changePage('SEARCH_TASK')
+        setSearch('')
+      },
     },
   ]
 
@@ -334,6 +341,37 @@ function CommandPalletContent({ handleClose }: { handleClose: () => void }) {
                     />
                   </CommandItem.Icon>
 
+                  <CommandItem.Title>{i.title}</CommandItem.Title>
+                </CommandItem.Container>
+              ))}
+            </>
+          )}
+          {page === 'SEARCH_TASK' && (
+            <>
+              {parentTask.map((i) => (
+                <CommandItem.Container
+                  value={`${i.title} ${i.id}`}
+                  key={i.id}
+                  onSelect={() => {
+                    console.log(i)
+
+                    setDialog({ editTask: { parentTaskId: i.id } })
+                    handleClose()
+                  }}
+                >
+                  <CommandItem.Title>{i.title}</CommandItem.Title>
+                </CommandItem.Container>
+              ))}
+
+              {childTasks.map((i) => (
+                <CommandItem.Container
+                  value={`${i.title} ${i.id}`}
+                  key={i.id}
+                  onSelect={() => {
+                    setDialog({ editTask: { childTaskId: i.id } })
+                    handleClose()
+                  }}
+                >
                   <CommandItem.Title>{i.title}</CommandItem.Title>
                 </CommandItem.Container>
               ))}
