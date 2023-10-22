@@ -58,7 +58,6 @@ type Page =
   | 'SEARCH_ALL_CATEGORY'
   | 'SEARCH_TASK'
 function CommandPalletContent({ handleClose }: { handleClose: () => void }) {
-  const searchInputRef = React.useRef<HTMLInputElement>(null)
   const [search, setSearch] = React.useState('')
   const [pages, setPages] = React.useState<string[]>([])
   const page = pages[pages.length - 1] as Page | undefined
@@ -194,6 +193,11 @@ function CommandPalletContent({ handleClose }: { handleClose: () => void }) {
     },
   ]
 
+  React.useEffect(() => {
+    const el = document.querySelector('[cmdk-list-sizer]')
+    el?.scrollTo({ top: 0 })
+  }, [search])
+
   return (
     <>
       <Command
@@ -209,7 +213,6 @@ function CommandPalletContent({ handleClose }: { handleClose: () => void }) {
         <div className="flex items-center border-b border-gray-200 py-2.5 pl-3.5 pr-2.5">
           <SearchIcon className="h-3 w-3 text-gray-400" />
           <Command.Input
-            ref={searchInputRef}
             value={search}
             placeholder="search"
             onValueChange={setSearch}
