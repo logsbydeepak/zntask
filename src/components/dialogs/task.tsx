@@ -1,5 +1,6 @@
 import { setFips } from 'crypto'
 import React from 'react'
+import { handleClientScriptLoad } from 'next/script'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
   CheckboxIndicator,
@@ -60,7 +61,7 @@ const schema = z.object({
   categoryId: z.string().nullable(),
   tasks: z.array(
     z.object({
-      id: z.string().nullable(),
+      _id: z.string().nullable(),
       title: zRequired,
       date: z.date().nullable(),
       time: z.date().nullable(),
@@ -75,11 +76,57 @@ export function TaskDialog() {
   const isEdit = useAppStore((state) => state.dialog.editTask)
   const setDialog = useAppStore((state) => state.setDialog)
 
+  const task = useTaskStore(
+    useShallow((s) => {
+      if (!isEdit) return { parentTask: undefined, childTasks: [] }
+      const isParentId = 'parentTaskId' in isEdit
+      const isChildId = 'childTaskId' in isEdit
+
+      if (isParentId) {
+        const parentTask = s.parentTasks.find(
+          (i) => i.id === isEdit.parentTaskId
+        )
+
+        const childTasks = s.childTasks.filter(
+          (i) => i.parentId === isEdit.parentTaskId
+        )
+
+        if (parentTask) {
+          return { parentTask, childTasks: childTasks }
+        }
+
+        return { parentTask: undefined, childTasks: [] }
+      }
+
+      if (isChildId) {
+        const childTask = s.childTasks.find((i) => i.id === isEdit.childTaskId)
+
+        if (!childTask) return { parentTask: undefined, childTasks: [] }
+
+        const parentTask = s.parentTasks.find(
+          (i) => i.id === childTask?.parentId
+        )
+        const childTasks = s.childTasks.filter(
+          (i) => i.parentId === childTask?.parentId
+        )
+
+        return { parentTask, childTasks }
+      }
+
+      return { parentTask: undefined, childTasks: [] }
+    })
+  )
+
   const isOpen = isCreate || !!isEdit
 
   const closeDialog = () => {
     if (isCreate) return setDialog({ createTask: false })
     if (isEdit) return setDialog({ editTask: null })
+  }
+
+  if (isEdit && !task.parentTask) {
+    closeDialog()
+    return
   }
 
   return (
@@ -88,8 +135,18 @@ export function TaskDialog() {
         <Dialog.Content className="p-0 focus:outline-none sm:p-0">
           <TaskDialogContent
             handleClose={closeDialog}
-            isEdit={isEdit}
             isCreate={isCreate}
+            parentTask={task.parentTask}
+            childTasks={task.childTasks}
+            triggerId={
+              isEdit
+                ? 'parentTaskId' in isEdit
+                  ? isEdit.parentTaskId
+                  : 'childTaskId' in isEdit
+                  ? isEdit.childTaskId
+                  : undefined
+                : undefined
+            }
           />
         </Dialog.Content>
       </Dialog.Portal>
@@ -100,12 +157,16 @@ export function TaskDialog() {
 type FormValues = z.infer<typeof schema>
 function TaskDialogContent({
   handleClose,
-  isEdit,
   isCreate,
+  childTasks,
+  parentTask,
+  triggerId,
 }: {
   handleClose: () => void
   isCreate: boolean
-  isEdit: null | ParentTask
+  parentTask: ParentTask | undefined
+  childTasks: ChildTask[]
+  triggerId?: string
 }) {
   const addParentTask = useTaskStore((s) => s.addParentTask)
   const addChildTask = useTaskStore((s) => s.addChildTask)
@@ -118,23 +179,19 @@ function TaskDialogContent({
     string[]
   >([])
 
-  const subTasks = useTaskStore(
-    useShallow((s) =>
-      s.childTasks
-        .filter((i) => i.parentId === isEdit?.id)
-        .map((i) => ({
-          ...i,
-          id: i.id,
-          date: i.date ? new Date(i.date) : null,
-          time: i.time ? new Date(i.time) : null,
-        }))
-    )
-  )
+  const childTask = childTasks.map((i) => {
+    return {
+      ...i,
+      _id: i.id,
+      date: i.date ? new Date(i.date) : null,
+      time: i.time ? new Date(i.time) : null,
+    }
+  })
 
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, defaultValues },
     getValues,
     setValue,
     watch,
@@ -142,16 +199,16 @@ function TaskDialogContent({
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
-      categoryId: isEdit?.categoryId ?? null,
+      categoryId: parentTask?.categoryId ?? null,
       tasks: [
         {
-          id: isEdit?.id ?? null,
-          title: isEdit?.title ?? '',
-          date: isEdit?.date ? new Date(isEdit.date) : null,
-          time: isEdit?.time ? new Date(isEdit.time) : null,
-          isCompleted: isEdit?.isCompleted ?? false,
+          _id: parentTask?.id ?? null,
+          title: parentTask?.title ?? '',
+          date: parentTask?.date ? new Date(parentTask.date) : null,
+          time: parentTask?.time ? new Date(parentTask.time) : null,
+          isCompleted: parentTask?.isCompleted ?? false,
         },
-        ...subTasks,
+        ...childTask,
       ],
     },
   })
@@ -192,10 +249,10 @@ function TaskDialogContent({
       })
     }
 
-    if (isEdit) {
+    if (parentTask) {
       removedChildTaskIds.forEach((i) => removeChildTask(i))
 
-      const parentId = isEdit.id
+      const parentId = parentTask.id
       data.tasks.forEach((i, index) => {
         const task = {
           title: i.title,
@@ -207,15 +264,17 @@ function TaskDialogContent({
 
         if (index === 0) {
           let isParentTaskEdited = false
-          if (isEdit.title !== task.title) isParentTaskEdited = true
-          if (isEdit.details !== task.details) isParentTaskEdited = true
-          if (isEdit.date !== task.date) isParentTaskEdited = true
-          if (isEdit.time !== task.time) isParentTaskEdited = true
-          if (isEdit.categoryId !== data.categoryId) isParentTaskEdited = true
-          if (isEdit.isCompleted !== task.isCompleted) isParentTaskEdited = true
+          if (parentTask.title !== task.title) isParentTaskEdited = true
+          if (parentTask.details !== task.details) isParentTaskEdited = true
+          if (parentTask.date !== task.date) isParentTaskEdited = true
+          if (parentTask.time !== task.time) isParentTaskEdited = true
+          if (parentTask.categoryId !== data.categoryId)
+            isParentTaskEdited = true
+          if (parentTask.isCompleted !== task.isCompleted)
+            isParentTaskEdited = true
           if (isParentTaskEdited) {
             editParentTask({
-              ...isEdit,
+              ...parentTask,
               ...task,
               categoryId: data.categoryId,
             })
@@ -223,7 +282,7 @@ function TaskDialogContent({
           return
         }
 
-        if (!i.id) {
+        if (!i._id) {
           addChildTask({
             ...task,
             parentId,
@@ -233,7 +292,7 @@ function TaskDialogContent({
         }
 
         let isChildTaskEdited = false
-        const originalChildTask = subTasks.find((j) => j.id === i.id)
+        const originalChildTask = childTask.find((j) => j.id === i._id)
         if (!originalChildTask) return
         if (originalChildTask.title !== i.title) isChildTaskEdited = true
         if (originalChildTask.details !== i.details) isChildTaskEdited = true
@@ -244,7 +303,7 @@ function TaskDialogContent({
         if (isChildTaskEdited) {
           editChildTask({
             ...task,
-            id: i.id,
+            id: i._id,
             parentId,
             orderId: index.toString(),
           })
@@ -257,7 +316,7 @@ function TaskDialogContent({
 
   return (
     <>
-      <Head title={isEdit ? `Edit ${isEdit?.title}` : 'Create Task'} />
+      <Head title={parentTask ? `Edit ${parentTask?.title}` : 'Create Task'} />
       <div className="container-scroll max-h-[400px] space-y-6 overflow-y-scroll p-6">
         <span>
           <CategoryPicker
@@ -291,7 +350,7 @@ function TaskDialogContent({
                     placeholder="task"
                     className="m-0 w-full border-0 p-0 outline-none focus-visible:ring-0"
                     autoComplete="off"
-                    autoFocus={index === 0}
+                    autoFocus={isCreate ? true : triggerId === _._id}
                   />
                 </div>
                 {errors.tasks && errors.tasks[index]?.title?.message && (
@@ -317,10 +376,10 @@ function TaskDialogContent({
                     setTime={(value) => setValue(`tasks.${index}.time`, value)}
                   />
 
-                  {index === 0 && isEdit && (
+                  {index === 0 && parentTask && (
                     <InfoButton
                       onClick={() => {
-                        removeParentTask(isEdit.id)
+                        removeParentTask(parentTask.id)
                         handleClose()
                       }}
                     >
@@ -335,7 +394,7 @@ function TaskDialogContent({
                     <InfoButton
                       onClick={() => {
                         append({
-                          id: null,
+                          _id: null,
                           title: '',
                           date: null,
                           time: null,
@@ -354,7 +413,7 @@ function TaskDialogContent({
                   {index !== 0 && (
                     <InfoButton
                       onClick={() => {
-                        const id = getValues(`tasks.${index}.id`)
+                        const id = getValues(`tasks.${index}._id`)
                         if (id) {
                           setRemovedChildTaskIds((prev) => [...prev, id])
                         }

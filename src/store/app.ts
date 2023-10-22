@@ -18,7 +18,7 @@ const dialogState = {
   deleteCategory: null as null | Category,
 
   createTask: false,
-  editTask: null as null | ParentTask,
+  editTask: null as null | { parentTaskId: string } | { childTaskId: string },
 }
 
 const initialState = {

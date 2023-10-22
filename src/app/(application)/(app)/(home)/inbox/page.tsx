@@ -57,7 +57,7 @@ function ParentTaskItem({ task }: { task: ParentTask }) {
       <button
         className="w-full text-left"
         onClick={() => {
-          setDialog({ editTask: task })
+          setDialog({ editTask: { parentTaskId: task.id } })
         }}
       >
         <p>{task.title}</p>
@@ -75,9 +75,14 @@ function ParentTaskItem({ task }: { task: ParentTask }) {
 }
 
 function ChildTaskItem({ task }: { task: ChildTask }) {
+  const setDialog = useAppStore((s) => s.setDialog)
+
   return (
-    <div className="text-xs">
+    <button
+      className="block text-xs"
+      onClick={() => setDialog({ editTask: { childTaskId: task.id } })}
+    >
       <p>{task.title}</p>
-    </div>
+    </button>
   )
 }

@@ -50,7 +50,10 @@ function PlanedTab() {
       {tasks.length === 0 && <EmptyState />}
 
       {tasks.map((i) => (
-        <p key={i.id} onClick={() => setDialog({ editTask: i })}>
+        <p
+          key={i.id}
+          onClick={() => setDialog({ editTask: { parentTaskId: i.id } })}
+        >
           {i.title}
         </p>
       ))}
@@ -68,7 +71,10 @@ function CompletedTab() {
       {tasks.length === 0 && <EmptyState />}
 
       {tasks.map((i) => (
-        <p key={i.id} onClick={() => setDialog({ editTask: i })}>
+        <p
+          key={i.id}
+          onClick={() => setDialog({ editTask: { parentTaskId: i.id } })}
+        >
           {i.title}
         </p>
       ))}
@@ -84,7 +90,10 @@ function ArchivedTab() {
     <>
       {tasks.length === 0 && <EmptyState />}
       {tasks.map((i) => (
-        <p key={i.id} onClick={() => setDialog({ editTask: i })}>
+        <p
+          key={i.id}
+          onClick={() => setDialog({ editTask: { parentTaskId: i.id } })}
+        >
           {i.title}
         </p>
       ))}
