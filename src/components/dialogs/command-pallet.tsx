@@ -154,7 +154,6 @@ function CommandPalletContent({ handleClose }: { handleClose: () => void }) {
       icon: <SidebarIcon />,
       onSelect: () => {
         setIsSidebarOpen((s) => !s)
-        handleClose()
       },
     },
   ]
@@ -217,7 +216,7 @@ function CommandPalletContent({ handleClose }: { handleClose: () => void }) {
             className="ml-2 h-5 w-full border-none p-0 text-sm outline-none placeholder:text-gray-400 focus:ring-0"
           />
         </div>
-        <Command.List className="container-scroll ml-2 h-40 overflow-y-scroll py-2 pb-5 pr-1 [&>[cmdk-list-sizer]]:space-y-2">
+        <Command.List className="[&>[cmdk-list-sizer]]:ml-2 [&>[cmdk-list-sizer]]:h-40 [&>[cmdk-list-sizer]]:space-y-2 [&>[cmdk-list-sizer]]:overflow-y-scroll [&>[cmdk-list-sizer]]:py-2 [&>[cmdk-list-sizer]]:pr-1">
           <Command.Empty className="flex h-[calc(100%-5%)] items-center justify-center">
             <div className="flex flex-col items-center justify-center space-y-1 rounded-md border px-4 py-4 shadow-sm">
               <span className="inline-block h-5 w-5">
@@ -405,7 +404,7 @@ const CommandItemGroup = React.forwardRef<
     <Command.Group
       ref={ref}
       {...props}
-      className="space-y-1 text-xs font-medium text-gray-400 last:pb-2"
+      className="space-y-1 text-xs font-medium text-gray-400"
     />
   )
 })

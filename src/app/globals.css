@@ -19,29 +19,29 @@
   }
 
   aside::-webkit-scrollbar,
-  .container-scroll::-webkit-scrollbar {
+  .container-scroll::-webkit-scrollbar,
+  [cmdk-list-sizer]::-webkit-scrollbar {
     @apply w-3;
   }
 
   aside:hover::-webkit-scrollbar-thumb,
-  .container-scroll:hover::-webkit-scrollbar-thumb {
+  .container-scroll:hover::-webkit-scrollbar-thumb,
+  [cmdk-list-sizer]:hover::-webkit-scrollbar-thumb {
     @apply rounded-full border-[3px] border-solid border-white bg-gray-300;
   }
 
   aside::-webkit-scrollbar-thumb:hover,
-  .container-scroll::-webkit-scrollbar-thumb:hover {
+  .container-scroll::-webkit-scrollbar-thumb:hover,
+  [cmdk-list-sizer]::-webkit-scrollbar-thumb:hover {
     @apply bg-gray-400;
   }
 
   svg {
     @apply h-full w-full;
   }
-  [cmdk-list] {
-    scroll-padding-block-start: 9px;
-    scroll-padding-block-end: 8px;
-  }
 
   [cmdk-list-sizer] {
-    @apply h-full;
+    scroll-padding-block-start: 10px;
+    scroll-padding-block-end: 10px;
   }
 }
