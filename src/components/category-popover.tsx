@@ -1,13 +1,7 @@
 import React from 'react'
 import { PopoverContent } from '@radix-ui/react-popover'
 import { Command } from 'cmdk'
-import {
-  ArrowBigUpIcon,
-  CornerDownLeftIcon,
-  FolderIcon,
-  InboxIcon,
-  SearchIcon,
-} from 'lucide-react'
+import { FolderIcon, InboxIcon, SearchIcon } from 'lucide-react'
 import { isValid } from 'ulidx'
 
 import { useCategoryStore } from '@/store/category'
@@ -32,6 +26,11 @@ export const CategoryPopover = React.forwardRef<
     setParentValue(value)
     setIsOpen(false)
   }
+
+  React.useEffect(() => {
+    const el = document.querySelector('[cmdk-list-sizer]')
+    el?.scrollTo({ top: 0 })
+  }, [search])
 
   return (
     <PopoverContent
@@ -74,7 +73,7 @@ export const CategoryPopover = React.forwardRef<
           />
         </div>
 
-        <Command.List className="container-scroll ml-2 h-40 overflow-y-scroll py-2 pr-1">
+        <Command.List className="[&>[cmdk-list-sizer]]:ml-2 [&>[cmdk-list-sizer]]:h-40 [&>[cmdk-list-sizer]]:space-y-1 [&>[cmdk-list-sizer]]:overflow-y-scroll [&>[cmdk-list-sizer]]:py-2 [&>[cmdk-list-sizer]]:pr-1">
           <Command.Empty className="flex h-36 items-center justify-center">
             <div className="flex flex-col items-center justify-center space-y-1 rounded-md border px-4 py-4 shadow-sm">
               <span className="inline-block h-5 w-5">
@@ -116,7 +115,9 @@ export const CategoryPopover = React.forwardRef<
             <CategoryItem.Title>Inbox</CategoryItem.Title>
           </CategoryItem.Container>
 
-          <Command.Separator className="mx-2 my-2 border-t border-gray-100" />
+          <span>
+            <Command.Separator className="mx-2 my-2 border-t border-gray-100" />
+          </span>
 
           {categories
             .filter((i) => i.id !== currentCategory?.id)
