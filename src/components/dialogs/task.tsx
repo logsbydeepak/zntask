@@ -1,45 +1,22 @@
-import { setFips } from 'crypto'
 import React from 'react'
-import { handleClientScriptLoad } from 'next/script'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
   CheckboxIndicator,
   Root as CheckboxRoot,
 } from '@radix-ui/react-checkbox'
 import * as Popover from '@radix-ui/react-popover'
+import { format, isThisYear, isToday, isTomorrow, isYesterday } from 'date-fns'
 import {
-  format,
-  isThisYear,
-  isToday,
-  isTomorrow,
-  isYesterday,
-  setDate,
-  sub,
-} from 'date-fns'
-import {
-  ArrowBigUpIcon,
-  ArrowUpLeftFromCircle,
-  ArrowUpLeftFromCircleIcon,
   CalendarIcon,
   CheckCircleIcon,
   CircleIcon,
-  CornerDownLeftIcon,
-  DeleteIcon,
   HourglassIcon,
   InboxIcon,
   PlusIcon,
-  ShovelIcon,
   TrashIcon,
   XIcon,
 } from 'lucide-react'
-import {
-  useFieldArray,
-  useForm,
-  UseFormGetValues,
-  UseFormSetValue,
-  UseFormWatch,
-} from 'react-hook-form'
-import { ulid } from 'ulidx'
+import { useFieldArray, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { useShallow } from 'zustand/react/shallow'
 
@@ -47,11 +24,10 @@ import { CategoryPopover } from '@/components/category-popover'
 import { Head } from '@/components/head'
 import { useAppStore } from '@/store/app'
 import { useCategoryStore } from '@/store/category'
-import { ChildTask, ParentTask, Task, useTaskStore } from '@/store/task'
+import { ChildTask, ParentTask, useTaskStore } from '@/store/task'
 import { getCategoryColor } from '@/utils/category'
 import { cn } from '@/utils/style'
 import { zRequired } from '@/utils/zod'
-import { Button } from '@ui/button'
 import * as Dialog from '@ui/dialog'
 import * as Form from '@ui/form'
 

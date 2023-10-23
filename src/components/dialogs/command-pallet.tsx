@@ -1,6 +1,7 @@
 import React from 'react'
 import { useRouter } from 'next/navigation'
 import * as Dialog from '@radix-ui/react-dialog'
+import * as Popover from '@radix-ui/react-popover'
 import { Command } from 'cmdk'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import {
@@ -23,6 +24,7 @@ import {
 } from 'lucide-react'
 import { useShallow } from 'zustand/react/shallow'
 
+import { CategoryPopover } from '@/components/category-popover'
 import {
   isCommandPaletteOpenAtom,
   isSidebarOpenAtom,
@@ -44,7 +46,7 @@ export function CommandPalletDialog() {
     <Dialog.Root open={isOpen} onOpenChange={handleClose}>
       <Dialog.Content
         id="task-dialog"
-        className="fixed left-1/2 top-16 z-50 w-[400px] -translate-x-1/2 transform rounded-md border border-gray-200 bg-white p-0 shadow-sm drop-shadow-sm"
+        className="fixed left-1/2 top-16 z-50 w-[400px] -translate-x-1/2 transform rounded-md border border-gray-200 bg-white p-0 shadow-sm drop-shadow-sm focus:outline-none"
       >
         <CommandPalletContent handleClose={handleClose} />
       </Dialog.Content>
@@ -390,7 +392,7 @@ function CommandPalletContent({ handleClose }: { handleClose: () => void }) {
             }}
           >
             <div className="flex justify-end">
-              <ActionButton type="button">Category</ActionButton>
+              <CategoryPicker value={null} setValue={() => {}} />
               <ActionButton type="button">Status</ActionButton>
             </div>
           </div>
@@ -459,5 +461,83 @@ function ActionButton({ children, ...props }: React.ComponentProps<'button'>) {
     >
       {children}
     </button>
+  )
+}
+
+function CategoryPicker({
+  value,
+  setValue,
+}: {
+  value: string | null
+  setValue: (id: string | null) => void
+}) {
+  const getCategory = useCategoryStore((state) => state.getCategory)
+  const [isOpen, setIsOpen] = React.useState(false)
+  const currentCategory = getCategory(value)
+
+  return (
+    <Popover.Root open={isOpen} onOpenChange={setIsOpen}>
+      <Popover.Trigger asChild>
+        <InfoButton className="max-w-[95%] overflow-hidden">
+          <InfoIcon>
+            {!currentCategory && (
+              <InboxIcon className="h-full w-full text-gray-600" />
+            )}
+            {currentCategory && (
+              <div
+                className={cn(
+                  'h-2.5 w-2.5 rounded-[4.5px]',
+                  `bg-${getCategoryColor(currentCategory.indicator)}-600`
+                )}
+              />
+            )}
+          </InfoIcon>
+          <InfoText className="w-full overflow-hidden overflow-ellipsis">
+            {currentCategory ? currentCategory.title : 'Inbox'}
+          </InfoText>
+        </InfoButton>
+      </Popover.Trigger>
+      {isOpen && (
+        <CategoryPopover
+          setValue={setValue}
+          currentCategory={currentCategory}
+          setIsOpen={setIsOpen}
+        />
+      )}
+    </Popover.Root>
+  )
+}
+
+const InfoButton = React.forwardRef<
+  HTMLButtonElement,
+  React.ComponentPropsWithoutRef<'button'>
+>(({ className, ...props }, ref) => {
+  return (
+    <button
+      {...props}
+      ref={ref}
+      type="button"
+      className={cn(
+        'mr-2 inline-flex items-center space-x-1 rounded-full border border-gray-200 px-3 py-1 text-gray-600 hover:bg-gray-50 hover:text-gray-950',
+        className
+      )}
+    />
+  )
+})
+InfoButton.displayName = 'InfoButton'
+
+function InfoIcon({ children }: { children: React.ReactNode }) {
+  return <span className="grid h-3 w-3 place-content-center">{children}</span>
+}
+
+function InfoText({
+  children,
+  className,
+}: {
+  children: React.ReactNode
+  className?: string
+}) {
+  return (
+    <span className={cn('text-xs font-medium', className)}>{children}</span>
   )
 }
