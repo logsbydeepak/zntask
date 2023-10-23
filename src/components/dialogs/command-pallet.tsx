@@ -355,8 +355,6 @@ function CommandPalletContent({ handleClose }: { handleClose: () => void }) {
                   value={`${i.title} ${i.id}`}
                   key={i.id}
                   onSelect={() => {
-                    console.log(i)
-
                     setDialog({ editTask: { parentTaskId: i.id } })
                     handleClose()
                   }}
@@ -381,6 +379,23 @@ function CommandPalletContent({ handleClose }: { handleClose: () => void }) {
           )}
         </Command.List>
       </Command>
+      {page === 'SEARCH_TASK' && (
+        <>
+          <div
+            className="border-t border-gray-200 px-2.5 py-1.5"
+            onKeyDown={(e) => {
+              if (e.key === '/') {
+                e.preventDefault()
+              }
+            }}
+          >
+            <div className="flex justify-end">
+              <ActionButton type="button">Category</ActionButton>
+              <ActionButton type="button">Status</ActionButton>
+            </div>
+          </div>
+        </>
+      )}
     </>
   )
 }
@@ -434,4 +449,15 @@ const CommandItem = {
   Icon: CommandItemIcon,
   Title: CommandItemTitle,
   Group: CommandItemGroup,
+}
+
+function ActionButton({ children, ...props }: React.ComponentProps<'button'>) {
+  return (
+    <button
+      {...props}
+      className="group flex items-center space-x-2 rounded-md px-1.5 py-1 text-xs font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-950"
+    >
+      {children}
+    </button>
+  )
 }
