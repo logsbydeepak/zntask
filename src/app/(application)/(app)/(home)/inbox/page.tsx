@@ -1,7 +1,11 @@
 'use client'
 
 import React from 'react'
-import { InboxIcon } from 'lucide-react'
+import {
+  CheckboxIndicator,
+  Root as CheckboxRoot,
+} from '@radix-ui/react-checkbox'
+import { CheckCircleIcon, CircleIcon, InboxIcon } from 'lucide-react'
 import { useShallow } from 'zustand/react/shallow'
 
 import * as Layout from '@/app/(application)/(app)/layout-components'
@@ -44,13 +48,33 @@ function TaskContainer({ task }: { task: ParentTask }) {
   const childTask = useTaskStore(
     useShallow((s) => s.childTasks.filter((i) => i.parentId === task.id))
   )
+  const setDialog = useAppStore((s) => s.setDialog)
+  const editChildTask = useTaskStore((s) => s.editChildTask)
+  const editParentTask = useTaskStore((s) => s.editParentTask)
 
   return (
     <div>
-      <TaskItem task={task} />
+      <TaskItem
+        task={task}
+        handleOnTaskCheckboxClick={(value) =>
+          editParentTask({ ...task, isCompleted: value })
+        }
+        handleOnTaskClick={() =>
+          setDialog({ editTask: { parentTaskId: task.id } })
+        }
+      />
       <div className="ml-4">
         {childTask.map((i) => (
-          <TaskItem key={i.id} task={i} isChildTask={true} />
+          <TaskItem
+            key={i.id}
+            task={i}
+            handleOnTaskCheckboxClick={(value) =>
+              editChildTask({ ...i, isCompleted: value })
+            }
+            handleOnTaskClick={() =>
+              setDialog({ editTask: { childTaskId: i.id } })
+            }
+          />
         ))}
       </div>
     </div>
@@ -59,26 +83,50 @@ function TaskContainer({ task }: { task: ParentTask }) {
 
 function TaskItem({
   task,
-  isChildTask = false,
+  handleOnTaskCheckboxClick,
+  handleOnTaskClick,
 }: {
   task: Task
-  isChildTask?: boolean
+  handleOnTaskClick: () => void
+  handleOnTaskCheckboxClick: (value: boolean) => void
 }) {
-  const setDialog = useAppStore((s) => s.setDialog)
-
-  const handleOnTaskClick = () => {
-    if (isChildTask) {
-      setDialog({ editTask: { childTaskId: task.id } })
-      return
-    }
-    setDialog({ editTask: { parentTaskId: task.id } })
-  }
-
   return (
-    <div>
-      <button onClick={handleOnTaskClick}>
-        <p>{task.title}</p>
-      </button>
+    <div className="flex">
+      <div className="flex items-center space-x-4">
+        <Checkbox
+          value={task.isCompleted}
+          setValue={handleOnTaskCheckboxClick}
+        />
+        <button onClick={handleOnTaskClick}>
+          <p>{task.title}</p>
+        </button>
+      </div>
     </div>
+  )
+}
+
+function Checkbox({
+  value,
+  setValue,
+}: {
+  value: boolean
+  setValue: (value: boolean) => void
+}) {
+  return (
+    <CheckboxRoot
+      checked={value}
+      onCheckedChange={(value) => {
+        if (typeof value === 'boolean') {
+          setValue(value)
+        }
+      }}
+      className="h-4 w-4 rounded-full text-gray-600 outline-offset-4 hover:text-gray-950"
+      name="task status"
+    >
+      {!value && <CircleIcon />}
+      <CheckboxIndicator asChild>
+        <CheckCircleIcon />
+      </CheckboxIndicator>
+    </CheckboxRoot>
   )
 }

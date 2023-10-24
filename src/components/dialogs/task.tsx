@@ -316,7 +316,6 @@ function TaskDialogContent({
                       setValue={(value) =>
                         setValue(`tasks.${index}.isCompleted`, value)
                       }
-                      index={index}
                     />
                   </div>
 
@@ -424,11 +423,9 @@ function TaskDialogContent({
 }
 
 function Checkbox({
-  index,
   value,
   setValue,
 }: {
-  index: number
   value: boolean
   setValue: (value: boolean) => void
 }) {
