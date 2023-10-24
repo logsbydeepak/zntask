@@ -103,12 +103,24 @@ const taskStore: StateCreator<State & Actions> = (set, get) => ({
   },
 
   editParentTask(parentTask) {
-    set((state) => ({
-      parentTasks: state.parentTasks.map((item) => {
-        if (item.id === parentTask.id) return parentTask
-        return item
-      }),
-    }))
+    if (parentTask.isCompleted) {
+      set((state) => ({
+        parentTasks: state.parentTasks.map((item) => {
+          if (item.id === parentTask.id) return parentTask
+          return item
+        }),
+        childTasks: state.childTasks.map((i) =>
+          i.parentId === parentTask.id ? { ...i, isCompleted: true } : i
+        ),
+      }))
+    } else {
+      set((state) => ({
+        parentTasks: state.parentTasks.map((item) => {
+          if (item.id === parentTask.id) return parentTask
+          return item
+        }),
+      }))
+    }
 
     useActivityStore.getState().addActivity({
       type: 'parentTask',

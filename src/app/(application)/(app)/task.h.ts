@@ -78,10 +78,22 @@ export const editParentTask = h(
   'AUTH',
   zParentTask,
   async ({ input, userId }) => {
-    await db
-      .update(dbSchema.parentTasks)
-      .set(input)
-      .where(eq(dbSchema.parentTasks.id, input.id))
+    if (input.isCompleted) {
+      await db
+        .update(dbSchema.parentTasks)
+        .set(input)
+        .where(eq(dbSchema.parentTasks.id, input.id))
+
+      await db
+        .update(dbSchema.childTask)
+        .set({ isCompleted: true })
+        .where(eq(dbSchema.childTask.parentId, input.id))
+    } else {
+      await db
+        .update(dbSchema.parentTasks)
+        .set(input)
+        .where(eq(dbSchema.parentTasks.id, input.id))
+    }
 
     return r('OK')
   }
