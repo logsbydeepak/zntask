@@ -5,13 +5,29 @@ import {
   CheckboxIndicator,
   Root as CheckboxRoot,
 } from '@radix-ui/react-checkbox'
-import { CheckCircleIcon, CircleIcon, InboxIcon } from 'lucide-react'
+import {
+  CheckCircleIcon,
+  CircleIcon,
+  EditIcon,
+  InboxIcon,
+  Trash2Icon,
+} from 'lucide-react'
 import { useShallow } from 'zustand/react/shallow'
 
 import * as Layout from '@/app/(application)/(app)/layout-components'
 import { Head } from '@/components/head'
+import {
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuRoot,
+  ContextMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuRoot,
+  MenuIcon,
+} from '@/components/ui/menu'
 import { useAppStore } from '@/store/app'
-import { ParentTask, Task, useTaskStore } from '@/store/task'
+import { ChildTask, ParentTask, Task, useTaskStore } from '@/store/task'
 
 export default function Page() {
   const tasks = useTaskStore(
@@ -86,23 +102,78 @@ function TaskItem({
   handleOnTaskCheckboxClick,
   handleOnTaskClick,
 }: {
-  task: Task
+  task: ParentTask | ChildTask
   handleOnTaskClick: () => void
   handleOnTaskCheckboxClick: (value: boolean) => void
 }) {
   return (
-    <div className="rounded-md border border-transparent px-3 py-2 text-sm hover:border-gray-200 hover:bg-gray-50">
-      <div className="flex items-center space-x-3">
-        <Checkbox
-          value={task.isCompleted}
-          setValue={handleOnTaskCheckboxClick}
-        />
-        <button onClick={handleOnTaskClick}>
-          <p>{task.title}</p>
-        </button>
-      </div>
-    </div>
+    <ContextMenuRoot>
+      <DropdownMenuRoot>
+        <ContextMenuTrigger asChild>
+          <div className="rounded-md border border-transparent px-3 py-2 text-sm hover:cursor-pointer hover:border-gray-200 hover:bg-gray-50 data-[state=open]:border-gray-200 data-[state=open]:bg-gray-50">
+            <div className="flex items-center space-x-3">
+              <Checkbox
+                value={task.isCompleted}
+                setValue={handleOnTaskCheckboxClick}
+              />
+              <button onClick={handleOnTaskClick}>
+                <p>{task.title}</p>
+              </button>
+            </div>
+          </div>
+        </ContextMenuTrigger>
+        <ContextMenuContent>
+          <TaskMenuContent task={task} type="context" />
+        </ContextMenuContent>
+        <DropdownMenuContent>
+          <TaskMenuContent task={task} type="dropdown" />
+        </DropdownMenuContent>
+      </DropdownMenuRoot>
+    </ContextMenuRoot>
   )
+}
+
+function TaskMenuContent({
+  task,
+  type,
+}: {
+  task: ParentTask | ChildTask
+  type: 'context' | 'dropdown'
+}) {
+  const menuItem = [
+    {
+      label: 'Edit',
+      icon: <EditIcon />,
+      onSelect: () => {},
+    },
+    {
+      label: task.isCompleted ? 'uncompleted' : 'completed',
+      icon: task.isCompleted ? <CircleIcon /> : <CheckCircleIcon />,
+      onSelect: () => {},
+    },
+    {
+      label: 'Delete',
+      icon: <Trash2Icon />,
+      onSelect: () => {},
+      intent: 'destructive' as const,
+    },
+  ]
+
+  if (type === 'context') {
+    return menuItem.map((i) => (
+      <ContextMenuItem key={i.label} onSelect={i.onSelect} intent={i.intent}>
+        <MenuIcon intent={i.intent}>{i.icon}</MenuIcon>
+        <span>{i.label}</span>
+      </ContextMenuItem>
+    ))
+  }
+
+  return menuItem.map((i) => (
+    <DropdownMenuItem key={i.label} onSelect={i.onSelect} intent={i.intent}>
+      <MenuIcon intent={i.intent}>{i.icon}</MenuIcon>
+      <span>{i.label}</span>
+    </DropdownMenuItem>
+  ))
 }
 
 function Checkbox({
