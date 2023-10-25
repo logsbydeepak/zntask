@@ -10,6 +10,7 @@ import {
   CircleIcon,
   EditIcon,
   InboxIcon,
+  MoreVerticalIcon,
   Trash2Icon,
 } from 'lucide-react'
 import { useShallow } from 'zustand/react/shallow'
@@ -24,6 +25,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuRoot,
+  DropdownMenuTrigger,
   MenuIcon,
 } from '@/components/ui/menu'
 import { useAppStore } from '@/store/app'
@@ -110,22 +112,31 @@ function TaskItem({
     <ContextMenuRoot>
       <DropdownMenuRoot>
         <ContextMenuTrigger asChild>
-          <div className="rounded-md border border-transparent px-3 py-2 text-sm hover:cursor-pointer hover:border-gray-200 hover:bg-gray-50 data-[state=open]:border-gray-200 data-[state=open]:bg-gray-50">
-            <div className="flex items-center space-x-3">
+          <div className="flex items-center rounded-md border border-transparent px-3 py-2 text-sm hover:cursor-pointer hover:border-gray-200 hover:bg-gray-50 data-[state=open]:border-gray-200 data-[state=open]:bg-gray-50">
+            <div className="flex w-full items-center space-x-3">
               <Checkbox
                 value={task.isCompleted}
                 setValue={handleOnTaskCheckboxClick}
               />
-              <button onClick={handleOnTaskClick}>
+              <button onClick={handleOnTaskClick} className="w-full text-left">
                 <p>{task.title}</p>
               </button>
+            </div>
+            <div>
+              <DropdownMenuTrigger asChild>
+                <button className="flex h-6 w-6 items-center justify-center text-gray-400 hover:text-gray-800 data-[state=open]:text-gray-800">
+                  <span className="inline-block h-4 w-4">
+                    <MoreVerticalIcon />
+                  </span>
+                </button>
+              </DropdownMenuTrigger>
             </div>
           </div>
         </ContextMenuTrigger>
         <ContextMenuContent>
           <TaskMenuContent task={task} type="context" />
         </ContextMenuContent>
-        <DropdownMenuContent>
+        <DropdownMenuContent align="end">
           <TaskMenuContent task={task} type="dropdown" />
         </DropdownMenuContent>
       </DropdownMenuRoot>
