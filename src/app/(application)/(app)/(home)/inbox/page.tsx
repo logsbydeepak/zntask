@@ -34,7 +34,7 @@ export default function Page() {
           </Layout.Empty.Container>
         )}
 
-        <div className="space-y-3">
+        <div className="space-y-1">
           {tasks.map((i) => (
             <TaskContainer key={i.id} task={i} />
           ))}
@@ -53,7 +53,7 @@ function TaskContainer({ task }: { task: ParentTask }) {
   const editParentTask = useTaskStore((s) => s.editParentTask)
 
   return (
-    <div>
+    <div className="space-y-2">
       <TaskItem
         task={task}
         handleOnTaskCheckboxClick={(value) =>
@@ -63,7 +63,7 @@ function TaskContainer({ task }: { task: ParentTask }) {
           setDialog({ editTask: { parentTaskId: task.id } })
         }
       />
-      <div className="ml-4">
+      <div className="ml-8 space-y-1">
         {childTask.map((i) => (
           <TaskItem
             key={i.id}
@@ -91,8 +91,8 @@ function TaskItem({
   handleOnTaskCheckboxClick: (value: boolean) => void
 }) {
   return (
-    <div className="flex">
-      <div className="flex items-center space-x-4">
+    <div className="rounded-md border border-transparent px-3 py-2 text-sm hover:border-gray-200 hover:bg-gray-50">
+      <div className="flex items-center space-x-3">
         <Checkbox
           value={task.isCompleted}
           setValue={handleOnTaskCheckboxClick}
@@ -120,7 +120,7 @@ function Checkbox({
           setValue(value)
         }
       }}
-      className="h-4 w-4 rounded-full text-gray-600 outline-offset-4 hover:text-gray-950"
+      className="h-3.5 w-3.5 rounded-full text-gray-600 outline-offset-4 hover:text-gray-950"
       name="task status"
     >
       {!value && <CircleIcon />}
