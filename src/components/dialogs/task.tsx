@@ -7,6 +7,7 @@ import {
 import * as Popover from '@radix-ui/react-popover'
 import { format, isThisYear, isToday, isTomorrow, isYesterday } from 'date-fns'
 import {
+  ArrowUpLeftFromCircleIcon,
   CalendarIcon,
   CheckCircleIcon,
   CircleIcon,
@@ -108,7 +109,15 @@ export function TaskDialog() {
   return (
     <Dialog.Root open={isOpen} onOpenChange={closeDialog}>
       <Dialog.Portal>
-        <Dialog.Content className="p-0 focus:outline-none sm:p-0">
+        <Dialog.Content
+          className="p-0 focus:outline-none sm:p-0"
+          onOpenAutoFocus={(e) => {
+            e.preventDefault()
+            document
+              .querySelector<HTMLInputElement>('[data-init-focus="true"]')
+              ?.focus()
+          }}
+        >
           <TaskDialogContent
             handleClose={closeDialog}
             isCreate={isCreate}
@@ -325,7 +334,12 @@ function TaskDialogContent({
                     placeholder="task"
                     className="m-0 w-full border-0 p-0 outline-none focus-visible:ring-0"
                     autoComplete="off"
-                    autoFocus={isCreate ? true : triggerId === _._id}
+                    {...(isCreate && {
+                      'data-init-focus': 'true',
+                    })}
+                    {...(triggerId === _._id && {
+                      'data-init-focus': 'true',
+                    })}
                   />
                 </div>
                 {errors.tasks && errors.tasks[index]?.title?.message && (
