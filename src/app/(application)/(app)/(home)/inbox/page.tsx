@@ -151,21 +151,35 @@ function TaskMenuContent({
   task: ParentTask | ChildTask
   type: 'context' | 'dropdown'
 }) {
+  const setDialog = useAppStore((s) => s.setDialog)
+  const removeParentTask = useTaskStore((s) => s.removeParentTask)
+  const removeChildTask = useTaskStore((s) => s.removeChildTask)
+
   const menuItem = [
     {
       label: 'Edit',
       icon: <EditIcon />,
-      onSelect: () => {},
-    },
-    {
-      label: task.isCompleted ? 'uncompleted' : 'completed',
-      icon: task.isCompleted ? <CircleIcon /> : <CheckCircleIcon />,
-      onSelect: () => {},
+      onSelect: () => {
+        if ('categoryId' in task) {
+          setDialog({ editTask: { parentTaskId: task.id } })
+        }
+
+        if ('parentId' in task) {
+          setDialog({ editTask: { childTaskId: task.id } })
+        }
+      },
     },
     {
       label: 'Delete',
       icon: <Trash2Icon />,
-      onSelect: () => {},
+      onSelect: () => {
+        if ('categoryId' in task) {
+          removeParentTask(task.id)
+        }
+        if ('parentId' in task) {
+          removeChildTask(task.id)
+        }
+      },
       intent: 'destructive' as const,
     },
   ]
