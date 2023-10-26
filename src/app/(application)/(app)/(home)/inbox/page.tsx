@@ -63,12 +63,31 @@ export default function Page() {
 }
 
 function TaskContainer({ task }: { task: ParentTask }) {
+  const [isCollapsibleOpen, setIsCollapsibleOpen] = React.useState(false)
+
   const childTask = useTaskStore(
-    useShallow((s) => s.childTasks.filter((i) => i.parentId === task.id))
+    useShallow((s) =>
+      s.childTasks
+        .filter((i) => i.parentId === task.id)
+        .sort((a, b) => {
+          if (a.isCompleted && !b.isCompleted) {
+            return 1
+          }
+          if (!a.isCompleted && b.isCompleted) {
+            return -1
+          }
+          return 0
+        })
+    )
   )
   const setDialog = useAppStore((s) => s.setDialog)
   const editChildTask = useTaskStore((s) => s.editChildTask)
   const editParentTask = useTaskStore((s) => s.editParentTask)
+
+  const childTaskToDisplay = childTask.slice(
+    0,
+    childTask.length >= 5 && !isCollapsibleOpen ? 4 : childTask.length
+  )
 
   return (
     <div className="space-y-2">
@@ -82,7 +101,7 @@ function TaskContainer({ task }: { task: ParentTask }) {
         }
       />
       <div className="ml-8 space-y-1">
-        {childTask.map((i) => (
+        {childTaskToDisplay.map((i) => (
           <TaskItem
             key={i.id}
             task={i}
@@ -94,6 +113,17 @@ function TaskContainer({ task }: { task: ParentTask }) {
             }
           />
         ))}
+
+        {childTask.length > 4 && (
+          <button
+            onClick={() => setIsCollapsibleOpen((open) => !open)}
+            className="rounded-full border border-gray-200 px-3 py-1 text-xs text-gray-600 hover:bg-gray-50"
+          >
+            {isCollapsibleOpen
+              ? 'show less'
+              : `show ${childTask.length - 4} more`}
+          </button>
+        )}
       </div>
     </div>
   )
