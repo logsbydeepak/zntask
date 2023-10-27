@@ -5,7 +5,7 @@ import bcrypt from 'bcryptjs'
 import ms from 'ms'
 
 import { db } from '@/db'
-import { redis, resend } from '@/utils/config'
+import { redis } from '@/utils/config'
 import { h, r } from '@/utils/handler'
 
 import { generateAuthJWT, generateEmailJWT, setAuthCookie } from '../utils'
@@ -52,16 +52,16 @@ export const resetPassword = h(resetPasswordSchema, async ({ input }) => {
 
   const token = await generateEmailJWT(user.id)
 
-  const email = await resend.sendEmail({
-    to: input.email,
-    from: `team <${env.RESEND_FROM_EMAIL}>`,
-    subject: 'Reset Password',
-    text: `${env.BASE_URL}/add-password?token=${token}`,
-  })
+  // const email = await resend.sendEmail({
+  //   to: input.email,
+  //   from: `team <${env.RESEND_FROM_EMAIL}>`,
+  //   subject: 'Reset Password',
+  //   text: `${env.BASE_URL}/add-password?token=${token}`,
+  // })
 
-  if (!email.id) {
-    throw new Error('Failed to send email', { cause: email })
-  }
+  // if (!email.id) {
+  //   throw new Error('Failed to send email', { cause: email })
+  // }
 
   const redisRes = await redis.set(`reset-password:${user.id}`, token, {
     px: ms('15 minutes'),
