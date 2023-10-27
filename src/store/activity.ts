@@ -50,7 +50,7 @@ type AddTaskType =
 interface Action {
   addActivity: (activity: AddTaskType) => void
   removeActivity: (id: string) => void
-  setActivitySynced: (id: string) => void
+  setActivitySyncing: (id: string, value: boolean) => void
 }
 
 const activityStore: StateCreator<State & Action> = (set, get) => ({
@@ -103,10 +103,16 @@ const activityStore: StateCreator<State & Action> = (set, get) => ({
     }))
   },
 
-  setActivitySynced: (id) => {
+  setActivitySyncing(id, value) {
     set((state) => ({
       activities: state.activities.map((item) => {
-        if (item.id === id) return { ...item, isSynced: true }
+        if (item.id === id) {
+          return {
+            ...item,
+            isSynced: value,
+          }
+        }
+
         return item
       }),
     }))

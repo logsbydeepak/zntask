@@ -1,14 +1,13 @@
 'use client'
 
 import React from 'react'
-import { useAtom, useSetAtom } from 'jotai'
+import { useSetAtom } from 'jotai'
 
 import { useActivityStore } from '@/store/activity'
 import { isAppSyncingAtom } from '@/store/app'
 import { useCategoryStore } from '@/store/category'
 import { useTaskStore } from '@/store/task'
 
-import { Action } from '../(auth)/add-password/form'
 import { addCategory, deleteCategory, editCategory } from './category.h'
 import {
   createChildTask,
@@ -22,24 +21,28 @@ import {
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
 export function Sync() {
-  const startTransition = React.useTransition()[1]
-  const [isAppSyncing, setIsAppSyncing] = useAtom(isAppSyncingAtom)
+  const [isPending, startTransition] = React.useTransition()
+  const setIsAppSyncing = useSetAtom(isAppSyncingAtom)
 
   const activities = useActivityStore((s) => s.activities)
   const removeActivity = useActivityStore((s) => s.removeActivity)
-  const setActivitySynced = useActivityStore((s) => s.setActivitySynced)
+  const setActivitySyncing = useActivityStore((s) => s.setActivitySyncing)
 
   const getCategory = useCategoryStore((s) => s.getCategory)
   const getParentTask = useTaskStore((s) => s.getParentTask)
   const getChildTask = useTaskStore((s) => s.getChildTask)
 
   React.useEffect(() => {
-    if (isAppSyncing) return
+    setIsAppSyncing(isPending)
+  }, [isPending, setIsAppSyncing])
+
+  React.useEffect(() => {
+    if (isPending) return
     if (activities.length === 0) return
-    setIsAppSyncing(true)
+
+    const activity = activities[0]
     startTransition(async () => {
       try {
-        const activity = activities[0]
         if (activity.type === 'category') {
           switch (activity.action) {
             case 'CREATE': {
@@ -49,14 +52,14 @@ export function Sync() {
                 return
               }
 
-              setActivitySynced(activity.id)
+              setActivitySyncing(activity.id, true)
               await addCategory(category)
               removeActivity(activity.id)
               break
             }
 
             case 'DELETE': {
-              setActivitySynced(activity.categoryId)
+              setActivitySyncing(activity.id, true)
               await deleteCategory({ id: activity.categoryId })
               removeActivity(activity.id)
               break
@@ -69,7 +72,7 @@ export function Sync() {
                 return
               }
 
-              setActivitySynced(activity.id)
+              setActivitySyncing(activity.id, true)
               await editCategory(category)
               removeActivity(activity.id)
               break
@@ -88,7 +91,7 @@ export function Sync() {
               return
             }
 
-            setActivitySynced(activity.id)
+            setActivitySyncing(activity.id, true)
             await createParentTask(parentTask)
             removeActivity(activity.id)
             return
@@ -101,14 +104,14 @@ export function Sync() {
               return
             }
 
-            setActivitySynced(activity.id)
+            setActivitySyncing(activity.id, true)
             await editParentTask(parentTask)
             removeActivity(activity.id)
             return
           }
 
           if (action === 'DELETE') {
-            setActivitySynced(activity.id)
+            setActivitySyncing(activity.id, true)
             await deleteParentTask({ id: activity.taskId })
             removeActivity(activity.id)
             return
@@ -126,7 +129,7 @@ export function Sync() {
               return
             }
 
-            setActivitySynced(activity.id)
+            setActivitySyncing(activity.id, true)
             await createChildTask(childTask)
             removeActivity(activity.id)
             return
@@ -139,14 +142,14 @@ export function Sync() {
               return
             }
 
-            setActivitySynced(activity.id)
+            setActivitySyncing(activity.id, true)
             await editChildTask(childTask)
             removeActivity(activity.id)
             return
           }
 
           if (action === 'DELETE') {
-            setActivitySynced(activity.id)
+            setActivitySyncing(activity.id, true)
             await deleteChildTask({ id: activity.taskId })
             removeActivity(activity.id)
             return
@@ -154,10 +157,9 @@ export function Sync() {
         }
         return
       } catch (error) {
+        console.log({ error })
         await sleep(5000)
-        console.log(error)
-      } finally {
-        setIsAppSyncing(false)
+        setActivitySyncing(activity.id, false)
       }
     })
   }, [
@@ -166,10 +168,8 @@ export function Sync() {
     getChildTask,
     getParentTask,
     removeActivity,
-    setActivitySynced,
-    isAppSyncing,
-    setIsAppSyncing,
-    startTransition,
+    setActivitySyncing,
+    isPending,
   ])
 
   return null

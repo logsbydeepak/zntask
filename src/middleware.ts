@@ -1,3 +1,4 @@
+import { cookies } from 'next/headers'
 import { NextRequest, NextResponse } from 'next/server'
 import { env } from '#env'
 import * as jose from 'jose'
@@ -5,7 +6,7 @@ import * as jose from 'jose'
 export async function middleware(req: NextRequest) {
   try {
     const url = req.url
-    const token = req.cookies.get('auth')?.value
+    const token = cookies().get('auth')?.value
     const isAuth = await checkIsAuth(token)
 
     const isIndexPage = req.nextUrl.pathname === '/'

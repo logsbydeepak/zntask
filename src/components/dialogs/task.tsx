@@ -103,7 +103,6 @@ export function TaskDialog() {
 
   if (isEdit && !task.parentTask) {
     closeDialog()
-    return
   }
 
   return (
@@ -330,7 +329,7 @@ function TaskDialogContent({
 
                   <input
                     {...register(`tasks.${index}.title`)}
-                    id="title"
+                    id={`tasks.${index}.title`}
                     placeholder="task"
                     className="m-0 w-full border-0 p-0 outline-none focus-visible:ring-0"
                     autoComplete="off"
@@ -354,7 +353,7 @@ function TaskDialogContent({
                 <textarea
                   {...register(`tasks.${index}.details`)}
                   placeholder="details"
-                  id="details"
+                  id={`details.${index}.details`}
                   className="container-scroll w-full resize-none border-0 p-0 text-xs font-medium outline-none focus-visible:ring-0"
                 />
                 <div className="flex flex-wrap gap-x-1.5 gap-y-2">
