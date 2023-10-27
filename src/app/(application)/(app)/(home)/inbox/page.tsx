@@ -30,12 +30,9 @@ import {
 } from '@/components/ui/menu'
 import { useAppStore } from '@/store/app'
 import { ChildTask, ParentTask, Task, useTaskStore } from '@/store/task'
+import { TabsContent, TabsList, TabsRoot, TabsTrigger } from '@ui/tabs'
 
 export default function Page() {
-  const tasks = useTaskStore(
-    useShallow((s) => s.parentTasks.filter((i) => !i.categoryId))
-  )
-
   return (
     <Layout.Root>
       <Layout.Header>
@@ -43,22 +40,70 @@ export default function Page() {
         <Head title="Inbox" />
       </Layout.Header>
       <Layout.Content>
-        {tasks.length === 0 && (
-          <Layout.Empty.Container>
-            <Layout.Empty.Icon>
-              <InboxIcon />
-            </Layout.Empty.Icon>
-            <Layout.Empty.Label>No task</Layout.Empty.Label>
-          </Layout.Empty.Container>
-        )}
-
-        <div className="space-y-1">
-          {tasks.map((i) => (
-            <TaskContainer key={i.id} task={i} />
-          ))}
-        </div>
+        <TabsRoot defaultValue="planed">
+          <TabsList>
+            <TabsTrigger value="planed">Planed</TabsTrigger>
+            <TabsTrigger value="completed">Completed</TabsTrigger>
+          </TabsList>
+          <TabsContent value="planed">
+            <div className="mt-4">
+              <PlanedTab />
+            </div>
+          </TabsContent>
+          <TabsContent value="completed">
+            <div className="mt-4">
+              <CompletedTab />
+            </div>
+          </TabsContent>
+        </TabsRoot>
       </Layout.Content>
     </Layout.Root>
+  )
+}
+
+function PlanedTab() {
+  const tasks = useTaskStore(
+    useShallow((s) =>
+      s.parentTasks.filter((i) => !i.categoryId && !i.isCompleted)
+    )
+  )
+
+  if (tasks.length === 0) return <EmptyState />
+  return (
+    <div className="space-y-1">
+      {tasks.map((i) => (
+        <TaskContainer key={i.id} task={i} />
+      ))}
+    </div>
+  )
+}
+
+function CompletedTab() {
+  const tasks = useTaskStore(
+    useShallow((s) =>
+      s.parentTasks.filter((i) => !i.categoryId && i.isCompleted)
+    )
+  )
+
+  if (tasks.length === 0) return <EmptyState />
+
+  return (
+    <div className="space-y-1">
+      {tasks.map((i) => (
+        <TaskContainer key={i.id} task={i} />
+      ))}
+    </div>
+  )
+}
+
+function EmptyState() {
+  return (
+    <Layout.Empty.Container>
+      <Layout.Empty.Icon>
+        <InboxIcon />
+      </Layout.Empty.Icon>
+      <Layout.Empty.Label>No task</Layout.Empty.Label>
+    </Layout.Empty.Container>
   )
 }
 
