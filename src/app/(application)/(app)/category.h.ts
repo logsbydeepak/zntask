@@ -9,9 +9,7 @@ import { h, r } from '@/utils/handler'
 import { zRequired } from '@/utils/zod'
 
 export const addCategory = h('AUTH', zCategory, async ({ input, userId }) => {
-  await db
-    .insert(dbSchema.categories)
-    .values({ ...input, userId, indicator: 'orange' })
+  await db.insert(dbSchema.categories).values({ ...input, userId })
 
   return r('OK', { input })
 })
