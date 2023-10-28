@@ -5,10 +5,13 @@ import {
   CheckboxIndicator,
   Root as CheckboxRoot,
 } from '@radix-ui/react-checkbox'
+import { format, isThisYear, isToday, isTomorrow, isYesterday } from 'date-fns'
 import {
+  CalendarIcon,
   CheckCircleIcon,
   CircleIcon,
   EditIcon,
+  HourglassIcon,
   InboxIcon,
   MoreVerticalIcon,
   Trash2Icon,
@@ -30,6 +33,7 @@ import {
 } from '@/components/ui/menu'
 import { useAppStore } from '@/store/app'
 import { ChildTask, ParentTask, Task, useTaskStore } from '@/store/task'
+import { cn } from '@/utils/style'
 import { TabsContent, TabsList, TabsRoot, TabsTrigger } from '@ui/tabs'
 
 export default function Page() {
@@ -183,6 +187,9 @@ function TaskItem({
   handleOnTaskClick: () => void
   handleOnTaskCheckboxClick: (value: boolean) => void
 }) {
+  const date = task.date ? new Date(task.date) : null
+  const time = task.time ? new Date(task.time) : null
+
   return (
     <ContextMenuRoot>
       <DropdownMenuRoot>
@@ -203,8 +210,31 @@ function TaskItem({
                   {task.title}
                 </button>
               </div>
-              <div className="ml-[26px]">
+              <div className="ml-[26px] space-y-0.5">
                 <p className="text-xs text-gray-600">{task.details}</p>
+                {task.date && (
+                  <div className="flex items-center space-x-0.5 text-xs font-normal text-gray-600">
+                    <InfoIcon>
+                      <CalendarIcon />
+                    </InfoIcon>
+                    <p>{date ? showDate(date) : 'select'}</p>
+
+                    {time && (
+                      <div>
+                        <div className="mx-1 h-2 border-l border-gray-200" />
+                      </div>
+                    )}
+
+                    {time && (
+                      <>
+                        <InfoIcon>
+                          <HourglassIcon />
+                        </InfoIcon>
+                        <p>{time && showTime(time)}</p>
+                      </>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
             <div>
@@ -310,4 +340,26 @@ function Checkbox({
       </CheckboxIndicator>
     </CheckboxRoot>
   )
+}
+
+function InfoIcon({ children }: { children: React.ReactNode }) {
+  return <span className="grid h-3 w-3 place-content-center">{children}</span>
+}
+
+function showDate(date: Date) {
+  return (
+    (isTomorrow(date) && 'tomorrow') ||
+    (isToday(date) && 'today') ||
+    (isYesterday(date) && 'yesterday') ||
+    (isThisYear(date) &&
+      !isToday(date) &&
+      !isTomorrow(date) &&
+      !isYesterday(date) &&
+      format(date, 'MMM d')) ||
+    format(date, 'MMM d, yyyy')
+  )
+}
+
+function showTime(time: Date) {
+  return format(time, 'h:mm a')
 }
