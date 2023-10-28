@@ -188,14 +188,24 @@ function TaskItem({
       <DropdownMenuRoot>
         <ContextMenuTrigger asChild>
           <div className="flex items-center rounded-md border border-transparent px-3 py-2 text-sm hover:cursor-pointer hover:border-gray-200 hover:bg-gray-50 data-[state=open]:border-gray-200 data-[state=open]:bg-gray-50">
-            <div className="flex w-full items-center space-x-3">
-              <Checkbox
-                value={task.isCompleted}
-                setValue={handleOnTaskCheckboxClick}
-              />
-              <button onClick={handleOnTaskClick} className="w-full text-left">
-                <p>{task.title}</p>
-              </button>
+            <div className="w-full">
+              <div className="flex items-center space-x-3">
+                <div>
+                  <Checkbox
+                    value={task.isCompleted}
+                    setValue={handleOnTaskCheckboxClick}
+                  />
+                </div>
+                <button
+                  onClick={handleOnTaskClick}
+                  className="w-full text-left"
+                >
+                  {task.title}
+                </button>
+              </div>
+              <div className="ml-[26px]">
+                <p className="text-xs text-gray-600">{task.details}</p>
+              </div>
             </div>
             <div>
               <DropdownMenuTrigger asChild>
