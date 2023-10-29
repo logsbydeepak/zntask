@@ -5,6 +5,7 @@ import {
   CheckboxIndicator,
   Root as CheckboxRoot,
 } from '@radix-ui/react-checkbox'
+import * as Dialog from '@radix-ui/react-dialog'
 import { format, isThisYear, isToday, isTomorrow, isYesterday } from 'date-fns'
 import {
   CalendarIcon,
@@ -189,73 +190,80 @@ function TaskItem({
 }) {
   const date = task.date ? new Date(task.date) : null
   const time = task.time ? new Date(task.time) : null
+  const [isEdit, setIsEdit] = React.useState(false)
 
   return (
-    <ContextMenuRoot>
-      <DropdownMenuRoot>
-        <ContextMenuTrigger asChild>
-          <div className="flex items-center rounded-md border border-transparent px-3 py-2 text-sm hover:cursor-pointer hover:border-gray-200 hover:bg-gray-50 data-[state=open]:border-gray-200 data-[state=open]:bg-gray-50">
-            <div className="w-full">
-              <div className="flex items-center space-x-3">
-                <div>
-                  <Checkbox
-                    value={task.isCompleted}
-                    setValue={handleOnTaskCheckboxClick}
-                  />
-                </div>
-                <button
-                  onClick={handleOnTaskClick}
-                  className="w-full text-left"
-                >
-                  {task.title}
-                </button>
-              </div>
-              <div className="ml-[26px] space-y-0.5">
-                <p className="text-xs text-gray-600">{task.details}</p>
-                {task.date && (
-                  <div className="flex items-center space-x-0.5 text-xs font-normal text-gray-600">
-                    <InfoIcon>
-                      <CalendarIcon />
-                    </InfoIcon>
-                    <p>{date ? showDate(date) : 'select'}</p>
+    <Dialog.Root open={isEdit} onOpenChange={setIsEdit}>
+      <ContextMenuRoot>
+        <DropdownMenuRoot>
+          {!isEdit && (
+            <ContextMenuTrigger asChild>
+              <Dialog.Trigger className="flex w-full items-center rounded-md border border-transparent px-3 py-2 text-sm hover:cursor-pointer hover:border-gray-200 hover:bg-gray-50 data-[state=open]:border-gray-200 data-[state=open]:bg-gray-50">
+                <div className="w-full">
+                  <div className="flex items-center space-x-3">
+                    <div>
+                      <Checkbox
+                        value={task.isCompleted}
+                        setValue={handleOnTaskCheckboxClick}
+                      />
+                    </div>
+                    <p className="w-full cursor-text text-left">{task.title}</p>
+                  </div>
+                  <div className="ml-[26px] space-y-0.5">
+                    <p className="text-xs text-gray-600">{task.details}</p>
+                    {task.date && (
+                      <div className="flex items-center space-x-0.5 text-xs font-normal text-gray-600">
+                        <InfoIcon>
+                          <CalendarIcon />
+                        </InfoIcon>
+                        <p>{date ? showDate(date) : 'select'}</p>
 
-                    {time && (
-                      <div>
-                        <div className="mx-1 h-2 border-l border-gray-200" />
+                        {time && (
+                          <div>
+                            <div className="mx-1 h-2 border-l border-gray-200" />
+                          </div>
+                        )}
+
+                        {time && (
+                          <>
+                            <InfoIcon>
+                              <HourglassIcon />
+                            </InfoIcon>
+                            <p>{time && showTime(time)}</p>
+                          </>
+                        )}
                       </div>
                     )}
-
-                    {time && (
-                      <>
-                        <InfoIcon>
-                          <HourglassIcon />
-                        </InfoIcon>
-                        <p>{time && showTime(time)}</p>
-                      </>
-                    )}
                   </div>
-                )}
-              </div>
-            </div>
-            <div>
-              <DropdownMenuTrigger asChild>
-                <button className="flex h-6 w-6 items-center justify-center text-gray-400 hover:text-gray-800 data-[state=open]:text-gray-800">
-                  <span className="inline-block h-4 w-4">
-                    <MoreVerticalIcon />
-                  </span>
-                </button>
-              </DropdownMenuTrigger>
-            </div>
-          </div>
-        </ContextMenuTrigger>
-        <ContextMenuContent>
-          <TaskMenuContent task={task} type="context" />
-        </ContextMenuContent>
-        <DropdownMenuContent align="end">
-          <TaskMenuContent task={task} type="dropdown" />
-        </DropdownMenuContent>
-      </DropdownMenuRoot>
-    </ContextMenuRoot>
+                </div>
+                <div>
+                  <DropdownMenuTrigger asChild>
+                    <button className="flex h-6 w-6 items-center justify-center text-gray-400 hover:text-gray-800 data-[state=open]:text-gray-800">
+                      <span className="inline-block h-4 w-4">
+                        <MoreVerticalIcon />
+                      </span>
+                    </button>
+                  </DropdownMenuTrigger>
+                </div>
+              </Dialog.Trigger>
+            </ContextMenuTrigger>
+          )}
+
+          {isEdit && (
+            <Dialog.Content>
+              <input type="text" defaultValue={task.title} />
+            </Dialog.Content>
+          )}
+
+          <ContextMenuContent>
+            <TaskMenuContent task={task} type="context" />
+          </ContextMenuContent>
+          <DropdownMenuContent align="end">
+            <TaskMenuContent task={task} type="dropdown" />
+          </DropdownMenuContent>
+        </DropdownMenuRoot>
+      </ContextMenuRoot>
+    </Dialog.Root>
   )
 }
 
