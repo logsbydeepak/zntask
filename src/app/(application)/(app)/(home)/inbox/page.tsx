@@ -198,8 +198,8 @@ function TaskItem({
     <ContextMenuRoot>
       <DropdownMenuRoot>
         <ContextMenuTrigger asChild>
-          <div className="flex w-full items-center justify-between rounded-md border border-transparent px-3 py-2 text-sm hover:cursor-pointer hover:border-gray-200 hover:bg-gray-50 data-[state=open]:border-gray-200 data-[state=open]:bg-gray-50">
-            <div className="w-[95%]">
+          <div className="flex w-full flex-col rounded-md border border-transparent px-3 py-2 text-sm hover:cursor-pointer hover:border-gray-200 hover:bg-gray-50 data-[state=open]:border-gray-200 data-[state=open]:bg-gray-50">
+            <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <div className="flex items-center">
                   <Checkbox
@@ -208,74 +208,75 @@ function TaskItem({
                   />
                 </div>
                 <p
-                  className="w-full cursor-text overflow-hidden text-ellipsis text-left"
+                  className="w-full overflow-hidden text-ellipsis text-left"
                   onClick={handleOnTaskClick}
                 >
                   {task.title}
                 </p>
               </div>
-              <div className="ml-[26px] space-y-2">
-                <p
-                  className="cursor-text overflow-hidden text-ellipsis text-xs text-gray-600"
-                  onClick={handleOnTaskClick}
-                >
-                  {task.details?.split('\n').map((i, index) => (
-                    <React.Fragment key={index}>
-                      {index < 3 && (
-                        <>
-                          <span>{i}</span>
-                          <br />
-                        </>
-                      )}
-                      {index === 3 && <span>...</span>}
-                    </React.Fragment>
-                  ))}
-                </p>
-                {task.date && (
-                  <DateAndTimePicker
-                    date={task.date ? new Date(task.date) : null}
-                    time={task.time ? new Date(task.time) : null}
-                    setDate={(value) => {
-                      if ('categoryId' in task) {
-                        editParentTask({
-                          ...task,
-                          date: !value ? null : value.toISOString(),
-                        })
-                      }
 
-                      if ('parentId' in task) {
-                        editChildTask({
-                          ...task,
-                          date: !value ? null : value.toISOString(),
-                        })
-                      }
-                    }}
-                    setTime={(value) => {
-                      if ('categoryId' in task) {
-                        editParentTask({
-                          ...task,
-                          time: !value ? null : value.toISOString(),
-                        })
-                      }
-                      if ('parentId' in task) {
-                        editChildTask({
-                          ...task,
-                          time: !value ? null : value.toISOString(),
-                        })
-                      }
-                    }}
-                  />
-                )}
+              <div>
+                <DropdownMenuTrigger asChild>
+                  <button className="flex h-6 w-6 items-center justify-center text-gray-400 hover:text-gray-800 data-[state=open]:text-gray-800">
+                    <span className="inline-block h-4 w-4">
+                      <MoreVerticalIcon />
+                    </span>
+                  </button>
+                </DropdownMenuTrigger>
               </div>
             </div>
-            <div>
-              <DropdownMenuTrigger asChild>
-                <button className="flex h-6 w-6 items-center justify-center text-gray-400 hover:text-gray-800 data-[state=open]:text-gray-800">
-                  <span className="inline-block h-4 w-4">
-                    <MoreVerticalIcon />
-                  </span>
-                </button>
-              </DropdownMenuTrigger>
+            <div className="ml-[26px] space-y-2">
+              <p
+                className="overflow-hidden text-ellipsis text-xs text-gray-600"
+                onClick={handleOnTaskClick}
+              >
+                {task.details?.split('\n').map((i, index) => (
+                  <React.Fragment key={index}>
+                    {index < 3 && (
+                      <>
+                        <span>{i}</span>
+                        {index !== 2 && <br />}
+                      </>
+                    )}
+                    {index === 3 && <span>...</span>}
+                  </React.Fragment>
+                ))}
+              </p>
+              {task.date && (
+                <DateAndTimePicker
+                  date={task.date ? new Date(task.date) : null}
+                  time={task.time ? new Date(task.time) : null}
+                  setDate={(value) => {
+                    if ('categoryId' in task) {
+                      editParentTask({
+                        ...task,
+                        date: !value ? null : value.toISOString(),
+                      })
+                    }
+
+                    if ('parentId' in task) {
+                      editChildTask({
+                        ...task,
+                        date: !value ? null : value.toISOString(),
+                      })
+                    }
+                  }}
+                  setTime={(value) => {
+                    if ('categoryId' in task) {
+                      editParentTask({
+                        ...task,
+                        time: !value ? null : value.toISOString(),
+                      })
+                    }
+                    if ('parentId' in task) {
+                      editChildTask({
+                        ...task,
+                        time: !value ? null : value.toISOString(),
+                      })
+                    }
+                  }}
+                />
+              )}
             </div>
           </div>
         </ContextMenuTrigger>
