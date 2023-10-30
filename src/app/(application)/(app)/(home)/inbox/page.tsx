@@ -211,7 +211,19 @@ function TaskItem({
                 </p>
               </div>
               <div className="ml-[26px] space-y-0.5">
-                <p className="text-xs text-gray-600">{task.details}</p>
+                <p className="overflow-hidden text-ellipsis text-xs text-gray-600">
+                  {task.details?.split('\n').map((i, index) => (
+                    <>
+                      {index < 3 && (
+                        <>
+                          <span>{i}</span>
+                          <br />
+                        </>
+                      )}
+                      {index === 3 && <span>...</span>}
+                    </>
+                  ))}
+                </p>
                 {task.date && (
                   <div className="flex items-center space-x-0.5 text-xs font-normal text-gray-600">
                     <InfoIcon>
