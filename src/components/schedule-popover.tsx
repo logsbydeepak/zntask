@@ -56,7 +56,7 @@ export const SchedulePopover = React.forwardRef<
       align="center"
       side="top"
       sideOffset={10}
-      className="category-popover w-72 space-y-4 rounded-lg border border-gray-200 bg-white shadow-sm"
+      className="category-popover z-50 w-72 space-y-4 rounded-lg border border-gray-200 bg-white shadow-sm"
       autoFocus={true}
       collisionPadding={10}
     >

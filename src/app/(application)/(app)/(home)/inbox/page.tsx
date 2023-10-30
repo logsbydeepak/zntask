@@ -5,6 +5,7 @@ import {
   CheckboxIndicator,
   Root as CheckboxRoot,
 } from '@radix-ui/react-checkbox'
+import * as Popover from '@radix-ui/react-popover'
 import { format, isThisYear, isToday, isTomorrow, isYesterday } from 'date-fns'
 import {
   CalendarIcon,
@@ -20,6 +21,7 @@ import { useShallow } from 'zustand/react/shallow'
 
 import * as Layout from '@/app/(application)/(app)/layout-components'
 import { Head } from '@/components/head'
+import { SchedulePopover } from '@/components/schedule-popover'
 import {
   ContextMenuContent,
   ContextMenuItem,
@@ -35,6 +37,8 @@ import { useAppStore } from '@/store/app'
 import { ChildTask, ParentTask, Task, useTaskStore } from '@/store/task'
 import { cn } from '@/utils/style'
 import { TabsContent, TabsList, TabsRoot, TabsTrigger } from '@ui/tabs'
+
+import { editCategory } from '../../category.h'
 
 export default function Page() {
   return (
@@ -187,17 +191,14 @@ function TaskItem({
   handleOnTaskClick: () => void
   handleOnTaskCheckboxClick: (value: boolean) => void
 }) {
-  const date = task.date ? new Date(task.date) : null
-  const time = task.time ? new Date(task.time) : null
+  const editChildTask = useTaskStore((s) => s.editChildTask)
+  const editParentTask = useTaskStore((s) => s.editParentTask)
 
   return (
     <ContextMenuRoot>
       <DropdownMenuRoot>
         <ContextMenuTrigger asChild>
-          <div
-            onClick={handleOnTaskClick}
-            className="flex w-full items-center justify-between rounded-md border border-transparent px-3 py-2 text-sm hover:cursor-pointer hover:border-gray-200 hover:bg-gray-50 data-[state=open]:border-gray-200 data-[state=open]:bg-gray-50"
-          >
+          <div className="flex w-full items-center justify-between rounded-md border border-transparent px-3 py-2 text-sm hover:cursor-pointer hover:border-gray-200 hover:bg-gray-50 data-[state=open]:border-gray-200 data-[state=open]:bg-gray-50">
             <div className="w-[95%]">
               <div className="flex items-center space-x-3">
                 <div className="flex items-center">
@@ -206,14 +207,20 @@ function TaskItem({
                     setValue={handleOnTaskCheckboxClick}
                   />
                 </div>
-                <p className="w-full overflow-hidden text-ellipsis text-left">
+                <p
+                  className="w-full cursor-text overflow-hidden text-ellipsis text-left"
+                  onClick={handleOnTaskClick}
+                >
                   {task.title}
                 </p>
               </div>
-              <div className="ml-[26px] space-y-0.5">
-                <p className="overflow-hidden text-ellipsis text-xs text-gray-600">
+              <div className="ml-[26px] space-y-2">
+                <p
+                  className="cursor-text overflow-hidden text-ellipsis text-xs text-gray-600"
+                  onClick={handleOnTaskClick}
+                >
                   {task.details?.split('\n').map((i, index) => (
-                    <>
+                    <React.Fragment key={index}>
                       {index < 3 && (
                         <>
                           <span>{i}</span>
@@ -221,31 +228,43 @@ function TaskItem({
                         </>
                       )}
                       {index === 3 && <span>...</span>}
-                    </>
+                    </React.Fragment>
                   ))}
                 </p>
                 {task.date && (
-                  <div className="flex items-center space-x-0.5 text-xs font-normal text-gray-600">
-                    <InfoIcon>
-                      <CalendarIcon />
-                    </InfoIcon>
-                    <p>{date ? showDate(date) : 'select'}</p>
+                  <DateAndTimePicker
+                    date={task.date ? new Date(task.date) : null}
+                    time={task.time ? new Date(task.time) : null}
+                    setDate={(value) => {
+                      if ('categoryId' in task) {
+                        editParentTask({
+                          ...task,
+                          date: !value ? null : value.toISOString(),
+                        })
+                      }
 
-                    {time && (
-                      <div>
-                        <div className="mx-1 h-2 border-l border-gray-200" />
-                      </div>
-                    )}
-
-                    {time && (
-                      <>
-                        <InfoIcon>
-                          <HourglassIcon />
-                        </InfoIcon>
-                        <p>{time && showTime(time)}</p>
-                      </>
-                    )}
-                  </div>
+                      if ('parentId' in task) {
+                        editChildTask({
+                          ...task,
+                          date: !value ? null : value.toISOString(),
+                        })
+                      }
+                    }}
+                    setTime={(value) => {
+                      if ('categoryId' in task) {
+                        editParentTask({
+                          ...task,
+                          time: !value ? null : value.toISOString(),
+                        })
+                      }
+                      if ('parentId' in task) {
+                        editChildTask({
+                          ...task,
+                          time: !value ? null : value.toISOString(),
+                        })
+                      }
+                    }}
+                  />
                 )}
               </div>
             </div>
@@ -355,10 +374,6 @@ function Checkbox({
   )
 }
 
-function InfoIcon({ children }: { children: React.ReactNode }) {
-  return <span className="grid h-3 w-3 place-content-center">{children}</span>
-}
-
 function showDate(date: Date) {
   return (
     (isTomorrow(date) && 'tomorrow') ||
@@ -375,4 +390,89 @@ function showDate(date: Date) {
 
 function showTime(time: Date) {
   return format(time, 'h:mm a')
+}
+
+function DateAndTimePicker({
+  date,
+  time,
+  setDate,
+  setTime,
+}: {
+  date: Date | null
+  time: Date | null
+  setDate: (date: Date | null) => void
+  setTime: (date: Date | null) => void
+}) {
+  const [isOpen, setIsOpen] = React.useState(false)
+
+  return (
+    <Popover.Root open={isOpen} onOpenChange={setIsOpen}>
+      <Popover.Trigger asChild>
+        <InfoButton>
+          <InfoIcon>
+            <CalendarIcon />
+          </InfoIcon>
+          <InfoText>{date ? showDate(date) : 'select'}</InfoText>
+
+          {time && (
+            <div>
+              <div className="mx-1 h-2 border-l border-gray-200" />
+            </div>
+          )}
+
+          {time && (
+            <>
+              <InfoIcon>
+                <HourglassIcon />
+              </InfoIcon>
+              <InfoText>{time && showTime(time)}</InfoText>
+            </>
+          )}
+        </InfoButton>
+      </Popover.Trigger>
+      {isOpen && (
+        <SchedulePopover
+          setIsOpen={setIsOpen}
+          date={date}
+          time={time}
+          setDate={setDate}
+          setTime={setTime}
+        />
+      )}
+    </Popover.Root>
+  )
+}
+
+const InfoButton = React.forwardRef<
+  HTMLButtonElement,
+  React.ComponentPropsWithoutRef<'button'>
+>(({ className, ...props }, ref) => {
+  return (
+    <button
+      {...props}
+      ref={ref}
+      type="button"
+      className={cn(
+        'mr-2 inline-flex items-center space-x-1 rounded-full border border-gray-200 px-3 py-1 text-gray-600 hover:bg-gray-50 hover:text-gray-950',
+        className
+      )}
+    />
+  )
+})
+InfoButton.displayName = 'InfoButton'
+
+function InfoIcon({ children }: { children: React.ReactNode }) {
+  return <span className="grid h-3 w-3 place-content-center">{children}</span>
+}
+
+function InfoText({
+  children,
+  className,
+}: {
+  children: React.ReactNode
+  className?: string
+}) {
+  return (
+    <span className={cn('text-xs font-medium', className)}>{children}</span>
+  )
 }
