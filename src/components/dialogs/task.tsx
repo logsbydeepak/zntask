@@ -5,13 +5,9 @@ import {
   Root as CheckboxRoot,
 } from '@radix-ui/react-checkbox'
 import * as Popover from '@radix-ui/react-popover'
-import { format, isThisYear, isToday, isTomorrow, isYesterday } from 'date-fns'
 import {
-  ArrowUpLeftFromCircleIcon,
-  CalendarIcon,
   CheckCircleIcon,
   CircleIcon,
-  HourglassIcon,
   InboxIcon,
   PlusIcon,
   TrashIcon,
@@ -23,6 +19,7 @@ import { useShallow } from 'zustand/react/shallow'
 
 import { CategoryPopover } from '@/components/category-popover'
 import { Head } from '@/components/head'
+import { SchedulePicker } from '@/components/schedule'
 import { useAppStore } from '@/store/app'
 import { useCategoryStore } from '@/store/category'
 import { ChildTask, ParentTask, useTaskStore } from '@/store/task'
@@ -31,8 +28,6 @@ import { cn } from '@/utils/style'
 import { zRequired } from '@/utils/zod'
 import * as Dialog from '@ui/dialog'
 import * as Form from '@ui/form'
-
-import { SchedulePopover } from '../schedule-popover'
 
 const schema = z.object({
   categoryId: z.string().nullable(),
@@ -358,7 +353,7 @@ function TaskDialogContent({
                   className="container-scroll w-full resize-none border-0 p-0 text-xs font-medium text-gray-600 outline-none focus-visible:ring-0"
                 />
                 <div className="flex flex-wrap gap-x-1.5 gap-y-2">
-                  <DateAndTimePicker
+                  <SchedulePicker
                     date={watch(`tasks.${index}.date`)}
                     time={watch(`tasks.${index}.time`)}
                     setDate={(value) => setValue(`tasks.${index}.date`, value)}
@@ -504,75 +499,6 @@ function CategoryPicker({
       )}
     </Popover.Root>
   )
-}
-
-function DateAndTimePicker({
-  date,
-  time,
-  setDate,
-  setTime,
-}: {
-  date: Date | null
-  time: Date | null
-  setDate: (date: Date | null) => void
-  setTime: (date: Date | null) => void
-}) {
-  const [isOpen, setIsOpen] = React.useState(false)
-
-  return (
-    <Popover.Root open={isOpen} onOpenChange={setIsOpen}>
-      <Popover.Trigger asChild>
-        <InfoButton>
-          <InfoIcon>
-            <CalendarIcon />
-          </InfoIcon>
-          <InfoText>{date ? showDate(date) : 'select'}</InfoText>
-
-          {time && (
-            <div>
-              <div className="mx-1 h-2 border-l border-gray-200" />
-            </div>
-          )}
-
-          {time && (
-            <>
-              <InfoIcon>
-                <HourglassIcon />
-              </InfoIcon>
-              <InfoText>{time && showTime(time)}</InfoText>
-            </>
-          )}
-        </InfoButton>
-      </Popover.Trigger>
-      {isOpen && (
-        <SchedulePopover
-          setIsOpen={setIsOpen}
-          date={date}
-          time={time}
-          setDate={setDate}
-          setTime={setTime}
-        />
-      )}
-    </Popover.Root>
-  )
-}
-
-function showDate(date: Date) {
-  return (
-    (isTomorrow(date) && 'tomorrow') ||
-    (isToday(date) && 'today') ||
-    (isYesterday(date) && 'yesterday') ||
-    (isThisYear(date) &&
-      !isToday(date) &&
-      !isTomorrow(date) &&
-      !isYesterday(date) &&
-      format(date, 'MMM d')) ||
-    format(date, 'MMM d, yyyy')
-  )
-}
-
-function showTime(time: Date) {
-  return format(time, 'h:mm a')
 }
 
 const InfoButton = React.forwardRef<

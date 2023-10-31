@@ -5,14 +5,10 @@ import {
   CheckboxIndicator,
   Root as CheckboxRoot,
 } from '@radix-ui/react-checkbox'
-import * as Popover from '@radix-ui/react-popover'
-import { format, isThisYear, isToday, isTomorrow, isYesterday } from 'date-fns'
 import {
-  CalendarIcon,
   CheckCircleIcon,
   CircleIcon,
   EditIcon,
-  HourglassIcon,
   InboxIcon,
   MoreVerticalIcon,
   Trash2Icon,
@@ -21,7 +17,7 @@ import { useShallow } from 'zustand/react/shallow'
 
 import * as Layout from '@/app/(application)/(app)/layout-components'
 import { Head } from '@/components/head'
-import { SchedulePopover } from '@/components/schedule-popover'
+import { SchedulePicker } from '@/components/schedule'
 import {
   ContextMenuContent,
   ContextMenuItem,
@@ -34,11 +30,8 @@ import {
   MenuIcon,
 } from '@/components/ui/menu'
 import { useAppStore } from '@/store/app'
-import { ChildTask, ParentTask, Task, useTaskStore } from '@/store/task'
-import { cn } from '@/utils/style'
+import { ChildTask, ParentTask, useTaskStore } from '@/store/task'
 import { TabsContent, TabsList, TabsRoot, TabsTrigger } from '@ui/tabs'
-
-import { editCategory } from '../../category.h'
 
 export default function Page() {
   return (
@@ -246,7 +239,7 @@ function TaskItem({
                   </p>
                 )}
                 {task.date && (
-                  <DateAndTimePicker
+                  <SchedulePicker
                     date={task.date ? new Date(task.date) : null}
                     time={task.time ? new Date(task.time) : null}
                     setDate={(value) => {
@@ -376,108 +369,5 @@ function Checkbox({
         <CheckCircleIcon />
       </CheckboxIndicator>
     </CheckboxRoot>
-  )
-}
-
-function showDate(date: Date) {
-  return (
-    (isTomorrow(date) && 'tomorrow') ||
-    (isToday(date) && 'today') ||
-    (isYesterday(date) && 'yesterday') ||
-    (isThisYear(date) &&
-      !isToday(date) &&
-      !isTomorrow(date) &&
-      !isYesterday(date) &&
-      format(date, 'MMM d')) ||
-    format(date, 'MMM d, yyyy')
-  )
-}
-
-function showTime(time: Date) {
-  return format(time, 'h:mm a')
-}
-
-function DateAndTimePicker({
-  date,
-  time,
-  setDate,
-  setTime,
-}: {
-  date: Date | null
-  time: Date | null
-  setDate: (date: Date | null) => void
-  setTime: (date: Date | null) => void
-}) {
-  const [isOpen, setIsOpen] = React.useState(false)
-
-  return (
-    <Popover.Root open={isOpen} onOpenChange={setIsOpen}>
-      <Popover.Trigger asChild>
-        <InfoButton>
-          <InfoIcon>
-            <CalendarIcon />
-          </InfoIcon>
-          <InfoText>{date ? showDate(date) : 'select'}</InfoText>
-
-          {time && (
-            <div>
-              <div className="mx-1 h-2 border-l border-gray-200" />
-            </div>
-          )}
-
-          {time && (
-            <>
-              <InfoIcon>
-                <HourglassIcon />
-              </InfoIcon>
-              <InfoText>{time && showTime(time)}</InfoText>
-            </>
-          )}
-        </InfoButton>
-      </Popover.Trigger>
-      {isOpen && (
-        <SchedulePopover
-          setIsOpen={setIsOpen}
-          date={date}
-          time={time}
-          setDate={setDate}
-          setTime={setTime}
-        />
-      )}
-    </Popover.Root>
-  )
-}
-
-const InfoButton = React.forwardRef<
-  HTMLButtonElement,
-  React.ComponentPropsWithoutRef<'button'>
->(({ className, ...props }, ref) => {
-  return (
-    <button
-      {...props}
-      ref={ref}
-      type="button"
-      className={cn(
-        'mr-2 inline-flex items-center space-x-1 rounded-full border border-gray-200 px-3 py-1 text-gray-600 hover:bg-gray-50 hover:text-gray-950',
-        className
-      )}
-    />
-  )
-})
-InfoButton.displayName = 'InfoButton'
-
-function InfoIcon({ children }: { children: React.ReactNode }) {
-  return <span className="grid h-3 w-3 place-content-center">{children}</span>
-}
-
-function InfoText({
-  children,
-  className,
-}: {
-  children: React.ReactNode
-  className?: string
-}) {
-  return (
-    <span className={cn('text-xs font-medium', className)}>{children}</span>
   )
 }

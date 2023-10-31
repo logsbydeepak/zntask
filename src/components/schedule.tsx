@@ -1,7 +1,15 @@
 import React from 'react'
 import { PopoverContent } from '@radix-ui/react-popover'
+import * as Popover from '@radix-ui/react-popover'
 import { parse as chronoParse } from 'chrono-node'
-import { addDays, format } from 'date-fns'
+import {
+  addDays,
+  format,
+  isThisYear,
+  isToday,
+  isTomorrow,
+  isYesterday,
+} from 'date-fns'
 import {
   CalendarCheckIcon,
   CalendarIcon,
@@ -13,7 +21,60 @@ import {
 import { DayPicker } from 'react-day-picker'
 import { useDebounce } from 'use-debounce'
 
-export const SchedulePopover = React.forwardRef<
+import { cn } from '@/utils/style'
+
+export function SchedulePicker({
+  date,
+  time,
+  setDate,
+  setTime,
+}: {
+  date: Date | null
+  time: Date | null
+  setDate: (date: Date | null) => void
+  setTime: (date: Date | null) => void
+}) {
+  const [isOpen, setIsOpen] = React.useState(false)
+
+  return (
+    <Popover.Root open={isOpen} onOpenChange={setIsOpen}>
+      <Popover.Trigger asChild>
+        <InfoButton>
+          <InfoIcon>
+            <CalendarIcon />
+          </InfoIcon>
+          <InfoText>{date ? showDate(date) : 'select'}</InfoText>
+
+          {time && (
+            <div>
+              <div className="mx-1 h-2 border-l border-gray-200" />
+            </div>
+          )}
+
+          {time && (
+            <>
+              <InfoIcon>
+                <HourglassIcon />
+              </InfoIcon>
+              <InfoText>{time && showTime(time)}</InfoText>
+            </>
+          )}
+        </InfoButton>
+      </Popover.Trigger>
+      {isOpen && (
+        <SchedulePopover
+          setIsOpen={setIsOpen}
+          date={date}
+          time={time}
+          setDate={setDate}
+          setTime={setTime}
+        />
+      )}
+    </Popover.Root>
+  )
+}
+
+const SchedulePopover = React.forwardRef<
   React.ElementRef<typeof PopoverContent>,
   React.ComponentProps<typeof PopoverContent> & {
     setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
@@ -270,4 +331,56 @@ function weekDayName(date: Date) {
   if (day === 5) return 'F'
   if (day === 6) return 'S'
   return 'NA'
+}
+
+const InfoButton = React.forwardRef<
+  HTMLButtonElement,
+  React.ComponentPropsWithoutRef<'button'>
+>(({ className, ...props }, ref) => {
+  return (
+    <button
+      {...props}
+      ref={ref}
+      type="button"
+      className={cn(
+        'mr-2 inline-flex items-center space-x-1 rounded-full border border-gray-200 px-3 py-1 text-gray-600 hover:bg-gray-50 hover:text-gray-950',
+        className
+      )}
+    />
+  )
+})
+InfoButton.displayName = 'InfoButton'
+
+function InfoIcon({ children }: { children: React.ReactNode }) {
+  return <span className="grid h-3 w-3 place-content-center">{children}</span>
+}
+
+function InfoText({
+  children,
+  className,
+}: {
+  children: React.ReactNode
+  className?: string
+}) {
+  return (
+    <span className={cn('text-xs font-medium', className)}>{children}</span>
+  )
+}
+
+function showDate(date: Date) {
+  return (
+    (isTomorrow(date) && 'tomorrow') ||
+    (isToday(date) && 'today') ||
+    (isYesterday(date) && 'yesterday') ||
+    (isThisYear(date) &&
+      !isToday(date) &&
+      !isTomorrow(date) &&
+      !isYesterday(date) &&
+      format(date, 'MMM d')) ||
+    format(date, 'MMM d, yyyy')
+  )
+}
+
+function showTime(time: Date) {
+  return format(time, 'h:mm a')
 }
