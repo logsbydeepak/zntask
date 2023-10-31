@@ -37,3 +37,19 @@ export const Button = React.forwardRef<
   </button>
 ))
 Button.displayName = 'Button'
+
+export const ActionButton = React.forwardRef<
+  HTMLButtonElement,
+  React.ComponentPropsWithoutRef<'button'>
+>(({ children, ...props }, ref) => {
+  return (
+    <button
+      {...props}
+      ref={ref}
+      className="group flex items-center space-x-2 rounded-md px-1.5 py-1 text-xs font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-950"
+    >
+      {children}
+    </button>
+  )
+})
+ActionButton.displayName = 'ActionButton'

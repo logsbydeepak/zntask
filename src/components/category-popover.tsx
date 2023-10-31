@@ -7,6 +7,7 @@ import { isValid } from 'ulidx'
 import { useCategoryStore } from '@/store/category'
 import { Category, getCategoryColor } from '@/utils/category'
 import { cn } from '@/utils/style'
+import { ActionButton } from '@ui/button'
 
 export const CategoryPopover = React.forwardRef<
   React.ElementRef<typeof PopoverContent>,
@@ -225,15 +226,4 @@ const CategoryItem = {
   Container: CategoryItemContainer,
   Icon: CategoryItemIcon,
   Title: CategoryItemTitle,
-}
-
-function ActionButton({ children, ...props }: React.ComponentProps<'button'>) {
-  return (
-    <button
-      {...props}
-      className="group flex items-center space-x-2 rounded-md px-1.5 py-1 text-xs font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-950"
-    >
-      {children}
-    </button>
-  )
 }

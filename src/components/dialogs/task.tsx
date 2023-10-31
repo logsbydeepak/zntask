@@ -26,8 +26,11 @@ import { ChildTask, ParentTask, useTaskStore } from '@/store/task'
 import { getCategoryColor } from '@/utils/category'
 import { cn } from '@/utils/style'
 import { zRequired } from '@/utils/zod'
+import * as Badge from '@ui/badge'
 import * as Dialog from '@ui/dialog'
 import * as Form from '@ui/form'
+
+import { ActionButton } from '../ui/button'
 
 const schema = z.object({
   categoryId: z.string().nullable(),
@@ -361,21 +364,21 @@ function TaskDialogContent({
                   />
 
                   {index === 0 && parentTask && (
-                    <InfoButton
+                    <Badge.Button
                       onClick={() => {
                         removeParentTask(parentTask.id)
                         handleClose()
                       }}
                     >
-                      <InfoIcon>
+                      <Badge.Icon>
                         <TrashIcon />
-                      </InfoIcon>
-                      <InfoText>delete</InfoText>
-                    </InfoButton>
+                      </Badge.Icon>
+                      <Badge.Label>delete</Badge.Label>
+                    </Badge.Button>
                   )}
 
                   {index === 0 && (
-                    <InfoButton
+                    <Badge.Button
                       onClick={() => {
                         append({
                           _id: null,
@@ -387,15 +390,15 @@ function TaskDialogContent({
                         })
                       }}
                     >
-                      <InfoIcon>
+                      <Badge.Icon>
                         <PlusIcon />
-                      </InfoIcon>
-                      <InfoText>subtask</InfoText>
-                    </InfoButton>
+                      </Badge.Icon>
+                      <Badge.Label>subtask</Badge.Label>
+                    </Badge.Button>
                   )}
 
                   {index !== 0 && (
-                    <InfoButton
+                    <Badge.Button
                       onClick={() => {
                         const id = getValues(`tasks.${index}._id`)
                         if (id) {
@@ -405,11 +408,11 @@ function TaskDialogContent({
                         remove(index)
                       }}
                     >
-                      <InfoIcon>
+                      <Badge.Icon>
                         <XIcon />
-                      </InfoIcon>
-                      <InfoText>remove</InfoText>
-                    </InfoButton>
+                      </Badge.Icon>
+                      <Badge.Label>remove</Badge.Label>
+                    </Badge.Button>
                   )}
                 </div>
               </div>
@@ -471,8 +474,8 @@ function CategoryPicker({
   return (
     <Popover.Root open={isOpen} onOpenChange={setIsOpen}>
       <Popover.Trigger asChild>
-        <InfoButton className="max-w-[95%] overflow-hidden">
-          <InfoIcon>
+        <Badge.Button className="max-w-[95%] overflow-hidden">
+          <Badge.Icon>
             {!currentCategory && (
               <InboxIcon className="h-full w-full text-gray-600" />
             )}
@@ -484,11 +487,11 @@ function CategoryPicker({
                 )}
               />
             )}
-          </InfoIcon>
-          <InfoText className="w-full overflow-hidden overflow-ellipsis">
+          </Badge.Icon>
+          <Badge.Label className="w-full overflow-hidden overflow-ellipsis">
             {currentCategory ? currentCategory.title : 'Inbox'}
-          </InfoText>
-        </InfoButton>
+          </Badge.Label>
+        </Badge.Button>
       </Popover.Trigger>
       {isOpen && (
         <CategoryPopover
@@ -498,50 +501,5 @@ function CategoryPicker({
         />
       )}
     </Popover.Root>
-  )
-}
-
-const InfoButton = React.forwardRef<
-  HTMLButtonElement,
-  React.ComponentPropsWithoutRef<'button'>
->(({ className, ...props }, ref) => {
-  return (
-    <button
-      {...props}
-      ref={ref}
-      type="button"
-      className={cn(
-        'mr-2 inline-flex items-center space-x-1 rounded-full border border-gray-200 px-3 py-1 text-gray-600 hover:bg-gray-50 hover:text-gray-950',
-        className
-      )}
-    />
-  )
-})
-InfoButton.displayName = 'InfoButton'
-
-function InfoIcon({ children }: { children: React.ReactNode }) {
-  return <span className="grid h-3 w-3 place-content-center">{children}</span>
-}
-
-function InfoText({
-  children,
-  className,
-}: {
-  children: React.ReactNode
-  className?: string
-}) {
-  return (
-    <span className={cn('text-xs font-medium', className)}>{children}</span>
-  )
-}
-
-function ActionButton({ children, ...props }: React.ComponentProps<'button'>) {
-  return (
-    <button
-      {...props}
-      className="group flex items-center space-x-2 rounded-md px-2 py-1 text-xs font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-950"
-    >
-      {children}
-    </button>
   )
 }

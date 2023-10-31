@@ -381,23 +381,6 @@ function CommandPalletContent({ handleClose }: { handleClose: () => void }) {
           )}
         </Command.List>
       </Command>
-      {page === 'SEARCH_TASK' && (
-        <>
-          <div
-            className="border-t border-gray-200 px-2.5 py-1.5"
-            onKeyDown={(e) => {
-              if (e.key === '/') {
-                e.preventDefault()
-              }
-            }}
-          >
-            <div className="flex justify-end">
-              <CategoryPicker value={null} setValue={() => {}} />
-              <ActionButton type="button">Status</ActionButton>
-            </div>
-          </div>
-        </>
-      )}
     </>
   )
 }
@@ -451,93 +434,4 @@ const CommandItem = {
   Icon: CommandItemIcon,
   Title: CommandItemTitle,
   Group: CommandItemGroup,
-}
-
-function ActionButton({ children, ...props }: React.ComponentProps<'button'>) {
-  return (
-    <button
-      {...props}
-      className="group flex items-center space-x-2 rounded-md px-1.5 py-1 text-xs font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-950"
-    >
-      {children}
-    </button>
-  )
-}
-
-function CategoryPicker({
-  value,
-  setValue,
-}: {
-  value: string | null
-  setValue: (id: string | null) => void
-}) {
-  const getCategory = useCategoryStore((state) => state.getCategory)
-  const [isOpen, setIsOpen] = React.useState(false)
-  const currentCategory = getCategory(value)
-
-  return (
-    <Popover.Root open={isOpen} onOpenChange={setIsOpen}>
-      <Popover.Trigger asChild>
-        <InfoButton className="max-w-[95%] overflow-hidden">
-          <InfoIcon>
-            {!currentCategory && (
-              <InboxIcon className="h-full w-full text-gray-600" />
-            )}
-            {currentCategory && (
-              <div
-                className={cn(
-                  'h-2.5 w-2.5 rounded-[4.5px]',
-                  `bg-${getCategoryColor(currentCategory.indicator)}-600`
-                )}
-              />
-            )}
-          </InfoIcon>
-          <InfoText className="w-full overflow-hidden overflow-ellipsis">
-            {currentCategory ? currentCategory.title : 'Inbox'}
-          </InfoText>
-        </InfoButton>
-      </Popover.Trigger>
-      {isOpen && (
-        <CategoryPopover
-          setValue={setValue}
-          currentCategory={currentCategory}
-          setIsOpen={setIsOpen}
-        />
-      )}
-    </Popover.Root>
-  )
-}
-
-const InfoButton = React.forwardRef<
-  HTMLButtonElement,
-  React.ComponentPropsWithoutRef<'button'>
->(({ className, ...props }, ref) => {
-  return (
-    <button
-      {...props}
-      ref={ref}
-      type="button"
-      className={cn(
-        'mr-2 inline-flex items-center space-x-1 rounded-full border border-gray-200 px-3 py-1 text-gray-600 hover:bg-gray-50 hover:text-gray-950',
-        className
-      )}
-    />
-  )
-})
-InfoButton.displayName = 'InfoButton'
-
-function InfoIcon({ children }: { children: React.ReactNode }) {
-  return <span className="grid h-3 w-3 place-content-center">{children}</span>
-}
-
-function InfoText({
-  children,
-  className,
-}: {
-  children: React.ReactNode
-  className?: string
-}) {
-  return (
-    <span className={cn('text-xs font-medium', className)}>{children}</span>
-  )
 }

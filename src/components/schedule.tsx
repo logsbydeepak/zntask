@@ -22,6 +22,7 @@ import { DayPicker } from 'react-day-picker'
 import { useDebounce } from 'use-debounce'
 
 import { cn } from '@/utils/style'
+import * as Badge from '@ui/badge'
 
 export function SchedulePicker({
   date,
@@ -39,11 +40,11 @@ export function SchedulePicker({
   return (
     <Popover.Root open={isOpen} onOpenChange={setIsOpen}>
       <Popover.Trigger asChild>
-        <InfoButton>
-          <InfoIcon>
+        <Badge.Button>
+          <Badge.Icon>
             <CalendarIcon />
-          </InfoIcon>
-          <InfoText>{date ? showDate(date) : 'select'}</InfoText>
+          </Badge.Icon>
+          <Badge.Label>{date ? showDate(date) : 'select'}</Badge.Label>
 
           {time && (
             <div>
@@ -53,13 +54,13 @@ export function SchedulePicker({
 
           {time && (
             <>
-              <InfoIcon>
+              <Badge.Icon>
                 <HourglassIcon />
-              </InfoIcon>
-              <InfoText>{time && showTime(time)}</InfoText>
+              </Badge.Icon>
+              <Badge.Label>{time && showTime(time)}</Badge.Label>
             </>
           )}
-        </InfoButton>
+        </Badge.Button>
       </Popover.Trigger>
       {isOpen && (
         <SchedulePopover
@@ -135,105 +136,105 @@ const SchedulePopover = React.forwardRef<
         </div>
         <div className="mt-3 flex flex-row flex-wrap gap-x-1.5 gap-y-2">
           {actionDate && actionTime && (
-            <ActionContainer
+            <Badge.Button
               onClick={() => {
                 setTime(actionTime)
                 setDate(actionDate)
                 handleClose()
               }}
             >
-              <ActionIcon>
+              <Badge.Icon>
                 <CalendarIcon />
-              </ActionIcon>
-              <ActionIcon>
+              </Badge.Icon>
+              <Badge.Icon>
                 <HourglassIcon />
-              </ActionIcon>
-            </ActionContainer>
+              </Badge.Icon>
+            </Badge.Button>
           )}
 
           {actionDate && (
-            <ActionContainer
+            <Badge.Button
               onClick={() => {
                 setDate(actionDate)
                 handleClose()
               }}
             >
-              <ActionIcon>
+              <Badge.Icon>
                 <CalendarIcon />
-              </ActionIcon>
-              <ActionText>
+              </Badge.Icon>
+              <Badge.Label>
                 {format(actionDate ?? new Date(), 'MMM d')}
-              </ActionText>
-            </ActionContainer>
+              </Badge.Label>
+            </Badge.Button>
           )}
           {actionTime && (
-            <ActionContainer
+            <Badge.Button
               onClick={() => {
                 if (!date) setDate(new Date())
                 setTime(actionDate)
                 handleClose()
               }}
             >
-              <ActionIcon>
+              <Badge.Icon>
                 <HourglassIcon />
-              </ActionIcon>
-              <ActionText>
+              </Badge.Icon>
+              <Badge.Label>
                 {format(actionTime ?? new Date(), 'h:mm a')}
-              </ActionText>
-            </ActionContainer>
+              </Badge.Label>
+            </Badge.Button>
           )}
 
-          <ActionContainer
+          <Badge.Button
             onClick={() => {
               setDate(new Date())
               handleClose()
             }}
           >
-            <ActionIcon>
+            <Badge.Icon>
               <CalendarIcon />
-            </ActionIcon>
-            <ActionText>today</ActionText>
-          </ActionContainer>
+            </Badge.Icon>
+            <Badge.Label>today</Badge.Label>
+          </Badge.Button>
 
-          <ActionContainer
+          <Badge.Button
             onClick={() => {
               setDate(addDays(new Date(), 1))
               handleClose()
             }}
           >
-            <ActionIcon>
+            <Badge.Icon>
               <CalendarIcon />
-            </ActionIcon>
-            <ActionText>tomorrow</ActionText>
-          </ActionContainer>
+            </Badge.Icon>
+            <Badge.Label>tomorrow</Badge.Label>
+          </Badge.Button>
 
           {date && (
-            <ActionContainer
+            <Badge.Button
               onClick={() => {
                 setDate(null)
                 setTime(null)
                 handleClose()
               }}
             >
-              <ActionIcon>
+              <Badge.Icon>
                 <XCircleIcon />
-              </ActionIcon>
-              <ActionText>clear date</ActionText>
-            </ActionContainer>
+              </Badge.Icon>
+              <Badge.Label>clear date</Badge.Label>
+            </Badge.Button>
           )}
 
           {time && (
-            <ActionContainer
+            <Badge.Button
               onClick={() => {
                 setTime(null)
                 handleClose()
               }}
             >
-              <ActionIcon>
+              <Badge.Icon>
                 <XCircleIcon />
-              </ActionIcon>
-              <ActionText>clear time</ActionText>
-            </ActionContainer>
+              </Badge.Icon>
+              <Badge.Label>clear time</Badge.Label>
+            </Badge.Button>
           )}
         </div>
       </div>
@@ -253,31 +254,6 @@ const SchedulePopover = React.forwardRef<
 })
 
 SchedulePopover.displayName = 'SchedulePopover'
-
-function ActionContainer({
-  children,
-  onClick,
-}: {
-  children: React.ReactNode
-  onClick?: () => void
-}) {
-  return (
-    <button
-      className="group inline-flex items-center space-x-1 rounded-full border border-gray-200 px-2 py-0.5 text-xs font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-950"
-      onClick={onClick}
-    >
-      {children}
-    </button>
-  )
-}
-
-function ActionIcon({ children }: { children: React.ReactNode }) {
-  return <div className="h-2.5 w-2.5">{children}</div>
-}
-
-function ActionText({ children }: { children: React.ReactNode }) {
-  return <span className="font-normal">{children}</span>
-}
 
 function Calendar({
   value,
@@ -331,40 +307,6 @@ function weekDayName(date: Date) {
   if (day === 5) return 'F'
   if (day === 6) return 'S'
   return 'NA'
-}
-
-const InfoButton = React.forwardRef<
-  HTMLButtonElement,
-  React.ComponentPropsWithoutRef<'button'>
->(({ className, ...props }, ref) => {
-  return (
-    <button
-      {...props}
-      ref={ref}
-      type="button"
-      className={cn(
-        'mr-2 inline-flex items-center space-x-1 rounded-full border border-gray-200 px-3 py-1 text-gray-600 hover:bg-gray-50 hover:text-gray-950',
-        className
-      )}
-    />
-  )
-})
-InfoButton.displayName = 'InfoButton'
-
-function InfoIcon({ children }: { children: React.ReactNode }) {
-  return <span className="grid h-3 w-3 place-content-center">{children}</span>
-}
-
-function InfoText({
-  children,
-  className,
-}: {
-  children: React.ReactNode
-  className?: string
-}) {
-  return (
-    <span className={cn('text-xs font-medium', className)}>{children}</span>
-  )
 }
 
 function showDate(date: Date) {
