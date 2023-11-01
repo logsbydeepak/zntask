@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
   CheckboxIndicator,
@@ -11,8 +11,6 @@ import {
   InboxIcon,
   PlusIcon,
   Trash2Icon,
-  TrashIcon,
-  XIcon,
 } from 'lucide-react'
 import { useFieldArray, useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -26,7 +24,6 @@ import { useCategoryStore } from '@/store/category'
 import { ChildTask, ParentTask, useTaskStore } from '@/store/task'
 import { getCategoryColor } from '@/utils/category'
 import { cn } from '@/utils/style'
-import { zRequired } from '@/utils/zod'
 import * as Badge from '@ui/badge'
 import * as Dialog from '@ui/dialog'
 import * as Form from '@ui/form'
@@ -38,7 +35,7 @@ const schema = z.object({
   tasks: z.array(
     z.object({
       _id: z.string().nullable(),
-      title: zRequired,
+      title: z.string().nullable(),
       date: z.date().nullable(),
       time: z.date().nullable(),
       details: z.string().nullable(),
@@ -202,101 +199,129 @@ function TaskDialogContent({
     control,
   })
 
-  const onSubmit = (data: FormValues) => {
-    if (isCreate) {
-      let parentId = ''
+  const onSubmit = useCallback(
+    (data: FormValues) => {
+      if (isCreate) {
+        let parentId = ''
 
-      data.tasks.forEach((i, index) => {
-        const task = {
-          title: i.title,
-          details: i.details,
-          date: i.date ? i.date.toISOString() : null,
-          time: i.time ? i.time.toISOString() : null,
-          isCompleted: i.isCompleted,
-        }
+        data.tasks.forEach((i, index) => {
+          if (!i.title) return
+          const task = {
+            title: i.title,
+            details: i.details,
+            date: i.date ? i.date.toISOString() : null,
+            time: i.time ? i.time.toISOString() : null,
+            isCompleted: i.isCompleted,
+          }
 
-        if (index === 0) {
-          const { id } = addParentTask({
-            ...task,
-            categoryId: data.categoryId,
-          })
-          parentId = id
-          return
-        }
-
-        if (!parentId) return
-        addChildTask({
-          ...task,
-          parentId,
-          orderId: index.toString(),
-        })
-      })
-    }
-
-    if (parentTask) {
-      removedChildTaskIds.forEach((i) => removeChildTask(i))
-
-      const parentId = parentTask.id
-      data.tasks.forEach((i, index) => {
-        const task = {
-          title: i.title,
-          details: i.details,
-          date: i.date ? i.date.toISOString() : null,
-          time: i.time ? i.time.toISOString() : null,
-          isCompleted: i.isCompleted,
-        }
-
-        if (index === 0) {
-          let isParentTaskEdited = false
-          if (parentTask.title !== task.title) isParentTaskEdited = true
-          if (parentTask.details !== task.details) isParentTaskEdited = true
-          if (parentTask.date !== task.date) isParentTaskEdited = true
-          if (parentTask.time !== task.time) isParentTaskEdited = true
-          if (parentTask.categoryId !== data.categoryId)
-            isParentTaskEdited = true
-          if (parentTask.isCompleted !== task.isCompleted)
-            isParentTaskEdited = true
-          if (isParentTaskEdited) {
-            editParentTask({
-              ...parentTask,
+          if (index === 0) {
+            const { id } = addParentTask({
               ...task,
               categoryId: data.categoryId,
             })
+            parentId = id
+            return
           }
-          return
-        }
 
-        if (!i._id) {
+          if (!parentId) return
           addChildTask({
             ...task,
             parentId,
             orderId: index.toString(),
           })
-          return
-        }
+        })
+      }
 
-        let isChildTaskEdited = false
-        const originalChildTask = childTask.find((j) => j.id === i._id)
-        if (!originalChildTask) return
-        if (originalChildTask.title !== i.title) isChildTaskEdited = true
-        if (originalChildTask.details !== i.details) isChildTaskEdited = true
-        if (originalChildTask.date !== i.date) isChildTaskEdited = true
-        if (originalChildTask.time !== i.time) isChildTaskEdited = true
-        if (originalChildTask.isCompleted !== i.isCompleted)
-          isChildTaskEdited = true
-        if (isChildTaskEdited) {
-          editChildTask({
-            ...task,
-            id: i._id,
-            parentId,
-            orderId: index.toString(),
-          })
-        }
-      })
+      if (parentTask) {
+        removedChildTaskIds.forEach((i) => removeChildTask(i))
+
+        const parentId = parentTask.id
+        data.tasks.forEach((i, index) => {
+          if (!i.title) return
+          const task = {
+            title: i.title,
+            details: i.details,
+            date: i.date ? i.date.toISOString() : null,
+            time: i.time ? i.time.toISOString() : null,
+            isCompleted: i.isCompleted,
+          }
+
+          if (index === 0) {
+            let isParentTaskEdited = false
+            if (parentTask.title !== task.title) isParentTaskEdited = true
+            if (parentTask.details !== task.details) isParentTaskEdited = true
+            if (parentTask.date !== task.date) isParentTaskEdited = true
+            if (parentTask.time !== task.time) isParentTaskEdited = true
+            if (parentTask.categoryId !== data.categoryId)
+              isParentTaskEdited = true
+            if (parentTask.isCompleted !== task.isCompleted)
+              isParentTaskEdited = true
+            if (isParentTaskEdited) {
+              editParentTask({
+                ...parentTask,
+                ...task,
+                categoryId: data.categoryId,
+              })
+            }
+            return
+          }
+
+          if (!i._id) {
+            addChildTask({
+              ...task,
+              parentId,
+              orderId: index.toString(),
+            })
+            return
+          }
+
+          let isChildTaskEdited = false
+          const originalChildTask = childTask.find((j) => j.id === i._id)
+          if (!originalChildTask) return
+          if (originalChildTask.title !== i.title) isChildTaskEdited = true
+          if (originalChildTask.details !== i.details) isChildTaskEdited = true
+          if (originalChildTask.date !== i.date) isChildTaskEdited = true
+          if (originalChildTask.time !== i.time) isChildTaskEdited = true
+          if (originalChildTask.isCompleted !== i.isCompleted)
+            isChildTaskEdited = true
+          if (isChildTaskEdited) {
+            editChildTask({
+              ...task,
+              id: i._id,
+              parentId,
+              orderId: index.toString(),
+            })
+          }
+        })
+      }
+
+      handleClose()
+    },
+    [
+      addChildTask,
+      addParentTask,
+      childTask,
+      handleClose,
+      parentTask,
+      removedChildTaskIds,
+      removeChildTask,
+      editChildTask,
+      editParentTask,
+      isCreate,
+    ]
+  )
+
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Enter' && e.shiftKey) {
+        e.preventDefault()
+        handleSubmit(onSubmit)()
+      }
     }
 
-    handleClose()
-  }
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [handleSubmit, onSubmit])
 
   return (
     <>
@@ -341,13 +366,6 @@ function TaskDialogContent({
                     })}
                   />
                 </div>
-                {errors.tasks && errors.tasks[index]?.title?.message && (
-                  <span className="ml-7 mt-2 inline-block">
-                    <Form.Error>
-                      {errors.tasks[index]?.title?.message}
-                    </Form.Error>
-                  </span>
-                )}
               </div>
               <div className="space-y-2 pl-7">
                 <textarea
