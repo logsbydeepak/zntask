@@ -2,6 +2,7 @@ import React from 'react'
 import {
   Content as ContextMenuContentPrimitives,
   Item as ContextMenuItemPrimitives,
+  Portal as ContextMenuPortalPrimitives,
   Root as ContextMenuRootPrimitives,
   Trigger as ContextMenuTriggerPrimitives,
 } from '@radix-ui/react-context-menu'
@@ -20,6 +21,7 @@ import { cn } from '@/utils/style'
 
 export const ContextMenuRoot = ContextMenuRootPrimitives
 export const ContextMenuTrigger = ContextMenuTriggerPrimitives
+export const ContextMenuPortal = ContextMenuPortalPrimitives
 
 export const DropdownMenuRoot = DropdownMenuRootPrimitives
 export const DropdownMenuPortal = DropdownMenuPortalPrimitives

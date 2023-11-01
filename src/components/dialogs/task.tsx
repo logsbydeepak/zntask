@@ -10,6 +10,7 @@ import {
   CircleIcon,
   InboxIcon,
   PlusIcon,
+  Trash2Icon,
   TrashIcon,
   XIcon,
 } from 'lucide-react'
@@ -173,7 +174,7 @@ function TaskDialogContent({
   const {
     register,
     handleSubmit,
-    formState: { errors, defaultValues },
+    formState: { errors },
     getValues,
     setValue,
     watch,
@@ -348,7 +349,7 @@ function TaskDialogContent({
                   </span>
                 )}
               </div>
-              <div className="pl-7">
+              <div className="space-y-2 pl-7">
                 <textarea
                   {...register(`tasks.${index}.details`)}
                   placeholder="details"
@@ -366,20 +367,6 @@ function TaskDialogContent({
                       setValue(`tasks.${index}.time`, time)
                     }}
                   />
-
-                  {index === 0 && parentTask && (
-                    <Badge.Button
-                      onClick={() => {
-                        removeParentTask(parentTask.id)
-                        handleClose()
-                      }}
-                    >
-                      <Badge.Icon>
-                        <TrashIcon />
-                      </Badge.Icon>
-                      <Badge.Label>delete</Badge.Label>
-                    </Badge.Button>
-                  )}
 
                   {index === 0 && (
                     <Badge.Button
@@ -401,6 +388,20 @@ function TaskDialogContent({
                     </Badge.Button>
                   )}
 
+                  {index === 0 && parentTask && (
+                    <Badge.Button
+                      onClick={() => {
+                        removeParentTask(parentTask.id)
+                        handleClose()
+                      }}
+                    >
+                      <Badge.Icon>
+                        <Trash2Icon />
+                      </Badge.Icon>
+                      <Badge.Label>delete</Badge.Label>
+                    </Badge.Button>
+                  )}
+
                   {index !== 0 && (
                     <Badge.Button
                       onClick={() => {
@@ -413,9 +414,9 @@ function TaskDialogContent({
                       }}
                     >
                       <Badge.Icon>
-                        <XIcon />
+                        <Trash2Icon />
                       </Badge.Icon>
-                      <Badge.Label>remove</Badge.Label>
+                      <Badge.Label>delete</Badge.Label>
                     </Badge.Button>
                   )}
                 </div>

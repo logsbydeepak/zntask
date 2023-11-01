@@ -21,10 +21,12 @@ import { SchedulePicker } from '@/components/schedule'
 import {
   ContextMenuContent,
   ContextMenuItem,
+  ContextMenuPortal,
   ContextMenuRoot,
   ContextMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuPortal,
   DropdownMenuRoot,
   DropdownMenuTrigger,
   MenuIcon,
@@ -186,6 +188,7 @@ function TaskItem({
 }) {
   const editChildTask = useTaskStore((s) => s.editChildTask)
   const editParentTask = useTaskStore((s) => s.editParentTask)
+  const setDialog = useAppStore((s) => s.setDialog)
 
   return (
     <ContextMenuRoot>
@@ -268,12 +271,16 @@ function TaskItem({
           </div>
         </ContextMenuTrigger>
 
-        <ContextMenuContent>
-          <TaskMenuContent task={task} type="context" />
-        </ContextMenuContent>
-        <DropdownMenuContent align="end">
-          <TaskMenuContent task={task} type="dropdown" />
-        </DropdownMenuContent>
+        <ContextMenuPortal>
+          <ContextMenuContent>
+            <TaskMenuContent task={task} type="context" />
+          </ContextMenuContent>
+        </ContextMenuPortal>
+        <DropdownMenuPortal>
+          <DropdownMenuContent align="end">
+            <TaskMenuContent task={task} type="dropdown" />
+          </DropdownMenuContent>
+        </DropdownMenuPortal>
       </DropdownMenuRoot>
     </ContextMenuRoot>
   )

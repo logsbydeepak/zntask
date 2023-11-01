@@ -12,7 +12,7 @@ export const Button = React.forwardRef<
       ref={ref}
       type="button"
       className={cn(
-        'mr-2 inline-flex items-center space-x-1 rounded-full border border-gray-200 px-3 py-1 text-gray-600 hover:bg-gray-50 hover:text-gray-950',
+        'mr-2 inline-flex items-center space-x-1 rounded-full border border-gray-200 px-3 py-1 text-gray-600 hover:bg-gray-50 hover:text-gray-950 data-[state=open]:bg-gray-50 data-[state=open]:text-gray-950',
         className
       )}
     />
