@@ -25,16 +25,13 @@ import { cn } from '@/utils/style'
 import * as Badge from '@ui/badge'
 
 export function SchedulePicker({
-  date,
-  time,
-  setDate,
-  setTime,
+  value,
+  setValue,
 }: {
-  date: Date | null
-  time: Date | null
-  setDate: (date: Date | null) => void
-  setTime: (date: Date | null) => void
+  value: { date: Date | null; time: Date | null }
+  setValue: ({ date, time }: { date: Date | null; time: Date | null }) => void
 }) {
+  const { date, time } = value
   const [isOpen, setIsOpen] = React.useState(false)
 
   return (
@@ -65,10 +62,8 @@ export function SchedulePicker({
       {isOpen && (
         <SchedulePopover
           setIsOpen={setIsOpen}
-          date={date}
-          time={time}
-          setDate={setDate}
-          setTime={setTime}
+          value={value}
+          setValue={setValue}
         />
       )}
     </Popover.Root>
@@ -79,12 +74,12 @@ const SchedulePopover = React.forwardRef<
   React.ElementRef<typeof PopoverContent>,
   React.ComponentProps<typeof PopoverContent> & {
     setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
-    setDate: (date: Date | null) => void
-    setTime: (time: Date | null) => void
-    date: Date | null
-    time: Date | null
+    value: { date: Date | null; time: Date | null }
+    setValue: ({ date, time }: { date: Date | null; time: Date | null }) => void
   }
->(({ setIsOpen, date, time, setTime, setDate, ...props }, ref) => {
+>(({ setIsOpen, value, setValue, ...props }, ref) => {
+  const { date, time } = value
+
   const [inputValue, setInputValue] = React.useState('')
   const [actionTime, setActionTime] = React.useState<Date | null>(null)
   const [actionDate, setActionDate] = React.useState<Date | null>(null)
@@ -134,12 +129,11 @@ const SchedulePopover = React.forwardRef<
             onChange={(e) => setInputValue(e.target.value)}
           />
         </div>
-        <div className="mt-3 flex flex-row flex-wrap gap-x-1.5 gap-y-2">
+        <div className="mt-3 flex flex-row flex-wrap gap-x-0.5 gap-y-2">
           {actionDate && actionTime && (
             <Badge.Button
               onClick={() => {
-                setTime(actionTime)
-                setDate(actionDate)
+                setValue({ date: actionDate, time: actionTime })
                 handleClose()
               }}
             >
@@ -155,7 +149,7 @@ const SchedulePopover = React.forwardRef<
           {actionDate && (
             <Badge.Button
               onClick={() => {
-                setDate(actionDate)
+                setValue({ date: actionDate, time })
                 handleClose()
               }}
             >
@@ -170,8 +164,8 @@ const SchedulePopover = React.forwardRef<
           {actionTime && (
             <Badge.Button
               onClick={() => {
-                if (!date) setDate(new Date())
-                setTime(actionDate)
+                if (!date) setValue({ date: new Date(), time })
+                setValue({ date, time: actionTime })
                 handleClose()
               }}
             >
@@ -186,7 +180,7 @@ const SchedulePopover = React.forwardRef<
 
           <Badge.Button
             onClick={() => {
-              setDate(new Date())
+              setValue({ date: new Date(), time })
               handleClose()
             }}
           >
@@ -198,7 +192,7 @@ const SchedulePopover = React.forwardRef<
 
           <Badge.Button
             onClick={() => {
-              setDate(addDays(new Date(), 1))
+              setValue({ date: addDays(new Date(), 1), time })
               handleClose()
             }}
           >
@@ -211,8 +205,7 @@ const SchedulePopover = React.forwardRef<
           {date && (
             <Badge.Button
               onClick={() => {
-                setDate(null)
-                setTime(null)
+                setValue({ date: null, time: null })
                 handleClose()
               }}
             >
@@ -226,7 +219,7 @@ const SchedulePopover = React.forwardRef<
           {time && (
             <Badge.Button
               onClick={() => {
-                setTime(null)
+                setValue({ date, time: null })
                 handleClose()
               }}
             >
@@ -244,7 +237,7 @@ const SchedulePopover = React.forwardRef<
           value={date ?? undefined}
           onSelect={(value) => {
             if (!value) return
-            setDate(value)
+            setValue({ date: value, time })
             handleClose()
           }}
         />

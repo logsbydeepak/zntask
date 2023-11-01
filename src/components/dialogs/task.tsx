@@ -357,10 +357,14 @@ function TaskDialogContent({
                 />
                 <div className="flex flex-wrap gap-x-1.5 gap-y-2">
                   <SchedulePicker
-                    date={watch(`tasks.${index}.date`)}
-                    time={watch(`tasks.${index}.time`)}
-                    setDate={(value) => setValue(`tasks.${index}.date`, value)}
-                    setTime={(value) => setValue(`tasks.${index}.time`, value)}
+                    value={{
+                      date: watch(`tasks.${index}.date`),
+                      time: watch(`tasks.${index}.time`),
+                    }}
+                    setValue={({ date, time }) => {
+                      setValue(`tasks.${index}.date`, date)
+                      setValue(`tasks.${index}.time`, time)
+                    }}
                   />
 
                   {index === 0 && parentTask && (

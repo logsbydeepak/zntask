@@ -240,34 +240,24 @@ function TaskItem({
                 )}
                 {task.date && (
                   <SchedulePicker
-                    date={task.date ? new Date(task.date) : null}
-                    time={task.time ? new Date(task.time) : null}
-                    setDate={(value) => {
+                    value={{
+                      date: task.date ? new Date(task.date) : null,
+                      time: task.time ? new Date(task.time) : null,
+                    }}
+                    setValue={({ date, time }) => {
                       if ('categoryId' in task) {
                         editParentTask({
                           ...task,
-                          date: !value ? null : value.toISOString(),
+                          date: date ? date.toISOString() : null,
+                          time: time ? time.toISOString() : null,
                         })
                       }
 
                       if ('parentId' in task) {
                         editChildTask({
                           ...task,
-                          date: !value ? null : value.toISOString(),
-                        })
-                      }
-                    }}
-                    setTime={(value) => {
-                      if ('categoryId' in task) {
-                        editParentTask({
-                          ...task,
-                          time: !value ? null : value.toISOString(),
-                        })
-                      }
-                      if ('parentId' in task) {
-                        editChildTask({
-                          ...task,
-                          time: !value ? null : value.toISOString(),
+                          date: date ? date.toISOString() : null,
+                          time: time ? time.toISOString() : null,
                         })
                       }
                     }}
