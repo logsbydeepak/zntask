@@ -1,7 +1,8 @@
 import { cookies } from 'next/headers'
 import { NextRequest, NextResponse } from 'next/server'
-import { env } from '#env'
 import * as jose from 'jose'
+
+import { env } from '@/env.mjs'
 
 export async function middleware(req: NextRequest) {
   try {

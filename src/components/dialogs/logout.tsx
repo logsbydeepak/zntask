@@ -1,10 +1,10 @@
 import React from 'react'
 import { useRouter } from 'next/navigation'
 
+import * as Dialog from '@/components/ui/dialog'
 import { logout } from '@/data/user'
 import { useAppStore } from '@/store/app'
 import { toast } from '@/store/toast'
-import * as Dialog from '@ui/dialog'
 
 import { Button } from '../ui/button'
 

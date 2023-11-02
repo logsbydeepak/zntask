@@ -31,9 +31,14 @@ import {
   DropdownMenuTrigger,
   MenuIcon,
 } from '@/components/ui/menu'
+import {
+  TabsContent,
+  TabsList,
+  TabsRoot,
+  TabsTrigger,
+} from '@/components/ui/tabs'
 import { useAppStore } from '@/store/app'
 import { ChildTask, ParentTask, useTaskStore } from '@/store/task'
-import { TabsContent, TabsList, TabsRoot, TabsTrigger } from '@ui/tabs'
 
 export default function Page() {
   return (

@@ -1,7 +1,8 @@
 import { cookies } from 'next/headers'
-import { env } from '#env'
 import * as jose from 'jose'
 import ms from 'ms'
+
+import { env } from '@/env.mjs'
 
 import { redis } from './config'
 

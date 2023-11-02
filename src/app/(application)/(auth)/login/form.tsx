@@ -14,11 +14,11 @@ import {
   ResetPassword,
 } from '@/app/(application)/(auth)/components'
 import { ResetPasswordDialog } from '@/components/dialogs/reset-password'
+import { Button } from '@/components/ui/button'
+import * as FormPrimitive from '@/components/ui/form'
 import { loginWithCredentials } from '@/data/auth'
 import { zLoginWithCredentials } from '@/data/utils/zSchema'
 import { toast } from '@/store/toast'
-import { Button } from '@ui/button'
-import * as FormPrimitive from '@ui/form'
 
 const isLoadingAtom = atom(false)
 type FormValues = z.infer<typeof zLoginWithCredentials>

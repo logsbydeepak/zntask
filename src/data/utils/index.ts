@@ -1,5 +1,6 @@
-import { env } from '#env'
 import * as jose from 'jose'
+
+import { env } from '@/env.mjs'
 
 import { r } from './handler'
 

@@ -6,8 +6,13 @@ import { useShallow } from 'zustand/react/shallow'
 
 import * as Layout from '@/app/(application)/(app)/layout-components'
 import { Head } from '@/components/head'
+import {
+  TabsContent,
+  TabsList,
+  TabsRoot,
+  TabsTrigger,
+} from '@/components/ui/tabs'
 import { useCategoryStore } from '@/store/category'
-import { TabsContent, TabsList, TabsRoot, TabsTrigger } from '@ui/tabs'
 
 import { CategoryContainer, CategoryItem } from '../category-components'
 

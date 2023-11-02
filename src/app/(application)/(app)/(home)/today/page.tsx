@@ -7,9 +7,14 @@ import { useShallow } from 'zustand/react/shallow'
 
 import * as Layout from '@/app/(application)/(app)/layout-components'
 import { Head } from '@/components/head'
+import {
+  TabsContent,
+  TabsList,
+  TabsRoot,
+  TabsTrigger,
+} from '@/components/ui/tabs'
 import { useAppStore } from '@/store/app'
 import { ParentTask, useTaskStore } from '@/store/task'
-import { TabsContent, TabsList, TabsRoot, TabsTrigger } from '@ui/tabs'
 
 export default function Page() {
   return (

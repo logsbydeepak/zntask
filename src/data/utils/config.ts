@@ -1,5 +1,6 @@
 import { Redis } from '@upstash/redis'
-import { env } from '#env'
+
+import { env } from '@/env.mjs'
 
 // import { Resend } from 'resend'
 

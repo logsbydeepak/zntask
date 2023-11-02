@@ -8,10 +8,6 @@ import {
   Trash2Icon,
 } from 'lucide-react'
 
-import { useAppStore } from '@/store/app'
-import { useCategoryStore } from '@/store/category'
-import { Category, getCategoryColor } from '@/utils/category'
-import { cn } from '@/utils/style'
 import {
   ContextMenuContent,
   ContextMenuItem,
@@ -22,7 +18,11 @@ import {
   DropdownMenuRoot,
   DropdownMenuTrigger,
   MenuIcon,
-} from '@ui/menu'
+} from '@/components/ui/menu'
+import { useAppStore } from '@/store/app'
+import { useCategoryStore } from '@/store/category'
+import { Category, getCategoryColor } from '@/utils/category'
+import { cn } from '@/utils/style'
 
 export function CategoryItem({
   category,

@@ -4,10 +4,10 @@ import { Command } from 'cmdk'
 import { FolderIcon, InboxIcon, SearchIcon } from 'lucide-react'
 import { isValid } from 'ulidx'
 
+import { ActionButton } from '@/components/ui/button'
 import { useCategoryStore } from '@/store/category'
 import { Category, getCategoryColor } from '@/utils/category'
 import { cn } from '@/utils/style'
-import { ActionButton } from '@ui/button'
 
 export const CategoryPopover = React.forwardRef<
   React.ElementRef<typeof PopoverContent>,

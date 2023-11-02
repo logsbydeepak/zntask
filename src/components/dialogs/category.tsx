@@ -4,6 +4,9 @@ import * as RadioGroup from '@radix-ui/react-radio-group'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
+import { Button } from '@/components/ui/button'
+import * as Dialog from '@/components/ui/dialog'
+import * as Form from '@/components/ui/form'
 import { useAppStore } from '@/store/app'
 import { useCategoryStore } from '@/store/category'
 import {
@@ -13,9 +16,6 @@ import {
 } from '@/utils/category'
 import { cn } from '@/utils/style'
 import { zRequired } from '@/utils/zSchema'
-import { Button } from '@ui/button'
-import * as Dialog from '@ui/dialog'
-import * as Form from '@ui/form'
 
 import { Head } from '../head'
 

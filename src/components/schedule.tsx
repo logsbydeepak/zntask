@@ -21,8 +21,8 @@ import {
 import { DayPicker } from 'react-day-picker'
 import { useDebounce } from 'use-debounce'
 
+import * as Badge from '@/components/ui/badge'
 import { cn } from '@/utils/style'
-import * as Badge from '@ui/badge'
 
 export function SchedulePicker({
   value,

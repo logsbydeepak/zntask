@@ -3,12 +3,12 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
+import { Button } from '@/components/ui/button'
+import * as Dialog from '@/components/ui/dialog'
+import * as Form from '@/components/ui/form'
 import { resetPassword } from '@/data/auth'
 import { zResetPassword } from '@/data/utils/zSchema'
 import { toast } from '@/store/toast'
-import { Button } from '@ui/button'
-import * as Dialog from '@ui/dialog'
-import * as Form from '@ui/form'
 
 import { Head } from '../head'
 

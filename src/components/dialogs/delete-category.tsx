@@ -1,10 +1,10 @@
 import React from 'react'
 
+import { Button } from '@/components/ui/button'
+import * as Dialog from '@/components/ui/dialog'
 import { useAppStore } from '@/store/app'
 import { useCategoryStore } from '@/store/category'
 import { Category } from '@/utils/category'
-import { Button } from '@ui/button'
-import * as Dialog from '@ui/dialog'
 
 export function DeleteCategoryDialog() {
   const category = useAppStore((s) => s.dialog.deleteCategory)

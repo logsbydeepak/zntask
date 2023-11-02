@@ -27,12 +27,6 @@ import { useTheme } from 'next-themes'
 
 import { LogoIcon } from '@/components/icon/logo'
 import {
-  isAppSyncingAtom,
-  isCommandPaletteOpenAtom,
-  isSidebarOpenAtom,
-  useAppStore,
-} from '@/store/app'
-import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuRadioGroup,
@@ -40,7 +34,13 @@ import {
   DropdownMenuRoot,
   DropdownMenuTrigger,
   MenuIcon,
-} from '@ui/menu'
+} from '@/components/ui/menu'
+import {
+  isAppSyncingAtom,
+  isCommandPaletteOpenAtom,
+  isSidebarOpenAtom,
+  useAppStore,
+} from '@/store/app'
 
 export function Navbar({
   firstName,
