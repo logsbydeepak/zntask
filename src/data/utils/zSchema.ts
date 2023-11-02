@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import { zEmail, zPassword, zRequired } from '@/utils/zod'
+import { zEmail, zPassword, zRequired } from '@/utils/zSchema'
 
 export const zLoginWithCredentials = z.object({
   email: zEmail,

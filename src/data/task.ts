@@ -4,9 +4,10 @@ import { eq } from 'drizzle-orm'
 import { isValid } from 'ulidx'
 import { z } from 'zod'
 
-import { db, dbSchema } from '@/db'
-import { h, r } from '@/utils/handler'
-import { zRequired } from '@/utils/zod'
+import { zRequired } from '@/utils/zSchema'
+
+import { db, dbSchema } from './db'
+import { h, r } from './utils/handler'
 
 export const getTasks = h('AUTH', async ({ userId }) => {
   const parentTask = await db.query.parentTasks.findMany({

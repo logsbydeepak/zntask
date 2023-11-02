@@ -3,12 +3,7 @@
 import React from 'react'
 import { useSetAtom } from 'jotai'
 
-import { useActivityStore } from '@/store/activity'
-import { isAppSyncingAtom } from '@/store/app'
-import { useCategoryStore } from '@/store/category'
-import { useTaskStore } from '@/store/task'
-
-import { addCategory, deleteCategory, editCategory } from './category.h'
+import { addCategory, deleteCategory, editCategory } from '@/data/category'
 import {
   createChildTask,
   createParentTask,
@@ -16,7 +11,11 @@ import {
   deleteParentTask,
   editChildTask,
   editParentTask,
-} from './task.h'
+} from '@/data/task'
+import { useActivityStore } from '@/store/activity'
+import { isAppSyncingAtom } from '@/store/app'
+import { useCategoryStore } from '@/store/category'
+import { useTaskStore } from '@/store/task'
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 

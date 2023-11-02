@@ -3,10 +3,11 @@
 import { eq } from 'drizzle-orm'
 import { z } from 'zod'
 
-import { db, dbSchema } from '@/db'
 import { zCategory } from '@/utils/category'
-import { h, r } from '@/utils/handler'
-import { zRequired } from '@/utils/zod'
+import { zRequired } from '@/utils/zSchema'
+
+import { db, dbSchema } from './db'
+import { h, r } from './utils/handler'
 
 export const addCategory = h('AUTH', zCategory, async ({ input, userId }) => {
   await db.insert(dbSchema.categories).values({ ...input, userId })

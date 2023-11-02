@@ -1,17 +1,16 @@
 import React, { Suspense } from 'react'
 
 import { Dialogs } from '@/components/dialogs'
-import { useCategoryStore } from '@/store/category'
+import { getCategories } from '@/data/category'
+import { getTasks } from '@/data/task'
+import { getUser } from '@/data/user'
 
 import { InitStore, SidebarState } from './app-loading'
-import { getCategories } from './category.h'
-import { getUser } from './fetch'
 import { AppLayout, JotaiProvider } from './layout-client'
 import { Navbar } from './navbar'
 import { Sidebar } from './sidebar'
 import { SplashScreen } from './splash-screen'
 import { Sync } from './sync'
-import { getTasks } from './task.h'
 
 export default async function Layout({
   children,

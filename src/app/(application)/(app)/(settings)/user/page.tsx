@@ -1,8 +1,8 @@
 import * as Layout from '@/app/(application)/(app)/layout-components'
 import { Head } from '@/components/head'
+import { getUserWithAuth } from '@/data/user'
 
 import { ResetPassword } from './component.c'
-import { getUserWithAuth } from './fetch'
 
 export default async function Page() {
   const user = await getUserWithAuth()

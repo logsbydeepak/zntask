@@ -6,14 +6,13 @@ import ms from 'ms'
 import { ulid } from 'ulidx'
 import { z } from 'zod'
 
-import { redis } from '@/utils/config'
-import { r } from '@/utils/handler'
-import { zPassword, zRequired } from '@/utils/zod'
+import { zPassword, zRequired } from '@/utils/zSchema'
 
 import { db, dbSchema } from './db'
 import { checkToken } from './utils'
 import { generateAuthJWT, generateEmailJWT, setAuthCookie } from './utils/auth'
-import { h } from './utils/serverClient'
+import { redis } from './utils/config'
+import { h, r } from './utils/handler'
 import {
   zLoginWithCredentials,
   zRegisterWithCredentials,

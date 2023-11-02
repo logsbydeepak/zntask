@@ -10,7 +10,7 @@ import {
   Title,
 } from '@/app/(application)/(auth)/components'
 import { checkToken } from '@/data/utils'
-import { zRequired } from '@/utils/zod'
+import { zRequired } from '@/utils/zSchema'
 
 import { Action, Form } from './form'
 

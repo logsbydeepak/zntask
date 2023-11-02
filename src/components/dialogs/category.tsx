@@ -12,7 +12,7 @@ import {
   zCategoryIndicator,
 } from '@/utils/category'
 import { cn } from '@/utils/style'
-import { zRequired } from '@/utils/zod'
+import { zRequired } from '@/utils/zSchema'
 import { Button } from '@ui/button'
 import * as Dialog from '@ui/dialog'
 import * as Form from '@ui/form'

@@ -1,7 +1,7 @@
 import { isValid } from 'ulidx'
 import { z } from 'zod'
 
-import { zRequired } from './zod'
+import { zRequired } from './zSchema'
 
 export const categoryDefaultIndicatorOption = {
   label: 'orange',

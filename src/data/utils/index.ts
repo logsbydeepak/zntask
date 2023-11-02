@@ -1,7 +1,7 @@
 import { env } from '#env'
 import * as jose from 'jose'
 
-import { r } from '@/utils/handler'
+import { r } from './handler'
 
 export async function checkToken(token: string) {
   try {

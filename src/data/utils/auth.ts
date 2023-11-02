@@ -3,7 +3,7 @@ import { env } from '#env'
 import * as jose from 'jose'
 import ms from 'ms'
 
-import { redis } from '@/utils/config'
+import { redis } from './config'
 
 const secret = jose.base64url.decode(env.JWT_SECRET)
 const maxAge = ms('30 days')
