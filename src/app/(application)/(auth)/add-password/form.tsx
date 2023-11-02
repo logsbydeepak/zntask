@@ -14,12 +14,11 @@ import {
   PasswordChecklistItem,
   PasswordVisibilityToggle,
 } from '@/app/(application)/(auth)/components'
+import { addPassword } from '@/data/auth'
 import { toast } from '@/store/toast'
 import { zPassword, zRequired } from '@/utils/zod'
 import { Button } from '@ui/button'
 import * as FormPrimitive from '@ui/form'
-
-import { addPassword } from './actions'
 
 const schema = z
   .object({

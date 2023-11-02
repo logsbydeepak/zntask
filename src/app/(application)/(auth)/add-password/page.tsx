@@ -9,10 +9,10 @@ import {
   SubTitle,
   Title,
 } from '@/app/(application)/(auth)/components'
+import { checkToken } from '@/data/utils'
 import { zRequired } from '@/utils/zod'
 
 import { Action, Form } from './form'
-import { checkToken } from './utils'
 
 export const metadata: Metadata = {
   title: 'Add password',

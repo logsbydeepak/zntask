@@ -2,7 +2,16 @@ import { z } from 'zod'
 
 import { zEmail, zPassword, zRequired } from '@/utils/zod'
 
-export const schema = z
+export const zLoginWithCredentials = z.object({
+  email: zEmail,
+  password: zPassword('invalid password'),
+})
+
+export const zResetPassword = z.object({
+  email: zEmail,
+})
+
+export const zRegisterWithCredentials = z
   .object({
     firstName: zRequired,
     lastName: z.string().nullable(),

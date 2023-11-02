@@ -1,7 +1,7 @@
 import React from 'react'
 import { useRouter } from 'next/navigation'
 
-import { logout } from '@/app/(application)/(app)/actions'
+import { logout } from '@/data/user'
 import { useAppStore } from '@/store/app'
 import { toast } from '@/store/toast'
 import * as Dialog from '@ui/dialog'

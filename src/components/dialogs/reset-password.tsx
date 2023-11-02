@@ -3,8 +3,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-import { resetPassword } from '@/app/(application)/(auth)/login/actions'
-import { resetPasswordSchema } from '@/app/(application)/(auth)/login/utils'
+import { resetPassword } from '@/data/auth'
+import { zResetPassword } from '@/data/utils/zSchema'
 import { toast } from '@/store/toast'
 import { Button } from '@ui/button'
 import * as Dialog from '@ui/dialog'
@@ -12,7 +12,7 @@ import * as Form from '@ui/form'
 
 import { Head } from '../head'
 
-type FormValues = z.infer<typeof resetPasswordSchema>
+type FormValues = z.infer<typeof zResetPassword>
 
 export function ResetPasswordDialog({
   isOpen,
@@ -58,7 +58,7 @@ function ResetPasswordDialogContent({
     handleSubmit,
     setError,
   } = useForm<FormValues>({
-    resolver: zodResolver(resetPasswordSchema),
+    resolver: zodResolver(zResetPassword),
   })
 
   const onSubmit = (values: FormValues) => {

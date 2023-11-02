@@ -14,15 +14,14 @@ import {
   ResetPassword,
 } from '@/app/(application)/(auth)/components'
 import { ResetPasswordDialog } from '@/components/dialogs/reset-password'
+import { loginWithCredentials } from '@/data/auth'
+import { zLoginWithCredentials } from '@/data/utils/zSchema'
 import { toast } from '@/store/toast'
 import { Button } from '@ui/button'
 import * as FormPrimitive from '@ui/form'
 
-import { loginWithCredentials } from './actions'
-import { schema } from './utils'
-
 const isLoadingAtom = atom(false)
-type FormValues = z.infer<typeof schema>
+type FormValues = z.infer<typeof zLoginWithCredentials>
 
 export function Form() {
   const router = useRouter()
@@ -41,7 +40,7 @@ export function Form() {
     setError,
     formState: { errors },
   } = useForm<FormValues>({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(zLoginWithCredentials),
   })
 
   const onSubmit = (values: FormValues) => {

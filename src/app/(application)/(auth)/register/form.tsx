@@ -15,14 +15,13 @@ import {
   PasswordChecklistItem,
   PasswordVisibilityToggle,
 } from '@/app/(application)/(auth)/components'
+import { registerWithCredentials } from '@/data/auth'
+import { zRegisterWithCredentials } from '@/data/utils/zSchema'
 import { toast } from '@/store/toast'
 import { Button } from '@ui/button'
 import * as FormPrimitive from '@ui/form'
 
-import { registerWithCredentials } from './actions'
-import { schema } from './utils'
-
-type FormValues = z.infer<typeof schema>
+type FormValues = z.infer<typeof zRegisterWithCredentials>
 
 const isLoadingAtom = atom(false)
 
@@ -42,7 +41,7 @@ export function Form() {
     watch,
     setError,
   } = useForm<FormValues>({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(zRegisterWithCredentials),
   })
 
   const [watchPassword] = useDebounce(watch('password') ?? '', 500)
