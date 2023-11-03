@@ -1,12 +1,13 @@
+import { JotaiProvider, ThemeProvider } from '@/components/client-providers'
 import { ToastProvider } from '@/components/toast'
-
-import { ThemeProvider } from './client-components'
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <ThemeProvider>
-      {children}
-      <ToastProvider />
-    </ThemeProvider>
+    <JotaiProvider>
+      <ThemeProvider>
+        {children}
+        <ToastProvider />
+      </ThemeProvider>
+    </JotaiProvider>
   )
 }

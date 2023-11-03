@@ -1,12 +1,8 @@
 'use client'
 
-import { Provider, useAtomValue } from 'jotai'
+import { useAtomValue } from 'jotai'
 
 import { isSidebarOpenAtom } from '@/store/app'
-
-export function JotaiProvider({ children }: { children: React.ReactNode }) {
-  return <Provider>{children}</Provider>
-}
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
   const isSidebarOpen = useAtomValue(isSidebarOpenAtom)

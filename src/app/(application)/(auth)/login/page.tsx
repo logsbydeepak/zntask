@@ -7,8 +7,9 @@ import {
   SubTitle,
   Title,
 } from '@/app/(application)/(auth)/components'
+import { JotaiProvider } from '@/components/client-providers'
 
-import { Action, Form, StateProvider } from './form'
+import { Action, Form } from './form'
 
 export const metadata: Metadata = {
   title: 'Login',
@@ -16,7 +17,7 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <StateProvider>
+    <JotaiProvider>
       <FormContainer>
         <Logo />
         <Title>Login to zntask</Title>
@@ -26,6 +27,6 @@ export default function Page() {
       <ActionContainer>
         <Action />
       </ActionContainer>
-    </StateProvider>
+    </JotaiProvider>
   )
 }

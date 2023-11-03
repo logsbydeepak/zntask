@@ -138,10 +138,6 @@ export function Form() {
   )
 }
 
-export function StateProvider({ children }: { children: React.ReactNode }) {
-  return <Provider>{children}</Provider>
-}
-
 export function Action() {
   const startTransition = React.useTransition()[1]
   const [isLoading, setIsLoading] = useAtom(isLoadingAtom)

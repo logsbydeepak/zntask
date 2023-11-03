@@ -4,7 +4,7 @@ import { Dialogs } from '@/components/dialogs'
 import { getInitialData } from '@/data'
 
 import { InitAppState } from './app-loading'
-import { AppLayout, JotaiProvider } from './layout-client'
+import { AppLayout } from './layout-client'
 import { Sidebar } from './sidebar'
 import { SplashScreen } from './splash-screen'
 import { Sync } from './sync'
@@ -15,16 +15,14 @@ export default async function Layout({
   children: React.ReactNode
 }) {
   return (
-    <JotaiProvider>
-      <Suspense fallback={<SplashScreen />}>
-        <InitData>
-          <Sidebar />
-          <AppLayout>{children}</AppLayout>
-          <Dialogs />
-          <Sync />
-        </InitData>
-      </Suspense>
-    </JotaiProvider>
+    <Suspense fallback={<SplashScreen />}>
+      <InitData>
+        <Sidebar />
+        <AppLayout>{children}</AppLayout>
+        <Dialogs />
+        <Sync />
+      </InitData>
+    </Suspense>
   )
 }
 
