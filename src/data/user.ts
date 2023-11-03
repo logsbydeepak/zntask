@@ -14,22 +14,6 @@ export const logout = h('AUTH', async ({ userId, token }) => {
   return r('OK')
 })
 
-export const getUser = h('AUTH', async ({ userId }) => {
-  const user = await db.query.users.findFirst({
-    where(fields, operators) {
-      return operators.eq(fields.id, userId)
-    },
-  })
-  if (!user) throw new Error('User not found')
-
-  return r('OK', {
-    firstName: user.firstName,
-    lastName: user.lastName,
-    profilePicture: user.profilePicture,
-    email: user.email,
-  })
-})
-
 export const getUserWithAuth = h('AUTH', async ({ userId }) => {
   const user = await db.query.users.findFirst({
     with: {

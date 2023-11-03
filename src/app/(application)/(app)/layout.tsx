@@ -1,9 +1,7 @@
 import React, { Suspense } from 'react'
 
 import { Dialogs } from '@/components/dialogs'
-import { getCategories } from '@/data/category'
-import { getTasks } from '@/data/task'
-import { getUser } from '@/data/user'
+import { getInitialData } from '@/data'
 
 import { InitStore, SidebarState } from './app-loading'
 import { AppLayout, JotaiProvider } from './layout-client'
@@ -32,9 +30,8 @@ export default async function Layout({
 }
 
 async function GetUser() {
-  const user = await getUser()
-  const categories = await getCategories()
-  const tasks = await getTasks()
+  const initialData = await getInitialData()
+  const user = initialData.user
 
   return (
     <>
@@ -45,9 +42,9 @@ async function GetUser() {
         email={user.email}
       />
       <InitStore
-        categories={categories.categories}
-        parentTask={tasks.parentTask}
-        childTask={tasks.childTask}
+        categories={initialData.categories}
+        parentTask={initialData.parentTasks}
+        childTask={initialData.childTasks}
       />
     </>
   )

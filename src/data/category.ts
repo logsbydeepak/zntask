@@ -37,24 +37,3 @@ export const deleteCategory = h(
     return r('OK', { input })
   }
 )
-
-export const getCategories = h('AUTH', async ({ userId }) => {
-  const categories = await db.query.categories.findMany({
-    where(fields, operators) {
-      return operators.eq(fields.userId, userId)
-    },
-    orderBy(fields, operators) {
-      return operators.desc(fields.orderId)
-    },
-  })
-
-  if (!categories) throw new Error('No categories found')
-  if (categories.length === 0) return r('OK', { categories })
-
-  const modCategories = categories.map((category) => {
-    const { userId, ...rest } = category
-    return rest
-  })
-
-  return r('OK', { categories: modCategories })
-})

@@ -9,34 +9,6 @@ import { zRequired } from '@/utils/zSchema'
 import { db, dbSchema } from './db'
 import { h, r } from './utils/handler'
 
-export const getTasks = h('AUTH', async ({ userId }) => {
-  const parentTask = await db.query.parentTasks.findMany({
-    where(fields, operators) {
-      return operators.eq(fields.userId, userId)
-    },
-  })
-
-  const childTask = await db.query.childTask.findMany({
-    where(fields, operators) {
-      return operators.eq(fields.userId, userId)
-    },
-  })
-
-  if (!parentTask && !childTask) throw new Error('No tasks found')
-
-  const modParentTask = parentTask.map((task) => {
-    const { userId, ...rest } = task
-    return rest
-  })
-
-  const modChildTask = childTask.map((task) => {
-    const { userId, ...rest } = task
-    return rest
-  })
-
-  return r('OK', { parentTask: modParentTask, childTask: modChildTask })
-})
-
 const zTask = z.object({
   id: zRequired.refine(isValid, { message: 'Invalid ulid' }),
   title: zRequired,
