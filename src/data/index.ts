@@ -7,9 +7,15 @@ export const getInitialData = h('AUTH', async ({ userId }) => {
       return operators.eq(fields.id, userId)
     },
     with: {
-      categories: true,
-      parentTasks: true,
-      childTasks: true,
+      categories: {
+        columns: { userId: false },
+      },
+      parentTasks: {
+        columns: { userId: false },
+      },
+      childTasks: {
+        columns: { userId: false },
+      },
     },
   })
   if (!data) throw new Error('User not found!')
@@ -21,14 +27,10 @@ export const getInitialData = h('AUTH', async ({ userId }) => {
     email: data.email,
   }
 
-  const categories = data.categories.map(({ userId, ...data }) => data)
-  const parentTasks = data.parentTasks.map(({ userId, ...data }) => data)
-  const childTasks = data.childTasks.map(({ userId, ...data }) => data)
-
   return r('OK', {
     user,
-    categories,
-    parentTasks,
-    childTasks,
+    categories: data.categories,
+    parentTasks: data.parentTasks,
+    childTasks: data.childTasks,
   })
 })
