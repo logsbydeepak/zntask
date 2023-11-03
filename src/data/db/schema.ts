@@ -1,5 +1,5 @@
 import { relations } from 'drizzle-orm'
-import { boolean, mysqlTable, varchar } from 'drizzle-orm/mysql-core'
+import { boolean, index, mysqlTable, varchar } from 'drizzle-orm/mysql-core'
 
 import {
   categoryDefaultIndicatorOption,
@@ -19,50 +19,98 @@ const tasks = {
   details: varchar('details', { length: 256 }),
 }
 
-export const users = mysqlTable('users', {
-  id: id().primaryKey(),
-  firstName: varchar('first_name', { length: 256 }).notNull(),
-  lastName: varchar('last_name', { length: 256 }),
-  email: varchar('email', { length: 256 }).unique().notNull(),
-  profilePicture: varchar('profile_picture', { length: 256 }),
-})
+export const users = mysqlTable(
+  'users',
+  {
+    id: id().primaryKey(),
+    firstName: varchar('first_name', { length: 256 }).notNull(),
+    lastName: varchar('last_name', { length: 256 }),
+    email: varchar('email', { length: 256 }).unique().notNull(),
+    profilePicture: varchar('profile_picture', { length: 256 }),
+  },
+  (table) => {
+    return {
+      emailIdx: index('email_idx').on(table.email),
+    }
+  }
+)
 
-export const credentialAuth = mysqlTable('credential_auth', {
-  id: id().primaryKey(),
-  userId: id('user_id').notNull(),
-  password: varchar('password', { length: 256 }).notNull(),
-})
+export const credentialAuth = mysqlTable(
+  'credential_auth',
+  {
+    id: id().primaryKey(),
+    userId: id('user_id').notNull(),
+    password: varchar('password', { length: 256 }).notNull(),
+  },
+  (table) => {
+    return {
+      userIdIdx: index('user_id_idx').on(table.userId),
+    }
+  }
+)
 
-export const googleAuth = mysqlTable('google_auth', {
-  id: id().primaryKey(),
-  userId: id('user_id').notNull(),
-  googleId: varchar('google_id', { length: 256 }).notNull(),
-})
+export const googleAuth = mysqlTable(
+  'google_auth',
+  {
+    id: id().primaryKey(),
+    userId: id('user_id').notNull(),
+    googleId: varchar('google_id', { length: 256 }).notNull(),
+  },
+  (table) => {
+    return {
+      userIdIdx: index('user_id_idx').on(table.userId),
+    }
+  }
+)
 
-export const categories = mysqlTable('categories', {
-  id: id().primaryKey(),
-  userId: id('user_id').notNull(),
-  title: varchar('title', { length: 256 }).notNull(),
-  indicator: varchar('indicator', {
-    length: 256,
-    enum: categoryIndicatorLabel,
-  })
-    .default(categoryDefaultIndicatorOption.label)
-    .notNull(),
-  isFavorite: boolean('is_favorite').notNull(),
-  isArchived: boolean('is_archived').notNull(),
-  orderId: varchar('order_id', { length: 26 }).notNull(),
-})
+export const categories = mysqlTable(
+  'categories',
+  {
+    id: id().primaryKey(),
+    userId: id('user_id').notNull(),
+    title: varchar('title', { length: 256 }).notNull(),
+    indicator: varchar('indicator', {
+      length: 256,
+      enum: categoryIndicatorLabel,
+    })
+      .default(categoryDefaultIndicatorOption.label)
+      .notNull(),
+    isFavorite: boolean('is_favorite').notNull(),
+    isArchived: boolean('is_archived').notNull(),
+    orderId: varchar('order_id', { length: 26 }).notNull(),
+  },
+  (table) => {
+    return {
+      userIdIdx: index('user_id_idx').on(table.userId),
+    }
+  }
+)
 
-export const parentTasks = mysqlTable('parent_tasks', {
-  ...tasks,
-  categoryId: id('category_id'),
-})
+export const parentTasks = mysqlTable(
+  'parent_tasks',
+  {
+    ...tasks,
+    categoryId: id('category_id'),
+  },
+  (table) => {
+    return {
+      userIdIdx: index('user_id_idx').on(table.userId),
+    }
+  }
+)
 
-export const childTask = mysqlTable('child_tasks', {
-  ...tasks,
-  parentId: id('parent_id').notNull(),
-})
+export const childTask = mysqlTable(
+  'child_tasks',
+  {
+    ...tasks,
+    parentId: id('parent_id').notNull(),
+  },
+  (table) => {
+    return {
+      userIdIdx: index('user_id_idx').on(table.userId),
+    }
+  }
+)
 
 export const userRelations = relations(users, ({ one, many }) => ({
   credentialAuth: one(credentialAuth),
