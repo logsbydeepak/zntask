@@ -84,8 +84,6 @@ const taskStore: StateCreator<State & Actions> = (set, get) => ({
   },
 
   addChildTask(childTask) {
-    console.log(childTask)
-
     const id = ulid()
 
     const newChildTask: ChildTask = {
