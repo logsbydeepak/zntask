@@ -5,7 +5,8 @@ import { getInitialData } from '@/data'
 
 import { InitAppState } from './app-loading'
 import { AppLayout } from './layout-client'
-import { Sidebar } from './sidebar'
+import { Navbar } from './navbar'
+import { Sidebar, SidebarState } from './sidebar'
 import { SplashScreen } from './splash-screen'
 import { Sync } from './sync'
 
@@ -18,6 +19,7 @@ export default async function Layout({
     <Suspense fallback={<SplashScreen />}>
       <InitData>
         <Sidebar />
+        <SidebarState />
         <AppLayout>{children}</AppLayout>
         <Dialogs />
         <Sync />
@@ -35,8 +37,13 @@ async function InitData({ children }: { children: React.ReactNode }) {
       categories={initialData.categories}
       parentTask={initialData.parentTasks}
       childTask={initialData.childTasks}
-      user={user}
     >
+      <Navbar
+        firstName={user.firstName}
+        lastName={user.lastName}
+        profilePicture={user.profilePicture}
+        email={user.email}
+      />
       {children}
     </InitAppState>
   )

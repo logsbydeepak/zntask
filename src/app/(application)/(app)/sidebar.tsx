@@ -3,7 +3,7 @@
 import React from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useAtomValue, useSetAtom } from 'jotai'
+import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import {
   CalendarClockIcon,
   ChevronDownIcon,
@@ -32,6 +32,17 @@ import { Category, getCategoryColor } from '@/utils/category'
 import { cn } from '@/utils/style'
 
 import { CategoryMenuContent } from './(home)/category-components'
+
+export function SidebarState() {
+  const [isSidebarOpen, setIsSidebarOpen] = useAtom(isSidebarOpenAtom)
+  const { isSmallScreen } = useMediaQuery()
+
+  React.useEffect(() => {
+    setIsSidebarOpen(isSmallScreen ? false : true)
+  }, [isSidebarOpen, isSmallScreen, setIsSidebarOpen])
+
+  return null
+}
 
 export function Sidebar() {
   const isSidebarOpen = useAtomValue(isSidebarOpenAtom)
