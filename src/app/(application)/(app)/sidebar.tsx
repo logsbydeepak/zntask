@@ -31,7 +31,7 @@ import { useCategoryStore } from '@/store/category'
 import { Category, getCategoryColor } from '@/utils/category'
 import { cn } from '@/utils/style'
 
-import { CategoryMenuContent } from './(home)/category-components'
+import { CategoryMenuContent } from './(home)/category'
 
 export function SidebarState() {
   const [isSidebarOpen, setIsSidebarOpen] = useAtom(isSidebarOpenAtom)

@@ -4,7 +4,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { FolderIcon } from 'lucide-react'
 import { useShallow } from 'zustand/react/shallow'
 
-import * as Layout from '@/app/(application)/(app)/layout-components'
+import * as Layout from '@/app/(application)/(app)/app-layout'
 import { Head } from '@/components/head'
 import {
   TabsContent,
@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/tabs'
 import { useCategoryStore } from '@/store/category'
 
-import { CategoryContainer, CategoryItem } from '../category-components'
+import { CategoryContainer, CategoryItem } from '../category'
 
 export default function Page() {
   const statusParams = useSearchParams().get('status')

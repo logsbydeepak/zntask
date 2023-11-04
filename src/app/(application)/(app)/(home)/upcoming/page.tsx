@@ -1,6 +1,6 @@
 import { GanttChartIcon } from 'lucide-react'
 
-import * as Layout from '@/app/(application)/(app)/layout-components'
+import * as Layout from '@/app/(application)/(app)/app-layout'
 import { Head } from '@/components/head'
 
 export default function Page() {

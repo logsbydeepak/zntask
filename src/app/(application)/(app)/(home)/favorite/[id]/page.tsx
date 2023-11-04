@@ -3,7 +3,7 @@
 import { CheckCheckIcon } from 'lucide-react'
 import { useShallow } from 'zustand/react/shallow'
 
-import * as Layout from '@/app/(application)/(app)/layout-components'
+import * as Layout from '@/app/(application)/(app)/app-layout'
 import { Head } from '@/components/head'
 import { useCategoryStore } from '@/store/category'
 

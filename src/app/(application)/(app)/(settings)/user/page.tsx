@@ -1,4 +1,4 @@
-import * as Layout from '@/app/(application)/(app)/layout-components'
+import * as Layout from '@/app/(application)/(app)/app-layout'
 import { Head } from '@/components/head'
 import { getUserWithAuth } from '@/data/user'
 
