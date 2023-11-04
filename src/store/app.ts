@@ -1,14 +1,15 @@
 import { atom } from 'jotai'
 import { create, StateCreator } from 'zustand'
 
+import type { RequireOnlyOne } from '@/types'
 import { Category } from '@/utils/category'
-
-import { ParentTask } from './task'
 
 export const isAppLoadingAtom = atom(true)
 export const isSidebarOpenAtom = atom(false)
 export const isAppSyncingAtom = atom(false)
 export const isCommandPaletteOpenAtom = atom(false)
+
+export const isScreenSMAtom = atom(false)
 
 const dialogState = {
   resetPassword: false,
@@ -27,15 +28,6 @@ const initialState = {
 }
 
 type State = typeof initialState
-
-type RequireOnlyOne<T, Keys extends keyof T = keyof T> = Pick<
-  T,
-  Exclude<keyof T, Keys>
-> &
-  {
-    [K in Keys]-?: Required<Pick<T, K>> &
-      Partial<Record<Exclude<Keys, K>, undefined>>
-  }[Keys]
 
 interface Actions {
   setDialog: <

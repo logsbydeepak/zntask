@@ -1,11 +1,12 @@
 import React, { Suspense } from 'react'
 
 import { Dialogs } from '@/components/dialogs'
+import { InitAppState, State } from '@/components/state'
 import { getInitialData } from '@/data'
 
-import { AppLayout, InitAppState } from './app-layout'
+import { AppLayout } from './app-layout'
 import { Navbar } from './navbar'
-import { Sidebar, SidebarState } from './sidebar'
+import { Sidebar } from './sidebar'
 import { SplashScreen } from './splash-screen'
 import { Sync } from './sync'
 
@@ -17,8 +18,8 @@ export default async function Layout({
   return (
     <Suspense fallback={<SplashScreen />}>
       <InitData>
+        <State />
         <Sidebar />
-        <SidebarState />
         <AppLayout>{children}</AppLayout>
         <Dialogs />
         <Sync />

@@ -25,24 +25,23 @@ import {
   DropdownMenuRoot,
   DropdownMenuTrigger,
 } from '@/components/ui/menu'
-import { useMediaQuery } from '@/hooks/useMediaQuery'
-import { isSidebarOpenAtom } from '@/store/app'
+import { isScreenSMAtom, isSidebarOpenAtom } from '@/store/app'
 import { useCategoryStore } from '@/store/category'
 import { Category, getCategoryColor } from '@/utils/category'
 import { cn } from '@/utils/style'
 
 import { CategoryMenuContent } from './(home)/category'
 
-export function SidebarState() {
-  const [isSidebarOpen, setIsSidebarOpen] = useAtom(isSidebarOpenAtom)
-  const { isSmallScreen } = useMediaQuery()
+// export function SidebarState() {
+//   const [isSidebarOpen, setIsSidebarOpen] = useAtom(isSidebarOpenAtom)
+//   const isScreenSM = useAtomValue(isScreenSMAtom)
 
-  React.useEffect(() => {
-    setIsSidebarOpen(isSmallScreen ? false : true)
-  }, [isSidebarOpen, isSmallScreen, setIsSidebarOpen])
+//   React.useEffect(() => {
+//     setIsSidebarOpen(isScreenSM ? false : true)
+//   }, [isSidebarOpen, isSmallScr, setIsSidebarOpen])
 
-  return null
-}
+//   return null
+// }
 
 export function Sidebar() {
   const isSidebarOpen = useAtomValue(isSidebarOpenAtom)
@@ -216,7 +215,8 @@ function CategoryItem({
   isActive: boolean
 }) {
   const editCategory = useCategoryStore((s) => s.editCategory)
-  const { isSmallScreen } = useMediaQuery()
+  const isScreenSM = useAtomValue(isScreenSMAtom)
+
   return (
     <Item.Root isActive={isActive}>
       <ContextMenuRoot>
@@ -268,7 +268,7 @@ function CategoryItem({
           <ContextMenuContent>
             <CategoryMenuContent category={category} type="context" />
           </ContextMenuContent>
-          <DropdownMenuContent align={isSmallScreen ? 'end' : 'start'}>
+          <DropdownMenuContent align={isScreenSM ? 'end' : 'start'}>
             <CategoryMenuContent category={category} type="dropdown" />
           </DropdownMenuContent>
         </DropdownMenuRoot>
@@ -382,7 +382,7 @@ function ItemContentLink({
   href,
   className,
 }: React.ComponentProps<typeof Link>) {
-  const { isSmallScreen } = useMediaQuery()
+  const isScreenSM = useAtomValue(isScreenSMAtom)
   const setIsSidebarOpen = useSetAtom(isSidebarOpenAtom)
 
   return (
@@ -390,7 +390,7 @@ function ItemContentLink({
       href={href}
       className={cn(itemContentStyle, className)}
       onClick={() => {
-        if (isSmallScreen) return setIsSidebarOpen(false)
+        if (isScreenSM) return setIsSidebarOpen(false)
       }}
     >
       {children}
