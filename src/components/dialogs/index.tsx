@@ -16,7 +16,7 @@ export function Dialogs() {
   const setDialog = useAppStore((state) => state.setDialog)
 
   const setIsResetPasswordOpen = React.useCallback(
-    (isOpen: boolean) => setDialog('resetPassword', isOpen),
+    (isOpen: boolean) => setDialog({ resetPassword: isOpen }),
     [setDialog]
   )
 

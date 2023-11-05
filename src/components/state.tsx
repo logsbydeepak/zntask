@@ -11,16 +11,26 @@ import { CategoryType } from '@/utils/category'
 export function State() {
   const setIsScreenSM = useSetAtom(isScreenSMAtom)
   const setIsSidebarOpen = useSetAtom(isSidebarOpenAtom)
+  const [screenSize, setScreenSize] = React.useState(() => {
+    if (typeof window === 'undefined') return 0
+    return window.innerWidth
+  })
+  const differScreenSize = React.useDeferredValue(screenSize)
+
+  React.useEffect(() => {
+    setIsScreenSM(differScreenSize <= 768)
+    setIsSidebarOpen(differScreenSize >= 768)
+  }, [differScreenSize, setIsSidebarOpen, setIsScreenSM])
 
   React.useEffect(() => {
     function handleResize() {
-      setIsScreenSM(window.innerWidth < 768)
-      setIsSidebarOpen(window.innerWidth >= 768)
+      setScreenSize(window.innerWidth)
     }
-
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
-  }, [setIsSidebarOpen, setIsScreenSM])
+  }, [setScreenSize])
+
+  React.useEffect
 
   return null
 }

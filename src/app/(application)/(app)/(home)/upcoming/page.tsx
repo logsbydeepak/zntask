@@ -1,3 +1,5 @@
+'use client'
+
 import { GanttChartIcon } from 'lucide-react'
 
 import * as Layout from '@/app/(application)/(app)/app-layout'
@@ -11,13 +13,19 @@ export default function Page() {
         <Head title="Upcoming" />
       </Layout.Header>
       <Layout.Content>
-        <Layout.Empty.Container>
-          <Layout.Empty.Icon>
-            <GanttChartIcon />
-          </Layout.Empty.Icon>
-          <Layout.Empty.Label>No task</Layout.Empty.Label>
-        </Layout.Empty.Container>
+        <EmptyState />
       </Layout.Content>
     </Layout.Root>
+  )
+}
+
+function EmptyState() {
+  return (
+    <Layout.Empty.Container>
+      <Layout.Empty.Icon>
+        <GanttChartIcon />
+      </Layout.Empty.Icon>
+      <Layout.Empty.Label>No task</Layout.Empty.Label>
+    </Layout.Empty.Container>
   )
 }
