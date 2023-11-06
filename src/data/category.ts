@@ -1,6 +1,6 @@
 'use server'
 
-import { eq } from 'drizzle-orm'
+import { and, eq } from 'drizzle-orm'
 import { z } from 'zod'
 
 import { zCategory } from '@/utils/category'
@@ -16,10 +16,19 @@ export const addCategory = h('AUTH', zCategory, async ({ input, userId }) => {
 })
 
 export const editCategory = h('AUTH', zCategory, async ({ input, userId }) => {
-  await db
+  const dbRes = await db
     .update(dbSchema.categories)
     .set(input)
-    .where(eq(dbSchema.categories.id, input.id))
+    .where(
+      and(
+        eq(dbSchema.categories.id, input.id),
+        eq(dbSchema.categories.userId, userId)
+      )
+    )
+
+  if (dbRes.rowsAffected === 0) {
+    return r('NOT_FOUND', { id: input.id })
+  }
 
   return r('OK', { input })
 })
@@ -31,9 +40,19 @@ export const deleteCategory = h(
   'AUTH',
   zDeleteCategory,
   async ({ input, userId }) => {
-    await db
+    const dbRes = await db
       .delete(dbSchema.categories)
-      .where(eq(dbSchema.categories.id, input.id))
+      .where(
+        and(
+          eq(dbSchema.categories.id, input.id),
+          eq(dbSchema.categories.userId, userId)
+        )
+      )
+
+    if (dbRes.rowsAffected === 0) {
+      return r('NOT_FOUND', { id: input.id })
+    }
+
     return r('OK', { input })
   }
 )
