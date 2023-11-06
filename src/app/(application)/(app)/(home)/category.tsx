@@ -40,14 +40,18 @@ export function CategoryItem({
             href={href}
             className="flex items-center justify-between rounded-lg border border-transparent px-4 py-2 hover:border-gray-200 hover:bg-gray-50 group-data-[state=open]:border-gray-200 group-data-[state=open]:bg-gray-50"
           >
-            <div className="flex items-center space-x-3">
-              <div
-                className={cn(
-                  'h-3 w-3 rounded-[4.5px]',
-                  `bg-${getCategoryColor(category.indicator)}-600`
-                )}
-              />
-              <p className="text-sm">{category.title}</p>
+            <div className="mr-2 flex items-center space-x-3 overflow-hidden">
+              <div>
+                <div
+                  className={cn(
+                    'h-3 w-3 rounded-[4.5px]',
+                    `bg-${getCategoryColor(category.indicator)}-600`
+                  )}
+                />
+              </div>
+              <p className="overflow-hidden text-ellipsis text-sm">
+                {category.title}
+              </p>
             </div>
             <div className="flex items-center space-x-1">
               {category.isFavorite && href.startsWith('/category') && (
