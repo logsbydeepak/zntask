@@ -32,17 +32,6 @@ import { cn } from '@/utils/style'
 
 import { CategoryMenuContent } from './(home)/category'
 
-// export function SidebarState() {
-//   const [isSidebarOpen, setIsSidebarOpen] = useAtom(isSidebarOpenAtom)
-//   const isScreenSM = useAtomValue(isScreenSMAtom)
-
-//   React.useEffect(() => {
-//     setIsSidebarOpen(isScreenSM ? false : true)
-//   }, [isSidebarOpen, isSmallScr, setIsSidebarOpen])
-
-//   return null
-// }
-
 export function Sidebar() {
   const isSidebarOpen = useAtomValue(isSidebarOpenAtom)
 

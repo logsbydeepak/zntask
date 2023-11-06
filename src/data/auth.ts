@@ -6,6 +6,7 @@ import ms from 'ms'
 import { ulid } from 'ulidx'
 import { z } from 'zod'
 
+import { env } from '@/env.mjs'
 import { zPassword, zRequired } from '@/utils/zSchema'
 
 import { db, dbSchema } from './db'
@@ -18,7 +19,6 @@ import {
   zRegisterWithCredentials,
   zResetPassword,
 } from './utils/zSchema'
-import { env } from '@/env.mjs'
 
 export const loginWithCredentials = h(
   zLoginWithCredentials,

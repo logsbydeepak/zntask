@@ -1,8 +1,7 @@
 import { Redis } from '@upstash/redis'
+import { Resend } from 'resend'
 
 import { env } from '@/env.mjs'
-
-import { Resend } from 'resend'
 
 export const redis = new Redis({
   url: env.REDIS_URL,

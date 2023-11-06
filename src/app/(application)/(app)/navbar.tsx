@@ -29,6 +29,7 @@ import { LogoIcon } from '@/components/icon/logo'
 import {
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuPortal,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
   DropdownMenuRoot,
@@ -94,9 +95,11 @@ export function Navbar({
               <ProfilePicture src={profilePicture} name={name} />
             </DropdownMenuTrigger>
 
-            <DropdownMenuContent align="end" sideOffset={8}>
-              <UserMenu name={name} email={email} src={profilePicture} />
-            </DropdownMenuContent>
+            <DropdownMenuPortal>
+              <DropdownMenuContent align="end" sideOffset={8}>
+                <UserMenu name={name} email={email} src={profilePicture} />
+              </DropdownMenuContent>
+            </DropdownMenuPortal>
           </DropdownMenuRoot>
         </div>
       </div>

@@ -1,11 +1,13 @@
 'use client'
 
 import { useRouter, useSearchParams } from 'next/navigation'
-import { FolderIcon } from 'lucide-react'
+import { DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu'
+import { FolderIcon, MoreVerticalIcon } from 'lucide-react'
 import { useShallow } from 'zustand/react/shallow'
 
 import * as Layout from '@/app/(application)/(app)/app-layout'
 import { Head } from '@/components/head'
+import { DropdownMenuRoot } from '@/components/ui/menu'
 import {
   TabsContent,
   TabsList,
@@ -24,8 +26,10 @@ export default function Page() {
   return (
     <Layout.Root>
       <Layout.Header>
-        <Layout.Title>Category</Layout.Title>
-        <Head title="Category" />
+        <div>
+          <Layout.Title>Category</Layout.Title>
+          <Head title="Category" />
+        </div>
       </Layout.Header>
       <Layout.Content>
         <TabsRoot
