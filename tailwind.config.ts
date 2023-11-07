@@ -13,6 +13,10 @@ const config: Config = {
         mono: ['var(--font-jetBrains)'],
         sans: ['var(--font-inter)'],
       },
+      colors: {
+        background: 'hsl(var(--color-background))',
+        text: 'hsl(var(--color-text))',
+      },
     },
   },
   plugins: [require('@tailwindcss/forms')],

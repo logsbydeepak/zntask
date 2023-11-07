@@ -3,6 +3,16 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --color-background: 0, 0%, 100%;
+    --color-text: 0, 0%, 11%;
+  }
+
+  .dark {
+    --color-background: 0, 0%, 11%;
+    --color-text: 220, 14%, 96%;
+  }
+
   *:focus-visible {
     @apply outline-gray-950;
   }
