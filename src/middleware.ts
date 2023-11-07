@@ -10,19 +10,33 @@ export async function middleware(req: NextRequest) {
     const token = cookies().get('auth')?.value
     const isAuth = await checkIsAuth(token)
 
-    const isIndexPage = req.nextUrl.pathname === '/'
+    const { pathname } = req.nextUrl
+
+    if (pathname.startsWith('/logout')) {
+      const authCookie = req.cookies.get('auth')?.value
+      const authParam = req.nextUrl.searchParams.get('auth')
+
+      if (authCookie !== authParam) {
+        return null
+      }
+
+      const response = NextResponse.next()
+      response.cookies.delete('auth')
+      return response
+    }
+
+    const isIndexPage = pathname === '/'
 
     const isAuthPage =
-      req.nextUrl.pathname.startsWith('/login') ||
-      req.nextUrl.pathname.startsWith('/register')
+      pathname.startsWith('/login') || pathname.startsWith('/register')
 
     const isAppPage =
-      req.nextUrl.pathname.startsWith('/today') ||
-      req.nextUrl.pathname.startsWith('/inbox') ||
-      req.nextUrl.pathname.startsWith('/upcoming') ||
-      req.nextUrl.pathname.startsWith('/favorite') ||
-      req.nextUrl.pathname.startsWith('/category') ||
-      req.nextUrl.pathname.startsWith('/user')
+      pathname.startsWith('/today') ||
+      pathname.startsWith('/inbox') ||
+      pathname.startsWith('/upcoming') ||
+      pathname.startsWith('/favorite') ||
+      pathname.startsWith('/category') ||
+      pathname.startsWith('/user')
 
     if (isAuth) {
       if (isIndexPage) {
@@ -56,6 +70,7 @@ export const config = {
 
     '/login/:path*',
     '/register/:path*',
+    '/logout/:path*',
 
     '/today/:path*',
     '/inbox/:path*',

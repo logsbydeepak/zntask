@@ -1,3 +1,4 @@
+import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { z } from 'zod'
 
@@ -112,7 +113,8 @@ function handleError(error: unknown) {
   console.log(error)
 
   if (error instanceof UnauthorizedError) {
-    redirect('/login')
+    const authCookie = cookies().get('auth')?.value
+    redirect(`/logout?auth=${authCookie}`)
   }
 
   throw new Error('Something went wrong!')
