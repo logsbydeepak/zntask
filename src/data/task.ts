@@ -61,7 +61,10 @@ export const createChildTask = h(
 
     if (!parentTask) return r('NOT_FOUND')
 
-    await db.insert(dbSchema.childTask).values({ ...input, userId })
+    await db
+      .insert(dbSchema.childTask)
+      .values({ ...input, userId, categoryId: parentTask.categoryId })
+
     return r('OK', { input })
   }
 )

@@ -17,6 +17,7 @@ const tasks = {
   date: varchar('date', { length: 30 }),
   time: varchar('time', { length: 30 }),
   details: varchar('details', { length: 256 }),
+  categoryId: id('category_id'),
 }
 
 export const users = mysqlTable(
@@ -86,18 +87,11 @@ export const categories = mysqlTable(
   }
 )
 
-export const parentTasks = mysqlTable(
-  'parent_tasks',
-  {
-    ...tasks,
-    categoryId: id('category_id'),
-  },
-  (table) => {
-    return {
-      userIdIdx: index('user_id_idx').on(table.userId),
-    }
+export const parentTasks = mysqlTable('parent_tasks', tasks, (table) => {
+  return {
+    userIdIdx: index('user_id_idx').on(table.userId),
   }
-)
+})
 
 export const childTask = mysqlTable(
   'child_tasks',

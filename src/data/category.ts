@@ -50,8 +50,26 @@ export const deleteCategory = h(
       )
 
     if (dbRes.rowsAffected === 0) {
-      return r('NOT_FOUND', { id: input.id })
+      return r('NOT_FOUND')
     }
+
+    await db
+      .delete(dbSchema.parentTasks)
+      .where(
+        and(
+          eq(dbSchema.parentTasks.categoryId, input.id),
+          eq(dbSchema.parentTasks.userId, userId)
+        )
+      )
+
+    await db
+      .delete(dbSchema.childTask)
+      .where(
+        and(
+          eq(dbSchema.childTask.categoryId, input.id),
+          eq(dbSchema.childTask.userId, userId)
+        )
+      )
 
     return r('OK', { input })
   }
