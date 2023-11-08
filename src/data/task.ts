@@ -33,8 +33,19 @@ export const createParentTask = h(
   'AUTH',
   zParentTask,
   async ({ userId, input }) => {
-    await db.insert(dbSchema.parentTasks).values({ ...input, userId })
+    const categoryId = input.categoryId
 
+    if (categoryId) {
+      const category = await db.query.categories.findFirst({
+        where(fields, operators) {
+          return operators.eq(fields.id, categoryId)
+        },
+      })
+
+      if (!category) return r('NOT_FOUND')
+    }
+
+    await db.insert(dbSchema.parentTasks).values({ ...input, userId })
     return r('OK', { input })
   }
 )
@@ -42,6 +53,14 @@ export const createChildTask = h(
   'AUTH',
   zChildTask,
   async ({ userId, input }) => {
+    const parentTask = await db.query.parentTasks.findFirst({
+      where(fields, operators) {
+        return operators.eq(fields.id, input.parentId)
+      },
+    })
+
+    if (!parentTask) return r('NOT_FOUND')
+
     await db.insert(dbSchema.childTask).values({ ...input, userId })
     return r('OK', { input })
   }
