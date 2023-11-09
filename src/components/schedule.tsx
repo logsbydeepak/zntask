@@ -123,7 +123,7 @@ const SchedulePopover = React.forwardRef<
           <input
             placeholder="today at 9am"
             autoFocus
-            className="ml-2 h-5 w-full border-none p-0 text-sm outline-none placeholder:text-gray-400 focus:ring-0"
+            className="ml-2 h-5 w-full border-none p-0 outline-none placeholder:text-gray-400 focus:ring-0"
             value={inputValue}
             autoComplete="off"
             onChange={(e) => setInputValue(e.target.value)}

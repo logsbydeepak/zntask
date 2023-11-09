@@ -71,7 +71,7 @@ export const CategoryPopover = React.forwardRef<
             value={search}
             placeholder="search"
             onValueChange={setSearch}
-            className="ml-2 h-5 w-full border-none p-0 text-sm outline-none placeholder:text-gray-400 focus:ring-0"
+            className="ml-2 h-5 w-full border-none p-0 outline-none placeholder:text-gray-400 focus:ring-0"
           />
         </div>
 

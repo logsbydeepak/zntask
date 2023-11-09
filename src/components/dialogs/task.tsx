@@ -372,7 +372,7 @@ function TaskDialogContent({
                   {...register(`tasks.${index}.details`)}
                   placeholder="details"
                   id={`details.${index}.details`}
-                  className="container-scroll w-full resize-none border-0 p-0 text-xs font-medium text-gray-600 outline-none focus-visible:ring-0"
+                  className="container-scroll w-full resize-none border-0 p-0 text-gray-600 outline-none focus-visible:ring-0"
                 />
                 <div className="flex flex-wrap gap-x-1.5 gap-y-2">
                   <SchedulePicker

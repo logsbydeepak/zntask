@@ -68,10 +68,10 @@ export function Navbar({
               <LogoIcon />
             </span>
           </span>
-          <span className="text-sm font-medium">zntask</span>
+          <span className="hidden text-sm font-medium xs:block">zntask</span>
         </Link>
-        <div className="flex space-x-3 md:space-x-4">
-          <div className="flex space-x-3">
+        <div className="flex space-x-2 md:space-x-4">
+          <div className="flex space-x-1.5 sm:space-x-2">
             <Search />
 
             <Icon onClick={() => setIsSidebarOpen((open) => !open)}>
@@ -80,7 +80,7 @@ export function Navbar({
           </div>
           <div className="my-1 w-[1px] bg-gray-200" />
 
-          <div className="flex space-x-3">
+          <div className="flex space-x-1.5 sm:space-x-2">
             <Icon onClick={() => setDialog({ createCategory: true })}>
               <FolderPlusIcon />
             </Icon>

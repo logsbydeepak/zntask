@@ -16,8 +16,7 @@ Root.displayName = 'Form.Root'
 
 export const formInputStyle = cva({
   base: [
-    'p-3',
-    'mb-2 mt-0.5 w-full rounded-md border border-gray-300 py-1.5 text-sm shadow-sm disabled:text-gray-500',
+    'mb-2 mt-0.5 w-full rounded-md border border-gray-300 py-1 px-3 shadow-sm disabled:text-gray-500',
     'placeholder:font-normal placeholder:text-gray-400 focus-visible:border-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-600',
   ],
 })

@@ -17,6 +17,9 @@ const config: Config = {
         background: 'hsl(var(--color-background))',
         text: 'hsl(var(--color-text))',
       },
+      screens: {
+        xs: '355px',
+      },
     },
   },
   plugins: [require('@tailwindcss/forms')],

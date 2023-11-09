@@ -9,10 +9,8 @@ import {
   CalendarClockIcon,
   CheckCircleIcon,
   FolderArchive,
-  FolderHeartIcon,
   FolderIcon,
   FolderPlusIcon,
-  FolderSearch2Icon,
   FolderSearchIcon,
   GanttChartIcon,
   HeartIcon,
@@ -218,7 +216,7 @@ function CommandPalletContent({ handleClose }: { handleClose: () => void }) {
             value={search}
             placeholder="search"
             onValueChange={setSearch}
-            className="ml-2 h-5 w-full border-none p-0 text-sm outline-none placeholder:text-gray-400 focus:ring-0"
+            className="ml-2 h-5 w-full border-none p-0 outline-none placeholder:text-gray-400 focus:ring-0"
           />
         </div>
         <Command.List className="[&>[cmdk-list-sizer]]:ml-2 [&>[cmdk-list-sizer]]:h-40 [&>[cmdk-list-sizer]]:space-y-2 [&>[cmdk-list-sizer]]:overflow-y-scroll [&>[cmdk-list-sizer]]:py-2 [&>[cmdk-list-sizer]]:pr-1">
