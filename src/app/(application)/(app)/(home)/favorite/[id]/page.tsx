@@ -11,9 +11,18 @@ import {
   DropdownMenuRoot,
   DropdownMenuTrigger,
 } from '@/components/ui/menu'
+import {
+  TabsContent,
+  TabsList,
+  TabsRoot,
+  TabsTrigger,
+} from '@/components/ui/tabs'
+import { useAppStore } from '@/store/app'
 import { useCategoryStore } from '@/store/category'
+import { useTaskStore } from '@/store/task'
 
 import { CategoryMenuContent } from '../../category'
+import { EmptyTaskCategory, TaskContainer } from '../../task'
 
 export default function Page({ params }: { params: { id?: string } }) {
   const category = useCategoryStore(
@@ -51,13 +60,58 @@ export default function Page({ params }: { params: { id?: string } }) {
         </div>
       </Layout.Header>
       <Layout.Content>
-        <Layout.Empty.Container>
-          <Layout.Empty.Icon>
-            <CheckCheckIcon />
-          </Layout.Empty.Icon>
-          <Layout.Empty.Label>No task</Layout.Empty.Label>
-        </Layout.Empty.Container>
+        <TabsRoot defaultValue="planed">
+          <TabsList>
+            <TabsTrigger value="planed">Planed</TabsTrigger>
+            <TabsTrigger value="completed">Completed</TabsTrigger>
+          </TabsList>
+          <TabsContent value="planed">
+            <div className="mt-4">
+              <PlanedTab categoryId={category.id} />
+            </div>
+          </TabsContent>
+          <TabsContent value="completed">
+            <div className="mt-4">
+              <CompletedTab categoryId={category.id} />
+            </div>
+          </TabsContent>
+        </TabsRoot>
       </Layout.Content>
     </Layout.Root>
+  )
+}
+
+function PlanedTab({ categoryId }: { categoryId: string }) {
+  const tasks = useTaskStore(
+    useShallow((s) =>
+      s.parentTasks.filter((i) => i.categoryId === categoryId && !i.isCompleted)
+    )
+  )
+
+  if (tasks.length === 0) return <EmptyTaskCategory />
+  return (
+    <div className="space-y-1">
+      {tasks.map((i) => (
+        <TaskContainer key={i.id} task={i} />
+      ))}
+    </div>
+  )
+}
+
+function CompletedTab({ categoryId }: { categoryId: string }) {
+  const tasks = useTaskStore(
+    useShallow((s) =>
+      s.parentTasks.filter((i) => i.categoryId === categoryId && i.isCompleted)
+    )
+  )
+
+  if (tasks.length === 0) return <EmptyTaskCategory />
+
+  return (
+    <div className="space-y-1">
+      {tasks.map((i) => (
+        <TaskContainer key={i.id} task={i} />
+      ))}
+    </div>
   )
 }
