@@ -37,7 +37,7 @@ export const CategoryPopover = React.forwardRef<
     <PopoverContent
       {...props}
       ref={ref}
-      className="category-popover w-full rounded-lg border border-gray-200 bg-white shadow-sm sm:w-60"
+      className="category-popover w-60 rounded-lg border border-gray-200 bg-white shadow-sm"
       sideOffset={5}
       align="center"
       collisionPadding={10}
