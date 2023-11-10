@@ -73,6 +73,20 @@ export const editParentTask = h(
   'AUTH',
   zParentTask,
   async ({ input, userId }) => {
+    const parentTask = await db.query.parentTasks.findFirst({
+      where(fields, operators) {
+        return operators.eq(fields.id, input.id)
+      },
+    })
+    if (!parentTask) return r('NOT_FOUND')
+
+    if (parentTask.categoryId !== input.categoryId) {
+      await db
+        .update(dbSchema.childTask)
+        .set({ categoryId: input.categoryId })
+        .where(eq(dbSchema.childTask.parentId, input.id))
+    }
+
     if (input.isCompleted) {
       await db
         .update(dbSchema.parentTasks)
