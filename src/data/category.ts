@@ -40,39 +40,36 @@ export const deleteCategory = h(
   'AUTH',
   zDeleteCategory,
   async ({ input, userId }) => {
-    await db.transaction(async (tx) => {
-      const categoryDeleteRes = await tx
-        .delete(dbSchema.categories)
-        .where(
-          and(
-            eq(dbSchema.categories.id, input.id),
-            eq(dbSchema.categories.userId, userId)
-          )
+    const categoryDeleteRes = await db
+      .delete(dbSchema.categories)
+      .where(
+        and(
+          eq(dbSchema.categories.id, input.id),
+          eq(dbSchema.categories.userId, userId)
         )
+      )
 
-      if (categoryDeleteRes.rowsAffected === 0) {
-        tx.rollback()
-        return r('NOT_FOUND')
-      }
+    if (categoryDeleteRes.rowsAffected === 0) {
+      return r('NOT_FOUND')
+    }
 
-      await tx
-        .delete(dbSchema.parentTasks)
-        .where(
-          and(
-            eq(dbSchema.parentTasks.categoryId, input.id),
-            eq(dbSchema.parentTasks.userId, userId)
-          )
+    await db
+      .delete(dbSchema.parentTasks)
+      .where(
+        and(
+          eq(dbSchema.parentTasks.categoryId, input.id),
+          eq(dbSchema.parentTasks.userId, userId)
         )
+      )
 
-      await tx
-        .delete(dbSchema.childTask)
-        .where(
-          and(
-            eq(dbSchema.childTask.categoryId, input.id),
-            eq(dbSchema.childTask.userId, userId)
-          )
+    await db
+      .delete(dbSchema.childTask)
+      .where(
+        and(
+          eq(dbSchema.childTask.categoryId, input.id),
+          eq(dbSchema.childTask.userId, userId)
         )
-    })
+      )
 
     return r('OK', { input })
   }
