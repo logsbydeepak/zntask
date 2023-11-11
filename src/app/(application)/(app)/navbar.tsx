@@ -36,12 +36,7 @@ import {
   DropdownMenuTrigger,
   MenuIcon,
 } from '@/components/ui/menu'
-import {
-  isAppSyncingAtom,
-  isCommandPaletteOpenAtom,
-  isSidebarOpenAtom,
-  useAppStore,
-} from '@/store/app'
+import { isAppSyncingAtom, isSidebarOpenAtom, useAppStore } from '@/store/app'
 
 export function Navbar({
   firstName,
@@ -231,24 +226,12 @@ function Icon({
 }
 
 function Search() {
-  const setIsCommandPalletOpen = useSetAtom(isCommandPaletteOpenAtom)
-
-  React.useEffect(() => {
-    const down = (e: KeyboardEvent) => {
-      if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
-        e.preventDefault()
-        setIsCommandPalletOpen((open) => !open)
-      }
-    }
-
-    document.addEventListener('keydown', down)
-    return () => document.removeEventListener('keydown', down)
-  }, [setIsCommandPalletOpen])
+  const setDialog = useAppStore((s) => s.setDialog)
 
   return (
     <button
       className="group flex items-center rounded-lg border border-gray-200 bg-gray-50 px-[7px] hover:bg-gray-100 hover:text-gray-950 sm:pl-3 sm:pr-1.5"
-      onClick={() => setIsCommandPalletOpen(true)}
+      onClick={() => setDialog({ commandPalette: true })}
     >
       <span className="h-4 w-4 text-gray-500 group-hover:text-gray-950">
         <SearchIcon />

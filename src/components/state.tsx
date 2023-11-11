@@ -3,10 +3,38 @@
 import React from 'react'
 import { useAtomValue, useSetAtom } from 'jotai'
 
-import { isScreenSMAtom, isSidebarOpenAtom } from '@/store/app'
+import { isScreenSMAtom, isSidebarOpenAtom, useAppStore } from '@/store/app'
 import { useCategoryStore } from '@/store/category'
 import { ChildTask, ParentTask, useTaskStore } from '@/store/task'
 import { CategoryType } from '@/utils/category'
+
+export function GlobalShortcut() {
+  const setDialog = useAppStore((s) => s.setDialog)
+
+  React.useEffect(() => {
+    function handleShortcuts(e: KeyboardEvent) {
+      if (e.key === 'i' && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault()
+        setDialog({ createTask: true })
+      }
+
+      if (e.key === 'b' && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault()
+        setDialog({ createCategory: true })
+      }
+
+      if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault()
+        setDialog({ commandPalette: true })
+      }
+    }
+
+    document.addEventListener('keydown', handleShortcuts)
+    return () => document.removeEventListener('keydown', handleShortcuts)
+  }, [setDialog])
+
+  return null
+}
 
 export function State() {
   const setIsScreenSM = useSetAtom(isScreenSMAtom)

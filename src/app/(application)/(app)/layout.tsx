@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react'
 
 import { Dialogs } from '@/components/dialogs'
-import { InitAppState, State } from '@/components/state'
+import { GlobalShortcut, InitAppState, State } from '@/components/state'
 import { getInitialData } from '@/data'
 
 import { AppLayout } from './app-layout'
@@ -21,6 +21,7 @@ export default async function Layout({
         <State />
         <Sidebar />
         <AppLayout>{children}</AppLayout>
+        <GlobalShortcut />
         <Dialogs />
         <Sync />
       </InitData>

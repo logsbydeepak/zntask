@@ -22,22 +22,18 @@ import {
 } from 'lucide-react'
 import { useShallow } from 'zustand/react/shallow'
 
-import { CategoryPopover } from '@/components/category-popover'
-import {
-  isCommandPaletteOpenAtom,
-  isSidebarOpenAtom,
-  useAppStore,
-} from '@/store/app'
+import { isSidebarOpenAtom, useAppStore } from '@/store/app'
 import { useCategoryStore } from '@/store/category'
 import { useTaskStore } from '@/store/task'
 import { getCategoryColor } from '@/utils/category'
 import { cn } from '@/utils/style'
 
-export function CommandPalletDialog() {
-  const [isOpen, setIsOpen] = useAtom(isCommandPaletteOpenAtom)
+export function CommandPaletteDialog() {
+  const isOpen = useAppStore((s) => s.dialog.commandPalette)
+  const setDialog = useAppStore((s) => s.setDialog)
 
   const handleClose = () => {
-    setIsOpen(false)
+    setDialog({ commandPalette: false })
   }
 
   return (
@@ -46,7 +42,7 @@ export function CommandPalletDialog() {
         id="task-dialog"
         className="fixed left-1/2 top-16 z-50 w-[400px] -translate-x-1/2 transform rounded-md border border-gray-200 bg-white p-0 shadow-sm drop-shadow-sm focus:outline-none"
       >
-        <CommandPalletContent handleClose={handleClose} />
+        <CommandPaletteContent handleClose={handleClose} />
       </Dialog.Content>
     </Dialog.Root>
   )
@@ -57,7 +53,7 @@ type Page =
   | 'SEARCH_ARCHIVE_CATEGORY'
   | 'SEARCH_ALL_CATEGORY'
   | 'SEARCH_TASK'
-function CommandPalletContent({ handleClose }: { handleClose: () => void }) {
+function CommandPaletteContent({ handleClose }: { handleClose: () => void }) {
   const [search, setSearch] = React.useState('')
   const [pages, setPages] = React.useState<string[]>([])
   const page = pages[pages.length - 1] as Page | undefined
