@@ -2,7 +2,7 @@ import * as Layout from '@/app/(application)/(app)/app-layout'
 import { Head } from '@/components/head'
 import { getUserWithAuth } from '@/data/user'
 
-import { ResetPassword } from './component.c'
+import { ResetPassword, Update } from './edit'
 
 export default async function Page() {
   const user = await getUserWithAuth()
@@ -16,6 +16,7 @@ export default async function Page() {
       <Layout.Content>
         {JSON.stringify(user)}
         <ResetPassword />
+        <Update />
       </Layout.Content>
     </Layout.Root>
   )

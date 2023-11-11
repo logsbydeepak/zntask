@@ -23,3 +23,8 @@ export const zRegisterWithCredentials = z
     message: 'password do not match',
     path: ['confirmPassword'],
   })
+
+export const zUpdateName = z.object({
+  firstName: zRequired,
+  lastName: z.string().nullable(),
+})

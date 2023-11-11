@@ -15,6 +15,8 @@ const dialogState = {
   logout: false,
   commandPalette: false,
 
+  updateName: false,
+
   createCategory: false,
   editCategory: null as null | Category,
   deleteCategory: null as null | Category,
