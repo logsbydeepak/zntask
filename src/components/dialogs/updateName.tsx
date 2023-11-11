@@ -1,5 +1,6 @@
 import React from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useAtom, useAtomValue } from 'jotai'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -7,7 +8,7 @@ import { Button } from '@/components/ui/button'
 import * as Dialog from '@/components/ui/dialog'
 import * as Form from '@/components/ui/form'
 import { zUpdateName } from '@/data/utils/zSchema'
-import { useAppStore } from '@/store/app'
+import { useAppStore, userAtom } from '@/store/app'
 
 import { Head } from '../head'
 
@@ -47,6 +48,7 @@ function UpdateNameDialogContent({
   isPending: boolean
   startTransition: React.TransitionStartFunction
 }) {
+  const user = useAtomValue(userAtom)
   const {
     register,
     formState: { errors },
@@ -54,6 +56,10 @@ function UpdateNameDialogContent({
     setError,
   } = useForm<FormValues>({
     resolver: zodResolver(zUpdateName),
+    defaultValues: {
+      firstName: user.firstName,
+      lastName: user.lastName,
+    },
   })
 
   const onSubmit = (values: FormValues) => {

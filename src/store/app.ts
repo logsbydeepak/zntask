@@ -4,11 +4,19 @@ import { create, StateCreator } from 'zustand'
 import type { RequireOnlyOne } from '@/types'
 import { Category } from '@/utils/category'
 
+interface User {
+  firstName: string
+  lastName: string | null
+  email: string
+  profilePicture: string | null
+}
+
 export const isAppLoadingAtom = atom(true)
 export const isSidebarOpenAtom = atom(false)
 export const isAppSyncingAtom = atom(false)
 
 export const isScreenSMAtom = atom(false)
+export const userAtom = atom<User>({} as User)
 
 const dialogState = {
   resetPassword: false,
@@ -26,7 +34,6 @@ const dialogState = {
 
 const initialState = {
   dialog: dialogState,
-  syncingList: [] as string[],
 }
 
 type State = typeof initialState

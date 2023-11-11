@@ -3,7 +3,12 @@
 import React from 'react'
 import { useAtomValue, useSetAtom } from 'jotai'
 
-import { isScreenSMAtom, isSidebarOpenAtom, useAppStore } from '@/store/app'
+import {
+  isScreenSMAtom,
+  isSidebarOpenAtom,
+  useAppStore,
+  userAtom,
+} from '@/store/app'
 import { useCategoryStore } from '@/store/category'
 import { ChildTask, ParentTask, useTaskStore } from '@/store/task'
 import { CategoryType } from '@/utils/category'
@@ -68,11 +73,18 @@ export function InitAppState({
   parentTask,
   childTask,
   children,
+  user,
 }: {
   categories: CategoryType[]
   parentTask: ParentTask[]
   childTask: ChildTask[]
   children: React.ReactNode
+  user: {
+    firstName: string
+    lastName: string | null
+    email: string
+    profilePicture: string | null
+  }
 }) {
   const [isAppReady, setIsAppReady] = React.useState(false)
 
@@ -83,6 +95,8 @@ export function InitAppState({
   const setNewParentTask = useTaskStore((s) => s.setNewParentTask)
   const setNewChildTask = useTaskStore((s) => s.setNewChildTask)
 
+  const setUser = useSetAtom(userAtom)
+
   React.useLayoutEffect(() => {
     if (isAppReady) return
     setNewCategories(categories)
@@ -90,6 +104,7 @@ export function InitAppState({
     setNewChildTask(childTask)
 
     setIsSidebarOpen(window.innerWidth >= 768)
+    setUser(user)
     setIsAppReady(true)
   }, [
     categories,

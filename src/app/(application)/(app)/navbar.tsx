@@ -36,24 +36,20 @@ import {
   DropdownMenuTrigger,
   MenuIcon,
 } from '@/components/ui/menu'
-import { isAppSyncingAtom, isSidebarOpenAtom, useAppStore } from '@/store/app'
+import {
+  isAppSyncingAtom,
+  isSidebarOpenAtom,
+  useAppStore,
+  userAtom,
+} from '@/store/app'
 
-export function Navbar({
-  firstName,
-  lastName,
-  profilePicture,
-  email,
-}: {
-  firstName: string
-  lastName: string | null
-  profilePicture: string | null
-  email: string
-}) {
+export function Navbar() {
   const setDialog = useAppStore((s) => s.setDialog)
   const setIsSidebarOpen = useSetAtom(isSidebarOpenAtom)
   const isSidebarOpen = useAtomValue(isSidebarOpenAtom)
+  const user = useAtomValue(userAtom)
 
-  const name = `${firstName} ${lastName}`
+  const name = `${user.firstName} ${user.lastName}`
   return (
     <nav className="fixed z-20 w-full border-b border-gray-200 bg-white bg-opacity-50 backdrop-blur-sm">
       <div className="flex h-14 items-center justify-between px-4 md:px-5">
@@ -87,12 +83,16 @@ export function Navbar({
 
           <DropdownMenuRoot>
             <DropdownMenuTrigger>
-              <ProfilePicture src={profilePicture} name={name} />
+              <ProfilePicture src={user.profilePicture} name={name} />
             </DropdownMenuTrigger>
 
             <DropdownMenuPortal>
               <DropdownMenuContent align="end" sideOffset={8}>
-                <UserMenu name={name} email={email} src={profilePicture} />
+                <UserMenu
+                  name={name}
+                  email={user.email}
+                  src={user.profilePicture}
+                />
               </DropdownMenuContent>
             </DropdownMenuPortal>
           </DropdownMenuRoot>

@@ -18,6 +18,7 @@ export default async function Layout({
   return (
     <Suspense fallback={<SplashScreen />}>
       <InitData>
+        <Navbar />
         <State />
         <Sidebar />
         <AppLayout>{children}</AppLayout>
@@ -38,13 +39,8 @@ async function InitData({ children }: { children: React.ReactNode }) {
       categories={initialData.categories}
       parentTask={initialData.parentTasks}
       childTask={initialData.childTasks}
+      user={user}
     >
-      <Navbar
-        firstName={user.firstName}
-        lastName={user.lastName}
-        profilePicture={user.profilePicture}
-        email={user.email}
-      />
       {children}
     </InitAppState>
   )
