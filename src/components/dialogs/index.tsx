@@ -11,6 +11,7 @@ import { LogoutDialog } from './logout'
 import { ResetPasswordDialog } from './reset-password'
 import { TaskDialog } from './task'
 import { UpdateNameDialog } from './updateName'
+import { UpdateProfilePictureDialog } from './updateProfilePicture'
 
 export function Dialogs() {
   const isResetPasswordOpen = useAppStore((state) => state.dialog.resetPassword)
@@ -23,6 +24,7 @@ export function Dialogs() {
 
   return (
     <>
+      <UpdateProfilePictureDialog />
       <UpdateNameDialog />
       <ResetPasswordDialog
         isOpen={isResetPasswordOpen}

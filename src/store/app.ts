@@ -24,6 +24,7 @@ const dialogState = {
   commandPalette: false,
 
   updateName: false,
+  updateProfilePicture: false,
 
   createCategory: false,
   editCategory: null as null | Category,
