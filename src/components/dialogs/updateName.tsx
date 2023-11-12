@@ -7,8 +7,10 @@ import { z } from 'zod'
 import { Button } from '@/components/ui/button'
 import * as Dialog from '@/components/ui/dialog'
 import * as Form from '@/components/ui/form'
+import { updateName } from '@/data/user'
 import { zUpdateName } from '@/data/utils/zSchema'
 import { useAppStore, userAtom } from '@/store/app'
+import { toast } from '@/store/toast'
 
 import { Head } from '../head'
 
@@ -53,7 +55,6 @@ function UpdateNameDialogContent({
     register,
     formState: { errors },
     handleSubmit,
-    setError,
   } = useForm<FormValues>({
     resolver: zodResolver(zUpdateName),
     defaultValues: {
@@ -63,12 +64,24 @@ function UpdateNameDialogContent({
   })
 
   const onSubmit = (values: FormValues) => {
-    startTransition(async () => {})
+    if (
+      user.firstName === values.firstName &&
+      user.lastName === values.lastName
+    ) {
+      handleClose()
+      return
+    }
+
+    startTransition(async () => {
+      await updateName(values)
+      toast.success('Name updated')
+      handleClose()
+    })
   }
 
   return (
     <>
-      <Head title="Reset Password" />
+      <Head title="Update name" />
       <Form.Root onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         <div>
           <Dialog.Title className="text text-lg font-medium">

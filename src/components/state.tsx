@@ -98,7 +98,6 @@ export function InitAppState({
   const setUser = useSetAtom(userAtom)
 
   React.useLayoutEffect(() => {
-    if (isAppReady) return
     setNewCategories(categories)
     setNewParentTask(parentTask)
     setNewChildTask(childTask)
@@ -116,6 +115,8 @@ export function InitAppState({
     isAppReady,
     isScreenSM,
     setIsSidebarOpen,
+    user,
+    setUser,
   ])
 
   if (!isAppReady) return null

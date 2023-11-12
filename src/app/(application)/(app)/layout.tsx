@@ -1,8 +1,10 @@
 import React, { Suspense } from 'react'
+import { unstable_cache } from 'next/cache'
 
 import { Dialogs } from '@/components/dialogs'
 import { GlobalShortcut, InitAppState, State } from '@/components/state'
 import { getInitialData } from '@/data'
+import { getUser } from '@/data/user'
 
 import { AppLayout } from './app-layout'
 import { Navbar } from './navbar'
@@ -30,9 +32,13 @@ export default async function Layout({
   )
 }
 
+const getUserData = unstable_cache(async () => {
+  return await getUser()
+}, ['user'])
+
 async function InitData({ children }: { children: React.ReactNode }) {
   const initialData = await getInitialData()
-  const user = initialData.user
+  const user = await getUserData()
 
   return (
     <InitAppState
