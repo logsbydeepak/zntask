@@ -53,6 +53,11 @@ function UpdateProfilePictureDialogContent({
   startTransition: React.TransitionStartFunction
 }) {
   const user = useAtomValue(userAtom)
+  const [file, setFile] = React.useState<(File & { preview: string }) | null>(
+    null
+  )
+  const [reset, setReset] = React.useState(false)
+
   const {
     register,
     formState: { errors },
@@ -82,27 +87,50 @@ function UpdateProfilePictureDialogContent({
           </Dialog.Description>
         </div>
         <div className="flex items-center justify-center space-x-4">
-          <Avatar name={name} src={user.profilePicture} size={100} />
+          <div className="h-24 w-24 rounded-full">
+            <Avatar
+              name={name}
+              src={file && file.preview}
+              size={96}
+              onLoad={() => URL.revokeObjectURL(file?.preview || '')}
+            />
+          </div>
 
           <div className="space-y-2">
-            <label htmlFor="file">
-              <input type="file" name="file" id="file" className="hidden" />
-              <div
-                className={cn(
-                  buttonStyle({ intent: 'secondary' }),
-                  'w-full cursor-pointer space-x-2'
-                )}
-              >
-                <UploadIcon className="h-4 w-4" />
-                <span>Pick new</span>
-              </div>
-            </label>
+            <Button
+              className="w-full space-x-2"
+              intent="secondary"
+              isLoading={isPending}
+              type="button"
+              onClick={() => {
+                const input = document.createElement('input')
+                input.type = 'file'
+                input.click()
+                input.onchange = () => {
+                  const file = input.files?.[0]
+                  if (!file) return
+                  setReset(false)
+                  setFile(
+                    Object.assign(file, {
+                      preview: URL.createObjectURL(file),
+                    })
+                  )
+                }
+              }}
+            >
+              <UploadIcon className="h-4 w-4" />
+              <span>Pick new</span>
+            </Button>
 
             <Button
               className="w-full space-x-2"
               intent="secondary"
               isLoading={isPending}
               type="button"
+              onClick={() => {
+                setFile(null)
+                setReset(true)
+              }}
             >
               <Trash2Icon className="h-4 w-4" />
               <span>Remove</span>

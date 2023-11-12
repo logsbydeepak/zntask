@@ -9,14 +9,20 @@ export function Avatar({
   src,
   name,
   size,
+  onLoad,
 }: {
-  src: string | null
+  src: string | null | undefined
   name: string
   size?: number
+  onLoad?: () => void
 }) {
   return (
-    <AvatarRoot>
-      <AvatarImage src={src || ''} className="rounded-full" />
+    <AvatarRoot className="h-full w-full">
+      <AvatarImage
+        src={src || ''}
+        className="h-full w-full rounded-full object-cover"
+        onLoad={onLoad}
+      />
       <AvatarFallback>
         <Avvvatars value={name} shadow={true} size={size} />
       </AvatarFallback>
