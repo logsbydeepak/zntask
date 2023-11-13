@@ -5,7 +5,7 @@ import { eq } from 'drizzle-orm'
 
 import { db, dbSchema } from './db'
 import { removeAuthCookie, UnauthorizedError } from './utils/auth'
-import { redis } from './utils/config'
+import { redis, utapi } from './utils/config'
 import { h, r } from './utils/handler'
 import { zUpdateName } from './utils/zSchema'
 
@@ -75,3 +75,5 @@ export const updateName = h('AUTH', zUpdateName, async ({ userId, input }) => {
 
   return r('OK')
 })
+
+export const uploadProfilePicture = h('AUTH', async ({ userId }) => {})

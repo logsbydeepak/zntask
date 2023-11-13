@@ -15,6 +15,8 @@ export const env = createEnv({
     REDIS_URL: zRequired.url(),
     REDIS_TOKEN: zRequired,
     BASE_URL: zRequired.url(),
+    UPLOADTHING_SECRET: zRequired,
+    UPLOADTHING_APP_ID: zRequired,
   },
   client: {},
   runtimeEnv: {
@@ -26,5 +28,7 @@ export const env = createEnv({
     REDIS_URL: process.env.REDIS_URL,
     REDIS_TOKEN: process.env.REDIS_TOKEN,
     BASE_URL: process.env.BASE_URL,
+    UPLOADTHING_APP_ID: process.env.UPLOADTHING_APP_ID,
+    UPLOADTHING_SECRET: process.env.UPLOADTHING_SECRET,
   },
 })

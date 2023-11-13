@@ -16,7 +16,9 @@
     "safelist",
     "Gantt",
     "cmdk",
-    "chrono"
+    "chrono",
+    "UPLOADTHING",
+    "utapi"
   ],
   "ignorePaths": ["bun.lockb"]
 }

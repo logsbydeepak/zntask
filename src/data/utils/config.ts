@@ -1,5 +1,6 @@
 import { Redis } from '@upstash/redis'
 import { Resend } from 'resend'
+import { UTApi } from 'uploadthing/server'
 
 import { env } from '@/env.mjs'
 
@@ -9,3 +10,5 @@ export const redis = new Redis({
 })
 
 export const resend = new Resend(env.RESEND_API_KEY)
+
+export const utapi = new UTApi()
