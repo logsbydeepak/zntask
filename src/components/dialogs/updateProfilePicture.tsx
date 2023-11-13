@@ -1,22 +1,22 @@
 import React from 'react'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useAtom, useAtomValue } from 'jotai'
+import Image from 'next/image'
+import { generateReactHelpers } from '@uploadthing/react/hooks'
+import Avvvatars from 'avvvatars-react'
+import { useAtomValue } from 'jotai'
 import { Trash2Icon, UploadIcon } from 'lucide-react'
 import { useForm } from 'react-hook-form'
-import { z } from 'zod'
+import { object, z } from 'zod'
 
 import { Button, buttonStyle } from '@/components/ui/button'
 import * as Dialog from '@/components/ui/dialog'
 import * as Form from '@/components/ui/form'
-import { updateName } from '@/data/user'
+import type { OurFileRouter } from '@/data/utils/uploadthing'
 import { useAppStore, userAtom } from '@/store/app'
-import { toast } from '@/store/toast'
-import { cn } from '@/utils/style'
 
-import { Avatar } from '../avatar'
 import { Head } from '../head'
 
-// type FormValues = z.infer<typeof zUpdateProfilePicture>
+export const { useUploadThing, uploadFiles } =
+  generateReactHelpers<OurFileRouter>()
 
 export function UpdateProfilePictureDialog() {
   const [isPending, startTransition] = React.useTransition()
@@ -57,6 +57,13 @@ function UpdateProfilePictureDialogContent({
     null
   )
   const [reset, setReset] = React.useState(false)
+  const { startUpload, isUploading } = useUploadThing('imageUploader', {
+    onClientUploadComplete: (file) => {
+      handleClose()
+    },
+  })
+
+  const isLoading = isPending || isUploading
 
   const {
     register,
@@ -70,7 +77,17 @@ function UpdateProfilePictureDialogContent({
   })
 
   const onSubmit = () => {
-    handleClose()
+    if (file) {
+      const _file = Object.assign(file, {
+        preview: undefined,
+      })
+
+      startUpload([_file])
+    }
+
+    if (reset) {
+      startTransition(async () => {})
+    }
   }
 
   const name = `${user.firstName} ${user.lastName}`
@@ -88,19 +105,13 @@ function UpdateProfilePictureDialogContent({
         </div>
         <div className="flex items-center justify-center space-x-4">
           <div className="h-24 w-24 rounded-full">
-            <Avatar
-              name={name}
-              src={file && file.preview}
-              size={96}
-              onLoad={() => URL.revokeObjectURL(file?.preview || '')}
-            />
+            <Avvvatars value={name} size={96} />
           </div>
 
-          <div className="space-y-2">
+          <fieldset className="space-y-2" disabled={isLoading}>
             <Button
               className="w-full space-x-2"
               intent="secondary"
-              isLoading={isPending}
               type="button"
               onClick={() => {
                 const input = document.createElement('input')
@@ -110,6 +121,8 @@ function UpdateProfilePictureDialogContent({
                   const file = input.files?.[0]
                   if (!file) return
                   setReset(false)
+                  console.log(URL.createObjectURL(file))
+
                   setFile(
                     Object.assign(file, {
                       preview: URL.createObjectURL(file),
@@ -125,7 +138,6 @@ function UpdateProfilePictureDialogContent({
             <Button
               className="w-full space-x-2"
               intent="secondary"
-              isLoading={isPending}
               type="button"
               onClick={() => {
                 setFile(null)
@@ -135,16 +147,16 @@ function UpdateProfilePictureDialogContent({
               <Trash2Icon className="h-4 w-4" />
               <span>Remove</span>
             </Button>
-          </div>
+          </fieldset>
         </div>
 
-        <fieldset className="flex space-x-4" disabled={isPending}>
+        <fieldset className="flex space-x-4" disabled={isLoading}>
           <Dialog.Close asChild>
             <Button intent="secondary" className="w-full">
               Cancel
             </Button>
           </Dialog.Close>
-          <Button className="w-full" isLoading={isPending}>
+          <Button className="w-full" isLoading={isLoading}>
             Submit
           </Button>
         </fieldset>

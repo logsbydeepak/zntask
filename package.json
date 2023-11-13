@@ -36,6 +36,7 @@
     "@types/react": "18.2.37",
     "@types/react-dom": "18.2.15",
     "@types/validator": "^13.11.6",
+    "@uploadthing/react": "^5.7.0",
     "@upstash/redis": "^1.25.1",
     "autoprefixer": "10.4.16",
     "avvvatars-react": "^0.4.2",

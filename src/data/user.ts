@@ -2,6 +2,7 @@
 
 import { revalidateTag } from 'next/cache'
 import { eq } from 'drizzle-orm'
+import { z } from 'zod'
 
 import { db, dbSchema } from './db'
 import { removeAuthCookie, UnauthorizedError } from './utils/auth'
@@ -75,5 +76,3 @@ export const updateName = h('AUTH', zUpdateName, async ({ userId, input }) => {
 
   return r('OK')
 })
-
-export const uploadProfilePicture = h('AUTH', async ({ userId }) => {})

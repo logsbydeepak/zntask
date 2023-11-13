@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import {
   AvatarFallback,
   AvatarImage,
@@ -20,6 +21,7 @@ export function Avatar({
     <AvatarRoot className="h-full w-full">
       <AvatarImage
         src={src || ''}
+        alt="avatar"
         className="h-full w-full rounded-full object-cover"
         onLoad={onLoad}
       />
