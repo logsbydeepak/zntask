@@ -1,13 +1,9 @@
 'use client'
 
 import React from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import {
-  AvatarFallback,
-  AvatarImage,
-  Avatar as AvatarRoot,
-} from '@radix-ui/react-avatar'
 import Avvvatars from 'avvvatars-react'
 import { useAtomValue, useSetAtom } from 'jotai'
 import {
@@ -25,7 +21,6 @@ import {
 } from 'lucide-react'
 import { useTheme } from 'next-themes'
 
-import { Avatar } from '@/components/avatar'
 import { LogoIcon } from '@/components/icon/logo'
 import {
   DropdownMenuContent,
@@ -84,7 +79,6 @@ export function Navbar() {
 
           <DropdownMenuRoot>
             <DropdownMenuTrigger>
-              {/* <ProfilePicture src={user.profilePicture} name={name} /> */}
               <Avatar src={user.profilePicture} name={name} />
             </DropdownMenuTrigger>
 
@@ -181,35 +175,6 @@ const ThemeItem = React.forwardRef<
 ))
 ThemeItem.displayName = 'ThemeItem'
 
-// function ProfilePicture({ src, name }: { src: string | null; name: string }) {
-//   const isAppSyncing = useAtomValue(isAppSyncingAtom)
-
-//   React.useEffect(() => {
-//     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-//       if (isAppSyncing) {
-//         e.preventDefault()
-//         return (e.returnValue = 'Your changes are not saved. Are you sure?')
-//       }
-//     }
-
-//     window.addEventListener('beforeunload', handleBeforeUnload)
-//     return () => window.removeEventListener('beforeunload', handleBeforeUnload)
-//   }, [isAppSyncing])
-
-//   return (
-//     <AvatarRoot className="relative flex h-8 w-8 items-center justify-center rounded-full">
-//       <AvatarImage src={src || ''} />
-//       <AvatarFallback>
-//         <Avvvatars value={name} shadow={true} size={32} />
-//       </AvatarFallback>
-//       <span
-//         className="absolute bottom-0 right-0 mb-0.5 h-1.5 w-1.5 rounded-full border-white bg-orange-600 ring-2 ring-white transition-opacity data-[sync=false]:hidden data-[sync=true]:animate-pulse"
-//         data-sync={isAppSyncing}
-//       />
-//     </AvatarRoot>
-//   )
-// }
-
 function Icon({
   children,
   onClick,
@@ -243,4 +208,21 @@ function Search() {
       </span>
     </button>
   )
+}
+
+function Avatar({ src, name }: { src: string | null; name: string }) {
+  if (src) {
+    return (
+      <div className="relative h-8 w-8">
+        <Image
+          src={src || ''}
+          alt="avatar"
+          fill
+          className="h-full  w-full rounded-full object-cover"
+        />
+      </div>
+    )
+  }
+
+  return <Avvvatars value={name} />
 }

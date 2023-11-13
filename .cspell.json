@@ -18,7 +18,8 @@
     "cmdk",
     "chrono",
     "UPLOADTHING",
-    "utapi"
+    "utapi",
+    "utfs"
   ],
   "ignorePaths": ["bun.lockb"]
 }

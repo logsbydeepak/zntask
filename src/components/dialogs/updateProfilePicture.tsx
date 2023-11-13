@@ -5,9 +5,8 @@ import Avvvatars from 'avvvatars-react'
 import { useAtomValue } from 'jotai'
 import { Trash2Icon, UploadIcon } from 'lucide-react'
 import { useForm } from 'react-hook-form'
-import { object, z } from 'zod'
 
-import { Button, buttonStyle } from '@/components/ui/button'
+import { Button } from '@/components/ui/button'
 import * as Dialog from '@/components/ui/dialog'
 import * as Form from '@/components/ui/form'
 import type { OurFileRouter } from '@/data/utils/uploadthing'
@@ -53,9 +52,11 @@ function UpdateProfilePictureDialogContent({
   startTransition: React.TransitionStartFunction
 }) {
   const user = useAtomValue(userAtom)
-  const [file, setFile] = React.useState<(File & { preview: string }) | null>(
-    null
+  const [preview, setPreview] = React.useState<string | null>(
+    user.profilePicture
   )
+
+  const [file, setFile] = React.useState<File | null>(null)
   const [reset, setReset] = React.useState(false)
   const { startUpload, isUploading } = useUploadThing('imageUploader', {
     onClientUploadComplete: (file) => {
@@ -78,11 +79,7 @@ function UpdateProfilePictureDialogContent({
 
   const onSubmit = () => {
     if (file) {
-      const _file = Object.assign(file, {
-        preview: undefined,
-      })
-
-      startUpload([_file])
+      startUpload([file])
     }
 
     if (reset) {
@@ -104,8 +101,20 @@ function UpdateProfilePictureDialogContent({
           </Dialog.Description>
         </div>
         <div className="flex items-center justify-center space-x-4">
-          <div className="h-24 w-24 rounded-full">
-            <Avvvatars value={name} size={96} />
+          <div className="relative h-24 w-24 rounded-full">
+            {preview && (
+              <Image
+                src={preview}
+                onLoad={() => URL.revokeObjectURL(preview)}
+                fill
+                alt="avatar"
+                className="h-full w-full rounded-full object-cover"
+              />
+            )}
+
+            {(reset || !user.profilePicture) && (
+              <Avvvatars value={name} size={96} />
+            )}
           </div>
 
           <fieldset className="space-y-2" disabled={isLoading}>
@@ -120,14 +129,10 @@ function UpdateProfilePictureDialogContent({
                 input.onchange = () => {
                   const file = input.files?.[0]
                   if (!file) return
-                  setReset(false)
-                  console.log(URL.createObjectURL(file))
 
-                  setFile(
-                    Object.assign(file, {
-                      preview: URL.createObjectURL(file),
-                    })
-                  )
+                  setPreview(URL.createObjectURL(file))
+                  setFile(file)
+                  setReset(false)
                 }
               }}
             >
@@ -140,6 +145,7 @@ function UpdateProfilePictureDialogContent({
               intent="secondary"
               type="button"
               onClick={() => {
+                setPreview(null)
                 setFile(null)
                 setReset(true)
               }}
