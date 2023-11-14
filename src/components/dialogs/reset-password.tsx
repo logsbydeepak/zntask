@@ -31,7 +31,7 @@ export function ResetPasswordDialog({
   return (
     <Dialog.Root open={isOpen} onOpenChange={handleClose}>
       <Dialog.Portal>
-        <Dialog.Content className="fixed left-1/2 top-1/2 w-[400px] -translate-x-1/2 -translate-y-1/2 transform rounded-md border border-gray-200 bg-white p-6 shadow-2xl drop-shadow-sm">
+        <Dialog.Content>
           <ResetPasswordDialogContent
             handleClose={handleClose}
             isPending={isPending}

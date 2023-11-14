@@ -4,7 +4,7 @@ import * as Layout from '@/app/(application)/(app)/app-layout'
 import { Head } from '@/components/head'
 import { getUserWithAuth } from '@/data/user'
 
-import { ResetPassword, Update } from './edit'
+import { Update } from './edit'
 
 const getUserWithAuthData = unstable_cache(async () => {
   return await getUserWithAuth()
@@ -20,8 +20,33 @@ export default async function Page() {
         <Head title="User" />
       </Layout.Header>
       <Layout.Content>
-        {JSON.stringify(user)}
-        <ResetPassword />
+        <div className="pb-8">
+          <table className="border-separate border-spacing-x-2 border-spacing-y-2 text-sm">
+            <tbody className="">
+              <tr>
+                <td>Name</td>
+                <td>{`${user.firstName} ${user.lastName}`}</td>
+              </tr>
+              <tr>
+                <td>Email</td>
+                <td>{user.email}</td>
+              </tr>
+              <tr>
+                <td>Picture</td>
+                <td>{user.profilePicture}</td>
+              </tr>
+              <tr>
+                <td>Google</td>
+                <td>{user.auth.google.toString()}</td>
+              </tr>
+              <tr>
+                <td>Credential</td>
+                <td>{user.auth.credential.toString()}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
         <Update />
       </Layout.Content>
     </Layout.Root>

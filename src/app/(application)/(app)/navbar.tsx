@@ -78,8 +78,10 @@ export function Navbar() {
           </div>
 
           <DropdownMenuRoot>
-            <DropdownMenuTrigger>
-              <Avatar src={user.profilePicture} name={name} />
+            <DropdownMenuTrigger asChild>
+              <button>
+                <Avatar src={user.profilePicture} name={name} />
+              </button>
             </DropdownMenuTrigger>
 
             <DropdownMenuPortal>
