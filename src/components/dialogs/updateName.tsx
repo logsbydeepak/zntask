@@ -84,9 +84,7 @@ function UpdateNameDialogContent({
       <Head title="Update name" />
       <Form.Root onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         <div>
-          <Dialog.Title className="text text-lg font-medium">
-            Update name
-          </Dialog.Title>
+          <Dialog.Title className="text text-lg font-medium">Name</Dialog.Title>
           <Dialog.Description className="text-xs text-gray-500">
             Enter your new name
           </Dialog.Description>

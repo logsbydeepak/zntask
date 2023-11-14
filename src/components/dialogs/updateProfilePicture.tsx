@@ -9,8 +9,10 @@ import { useForm } from 'react-hook-form'
 import { Button } from '@/components/ui/button'
 import * as Dialog from '@/components/ui/dialog'
 import * as Form from '@/components/ui/form'
+import { removeProfilePicture, revalidateUser } from '@/data/user'
 import type { OurFileRouter } from '@/data/utils/uploadthing'
 import { useAppStore, userAtom } from '@/store/app'
+import { toast } from '@/store/toast'
 
 import { Head } from '../head'
 
@@ -60,7 +62,14 @@ function UpdateProfilePictureDialogContent({
   const [reset, setReset] = React.useState(false)
   const { startUpload, isUploading } = useUploadThing('imageUploader', {
     onClientUploadComplete: (file) => {
+      startTransition(async () => {
+        await revalidateUser()
+      })
+      toast.success('Profile picture updated')
       handleClose()
+    },
+    onUploadError: (error) => {
+      console.error(error)
     },
   })
 
@@ -83,7 +92,11 @@ function UpdateProfilePictureDialogContent({
     }
 
     if (reset) {
-      startTransition(async () => {})
+      startTransition(async () => {
+        await removeProfilePicture()
+        toast.success('Profile picture updated')
+        handleClose()
+      })
     }
   }
 
@@ -93,12 +106,7 @@ function UpdateProfilePictureDialogContent({
       <Head title="Update profile picture" />
       <Form.Root onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         <div>
-          <Dialog.Title className="text text-lg font-medium">
-            Update name
-          </Dialog.Title>
-          <Dialog.Description className="text-xs text-gray-500">
-            Enter your new name
-          </Dialog.Description>
+          <Dialog.Title>Profile picture</Dialog.Title>
         </div>
         <div className="flex items-center justify-center space-x-4">
           <div className="relative h-24 w-24 rounded-full">
@@ -125,6 +133,7 @@ function UpdateProfilePictureDialogContent({
               onClick={() => {
                 const input = document.createElement('input')
                 input.type = 'file'
+                input.accept = 'image/png, image/jpeg'
                 input.click()
                 input.onchange = () => {
                   const file = input.files?.[0]
