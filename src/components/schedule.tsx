@@ -59,13 +59,15 @@ export function SchedulePicker({
           )}
         </Badge.Button>
       </Popover.Trigger>
-      {isOpen && (
-        <SchedulePopover
-          setIsOpen={setIsOpen}
-          value={value}
-          setValue={setValue}
-        />
-      )}
+      <Popover.Portal>
+        {isOpen && (
+          <SchedulePopover
+            setIsOpen={setIsOpen}
+            value={value}
+            setValue={setValue}
+          />
+        )}
+      </Popover.Portal>
     </Popover.Root>
   )
 }
@@ -116,6 +118,7 @@ const SchedulePopover = React.forwardRef<
       className="category-popover z-50 w-72 space-y-4 rounded-lg border border-gray-200 bg-white shadow-sm"
       autoFocus={true}
       collisionPadding={10}
+      sticky="always"
     >
       <div className="flex flex-col border-b border-gray-200 px-4 pb-4 pt-2.5">
         <div className="flex items-center">

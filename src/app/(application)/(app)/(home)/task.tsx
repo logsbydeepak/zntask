@@ -133,7 +133,7 @@ function TaskItem({
 }) {
   const editChildTask = useTaskStore((s) => s.editChildTask)
   const editParentTask = useTaskStore((s) => s.editParentTask)
-  const setDialog = useAppStore((s) => s.setDialog)
+  const [preventFocus, setPreventFocus] = React.useState(false)
 
   return (
     <ContextMenuRoot>
@@ -217,13 +217,26 @@ function TaskItem({
         </ContextMenuTrigger>
 
         <ContextMenuPortal>
-          <ContextMenuContent>
-            <TaskMenuContent task={task} type="context" />
+          <ContextMenuContent
+            onCloseAutoFocus={(e) => preventFocus && e.preventDefault()}
+          >
+            <TaskMenuContent
+              task={task}
+              type="context"
+              setPreventFocus={setPreventFocus}
+            />
           </ContextMenuContent>
         </ContextMenuPortal>
         <DropdownMenuPortal>
-          <DropdownMenuContent align="end">
-            <TaskMenuContent task={task} type="dropdown" />
+          <DropdownMenuContent
+            align="end"
+            onCloseAutoFocus={(e) => preventFocus && e.preventDefault()}
+          >
+            <TaskMenuContent
+              task={task}
+              type="dropdown"
+              setPreventFocus={setPreventFocus}
+            />
           </DropdownMenuContent>
         </DropdownMenuPortal>
       </DropdownMenuRoot>
@@ -234,9 +247,11 @@ function TaskItem({
 function TaskMenuContent({
   task,
   type,
+  setPreventFocus,
 }: {
   task: ParentTask | ChildTask
   type: 'context' | 'dropdown'
+  setPreventFocus: (value: boolean) => void
 }) {
   const setDialog = useAppStore((s) => s.setDialog)
   const removeParentTask = useTaskStore((s) => s.removeParentTask)
@@ -248,10 +263,12 @@ function TaskMenuContent({
       icon: <EditIcon />,
       onSelect: () => {
         if ('categoryId' in task) {
+          setPreventFocus(true)
           setDialog({ editTask: { parentTaskId: task.id } })
         }
 
         if ('parentId' in task) {
+          setPreventFocus(true)
           setDialog({ editTask: { childTaskId: task.id } })
         }
       },

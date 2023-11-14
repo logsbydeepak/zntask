@@ -205,8 +205,8 @@ function CategoryItem({
   href: string
   isActive: boolean
 }) {
-  const editCategory = useCategoryStore((s) => s.editCategory)
   const isScreenSM = useAtomValue(isScreenSMAtom)
+  const [preventFocus, setPreventFocus] = React.useState(false)
 
   return (
     <Item.Root isActive={isActive}>
@@ -239,11 +239,24 @@ function CategoryItem({
               </span>
             </Item.Content.Link>
           </ContextMenuTrigger>
-          <ContextMenuContent>
-            <CategoryMenuContent category={category} type="context" />
+          <ContextMenuContent
+            onCloseAutoFocus={(e) => preventFocus && e.preventDefault()}
+          >
+            <CategoryMenuContent
+              category={category}
+              type="context"
+              setPreventFocus={setPreventFocus}
+            />
           </ContextMenuContent>
-          <DropdownMenuContent align={isScreenSM ? 'end' : 'start'}>
-            <CategoryMenuContent category={category} type="dropdown" />
+          <DropdownMenuContent
+            align={isScreenSM ? 'end' : 'start'}
+            onCloseAutoFocus={(e) => preventFocus && e.preventDefault()}
+          >
+            <CategoryMenuContent
+              category={category}
+              type="dropdown"
+              setPreventFocus={setPreventFocus}
+            />
           </DropdownMenuContent>
         </DropdownMenuRoot>
       </ContextMenuRoot>

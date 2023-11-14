@@ -45,7 +45,13 @@ export function CategoryDialog() {
   return (
     <Dialog.Root open={isOpen} onOpenChange={handleClose}>
       <Dialog.Portal>
-        <Dialog.Content className="space-y-4">
+        <Dialog.Content
+          className="space-y-4"
+          onOpenAutoFocus={(e) => {
+            e.preventDefault()
+            document.querySelector<HTMLInputElement>('#title')?.focus()
+          }}
+        >
           <CategoryDialogContent
             handleClose={handleClose}
             isEdit={isEdit}

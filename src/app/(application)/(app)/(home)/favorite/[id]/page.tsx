@@ -1,5 +1,6 @@
 'use client'
 
+import React from 'react'
 import { CheckCheckIcon, MoreVerticalIcon } from 'lucide-react'
 import { useShallow } from 'zustand/react/shallow'
 
@@ -25,6 +26,7 @@ import { CategoryMenuContent } from '../../category'
 import { EmptyTaskCategory, TaskContainer } from '../../task'
 
 export default function Page({ params }: { params: { id?: string } }) {
+  const [preventFocus, setPreventFocus] = React.useState(false)
   const category = useCategoryStore(
     useShallow((s) =>
       s.categories.find((c) => c.id === params.id && c.isFavorite)
@@ -52,8 +54,15 @@ export default function Page({ params }: { params: { id?: string } }) {
             </DropdownMenuTrigger>
 
             <DropdownMenuPortal>
-              <DropdownMenuContent align={'end'}>
-                <CategoryMenuContent category={category} type="dropdown" />
+              <DropdownMenuContent
+                align={'end'}
+                onCloseAutoFocus={(e) => preventFocus && e.preventDefault()}
+              >
+                <CategoryMenuContent
+                  category={category}
+                  type="dropdown"
+                  setPreventFocus={setPreventFocus}
+                />
               </DropdownMenuContent>
             </DropdownMenuPortal>
           </DropdownMenuRoot>

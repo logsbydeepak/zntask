@@ -111,6 +111,7 @@ function ResetPasswordDialogContent({
             id="email"
             {...register('email')}
             placeholder="abc@domain.com"
+            autoFocus
           />
           {errors.email && <Form.Error>{errors.email?.message}</Form.Error>}
         </div>
