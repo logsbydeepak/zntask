@@ -53,3 +53,33 @@ export const getCategoryColor = (indicator: CategoryIndicatorLabelType) => {
 }
 
 export type Category = z.infer<typeof zCategory>
+
+export const sortCategories = (
+  allCategories: Category[],
+  { sortByFavorite }: { sortByFavorite?: boolean } = {}
+) => {
+  const categories = sortByFavorite
+    ? allCategories.filter((c) => c.isFavorite)
+    : allCategories.filter((c) => !c.isArchived)
+
+  const lastCategory = sortByFavorite
+    ? categories.find((c) => c.favoriteOrderId === null)
+    : categories.find((c) => c.orderId === null)
+
+  if (!lastCategory) return []
+  const sortedCategories: Category[] = []
+
+  const findCategory = (id: string) => {
+    const category = sortByFavorite
+      ? categories.find((c) => c.favoriteOrderId === id)
+      : categories.find((c) => c.orderId === id)
+
+    if (!category) return
+    sortedCategories.unshift(category)
+    findCategory(category.id)
+  }
+
+  findCategory(lastCategory.id)
+  sortedCategories.push(lastCategory)
+  return sortedCategories
+}
