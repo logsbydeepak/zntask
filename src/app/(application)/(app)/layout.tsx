@@ -26,7 +26,7 @@ export default async function Layout({
         <AppLayout>{children}</AppLayout>
         <GlobalShortcut />
         <Dialogs />
-        <Sync />
+        {/* <Sync /> */}
       </InitData>
     </Suspense>
   )

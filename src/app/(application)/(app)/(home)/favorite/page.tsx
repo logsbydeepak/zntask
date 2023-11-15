@@ -7,13 +7,34 @@ import { useShallow } from 'zustand/react/shallow'
 import * as Layout from '@/app/(application)/(app)/app-layout'
 import { Head } from '@/components/head'
 import { useCategoryStore } from '@/store/category'
+import { Category } from '@/utils/category'
 
 import { CategoryContainer, CategoryItem } from '../category'
 
 export default function Page() {
   const favorites = useCategoryStore(
-    useShallow((s) => s.categories.filter((c) => c.isFavorite))
+    useShallow((s) => {
+      const categories = s.categories.filter((c) => c.isFavorite)
+
+      const lastCategory = categories.find((c) => c.favoriteOrderId === null)
+      if (!lastCategory) return []
+
+      const sortedCategories: Category[] = []
+
+      const findCategory = (id: string) => {
+        const category = categories.find((c) => c.favoriteOrderId === id)
+        if (!category) return
+        sortedCategories.unshift(category)
+        findCategory(category.id)
+      }
+      findCategory(lastCategory.id)
+      sortedCategories.push(lastCategory)
+
+      // console.log({sortedCategories})
+      return sortedCategories
+    })
   )
+  console.log({ favorites })
 
   return (
     <Layout.Root>

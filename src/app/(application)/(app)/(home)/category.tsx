@@ -112,6 +112,8 @@ export function CategoryMenuContent({
 }) {
   const setDialog = useAppStore((s) => s.setDialog)
   const editCategory = useCategoryStore((s) => s.editCategory)
+  const toggleArchive = useCategoryStore((s) => s.toggleArchive)
+  const toggleFavorite = useCategoryStore((s) => s.toggleFavorite)
 
   const menuItem = [
     {
@@ -125,23 +127,13 @@ export function CategoryMenuContent({
 
     {
       label: category.isFavorite ? 'Unfavorite' : 'Favorite',
-      onSelect: () =>
-        editCategory({
-          ...category,
-          isFavorite: !category.isFavorite,
-          isArchived: false,
-        }),
+      onSelect: () => toggleFavorite(category),
       icon: category.isFavorite ? <HeartOffIcon /> : <HeartIcon />,
     },
 
     {
       label: category.isArchived ? 'Unarchive' : 'Archive',
-      onSelect: () =>
-        editCategory({
-          ...category,
-          isArchived: !category.isArchived,
-          isFavorite: false,
-        }),
+      onSelect: () => toggleArchive(category),
       icon: category.isArchived ? (
         <ArchiveRestoreIcon />
       ) : (

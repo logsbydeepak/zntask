@@ -17,6 +17,10 @@ interface Actions {
   getCategory: (id: string | null) => undefined | Category
   editCategory: (category: Category) => void
   deleteCategory: (category: Category) => void
+
+  toggleArchive: (category: Category) => void
+  toggleFavorite: (category: Category) => void
+
   setNewCategories: (categories: Category[]) => void
 }
 
@@ -85,6 +89,93 @@ const categoryStore: StateCreator<State & Actions> = (set, get) => ({
     if (!isValid(id)) return
 
     return get().categories.find((category) => category.id === id)
+  },
+  toggleArchive(category) {
+    if (category.isArchived) {
+      set((state) => ({
+        categories: state.categories.map((item) => {
+          if (item.orderId === null && !item.isArchived)
+            return { ...item, orderId: category.id }
+          if (item.id === category.id) return { ...item, isArchived: false }
+          return item
+        }),
+      }))
+    } else {
+      if (category.orderId === null) {
+        set((state) => ({
+          categories: state.categories.map((item) => {
+            if (item.orderId === category.id) return { ...item, orderId: null }
+            if (item.id === category.id)
+              return {
+                ...item,
+                isArchived: true,
+                isFavorite: false,
+                orderId: null,
+                favoriteOrderId: null,
+              }
+            return item
+          }),
+        }))
+      } else {
+        set((state) => ({
+          categories: state.categories.map((item) => {
+            if (item.id === category.id)
+              return {
+                ...item,
+                isArchived: true,
+                isFavorite: false,
+                orderId: null,
+                favoriteOrderId: null,
+              }
+            return item
+          }),
+        }))
+      }
+    }
+  },
+
+  toggleFavorite(category) {
+    if (category.isArchived) return
+
+    if (category.isFavorite) {
+      if (category.favoriteOrderId === null) {
+        set((state) => ({
+          categories: state.categories.map((item) => {
+            if (item.id === category.id)
+              return { ...item, isFavorite: false, favoriteOrderId: null }
+
+            if (item.favoriteOrderId === category.id)
+              return { ...item, favoriteOrderId: null }
+
+            return item
+          }),
+        }))
+      } else {
+        set((state) => ({
+          categories: state.categories.map((item) => {
+            if (item.id === category.id)
+              return { ...item, isFavorite: false, favoriteOrderId: null }
+            return item
+          }),
+        }))
+      }
+    } else {
+      set((state) => ({
+        categories: state.categories.map((item) => {
+          if (item.favoriteOrderId === null && item.isFavorite)
+            return { ...item, favoriteOrderId: category.id }
+
+          if (item.id === category.id)
+            return {
+              ...item,
+              isFavorite: true,
+              isArchived: false,
+              favoriteOrderId: null,
+            }
+          return item
+        }),
+      }))
+    }
   },
 
   setNewCategories(categories) {
