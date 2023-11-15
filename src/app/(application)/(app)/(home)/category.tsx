@@ -122,12 +122,18 @@ export function CategoryMenuContent({
       },
       icon: <EditIcon />,
     },
+
     {
       label: category.isFavorite ? 'Unfavorite' : 'Favorite',
       onSelect: () =>
-        editCategory({ ...category, isFavorite: !category.isFavorite }),
+        editCategory({
+          ...category,
+          isFavorite: !category.isFavorite,
+          isArchived: false,
+        }),
       icon: category.isFavorite ? <HeartOffIcon /> : <HeartIcon />,
     },
+
     {
       label: category.isArchived ? 'Unarchive' : 'Archive',
       onSelect: () =>
@@ -142,7 +148,6 @@ export function CategoryMenuContent({
         <ArchiveRestoreIcon />
       ),
     },
-
     {
       label: 'Delete',
       onSelect: () => setDialog({ deleteCategory: category }),
@@ -150,6 +155,10 @@ export function CategoryMenuContent({
       intent: 'destructive' as const,
     },
   ]
+
+  if (category.isArchived) {
+    menuItem.splice(1, 1)
+  }
 
   if (type === 'context') {
     return menuItem.map((i) => (

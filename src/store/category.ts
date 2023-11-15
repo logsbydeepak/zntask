@@ -11,7 +11,9 @@ const initialState = {
 type State = typeof initialState
 
 interface Actions {
-  addCategory: (category: Pick<Category, 'title' | 'indicator'>) => Category
+  addCategory: (
+    category: Pick<Category, 'title' | 'indicator'>
+  ) => Category | undefined
   getCategory: (id: string | null) => undefined | Category
   editCategory: (category: Category) => void
   deleteCategory: (category: Category) => void
@@ -23,17 +25,24 @@ const categoryStore: StateCreator<State & Actions> = (set, get) => ({
 
   addCategory: (category) => {
     const id = ulid()
+
     const newCategory: Category = {
-      id: id,
+      id,
       title: category.title,
       indicator: category.indicator,
       isFavorite: false,
       isArchived: false,
-      orderId: ulid(),
+      orderId: null,
+      favoriteOrderId: null,
     }
 
     set((state) => ({
-      categories: [newCategory, ...state.categories],
+      categories: state.categories
+        .map((item) => {
+          if (item.orderId === null) return { ...item, orderId: id }
+          return item
+        })
+        .concat(newCategory),
     }))
 
     useActivityStore.getState().addActivity({

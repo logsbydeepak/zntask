@@ -50,6 +50,7 @@ export const CategoryPopover = React.forwardRef<
             title: search,
             indicator: 'orange',
           })
+          if (!newCategory) return
           setValue(newCategory.id)
         }
       }}
@@ -180,6 +181,7 @@ export const CategoryPopover = React.forwardRef<
                 title: search,
                 indicator: 'orange',
               })
+              if (!newCategory) return
               setValue(newCategory.id)
             }}
           >

@@ -78,7 +78,8 @@ export const categories = mysqlTable(
       .notNull(),
     isFavorite: boolean('is_favorite').notNull(),
     isArchived: boolean('is_archived').notNull(),
-    orderId: varchar('order_id', { length: 26 }).notNull(),
+    orderId: id('order_id').unique(),
+    favoriteOrderId: id('favorite_order_id').unique(),
   },
   (table) => {
     return {

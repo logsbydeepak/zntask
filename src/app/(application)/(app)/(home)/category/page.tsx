@@ -15,6 +15,7 @@ import {
   TabsTrigger,
 } from '@/components/ui/tabs'
 import { useCategoryStore } from '@/store/category'
+import { Category } from '@/utils/category'
 
 import { CategoryContainer, CategoryItem } from '../category'
 
@@ -54,7 +55,25 @@ export default function Page() {
 
 function AllTab() {
   const categories = useCategoryStore(
-    useShallow((s) => s.categories.filter((c) => !c.isArchived))
+    useShallow((s) => {
+      const categories = s.categories.filter((c) => !c.isArchived)
+
+      const lastCategory = categories.find((c) => c.orderId === null)
+      if (!lastCategory) return []
+
+      const sortedCategories: Category[] = []
+
+      const findCategory = (id: string) => {
+        const category = categories.find((c) => c.orderId === id)
+        if (!category) return
+        sortedCategories.unshift(category)
+        findCategory(category.id)
+      }
+      findCategory(lastCategory.id)
+      sortedCategories.push(lastCategory)
+
+      return sortedCategories
+    })
   )
 
   return (
