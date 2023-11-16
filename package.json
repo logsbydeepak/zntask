@@ -36,13 +36,13 @@
     "@types/react": "18.2.37",
     "@types/react-dom": "18.2.15",
     "@types/validator": "^13.11.6",
-    "@uploadthing/react": "^5.7.0",
+    "@uploadthing/react": "^6.0.0",
     "@upstash/redis": "^1.25.1",
     "@use-gesture/react": "^10.3.0",
     "autoprefixer": "10.4.16",
     "avvvatars-react": "^0.4.2",
     "bcryptjs": "^2.4.3",
-    "bun-types": "^1.0.11",
+    "bun-types": "^1.0.12",
     "chrono-node": "^2.7.0",
     "cmdk": "^0.2.0",
     "cspell": "^8.0.0",
@@ -52,7 +52,7 @@
     "drizzle-orm": "^0.29.0",
     "eslint": "8.53.0",
     "eslint-config-next": "14.0.2",
-    "jose": "^5.1.0",
+    "jose": "^5.1.1",
     "jotai": "^2.5.1",
     "lucide-react": "^0.292.0",
     "ms": "^2.1.3",
@@ -62,7 +62,7 @@
     "npm-run-all": "^4.1.5",
     "postcss": "8.4.31",
     "postgres": "^3.4.3",
-    "prettier": "^3.0.3",
+    "prettier": "^3.1.0",
     "prettier-plugin-tailwindcss": "^0.5.7",
     "react": "18.2.0",
     "react-day-picker": "^8.9.1",
@@ -73,13 +73,13 @@
     "tailwindcss": "3.3.5",
     "typescript": "5.2.2",
     "ulidx": "^2.2.1",
-    "uploadthing": "^5.7.4",
+    "uploadthing": "^6.0.1",
     "use-debounce": "^10.0.0",
     "validator": "^13.11.0",
     "zod": "^3.22.4",
     "zustand": "^4.4.6"
   },
   "devDependencies": {
-    "drizzle-kit": "^0.20.1"
+    "drizzle-kit": "^0.20.2"
   }
 }
