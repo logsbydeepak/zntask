@@ -1,5 +1,6 @@
 import { isValid, ulid } from 'ulidx'
 import { create, StateCreator } from 'zustand'
+import { persist } from 'zustand/middleware'
 
 import { Category } from '@/utils/category'
 
@@ -185,4 +186,6 @@ const categoryStore: StateCreator<State & Actions> = (set, get) => ({
   },
 })
 
-export const useCategoryStore = create(categoryStore)
+export const useCategoryStore = create(
+  persist(categoryStore, { name: 'categories', skipHydration: true })
+)

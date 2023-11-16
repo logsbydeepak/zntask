@@ -98,7 +98,9 @@ export function InitAppState({
   const setUser = useSetAtom(userAtom)
 
   React.useLayoutEffect(() => {
-    setNewCategories(categories)
+    useCategoryStore.persist.rehydrate()
+
+    // setNewCategories(categories)
     setNewParentTask(parentTask)
     setNewChildTask(childTask)
 

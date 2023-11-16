@@ -1,8 +1,10 @@
 import React from 'react'
 import Link from 'next/link'
 import { useDrag } from '@use-gesture/react'
+import { atom, useAtom, useSetAtom } from 'jotai'
 import {
   ArchiveRestoreIcon,
+  CircleIcon,
   EditIcon,
   HeartIcon,
   HeartOffIcon,
@@ -15,6 +17,7 @@ import {
   ContextMenuItem,
   ContextMenuPortal,
   ContextMenuRoot,
+  ContextMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuPortal,
@@ -27,6 +30,8 @@ import { useCategoryStore } from '@/store/category'
 import { Category, getCategoryColor } from '@/utils/category'
 import { cn } from '@/utils/style'
 
+const isCategoryDraggingAtom = atom(false)
+
 export function CategoryItem({
   category,
   href,
@@ -35,9 +40,9 @@ export function CategoryItem({
   href: string
 }) {
   const [preventFocus, setPreventFocus] = React.useState(false)
-
   const [isDragging, setIsDragging] = React.useState(false)
   const [position, setPosition] = React.useState({ x: 0, y: 0 })
+  const [isHovering, setIsHovering] = React.useState(false)
 
   const bind = useDrag(
     ({ down, movement: [mx, my] }) => {
@@ -48,46 +53,49 @@ export function CategoryItem({
         setPosition({ x: 0, y: 0 })
       }
     },
-    { preventDefault: true, filterTaps: true, preventScroll: false }
+    { preventDefault: true, filterTaps: true }
   )
 
   return (
     <ContextMenuRoot>
       <DropdownMenuRoot>
-        <Link
-          {...bind()}
-          href={href}
-          style={{
-            transform: `translate3d(${position.x}px, ${position.y}px, 0)`,
-          }}
-          className={cn(
-            'relative flex  touch-none items-center justify-between rounded-lg border border-transparent px-4 py-2 hover:border-gray-200 hover:bg-gray-50 group-data-[state=open]:border-gray-200 group-data-[state=open]:bg-gray-50',
-            isDragging && 'z-50'
-          )}
-        >
-          <div className="mr-2 flex items-center space-x-3 overflow-hidden">
-            <div>
-              <div
-                className={cn(
-                  'h-3 w-3 rounded-[4.5px]',
-                  `bg-${getCategoryColor(category.indicator)}-600`
-                )}
-              />
+        <ContextMenuTrigger asChild>
+          <Link
+            {...bind()}
+            href={href}
+            style={{
+              transform: `translate3d(${position.x}px, ${position.y}px, 0)`,
+            }}
+            className={cn(
+              'relative flex touch-none items-center justify-between rounded-lg border border-transparent px-4 py-2 hover:border-gray-200 hover:bg-gray-50 group-data-[state=open]:border-gray-200 group-data-[state=open]:bg-gray-50',
+              isDragging && 'z-20'
+            )}
+          >
+            <div className="mr-2 flex items-center space-x-3 overflow-hidden">
+              <div>
+                <div
+                  className={cn(
+                    'h-3 w-3 rounded-[4.5px]',
+                    `bg-${getCategoryColor(category.indicator)}-600`
+                  )}
+                />
+              </div>
+              <p className="select-none overflow-hidden text-ellipsis text-sm">
+                {category.title}
+              </p>
             </div>
-            <p className="select-none overflow-hidden text-ellipsis text-sm">
-              {category.title}
-            </p>
-          </div>
-          <div className="flex items-center space-x-1">
-            <DropdownMenuTrigger asChild>
-              <button className="flex h-6 w-6 items-center justify-center text-gray-400 hover:text-gray-800 data-[state=open]:text-gray-800">
-                <span className="inline-block h-4 w-4">
-                  <MoreVerticalIcon />
-                </span>
-              </button>
-            </DropdownMenuTrigger>
-          </div>
-        </Link>
+            <div className="flex items-center space-x-1">
+              <DropdownMenuTrigger asChild>
+                <button className="flex h-6 w-6 items-center justify-center text-gray-400 hover:text-gray-800 data-[state=open]:text-gray-800">
+                  <span className="inline-block h-4 w-4">
+                    <MoreVerticalIcon />
+                  </span>
+                </button>
+              </DropdownMenuTrigger>
+            </div>
+            {isHovering && <Indicator />}
+          </Link>
+        </ContextMenuTrigger>
 
         <ContextMenuPortal>
           <ContextMenuContent
@@ -114,6 +122,15 @@ export function CategoryItem({
         </DropdownMenuPortal>
       </DropdownMenuRoot>
     </ContextMenuRoot>
+  )
+}
+
+function Indicator() {
+  return (
+    <div className="absolute -bottom-1 left-0 right-0 flex w-full items-center">
+      <CircleIcon className="h-2 w-2 text-orange-600" strokeWidth={3.5} />
+      <span className="-ml-[1px] h-[1.5px] w-full rounded-full bg-orange-600" />
+    </div>
   )
 }
 
