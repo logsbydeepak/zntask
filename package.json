@@ -38,6 +38,7 @@
     "@types/validator": "^13.11.6",
     "@uploadthing/react": "^5.7.0",
     "@upstash/redis": "^1.25.1",
+    "@use-gesture/react": "^10.3.0",
     "autoprefixer": "10.4.16",
     "avvvatars-react": "^0.4.2",
     "bcryptjs": "^2.4.3",

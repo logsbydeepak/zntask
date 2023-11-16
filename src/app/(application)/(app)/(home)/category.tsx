@@ -1,5 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
+import { useDrag } from '@use-gesture/react'
 import {
   ArchiveRestoreIcon,
   EditIcon,
@@ -14,7 +15,6 @@ import {
   ContextMenuItem,
   ContextMenuPortal,
   ContextMenuRoot,
-  ContextMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuPortal,
@@ -36,38 +36,58 @@ export function CategoryItem({
 }) {
   const [preventFocus, setPreventFocus] = React.useState(false)
 
+  const [isDragging, setIsDragging] = React.useState(false)
+  const [position, setPosition] = React.useState({ x: 0, y: 0 })
+
+  const bind = useDrag(
+    ({ down, movement: [mx, my] }) => {
+      setIsDragging(down)
+      if (down) {
+        setPosition({ x: mx, y: my })
+      } else {
+        setPosition({ x: 0, y: 0 })
+      }
+    },
+    { preventDefault: true, filterTaps: true, preventScroll: false }
+  )
+
   return (
     <ContextMenuRoot>
       <DropdownMenuRoot>
-        <ContextMenuTrigger className="group block">
-          <Link
-            href={href}
-            className="flex items-center justify-between rounded-lg border border-transparent px-4 py-2 hover:border-gray-200 hover:bg-gray-50 group-data-[state=open]:border-gray-200 group-data-[state=open]:bg-gray-50"
-          >
-            <div className="mr-2 flex items-center space-x-3 overflow-hidden">
-              <div>
-                <div
-                  className={cn(
-                    'h-3 w-3 rounded-[4.5px]',
-                    `bg-${getCategoryColor(category.indicator)}-600`
-                  )}
-                />
-              </div>
-              <p className="overflow-hidden text-ellipsis text-sm">
-                {category.title}
-              </p>
+        <Link
+          {...bind()}
+          href={href}
+          style={{
+            transform: `translate3d(${position.x}px, ${position.y}px, 0)`,
+          }}
+          className={cn(
+            'relative flex  touch-none items-center justify-between rounded-lg border border-transparent px-4 py-2 hover:border-gray-200 hover:bg-gray-50 group-data-[state=open]:border-gray-200 group-data-[state=open]:bg-gray-50',
+            isDragging && 'z-50'
+          )}
+        >
+          <div className="mr-2 flex items-center space-x-3 overflow-hidden">
+            <div>
+              <div
+                className={cn(
+                  'h-3 w-3 rounded-[4.5px]',
+                  `bg-${getCategoryColor(category.indicator)}-600`
+                )}
+              />
             </div>
-            <div className="flex items-center space-x-1">
-              <DropdownMenuTrigger asChild>
-                <button className="flex h-6 w-6 items-center justify-center text-gray-400 hover:text-gray-800 data-[state=open]:text-gray-800">
-                  <span className="inline-block h-4 w-4">
-                    <MoreVerticalIcon />
-                  </span>
-                </button>
-              </DropdownMenuTrigger>
-            </div>
-          </Link>
-        </ContextMenuTrigger>
+            <p className="select-none overflow-hidden text-ellipsis text-sm">
+              {category.title}
+            </p>
+          </div>
+          <div className="flex items-center space-x-1">
+            <DropdownMenuTrigger asChild>
+              <button className="flex h-6 w-6 items-center justify-center text-gray-400 hover:text-gray-800 data-[state=open]:text-gray-800">
+                <span className="inline-block h-4 w-4">
+                  <MoreVerticalIcon />
+                </span>
+              </button>
+            </DropdownMenuTrigger>
+          </div>
+        </Link>
 
         <ContextMenuPortal>
           <ContextMenuContent
