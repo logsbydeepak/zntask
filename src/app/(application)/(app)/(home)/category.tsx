@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Link from 'next/link'
 import { useDrag } from '@use-gesture/react'
-import { atom, useAtom, useSetAtom } from 'jotai'
+import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai'
 import {
   ArchiveRestoreIcon,
   CircleIcon,
@@ -12,6 +12,7 @@ import {
   Trash2Icon,
 } from 'lucide-react'
 
+import { JotaiProvider } from '@/components/client-providers'
 import {
   ContextMenuContent,
   ContextMenuItem,
@@ -30,7 +31,13 @@ import { useCategoryStore } from '@/store/category'
 import { Category, getCategoryColor } from '@/utils/category'
 import { cn } from '@/utils/style'
 
-const isCategoryDraggingAtom = atom(false)
+const allDroppableContainerAtom = atom<(DOMRect & { id: string })[]>([])
+const draggingContainerAtom = atom<{
+  id: string
+  x: number
+  y: number
+  rect: DOMRect
+} | null>(null)
 
 export function CategoryItem({
   category,
@@ -39,22 +46,45 @@ export function CategoryItem({
   category: Category
   href: string
 }) {
+  const id = category.id
   const [preventFocus, setPreventFocus] = React.useState(false)
-  const [isDragging, setIsDragging] = React.useState(false)
-  const [position, setPosition] = React.useState({ x: 0, y: 0 })
   const [isHovering, setIsHovering] = React.useState(false)
+  const ref = React.useRef<HTMLAnchorElement>(null)
+  const setAllDroppableContainer = useSetAtom(allDroppableContainerAtom)
+  const setDraggingContainer = useSetAtom(draggingContainerAtom)
+  const dragglingContainer = useAtomValue(draggingContainerAtom)
+  const [isDragging, setIsDragging] = React.useState(false)
 
   const bind = useDrag(
     ({ down, movement: [mx, my] }) => {
-      setIsDragging(down)
-      if (down) {
-        setPosition({ x: mx, y: my })
-      } else {
-        setPosition({ x: 0, y: 0 })
-      }
+      setDraggingContainer(() => {
+        setIsDragging(down)
+        if (!down) {
+          return null
+        }
+
+        const el = ref.current?.getBoundingClientRect()
+        if (!el) return null
+        return {
+          id,
+          x: mx,
+          y: my,
+          rect: el,
+        }
+      })
     },
     { preventDefault: true, filterTaps: true }
   )
+
+  useEffect(() => {
+    const el = ref.current?.getBoundingClientRect()
+    if (!el) return
+    setAllDroppableContainer((prev) => [...prev, { ...el, id }])
+  }, [setAllDroppableContainer])
+
+  const style = isDragging && {
+    transform: `translate3d(${dragglingContainer?.x}px, ${dragglingContainer?.y}px, 0)`,
+  }
 
   return (
     <ContextMenuRoot>
@@ -62,13 +92,15 @@ export function CategoryItem({
         <ContextMenuTrigger asChild>
           <Link
             {...bind()}
+            ref={ref}
             href={href}
-            style={{
-              transform: `translate3d(${position.x}px, ${position.y}px, 0)`,
-            }}
+            style={{ ...style }}
+            // style={{
+            //   transform: `translate3d(${position.x}px, ${position.y}px, 0)`,
+            // }}
             className={cn(
               'relative flex touch-none items-center justify-between rounded-lg border border-transparent px-4 py-2 hover:border-gray-200 hover:bg-gray-50 group-data-[state=open]:border-gray-200 group-data-[state=open]:bg-gray-50',
-              isDragging && 'z-20'
+              isDragging && 'z-50'
             )}
           >
             <div className="mr-2 flex items-center space-x-3 overflow-hidden">
@@ -128,14 +160,18 @@ export function CategoryItem({
 function Indicator() {
   return (
     <div className="absolute -bottom-1 left-0 right-0 flex w-full items-center">
-      <CircleIcon className="h-2 w-2 text-orange-600" strokeWidth={3.5} />
+      <CircleIcon className="h-2 w-2 text-orange-600" strokeWidth={4} />
       <span className="-ml-[1px] h-[1.5px] w-full rounded-full bg-orange-600" />
     </div>
   )
 }
 
 export function CategoryContainer({ children }: { children: React.ReactNode }) {
-  return <div className="space-y-2">{children}</div>
+  return (
+    <JotaiProvider>
+      <div className="space-y-2">{children}</div>
+    </JotaiProvider>
+  )
 }
 
 export function CategoryMenuContent({

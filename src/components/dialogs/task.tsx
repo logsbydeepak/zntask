@@ -123,8 +123,8 @@ export function TaskDialog() {
                 ? 'parentTaskId' in isEdit
                   ? isEdit.parentTaskId
                   : 'childTaskId' in isEdit
-                  ? isEdit.childTaskId
-                  : undefined
+                    ? isEdit.childTaskId
+                    : undefined
                 : undefined
             }
           />
