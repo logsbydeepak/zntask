@@ -1,7 +1,7 @@
-import React, { useEffect, useLayoutEffect } from 'react'
+import React, { useEffect } from 'react'
 import Link from 'next/link'
-import { useDrag, useGesture } from '@use-gesture/react'
-import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai'
+import { useDrag } from '@use-gesture/react'
+import { atom, useAtom } from 'jotai'
 import {
   ArchiveRestoreIcon,
   CircleIcon,
