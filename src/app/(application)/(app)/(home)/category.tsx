@@ -70,9 +70,10 @@ export function CategoryItem({
 
   const [isDragging, setIsDragging] = React.useState(false)
   const [position, setPosition] = React.useState({ x: 0, y: 0 })
-  const [differPosition] = useDebounce(position, 50)
   const [preventFocus, setPreventFocus] = React.useState(false)
   const ref = React.useRef<HTMLAnchorElement>(null)
+
+  const reorderCategories = useCategoryStore((s) => s.reorderCategories)
 
   const isHovering = currentDroppableContainerHover === id
 
@@ -81,55 +82,51 @@ export function CategoryItem({
       setIsDragging(down)
       if (down) {
         setPosition({ x: mx, y: my })
+
+        const el = ref.current?.getBoundingClientRect()
+        if (!el) return
+        if (!isDragging) return
+
+        const items = allDroppableContainer
+
+        const centerOfDroppableContainer = items.map((i) => ({
+          center: centerOfRectangle(i),
+          id: i.id,
+        }))
+
+        const centerOfCurrentDragging = centerOfRectangle({
+          left: el.left,
+          top: el.top,
+          width: el.width,
+          height: el.height,
+        })
+
+        const distanceBetween = centerOfDroppableContainer.map((i) => ({
+          distance: distance(i.center, {
+            x: centerOfCurrentDragging.x,
+            y: centerOfCurrentDragging.y,
+          }),
+          id: i.id,
+        }))
+
+        const closest = distanceBetween.reduce((prev, curr) =>
+          prev.distance < curr.distance ? prev : curr
+        )
+
+        setCurrentDroppableContainerHover(closest.id)
       } else {
         setPosition({ x: 0, y: 0 })
+        if (!currentDroppableContainerHover) return
+
+        if (currentDroppableContainerHover !== id) {
+          reorderCategories(id, currentDroppableContainerHover)
+        }
+
         setCurrentDroppableContainerHover(null)
       }
     },
     { preventDefault: true, filterTaps: true }
   )
-
-  useEffect(() => {
-    const el = ref.current?.getBoundingClientRect()
-    if (differPosition.x === 0 && differPosition.y === 0) return
-    if (!el) return
-    if (!isDragging) return
-
-    const items = allDroppableContainer
-
-    const centerOfDroppableContainer = items.map((i) => ({
-      center: centerOfRectangle(i),
-      id: i.id,
-    }))
-
-    const centerOfCurrentDragging = centerOfRectangle({
-      left: el.left,
-      top: el.top,
-      width: el.width,
-      height: el.height,
-    })
-
-    const distanceBetween = centerOfDroppableContainer.map((i) => ({
-      distance: distance(i.center, {
-        x: centerOfCurrentDragging.x,
-        y: centerOfCurrentDragging.y,
-      }),
-      id: i.id,
-    }))
-
-    const closest = distanceBetween.reduce((prev, curr) =>
-      prev.distance < curr.distance ? prev : curr
-    )
-
-    setCurrentDroppableContainerHover(closest.id)
-  }, [
-    position,
-    allDroppableContainer,
-    differPosition,
-    id,
-    isDragging,
-    setCurrentDroppableContainerHover,
-  ])
 
   useEffect(() => {
     const el = ref.current?.getBoundingClientRect()

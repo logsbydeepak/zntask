@@ -2,7 +2,7 @@ import { isValid, ulid } from 'ulidx'
 import { create, StateCreator } from 'zustand'
 import { persist } from 'zustand/middleware'
 
-import { Category } from '@/utils/category'
+import { Category, sortCategories } from '@/utils/category'
 
 import { useActivityStore } from './activity'
 
@@ -21,6 +21,7 @@ interface Actions {
 
   toggleArchive: (category: Category) => void
   toggleFavorite: (category: Category) => void
+  reorderCategories: (currentId: string, bottomOfId: string) => void
 
   setNewCategories: (categories: Category[]) => void
 }
@@ -177,6 +178,34 @@ const categoryStore: StateCreator<State & Actions> = (set, get) => ({
         }),
       }))
     }
+  },
+
+  reorderCategories(currentId, bottomOfId) {
+    const categories = get().categories
+
+    const from = categories.find((category) => category.id === currentId)
+    const to = categories.find((category) => category.id === bottomOfId)
+    if (!from || !to) return
+
+    set((state) => ({
+      categories: state.categories.map((i) => {
+        if (i.id === from.id) {
+          return {
+            ...i,
+            orderId: to.orderId,
+          }
+        }
+
+        if (i.id === to.id) {
+          return {
+            ...i,
+            orderId: from.id,
+          }
+        }
+
+        return i
+      }),
+    }))
   },
 
   setNewCategories(categories) {
