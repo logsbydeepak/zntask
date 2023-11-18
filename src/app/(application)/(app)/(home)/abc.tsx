@@ -50,12 +50,7 @@ function distance(a: { x: number; y: number }, b: { x: number; y: number }) {
   return Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2)
 }
 
-const allDroppableContainerAtom = atom<
-  {
-    ref: React.RefObject<HTMLAnchorElement>
-    id: string
-  }[]
->([])
+const allDroppableContainerAtom = atom<(Rec & { id: string })[]>([])
 const currentDroppableContainerHoverAtom = atom<string | null>(null)
 
 export function CategoryItem({
@@ -67,10 +62,6 @@ export function CategoryItem({
 }) {
   const id = category.id
 
-  const ref = React.useRef<HTMLAnchorElement>(null)
-  const renderRef = React.useRef(true)
-  const emptyShellRef = React.useRef<HTMLDivElement>(null)
-
   const [allDroppableContainer, setAllDroppableContainer] = useAtom(
     allDroppableContainerAtom
   )
@@ -80,7 +71,7 @@ export function CategoryItem({
   const [isDragging, setIsDragging] = React.useState(false)
   const [position, setPosition] = React.useState({ x: 0, y: 0 })
   const [preventFocus, setPreventFocus] = React.useState(false)
-  const debouncedPosition = React.useDeferredValue(position)
+  const ref = React.useRef<HTMLAnchorElement>(null)
 
   const reorderCategories = useCategoryStore((s) => s.reorderCategories)
 
@@ -91,6 +82,38 @@ export function CategoryItem({
       setIsDragging(down)
       if (down) {
         setPosition({ x: mx, y: my })
+
+        const el = ref.current?.getBoundingClientRect()
+        if (!el) return
+        if (!isDragging) return
+
+        const items = allDroppableContainer
+
+        const centerOfDroppableContainer = items.map((i) => ({
+          center: centerOfRectangle(i),
+          id: i.id,
+        }))
+
+        const centerOfCurrentDragging = centerOfRectangle({
+          left: el.left,
+          top: el.top,
+          width: el.width,
+          height: el.height,
+        })
+
+        const distanceBetween = centerOfDroppableContainer.map((i) => ({
+          distance: distance(i.center, {
+            x: centerOfCurrentDragging.x,
+            y: centerOfCurrentDragging.y,
+          }),
+          id: i.id,
+        }))
+
+        const closest = distanceBetween.reduce((prev, curr) =>
+          prev.distance < curr.distance ? prev : curr
+        )
+
+        setCurrentDroppableContainerHover(closest.id)
       } else {
         setPosition({ x: 0, y: 0 })
         if (!currentDroppableContainerHover) return
@@ -106,89 +129,19 @@ export function CategoryItem({
   )
 
   useEffect(() => {
-    if (allDroppableContainer.length === 0) return
-
     const el = ref.current?.getBoundingClientRect()
     if (!el) return
-    if (!isDragging) return
 
-    const centerOfCurrentDragging = centerOfRectangle({
-      left: el.left,
-      top: el.top,
-      width: el.width,
-      height: el.height,
-    })
-
-    const centerOfDroppableContainer: {
-      center: { x: number; y: number }
-      id: string
-    }[] = []
-
-    allDroppableContainer.forEach((i) => {
-      const current = i.ref.current?.getBoundingClientRect()
-      if (!current) return
-
-      if (id === i.id) {
-        const emptyShell = emptyShellRef.current?.getBoundingClientRect()
-        if (!emptyShell) return
-        const center = centerOfRectangle({
-          left: emptyShell.left,
-          top: emptyShell.top,
-          width: emptyShell.width,
-          height: emptyShell.height,
-        })
-
-        centerOfDroppableContainer.push({ center, id: i.id })
-
-        return
-      }
-
-      const center = centerOfRectangle({
-        left: current.left,
-        top: current.top,
-        width: current.width,
-        height: current.height,
-      })
-
-      centerOfDroppableContainer.push({ center, id: i.id })
-    })
-
-    const distanceBetween = centerOfDroppableContainer.map((i) => ({
-      distance: distance(i.center, {
-        x: centerOfCurrentDragging.x,
-        y: centerOfCurrentDragging.y,
-      }),
-      id: i.id,
-    }))
-
-    const closest = distanceBetween.reduce((prev, curr) =>
-      prev.distance < curr.distance ? prev : curr
-    )
-
-    setCurrentDroppableContainerHover(closest.id)
-  }, [
-    debouncedPosition,
-    allDroppableContainer,
-    currentDroppableContainerHover,
-    isDragging,
-    id,
-    setCurrentDroppableContainerHover,
-  ])
-
-  useEffect(() => {
-    if (renderRef.current) {
-      renderRef.current = false
-      const el = ref.current?.getBoundingClientRect()
-      if (!el) return
-
-      setAllDroppableContainer((prev) => [
-        ...prev,
-        {
-          id,
-          ref,
-        },
-      ])
-    }
+    setAllDroppableContainer((prev) => [
+      ...prev,
+      {
+        id,
+        left: el.left,
+        top: el.top,
+        height: el.height,
+        width: el.width,
+      },
+    ])
   }, [setAllDroppableContainer, id])
 
   return (
@@ -231,7 +184,7 @@ export function CategoryItem({
                 </DropdownMenuTrigger>
               </div>
             </Link>
-            {isDragging && <EmptyShell ref={emptyShellRef} />}
+            {isDragging && <EmptyShell />}
             {isHovering && <Indicator />}
           </div>
         </ContextMenuTrigger>
@@ -264,15 +217,11 @@ export function CategoryItem({
   )
 }
 
-const EmptyShell = React.forwardRef<HTMLDivElement, {}>((_, ref) => {
+function EmptyShell() {
   return (
-    <div
-      ref={ref}
-      className="absolute inset-0 rounded-lg border border-gray-200 bg-gray-50"
-    />
+    <div className="absolute inset-0 rounded-lg border border-gray-200 bg-gray-50" />
   )
-})
-EmptyShell.displayName = 'EmptyShell'
+}
 
 function Indicator() {
   return (
