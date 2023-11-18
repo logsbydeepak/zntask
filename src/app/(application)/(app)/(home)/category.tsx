@@ -228,8 +228,8 @@ function EmptyShell() {
 
 function Indicator() {
   return (
-    <div className="absolute -bottom-2 left-0 right-0 flex w-full items-center px-3">
-      <CircleIcon className="h-2 w-2 text-orange-600" strokeWidth={4} />
+    <div className="absolute -bottom-[5px] left-0 right-0 flex w-full translate-y-[2px] items-center px-3">
+      <span className="h-1.5 w-1.5 rounded-full border-[1.5px] border-orange-600" />
       <span className="-ml-[1px] h-[1.5px] w-full rounded-full bg-orange-600" />
     </div>
   )
