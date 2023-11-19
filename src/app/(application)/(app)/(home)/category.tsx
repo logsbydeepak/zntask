@@ -301,9 +301,10 @@ export function CategoryMenuContent({
   setPreventFocus: (value: boolean) => void
 }) {
   const setDialog = useAppStore((s) => s.setDialog)
-  const editCategory = useCategoryStore((s) => s.editCategory)
   const toggleArchive = useCategoryStore((s) => s.toggleArchive)
   const toggleFavorite = useCategoryStore((s) => s.toggleFavorite)
+
+  const isFavorite = !!category.favoriteOrderNumber
 
   const menuItem = [
     {
@@ -316,9 +317,9 @@ export function CategoryMenuContent({
     },
 
     {
-      label: category.isFavorite ? 'Unfavorite' : 'Favorite',
+      label: !!isFavorite ? 'Unfavorite' : 'Favorite',
       onSelect: () => toggleFavorite(category),
-      icon: category.isFavorite ? <HeartOffIcon /> : <HeartIcon />,
+      icon: !!isFavorite ? <HeartOffIcon /> : <HeartIcon />,
     },
 
     {

@@ -2,7 +2,7 @@ import { isValid, ulid } from 'ulidx'
 import { create, StateCreator } from 'zustand'
 import { persist } from 'zustand/middleware'
 
-import { Category, sortCategories } from '@/utils/category'
+import { Category } from '@/utils/category'
 
 import { useActivityStore } from './activity'
 
@@ -32,23 +32,22 @@ const categoryStore: StateCreator<State & Actions> = (set, get) => ({
   addCategory: (category) => {
     const id = ulid()
 
+    const lastOrderNumber = get().categories.reduce((acc, curr) => {
+      if (curr.orderNumber > acc) return curr.orderNumber
+      return acc
+    }, 0)
+
     const newCategory: Category = {
       id,
       title: category.title,
       indicator: category.indicator,
-      isFavorite: false,
       isArchived: false,
-      orderId: null,
-      favoriteOrderId: null,
+      orderNumber: lastOrderNumber + 1,
+      favoriteOrderNumber: 0,
     }
 
     set((state) => ({
-      categories: state.categories
-        .map((item) => {
-          if (item.orderId === null) return { ...item, orderId: id }
-          return item
-        })
-        .concat(newCategory),
+      categories: [...state.categories, newCategory],
     }))
 
     useActivityStore.getState().addActivity({
@@ -94,85 +93,63 @@ const categoryStore: StateCreator<State & Actions> = (set, get) => ({
   },
   toggleArchive(category) {
     if (category.isArchived) {
+      const lastOrderNumber = get().categories.reduce((acc, curr) => {
+        if (curr.orderNumber > acc) return curr.orderNumber
+        return acc
+      }, 0)
+
       set((state) => ({
         categories: state.categories.map((item) => {
-          if (item.orderId === null && !item.isArchived)
-            return { ...item, orderId: category.id }
-          if (item.id === category.id) return { ...item, isArchived: false }
+          if (item.id === category.id)
+            return {
+              ...item,
+              isArchived: false,
+              orderNumber: lastOrderNumber + 1,
+            }
           return item
         }),
       }))
     } else {
-      if (category.orderId === null) {
-        set((state) => ({
-          categories: state.categories.map((item) => {
-            if (item.orderId === category.id) return { ...item, orderId: null }
-            if (item.id === category.id)
-              return {
-                ...item,
-                isArchived: true,
-                isFavorite: false,
-                orderId: null,
-                favoriteOrderId: null,
-              }
-            return item
-          }),
-        }))
-      } else {
-        set((state) => ({
-          categories: state.categories.map((item) => {
-            if (item.id === category.id)
-              return {
-                ...item,
-                isArchived: true,
-                isFavorite: false,
-                orderId: null,
-                favoriteOrderId: null,
-              }
-            return item
-          }),
-        }))
-      }
+      set((state) => ({
+        categories: state.categories.map((item) => {
+          if (item.id === category.id)
+            return {
+              ...item,
+              isArchived: true,
+              orderNumber: 0,
+              favoriteOrderNumber: 0,
+            }
+          return item
+        }),
+      }))
     }
   },
 
   toggleFavorite(category) {
     if (category.isArchived) return
-
-    if (category.isFavorite) {
-      if (category.favoriteOrderId === null) {
-        set((state) => ({
-          categories: state.categories.map((item) => {
-            if (item.id === category.id)
-              return { ...item, isFavorite: false, favoriteOrderId: null }
-
-            if (item.favoriteOrderId === category.id)
-              return { ...item, favoriteOrderId: null }
-
-            return item
-          }),
-        }))
-      } else {
-        set((state) => ({
-          categories: state.categories.map((item) => {
-            if (item.id === category.id)
-              return { ...item, isFavorite: false, favoriteOrderId: null }
-            return item
-          }),
-        }))
-      }
-    } else {
+    if (!!category.favoriteOrderNumber) {
       set((state) => ({
         categories: state.categories.map((item) => {
-          if (item.favoriteOrderId === null && item.isFavorite)
-            return { ...item, favoriteOrderId: category.id }
-
           if (item.id === category.id)
             return {
               ...item,
-              isFavorite: true,
-              isArchived: false,
-              favoriteOrderId: null,
+              favoriteOrderNumber: 0,
+            }
+          return item
+        }),
+      }))
+    } else {
+      const lastFavoriteOrderNumber = get().categories.reduce((acc, curr) => {
+        if (curr.favoriteOrderNumber > acc) return curr.favoriteOrderNumber
+        return acc
+      }, 0)
+
+      set((state) => ({
+        categories: state.categories.map((item) => {
+          if (item.id === category.id)
+            return {
+              ...item,
+              favoriteOrderNumber: lastFavoriteOrderNumber + 1,
             }
           return item
         }),
@@ -186,26 +163,6 @@ const categoryStore: StateCreator<State & Actions> = (set, get) => ({
     const from = categories.find((category) => category.id === currentId)
     const to = categories.find((category) => category.id === bottomOfId)
     if (!from || !to) return
-
-    set((state) => ({
-      categories: state.categories.map((i) => {
-        if (i.id === from.id) {
-          return {
-            ...i,
-            orderId: to.orderId,
-          }
-        }
-
-        if (i.id === to.id) {
-          return {
-            ...i,
-            orderId: from.id,
-          }
-        }
-
-        return i
-      }),
-    }))
   },
 
   setNewCategories(categories) {
