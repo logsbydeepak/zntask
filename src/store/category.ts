@@ -163,6 +163,62 @@ const categoryStore: StateCreator<State & Actions> = (set, get) => ({
     const from = categories.find((category) => category.id === currentId)
     const to = categories.find((category) => category.id === bottomOfId)
     if (!from || !to) return
+
+    if (from.orderNumber < to.orderNumber) {
+      const newCategories = categories
+        .map((i) => {
+          if (
+            i.orderNumber >= from.orderNumber &&
+            i.orderNumber <= to.orderNumber
+          ) {
+            return {
+              ...i,
+              orderNumber: i.orderNumber - 1,
+            }
+          }
+          return i
+        })
+        .map((i) => {
+          if (i.id === from.id) {
+            return {
+              ...i,
+              orderNumber: to.orderNumber,
+            }
+          }
+          return i
+        })
+
+      set(() => ({
+        categories: newCategories,
+      }))
+    } else {
+      const newCategories = categories
+        .map((i) => {
+          if (
+            i.orderNumber <= from.orderNumber &&
+            i.orderNumber >= to.orderNumber
+          ) {
+            return {
+              ...i,
+              orderNumber: i.orderNumber + 1,
+            }
+          }
+          return i
+        })
+        .map((i) => {
+          if (i.id === from.id) {
+            return {
+              ...i,
+              orderNumber: to.orderNumber,
+            }
+          }
+          return i
+        })
+
+      set(() => ({
+        categories: newCategories,
+      }))
+    }
   },
 
   setNewCategories(categories) {
