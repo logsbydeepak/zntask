@@ -29,7 +29,7 @@ export default function Page({ params }: { params: { id?: string } }) {
   const [preventFocus, setPreventFocus] = React.useState(false)
   const category = useCategoryStore(
     useShallow((s) =>
-      s.categories.find((c) => c.id === params.id && c.isFavorite)
+      s.categories.find((c) => c.id === params.id && !!c.favoriteOrderNumber)
     )
   )
 
