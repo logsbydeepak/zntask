@@ -1,17 +1,15 @@
 import React, { useEffect } from 'react'
 import Link from 'next/link'
 import { useDrag } from '@use-gesture/react'
-import { atom, useAtom, useSetAtom } from 'jotai'
+import { atom, useAtom } from 'jotai'
 import {
   ArchiveRestoreIcon,
-  CircleIcon,
   EditIcon,
   HeartIcon,
   HeartOffIcon,
   MoreVerticalIcon,
   Trash2Icon,
 } from 'lucide-react'
-import { useDebounce } from 'use-debounce'
 
 import { JotaiProvider } from '@/components/client-providers'
 import {
@@ -57,6 +55,10 @@ const allDroppableContainerAtom = atom<
   }[]
 >([])
 const currentDroppableContainerHoverAtom = atom<string | null>(null)
+const currentDraggablePositionAtom = atom<{ x: number; y: number }>({
+  x: 0,
+  y: 0,
+})
 
 export function CategoryItem({
   category,
@@ -76,11 +78,13 @@ export function CategoryItem({
   )
   const [currentDroppableContainerHover, setCurrentDroppableContainerHover] =
     useAtom(currentDroppableContainerHoverAtom)
+  const [currentDraggablePosition, setCurrentDraggablePosition] = useAtom(
+    currentDraggablePositionAtom
+  )
 
   const [isDragging, setIsDragging] = React.useState(false)
-  const [position, setPosition] = React.useState({ x: 0, y: 0 })
   const [preventFocus, setPreventFocus] = React.useState(false)
-  const debouncedPosition = React.useDeferredValue(position)
+  const debouncedPosition = React.useDeferredValue(currentDraggablePosition)
 
   const reorderCategories = useCategoryStore((s) => s.reorderCategories)
 
@@ -90,9 +94,9 @@ export function CategoryItem({
     ({ down, movement: [mx, my] }) => {
       setIsDragging(down)
       if (down) {
-        setPosition({ x: mx, y: my })
+        setCurrentDraggablePosition({ x: mx, y: my })
       } else {
-        setPosition({ x: 0, y: 0 })
+        setCurrentDraggablePosition({ x: 0, y: 0 })
         if (!currentDroppableContainerHover) return
 
         if (currentDroppableContainerHover !== id) {
@@ -191,6 +195,12 @@ export function CategoryItem({
     }
   }, [setAllDroppableContainer, id])
 
+  const style: React.CSSProperties = isDragging
+    ? {
+        transform: `translate3d(${currentDraggablePosition.x}px, ${currentDraggablePosition.y}px, 0)`,
+      }
+    : {}
+
   return (
     <ContextMenuRoot>
       <DropdownMenuRoot>
@@ -200,9 +210,7 @@ export function CategoryItem({
               {...bind()}
               ref={ref}
               href={href}
-              style={{
-                transform: `translate3d(${position.x}px, ${position.y}px, 0)`,
-              }}
+              style={style}
               className={cn(
                 'relative flex touch-none items-center justify-between rounded-lg border border-transparent px-4 py-2 hover:border-gray-200 hover:bg-gray-50 group-data-[state=open]:border-gray-200 group-data-[state=open]:bg-gray-50',
                 isDragging && 'z-50'
@@ -232,7 +240,10 @@ export function CategoryItem({
               </div>
             </Link>
             {isDragging && <EmptyShell ref={emptyShellRef} />}
-            {isHovering && <Indicator />}
+            {isHovering && currentDraggablePosition.y > 0 && (
+              <BottomIndicator />
+            )}
+            {isHovering && currentDraggablePosition.y < 0 && <TopIndicator />}
           </div>
         </ContextMenuTrigger>
 
@@ -274,9 +285,18 @@ const EmptyShell = React.forwardRef<HTMLDivElement, {}>((_, ref) => {
 })
 EmptyShell.displayName = 'EmptyShell'
 
-function Indicator() {
+function BottomIndicator() {
   return (
     <div className="absolute -bottom-[5px] left-0 right-0 flex w-full translate-y-[2px] items-center px-3">
+      <span className="h-1.5 w-1.5 rounded-full border-[1.5px] border-orange-600" />
+      <span className="-ml-[1px] h-[1.5px] w-full rounded-full bg-orange-600" />
+    </div>
+  )
+}
+
+function TopIndicator() {
+  return (
+    <div className="absolute -top-[5px] left-0 right-0 flex w-full translate-y-[-2px] items-center px-3">
       <span className="h-1.5 w-1.5 rounded-full border-[1.5px] border-orange-600" />
       <span className="-ml-[1px] h-[1.5px] w-full rounded-full bg-orange-600" />
     </div>
