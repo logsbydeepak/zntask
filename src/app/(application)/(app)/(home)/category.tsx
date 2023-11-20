@@ -72,7 +72,6 @@ export function CategoryItem({
   const id = category.id
 
   const ref = React.useRef<HTMLAnchorElement>(null)
-  const renderRef = React.useRef(true)
   const emptyShellRef = React.useRef<HTMLDivElement>(null)
 
   const [allDroppableContainer, setAllDroppableContainer] = useAtom(
@@ -187,18 +186,19 @@ export function CategoryItem({
   ])
 
   useEffect(() => {
-    if (renderRef.current) {
-      renderRef.current = false
-      const el = ref.current?.getBoundingClientRect()
-      if (!el) return
+    const el = ref.current?.getBoundingClientRect()
+    if (!el) return
 
-      setAllDroppableContainer((prev) => [
-        ...prev,
-        {
-          id,
-          ref,
-        },
-      ])
+    setAllDroppableContainer((prev) => [
+      ...prev,
+      {
+        id,
+        ref,
+      },
+    ])
+
+    return () => {
+      setAllDroppableContainer((prev) => prev.filter((i) => i.id !== id))
     }
   }, [setAllDroppableContainer, id])
 
