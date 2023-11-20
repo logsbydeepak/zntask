@@ -63,9 +63,11 @@ const currentDraggablePositionAtom = atom<{ x: number; y: number }>({
 export function CategoryItem({
   category,
   href,
+  isFavorite = false,
 }: {
   category: Category
   href: string
+  isFavorite?: boolean
 }) {
   const id = category.id
 
@@ -87,6 +89,7 @@ export function CategoryItem({
   const debouncedPosition = React.useDeferredValue(currentDraggablePosition)
 
   const reorderCategories = useCategoryStore((s) => s.reorderCategories)
+  const reorderFavoriteCategories = useCategoryStore((s) => s.reorderFavorites)
 
   const isHovering = currentDroppableContainerHover === id
 
@@ -99,7 +102,11 @@ export function CategoryItem({
         setCurrentDraggablePosition({ x: 0, y: 0 })
         if (!currentDroppableContainerHover) return
 
-        if (currentDroppableContainerHover !== id) {
+        if (isFavorite && currentDroppableContainerHover !== id) {
+          reorderFavoriteCategories(id, currentDroppableContainerHover)
+        }
+
+        if (!isFavorite && currentDroppableContainerHover !== id) {
           reorderCategories(id, currentDroppableContainerHover)
         }
 

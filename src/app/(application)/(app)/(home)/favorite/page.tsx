@@ -34,7 +34,12 @@ export default function Page() {
           )}
 
           {favorites.map((i) => (
-            <CategoryItem key={i.id} category={i} href={`/favorite/${i.id}`} />
+            <CategoryItem
+              key={i.id}
+              category={i}
+              href={`/favorite/${i.id}`}
+              isFavorite
+            />
           ))}
         </CategoryContainer>
       </Layout.Content>

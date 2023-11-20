@@ -22,6 +22,7 @@ interface Actions {
   toggleArchive: (category: Category) => void
   toggleFavorite: (category: Category) => void
   reorderCategories: (currentId: string, bottomOfId: string) => void
+  reorderFavorites: (currentId: string, bottomOfId: string) => void
 
   setNewCategories: (categories: Category[]) => void
 }
@@ -210,6 +211,71 @@ const categoryStore: StateCreator<State & Actions> = (set, get) => ({
             return {
               ...i,
               orderNumber: to.orderNumber,
+            }
+          }
+          return i
+        })
+
+      set(() => ({
+        categories: newCategories,
+      }))
+    }
+  },
+
+  reorderFavorites(currentId, bottomOfId) {
+    const categories = get().categories
+
+    const from = categories.find((category) => category.id === currentId)
+    const to = categories.find((category) => category.id === bottomOfId)
+
+    if (!from || !to) return
+
+    if (from.favoriteOrderNumber < to.favoriteOrderNumber) {
+      const newCategories = categories
+        .map((i) => {
+          if (
+            i.favoriteOrderNumber >= from.favoriteOrderNumber &&
+            i.favoriteOrderNumber <= to.favoriteOrderNumber
+          ) {
+            return {
+              ...i,
+              favoriteOrderNumber: i.favoriteOrderNumber - 1,
+            }
+          }
+          return i
+        })
+        .map((i) => {
+          if (i.id === from.id) {
+            return {
+              ...i,
+              favoriteOrderNumber: to.favoriteOrderNumber,
+            }
+          }
+          return i
+        })
+
+      set(() => ({
+        categories: newCategories,
+      }))
+    } else {
+      const newCategories = categories
+        .map((i) => {
+          if (
+            i.favoriteOrderNumber <= from.favoriteOrderNumber &&
+            i.favoriteOrderNumber >= to.favoriteOrderNumber
+          ) {
+            return {
+              ...i,
+              favoriteOrderNumber: i.favoriteOrderNumber + 1,
+            }
+          }
+          return i
+        })
+        .map((i) => {
+          if (i.id === from.id) {
+            return {
+              ...i,
+              favoriteOrderNumber: to.favoriteOrderNumber,
             }
           }
           return i
