@@ -1,5 +1,6 @@
 'use server'
 
+import { redirect } from 'next/navigation'
 import bcrypt from 'bcryptjs'
 import { eq } from 'drizzle-orm'
 import ms from 'ms'
@@ -13,12 +14,26 @@ import { db, dbSchema } from './db'
 import { checkToken } from './utils'
 import { generateAuthJWT, generateEmailJWT, setAuthCookie } from './utils/auth'
 import { redis, resend } from './utils/config'
+import { generateGoogleAuthUrl } from './utils/google'
 import { h, r } from './utils/handler'
 import {
   zLoginWithCredentials,
   zRegisterWithCredentials,
   zResetPassword,
 } from './utils/zSchema'
+
+const LOGIN_PAGE_URL = `${env.BASE_URL}/login`
+const REGISTER_PAGE_URL = `${env.BASE_URL}/createAccount`
+
+export const redirectGoogleLogin = h(async () => {
+  const url = generateGoogleAuthUrl(LOGIN_PAGE_URL)
+  redirect(url)
+})
+
+export const redirectGoogleCreateAccount = h(async () => {
+  const url = generateGoogleAuthUrl(REGISTER_PAGE_URL)
+  redirect(url)
+})
 
 export const loginWithCredentials = h(
   zLoginWithCredentials,
