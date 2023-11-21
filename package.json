@@ -52,6 +52,7 @@
     "drizzle-orm": "^0.29.0",
     "eslint": "8.54.0",
     "eslint-config-next": "14.0.3",
+    "googleapis": "^128.0.0",
     "jose": "^5.1.1",
     "jotai": "^2.5.1",
     "lucide-react": "^0.292.0",

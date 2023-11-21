@@ -17,6 +17,8 @@ export const env = createEnv({
     BASE_URL: zRequired.url(),
     UPLOADTHING_SECRET: zRequired,
     UPLOADTHING_APP_ID: zRequired,
+    GOOGLE_CLIENT_ID: zRequired,
+    GOOGLE_CLIENT_SECRET: zRequired,
   },
   client: {},
   runtimeEnv: {
@@ -30,5 +32,7 @@ export const env = createEnv({
     BASE_URL: process.env.BASE_URL,
     UPLOADTHING_APP_ID: process.env.UPLOADTHING_APP_ID,
     UPLOADTHING_SECRET: process.env.UPLOADTHING_SECRET,
+    GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+    GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
   },
 })
