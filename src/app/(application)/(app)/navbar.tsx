@@ -44,6 +44,7 @@ export function Navbar() {
   const setIsSidebarOpen = useSetAtom(isSidebarOpenAtom)
   const isSidebarOpen = useAtomValue(isSidebarOpenAtom)
   const user = useAtomValue(userAtom)
+  const isAppSyncing = useAtomValue(isAppSyncingAtom)
 
   const name = `${user.firstName} ${user.lastName}`
   return (
@@ -79,8 +80,14 @@ export function Navbar() {
 
           <DropdownMenuRoot>
             <DropdownMenuTrigger asChild>
-              <button>
+              <button className="relative">
                 <Avatar src={user.profilePicture} name={name} />
+                <span
+                  data-active={isAppSyncing}
+                  className="absolute bottom-0 right-[1px] hidden h-2 w-2 items-center justify-center rounded-full border border-white bg-white data-[active=true]:flex"
+                >
+                  <span className="h-full w-full animate-pulse rounded-full bg-orange-500" />
+                </span>
               </button>
             </DropdownMenuTrigger>
 
