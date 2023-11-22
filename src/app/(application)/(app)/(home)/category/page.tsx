@@ -16,8 +16,9 @@ import {
 } from '@/components/ui/tabs'
 import { useCategoryStore } from '@/store/category'
 import { Category, sortCategories } from '@/utils/category'
+import { DNDProvider } from '@/utils/dnd'
 
-import { CategoryContainer, CategoryItem } from '../category'
+import { CategoryContainer, CategoryItem, DNDCategoryItem } from '../category'
 
 export default function Page() {
   const statusParams = useSearchParams().get('status')
@@ -63,9 +64,19 @@ function AllTab() {
       {categories.length === 0 && <EmptyLayout />}
 
       <CategoryContainer>
-        {categories.map((i) => (
-          <CategoryItem key={i.id} category={i} href={`/category/${i.id}`} />
-        ))}
+        <DNDProvider
+          onDrop={({ start, over }) => {
+            console.log(start, over)
+          }}
+        >
+          {categories.map((i) => (
+            <DNDCategoryItem
+              key={i.id}
+              category={i}
+              href={`/category/${i.id}`}
+            />
+          ))}
+        </DNDProvider>
       </CategoryContainer>
     </>
   )

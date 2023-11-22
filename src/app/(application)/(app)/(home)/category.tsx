@@ -1,7 +1,5 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import Link from 'next/link'
-import { useDrag } from '@use-gesture/react'
-import { atom, useAtom } from 'jotai'
 import {
   ArchiveRestoreIcon,
   EditIcon,
@@ -10,8 +8,8 @@ import {
   MoreVerticalIcon,
   Trash2Icon,
 } from 'lucide-react'
+import { classNames } from 'uploadthing/client'
 
-import { JotaiProvider } from '@/components/client-providers'
 import {
   ContextMenuContent,
   ContextMenuItem,
@@ -28,230 +26,93 @@ import {
 import { useAppStore } from '@/store/app'
 import { useCategoryStore } from '@/store/category'
 import { Category, getCategoryColor } from '@/utils/category'
+import { useDNDState, useDrag, useDrop } from '@/utils/dnd'
 import { cn } from '@/utils/style'
 
-interface Rec {
-  left: number
-  top: number
-  width: number
-  height: number
-}
-
-function centerOfRectangle(rect: Rec) {
-  return {
-    x: rect.left + rect.width * 0.5,
-    y: rect.top + rect.height * 0.5,
-  }
-}
-
-function distance(a: { x: number; y: number }, b: { x: number; y: number }) {
-  return Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2)
-}
-
-const allDroppableContainerAtom = atom<
-  {
-    ref: React.RefObject<HTMLAnchorElement>
-    id: string
-  }[]
->([])
-const currentDroppableContainerHoverAtom = atom<string | null>(null)
-const currentDraggablePositionAtom = atom<{ x: number; y: number }>({
-  x: 0,
-  y: 0,
-})
-
-export function CategoryItem({
+export function DNDCategoryItem({
   category,
   href,
-  isFavorite = false,
 }: {
   category: Category
   href: string
-  isFavorite?: boolean
 }) {
-  const id = category.id
+  const drag = useDrag({ id: category.id })
+  const drop = useDrop({ id: category.id })
+  const dnd = useDNDState()
 
-  const ref = React.useRef<HTMLAnchorElement>(null)
-  const emptyShellRef = React.useRef<HTMLDivElement>(null)
-
-  const [allDroppableContainer, setAllDroppableContainer] = useAtom(
-    allDroppableContainerAtom
-  )
-  const [currentDroppableContainerHover, setCurrentDroppableContainerHover] =
-    useAtom(currentDroppableContainerHoverAtom)
-  const [currentDraggablePosition, setCurrentDraggablePosition] = useAtom(
-    currentDraggablePositionAtom
-  )
-
-  const [isDragging, setIsDragging] = React.useState(false)
-  const [preventFocus, setPreventFocus] = React.useState(false)
-  const debouncedPosition = React.useDeferredValue(currentDraggablePosition)
-
-  const reorderCategories = useCategoryStore((s) => s.reorderCategories)
-  const reorderFavoriteCategories = useCategoryStore((s) => s.reorderFavorites)
-
-  const isHovering = currentDroppableContainerHover === id
-
-  const bind = useDrag(
-    ({ down, movement: [mx, my] }) => {
-      setIsDragging(down)
-      if (down) {
-        setCurrentDraggablePosition({ x: mx, y: my })
-      } else {
-        setCurrentDraggablePosition({ x: 0, y: 0 })
-        if (!currentDroppableContainerHover) return
-
-        if (isFavorite && currentDroppableContainerHover !== id) {
-          reorderFavoriteCategories(id, currentDroppableContainerHover)
-        }
-
-        if (!isFavorite && currentDroppableContainerHover !== id) {
-          reorderCategories(id, currentDroppableContainerHover)
-        }
-
-        setCurrentDroppableContainerHover(null)
-      }
-    },
-    { preventDefault: true, filterTaps: true }
-  )
-
-  useEffect(() => {
-    if (allDroppableContainer.length === 0) return
-
-    const el = ref.current?.getBoundingClientRect()
-    if (!el) return
-    if (!isDragging) return
-
-    const centerOfCurrentDragging = centerOfRectangle({
-      left: el.left,
-      top: el.top,
-      width: el.width,
-      height: el.height,
-    })
-
-    const centerOfDroppableContainer: {
-      center: { x: number; y: number }
-      id: string
-    }[] = []
-
-    allDroppableContainer.forEach((i) => {
-      const current = i.ref.current?.getBoundingClientRect()
-      if (!current) return
-
-      if (id === i.id) {
-        const emptyShell = emptyShellRef.current?.getBoundingClientRect()
-        if (!emptyShell) return
-        const center = centerOfRectangle({
-          left: emptyShell.left,
-          top: emptyShell.top,
-          width: emptyShell.width,
-          height: emptyShell.height,
-        })
-
-        centerOfDroppableContainer.push({ center, id: i.id })
-
-        return
-      }
-
-      const center = centerOfRectangle({
-        left: current.left,
-        top: current.top,
-        width: current.width,
-        height: current.height,
-      })
-
-      centerOfDroppableContainer.push({ center, id: i.id })
-    })
-
-    const distanceBetween = centerOfDroppableContainer.map((i) => ({
-      distance: distance(i.center, {
-        x: centerOfCurrentDragging.x,
-        y: centerOfCurrentDragging.y,
-      }),
-      id: i.id,
-    }))
-
-    const closest = distanceBetween.reduce((prev, curr) =>
-      prev.distance < curr.distance ? prev : curr
-    )
-
-    setCurrentDroppableContainerHover(closest.id)
-  }, [
-    debouncedPosition,
-    allDroppableContainer,
-    currentDroppableContainerHover,
-    isDragging,
-    id,
-    setCurrentDroppableContainerHover,
-  ])
-
-  useEffect(() => {
-    const el = ref.current?.getBoundingClientRect()
-    if (!el) return
-
-    setAllDroppableContainer((prev) => [
-      ...prev,
-      {
-        id,
-        ref,
-      },
-    ])
-
-    return () => {
-      setAllDroppableContainer((prev) => prev.filter((i) => i.id !== id))
+  const style = React.useMemo(() => {
+    if (!drag.position) return {}
+    return {
+      transform: `translate(${drag.position.x}px, ${drag.position.y}px)`,
     }
-  }, [setAllDroppableContainer, id])
+  }, [drag.position])
 
-  const style: React.CSSProperties = isDragging
-    ? {
-        transform: `translate3d(${currentDraggablePosition.x}px, ${currentDraggablePosition.y}px, 0)`,
-      }
-    : {}
+  return (
+    <div className="relative">
+      <CategoryItem
+        style={style}
+        category={category}
+        className={drag.isDragging ? 'z-50' : ''}
+        href={href}
+        ref={drop.ref as any}
+        {...drag.bind()}
+      />
+      {drop.isOver && dnd.dragPosition && dnd.dragPosition.y < 0 && (
+        <TopIndicator />
+      )}
 
+      {drop.isOver && dnd.dragPosition && dnd.dragPosition.y > 0 && (
+        <BottomIndicator />
+      )}
+      {drag.isDragging && <EmptyShell />}
+    </div>
+  )
+}
+
+export const CategoryItem = React.forwardRef<
+  HTMLAnchorElement,
+  React.ComponentPropsWithoutRef<'a'> & {
+    category: Category
+    href: string
+  }
+>(({ category, href, className, ...props }, ref) => {
+  const [preventFocus, setPreventFocus] = React.useState(false)
   return (
     <ContextMenuRoot>
       <DropdownMenuRoot>
         <ContextMenuTrigger asChild>
-          <div className="group relative">
-            <Link
-              {...bind()}
-              ref={ref}
-              href={href}
-              style={style}
-              className={cn(
-                'relative flex touch-none items-center justify-between rounded-lg border border-transparent px-4 py-2 hover:border-gray-200 hover:bg-gray-50 group-data-[state=open]:border-gray-200 group-data-[state=open]:bg-gray-50',
-                isDragging && 'z-50'
-              )}
-            >
-              <div className="mr-2 flex items-center space-x-3 overflow-hidden">
-                <div>
-                  <div
-                    className={cn(
-                      'h-3 w-3 rounded-[4.5px]',
-                      `bg-${getCategoryColor(category.indicator)}-600`
-                    )}
-                  />
-                </div>
-                <p className=" overflow-hidden text-ellipsis text-sm">
-                  {category.title}
-                </p>
-              </div>
-              <div className="flex items-center space-x-1">
-                <DropdownMenuTrigger asChild>
-                  <button className="flex h-6 w-6 items-center justify-center text-gray-400 hover:text-gray-800 data-[state=open]:text-gray-800">
-                    <span className="inline-block h-4 w-4">
-                      <MoreVerticalIcon />
-                    </span>
-                  </button>
-                </DropdownMenuTrigger>
-              </div>
-            </Link>
-            {isDragging && <EmptyShell ref={emptyShellRef} />}
-            {isHovering && currentDraggablePosition.y > 0 && (
-              <BottomIndicator />
+          <Link
+            {...props}
+            ref={ref}
+            href={href}
+            className={cn(
+              'relative flex touch-none items-center justify-between rounded-lg border border-transparent px-4 py-2 hover:border-gray-200 hover:bg-gray-50 data-[state=open]:border-gray-200 data-[state=open]:bg-gray-50',
+              className
             )}
-            {isHovering && currentDraggablePosition.y < 0 && <TopIndicator />}
-          </div>
+          >
+            <div className="mr-2 flex items-center space-x-3 overflow-hidden">
+              <div>
+                <div
+                  className={cn(
+                    'h-3 w-3 rounded-[4.5px]',
+                    `bg-${getCategoryColor(category.indicator)}-600`
+                  )}
+                />
+              </div>
+              <p className="overflow-hidden text-ellipsis text-sm">
+                {category.title}
+              </p>
+            </div>
+            <div className="flex items-center space-x-1">
+              <DropdownMenuTrigger asChild>
+                <button className="flex h-6 w-6 items-center justify-center text-gray-400 hover:text-gray-800 data-[state=open]:text-gray-800">
+                  <span className="inline-block h-4 w-4">
+                    <MoreVerticalIcon />
+                  </span>
+                </button>
+              </DropdownMenuTrigger>
+            </div>
+          </Link>
         </ContextMenuTrigger>
 
         <ContextMenuPortal>
@@ -280,7 +141,8 @@ export function CategoryItem({
       </DropdownMenuRoot>
     </ContextMenuRoot>
   )
-}
+})
+CategoryItem.displayName = 'CategoryItem'
 
 const EmptyShell = React.forwardRef<HTMLDivElement, {}>((_, ref) => {
   return (
@@ -311,11 +173,7 @@ function TopIndicator() {
 }
 
 export function CategoryContainer({ children }: { children: React.ReactNode }) {
-  return (
-    <JotaiProvider>
-      <div className="space-y-2">{children}</div>
-    </JotaiProvider>
-  )
+  return <div className="space-y-2">{children}</div>
 }
 
 export function CategoryMenuContent({
