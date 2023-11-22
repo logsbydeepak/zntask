@@ -17,6 +17,8 @@ export default function Page() {
     useShallow((s) => sortCategories(s.categories, { sortByFavorite: true }))
   )
 
+  const reorderFavorites = useCategoryStore((s) => s.reorderFavorites)
+
   return (
     <Layout.Root>
       <Layout.Header>
@@ -36,7 +38,10 @@ export default function Page() {
         <CategoryContainer>
           <DNDProvider
             onDrop={({ start, over }) => {
-              console.log(start, over)
+              if (!start) return
+              if (!over) return
+              if (start === over) return
+              reorderFavorites(start, over)
             }}
           >
             {favorites.map((i) => (

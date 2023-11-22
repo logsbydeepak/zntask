@@ -1,6 +1,8 @@
 import React from 'react'
 import { useDrag as _useDrag } from '@use-gesture/react'
 import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai'
+import { useHydrateAtoms } from 'jotai/utils'
+import { ulid } from 'ulidx'
 
 import { JotaiProvider } from '@/components/client-providers'
 
@@ -32,6 +34,7 @@ const dropContainersAtom = atom<DropContainer[]>([])
 const dragPositionAtom = atom<{ x: number; y: number } | null>(null)
 const overIdAtom = atom<string | null>(null)
 const startIdAtom = atom<string | null>(null)
+const DNDIdAtom = atom<string | null>(null)
 
 export function useDrag({ id }: { id: string }) {
   const [position, setPosition] = React.useState<{
@@ -39,8 +42,9 @@ export function useDrag({ id }: { id: string }) {
     y: number
   } | null>({ x: 0, y: 0 })
 
+  const DNDId = useAtomValue(DNDIdAtom)
   const [startId, setStartId] = useAtom(startIdAtom)
-  const setOverId = useSetAtom(overIdAtom)
+  const [overId, setOverId] = useAtom(overIdAtom)
   const isDragging = startId === id
   const setDragPosition = useSetAtom(dragPositionAtom)
 
@@ -51,6 +55,12 @@ export function useDrag({ id }: { id: string }) {
         setPosition({ x: mx, y: my })
         setDragPosition({ x: mx, y: my })
       } else {
+        window.dispatchEvent(
+          new CustomEvent(`custom:drop${DNDId}`, {
+            detail: { start: startId, over: overId },
+          })
+        )
+
         setPosition(null)
         setDragPosition(null)
         setOverId(null)
@@ -97,28 +107,48 @@ export function useDNDState() {
   return { dragPosition }
 }
 
+type OnDropType = ({ start, over }: { start: string; over?: string }) => void
+
 export function DNDProvider({
   children,
   onDrop,
 }: {
   children: React.ReactNode
-  onDrop: ({ start, over }: { start: string; over?: string }) => void
+  onDrop: OnDropType
 }) {
   return (
     <JotaiProvider>
-      <DNDManager />
+      <DNDManager onDrop={onDrop} />
       {children}
     </JotaiProvider>
   )
 }
 
-function DNDManager() {
+type DNDEvent = CustomEvent<{ start: string; over: string }>
+
+function DNDManager({ onDrop }: { onDrop: OnDropType }) {
+  useHydrateAtoms([[DNDIdAtom, ulid()]])
+
+  const DNDId = useAtomValue(DNDIdAtom)
   const dropContainers = useAtomValue(dropContainersAtom)
   const startId = useAtomValue(startIdAtom)
 
   const dragPosition = useAtomValue(dragPositionAtom)
   const deferredPosition = React.useDeferredValue(dragPosition)
   const setOverId = useSetAtom(overIdAtom)
+
+  React.useEffect(() => {
+    const handleDrop = (e: Event) => {
+      const event = e as DNDEvent
+      if (!event.detail) return
+      if (!event.detail.start) return
+      if (!event.detail.over) return
+      onDrop(event.detail)
+    }
+
+    window.addEventListener(`custom:drop${DNDId}`, handleDrop)
+    return () => window.removeEventListener(`custom:drop${DNDId}`, handleDrop)
+  }, [DNDId, onDrop])
 
   React.useEffect(() => {
     if (!startId) return
