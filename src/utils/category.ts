@@ -34,9 +34,9 @@ export const zCategory = z.object({
   id: zRequired.refine(isValid, { message: 'Invalid ulid' }),
   title: zRequired,
   indicator: z.enum(categoryIndicatorLabel),
-  isArchived: z.boolean(),
   orderNumber: z.number(),
   favoriteOrderNumber: z.number(),
+  archivedAt: z.string().nullable(),
 })
 
 export type CategoryType = z.infer<typeof zCategory>
@@ -60,7 +60,7 @@ export const sortCategories = (
         .filter((c) => !!c.favoriteOrderNumber)
         .sort((a, b) => a.favoriteOrderNumber - b.favoriteOrderNumber)
     : allCategories
-        .filter((c) => !c.isArchived)
+        .filter((c) => !!!c.archivedAt)
         .sort((a, b) => a.orderNumber - b.orderNumber)
 
   return categories

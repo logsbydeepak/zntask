@@ -88,7 +88,17 @@ function AllTab() {
 
 function ArchiveTab() {
   const categories = useCategoryStore(
-    useShallow((s) => s.categories.filter((c) => c.isArchived))
+    useShallow((s) => {
+      const category = s.categories.filter((c) => c.archivedAt)
+
+      return category.sort((a, b) => {
+        if (!a.archivedAt) return 1
+        if (!b.archivedAt) return -1
+        if (a.archivedAt > b.archivedAt) return -1
+        if (a.archivedAt < b.archivedAt) return 1
+        return 0
+      })
+    })
   )
 
   return (

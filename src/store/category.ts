@@ -42,9 +42,9 @@ const categoryStore: StateCreator<State & Actions> = (set, get) => ({
       id,
       title: category.title,
       indicator: category.indicator,
-      isArchived: false,
       orderNumber: lastOrderNumber + 1,
       favoriteOrderNumber: 0,
+      archivedAt: null,
     }
 
     set((state) => ({
@@ -93,7 +93,7 @@ const categoryStore: StateCreator<State & Actions> = (set, get) => ({
     return get().categories.find((category) => category.id === id)
   },
   toggleArchive(category) {
-    if (category.isArchived) {
+    if (!!category.archivedAt) {
       const lastOrderNumber = get().categories.reduce((acc, curr) => {
         if (curr.orderNumber > acc) return curr.orderNumber
         return acc
@@ -104,7 +104,7 @@ const categoryStore: StateCreator<State & Actions> = (set, get) => ({
           if (item.id === category.id)
             return {
               ...item,
-              isArchived: false,
+              archivedAt: null,
               orderNumber: lastOrderNumber + 1,
             }
           return item
@@ -116,7 +116,7 @@ const categoryStore: StateCreator<State & Actions> = (set, get) => ({
           if (item.id === category.id)
             return {
               ...item,
-              isArchived: true,
+              archivedAt: new Date().toISOString(),
               orderNumber: 0,
               favoriteOrderNumber: 0,
             }
@@ -127,7 +127,7 @@ const categoryStore: StateCreator<State & Actions> = (set, get) => ({
   },
 
   toggleFavorite(category) {
-    if (category.isArchived) return
+    if (!!category.archivedAt) return
     if (!!category.favoriteOrderNumber) {
       set((state) => ({
         categories: state.categories.map((item) => {

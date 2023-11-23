@@ -204,6 +204,7 @@ export function CategoryMenuContent({
   const toggleFavorite = useCategoryStore((s) => s.toggleFavorite)
 
   const isFavorite = !!category.favoriteOrderNumber
+  const isArchived = !!category.archivedAt
 
   const menuItem = [
     {
@@ -222,13 +223,9 @@ export function CategoryMenuContent({
     },
 
     {
-      label: category.isArchived ? 'Unarchive' : 'Archive',
+      label: isArchived ? 'Unarchive' : 'Archive',
       onSelect: () => toggleArchive(category),
-      icon: category.isArchived ? (
-        <ArchiveRestoreIcon />
-      ) : (
-        <ArchiveRestoreIcon />
-      ),
+      icon: isArchived ? <ArchiveRestoreIcon /> : <ArchiveRestoreIcon />,
     },
     {
       label: 'Delete',
@@ -238,7 +235,7 @@ export function CategoryMenuContent({
     },
   ]
 
-  if (category.isArchived) {
+  if (isArchived) {
     menuItem.splice(1, 1)
   }
 
