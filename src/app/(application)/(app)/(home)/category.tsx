@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Link from 'next/link'
 import {
   ArchiveRestoreIcon,
@@ -39,6 +39,8 @@ export function DNDCategoryItem({
   const drag = useDrag({ id: category.id })
   const drop = useDrop({ id: category.id })
   const dnd = useDNDState()
+  const ref = React.useRef<HTMLAnchorElement>(null)
+  const shellRef = React.useRef<HTMLDivElement>(null)
 
   const style = React.useMemo(() => {
     if (!drag.position) return {}
@@ -47,6 +49,18 @@ export function DNDCategoryItem({
     }
   }, [drag.position])
 
+  useEffect(() => {
+    drag.ref.current = ref.current
+  }, [drag])
+
+  useEffect(() => {
+    if (drag.isDragging) {
+      drop.ref.current = shellRef.current
+    } else {
+      drop.ref.current = ref.current
+    }
+  }, [drag, drop])
+
   return (
     <div className="relative">
       <CategoryItem
@@ -54,7 +68,7 @@ export function DNDCategoryItem({
         category={category}
         className={drag.isDragging ? 'z-50' : ''}
         href={href}
-        ref={drop.ref as any}
+        ref={ref}
         {...drag.bind()}
       />
       {drop.isOver && dnd.dragPosition && dnd.dragPosition.y < 0 && (
@@ -64,7 +78,7 @@ export function DNDCategoryItem({
       {drop.isOver && dnd.dragPosition && dnd.dragPosition.y > 0 && (
         <BottomIndicator />
       )}
-      {drag.isDragging && <EmptyShell />}
+      {drag.isDragging && <EmptyShell ref={shellRef} />}
     </div>
   )
 }
