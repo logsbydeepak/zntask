@@ -1,5 +1,11 @@
 import { relations } from 'drizzle-orm'
-import { boolean, index, mysqlTable, varchar } from 'drizzle-orm/mysql-core'
+import {
+  boolean,
+  index,
+  int,
+  mysqlTable,
+  varchar,
+} from 'drizzle-orm/mysql-core'
 
 import {
   categoryDefaultIndicatorOption,
@@ -67,8 +73,9 @@ export const googleAuth = mysqlTable(
 export const categories = mysqlTable(
   'categories',
   {
-    id: id().primaryKey(),
     userId: id('user_id').notNull(),
+
+    id: id().primaryKey(),
     title: varchar('title', { length: 256 }).notNull(),
     indicator: varchar('indicator', {
       length: 256,
@@ -76,10 +83,9 @@ export const categories = mysqlTable(
     })
       .default(categoryDefaultIndicatorOption.label)
       .notNull(),
-    isFavorite: boolean('is_favorite').notNull(),
-    isArchived: boolean('is_archived').notNull(),
-    orderId: id('order_id').unique(),
-    favoriteOrderId: id('favorite_order_id').unique(),
+    orderNumber: int('order_number').notNull(),
+    favoriteOrderNumber: int('favorite_order_number').notNull(),
+    archivedAt: varchar('archived_at', { length: 30 }),
   },
   (table) => {
     return {
