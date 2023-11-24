@@ -1,8 +1,9 @@
 import React from 'react'
-import { useDrag as _useDrag } from '@use-gesture/react'
+import { createUseGesture, dragAction } from '@use-gesture/react'
 import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { useHydrateAtoms } from 'jotai/utils'
 import { ulid } from 'ulidx'
+import { useDebounce } from 'use-debounce'
 
 import { JotaiProvider } from '@/components/client-providers'
 
@@ -35,6 +36,8 @@ const overIdAtom = atom<string | null>(null)
 const DNDIdAtom = atom<string | null>(null)
 const dragContainerAtom = atom<Container | null>(null)
 
+const useGesture = createUseGesture([dragAction])
+
 export function useDrag({ id }: { id: string }) {
   const [position, setPosition] = React.useState<{
     x: number
@@ -48,26 +51,35 @@ export function useDrag({ id }: { id: string }) {
   const [dragContainer, setDragContainer] = useAtom(dragContainerAtom)
   const isDragging = dragContainer?.id === id
 
-  const bind = _useDrag(
-    ({ movement: [mx, my], active }) => {
-      if (active) {
-        setPosition({ x: mx, y: my })
-        setDragPosition({ x: mx, y: my })
+  const bind = useGesture(
+    {
+      onDragStart: () => {
         setDragContainer({ id, ref })
-      } else {
+      },
+      onDrag: ({ movement: [mx, my] }) => {
+        setDragPosition({ x: mx, y: my })
+        setPosition({ x: mx, y: my })
+      },
+      onDragEnd: () => {
         window.dispatchEvent(
           new CustomEvent(`custom:drop${DNDId}`, {
             detail: { start: dragContainer?.id, over: overId },
           })
         )
 
-        setDragContainer(null)
         setPosition(null)
         setDragPosition(null)
+
+        setDragContainer(null)
         setOverId(null)
-      }
+      },
     },
-    { preventDefault: true, filterTaps: true }
+    {
+      drag: {
+        preventDefault: true,
+        filterTaps: true,
+      },
+    }
   )
 
   return { position, bind, isDragging, ref }
@@ -119,10 +131,10 @@ function DNDManager({ onDrop }: { onDrop: OnDropType }) {
   const DNDId = useAtomValue(DNDIdAtom)
   const dropContainers = useAtomValue(dropContainersAtom)
   const dragContainer = useAtomValue(dragContainerAtom)
-
   const dragPosition = useAtomValue(dragPositionAtom)
-  const deferredPosition = React.useDeferredValue(dragPosition)
   const setOverId = useSetAtom(overIdAtom)
+
+  const [deferredPosition] = useDebounce(dragPosition, 30)
 
   React.useEffect(() => {
     const handleDrop = (e: Event) => {
