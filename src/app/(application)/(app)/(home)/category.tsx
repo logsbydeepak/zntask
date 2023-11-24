@@ -58,9 +58,10 @@ export function DNDCategoryItem({
       {drag.isDragging && (
         <div
           className={cn(
-            'fixed left-0 top-0 z-50 hidden rounded-full bg-orange-600 shadow-sm drop-shadow-sm',
-            drag.isDragging && 'block',
-            drag.isDragging && 'z-50'
+            `fixed left-0 top-0 z-50 hidden rounded-full shadow-sm drop-shadow-sm  bg-${getCategoryColor(
+              category.indicator
+            )}-600`,
+            drag.isDragging && 'z-50 block'
           )}
           style={style}
           ref={ref}
