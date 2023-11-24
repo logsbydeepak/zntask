@@ -32,6 +32,8 @@ import {
 } from '@/components/ui/menu'
 import { useAppStore } from '@/store/app'
 import { ChildTask, ParentTask, useTaskStore } from '@/store/task'
+import { DNDProvider, useDNDState, useDrag, useDrop } from '@/utils/dnd'
+import { cn } from '@/utils/style'
 
 export function EmptyInbox() {
   return (
@@ -134,85 +136,129 @@ function TaskItem({
   const editChildTask = useTaskStore((s) => s.editChildTask)
   const editParentTask = useTaskStore((s) => s.editParentTask)
   const [preventFocus, setPreventFocus] = React.useState(false)
+  const dnd = useDNDState()
+  const ref = React.useRef<HTMLDivElement>(null)
+  const shellRef = React.useRef<HTMLDivElement>(null)
+
+  const drag = useDrag({ id: task.id })
+  const drop = useDrop({ id: task.id })
+
+  const style = React.useMemo(() => {
+    if (!drag.position) return {}
+    return {
+      transform: `translate(${drag.position.x}px, ${drag.position.y}px)`,
+    }
+  }, [drag.position])
+
+  React.useEffect(() => {
+    drag.ref.current = ref.current
+  }, [drag])
+
+  React.useEffect(() => {
+    if (drag.isDragging) {
+      drop.ref.current = shellRef.current
+    } else {
+      drop.ref.current = ref.current
+    }
+  }, [drag, drop])
 
   return (
     <ContextMenuRoot>
       <DropdownMenuRoot>
         <ContextMenuTrigger asChild>
-          <div className="flex w-full flex-col space-y-1 rounded-md border border-transparent px-3 py-2 text-sm data-[state=open]:border-gray-200 data-[state=open]:bg-gray-50">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-3">
-                <div className="flex items-center">
-                  <Checkbox
-                    value={task.isCompleted}
-                    setValue={handleOnTaskCheckboxClick}
-                  />
-                </div>
-                <p
-                  className="w-full overflow-hidden text-ellipsis text-left"
-                  onClick={handleOnTaskClick}
-                >
-                  {task.title}
-                </p>
-              </div>
-
-              <div>
-                <DropdownMenuTrigger asChild>
-                  <button className="flex h-6 w-6 items-center justify-center text-gray-400 hover:text-gray-800 data-[state=open]:text-gray-800">
-                    <span className="inline-block h-4 w-4">
-                      <MoreVerticalIcon />
-                    </span>
-                  </button>
-                </DropdownMenuTrigger>
-              </div>
-            </div>
-            {(task.details || task.date) && (
-              <div className="ml-[26px] space-y-2">
-                {task.details && (
+          <div className="relative">
+            <div
+              ref={ref}
+              className={cn(
+                'relative flex w-full touch-none flex-col space-y-1 rounded-lg border border-transparent px-3 py-2 text-sm data-[state=open]:border-gray-200 data-[state=open]:bg-gray-50',
+                drag.isDragging && 'z-50 border-gray-200 bg-gray-50'
+              )}
+              {...drag.bind()}
+              style={style}
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="flex items-center">
+                    <Checkbox
+                      value={task.isCompleted}
+                      setValue={handleOnTaskCheckboxClick}
+                    />
+                  </div>
                   <p
-                    className="overflow-hidden text-ellipsis text-xs text-gray-600"
+                    className="w-full overflow-hidden text-ellipsis text-left"
                     onClick={handleOnTaskClick}
                   >
-                    {task.details?.split('\n').map((i, index) => (
-                      <React.Fragment key={index}>
-                        {index < 3 && (
-                          <>
-                            <span>{i}</span>
-                            {index !== 2 && <br />}
-                          </>
-                        )}
-                        {index === 3 && <span>...</span>}
-                      </React.Fragment>
-                    ))}
+                    {task.title}
                   </p>
-                )}
-                {task.date && (
-                  <SchedulePicker
-                    value={{
-                      date: task.date ? new Date(task.date) : null,
-                      time: task.time ? new Date(task.time) : null,
-                    }}
-                    setValue={({ date, time }) => {
-                      if ('categoryId' in task) {
-                        editParentTask({
-                          ...task,
-                          date: date ? date.toISOString() : null,
-                          time: time ? time.toISOString() : null,
-                        })
-                      }
+                </div>
 
-                      if ('parentId' in task) {
-                        editChildTask({
-                          ...task,
-                          date: date ? date.toISOString() : null,
-                          time: time ? time.toISOString() : null,
-                        })
-                      }
-                    }}
-                  />
-                )}
+                <div>
+                  <DropdownMenuTrigger asChild>
+                    <button className="flex h-6 w-6 items-center justify-center text-gray-400 hover:text-gray-800 data-[state=open]:text-gray-800">
+                      <span className="inline-block h-4 w-4">
+                        <MoreVerticalIcon />
+                      </span>
+                    </button>
+                  </DropdownMenuTrigger>
+                </div>
               </div>
+              {(task.details || task.date) && (
+                <div className="ml-[26px] space-y-2">
+                  {task.details && (
+                    <p
+                      className="overflow-hidden text-ellipsis text-xs text-gray-600"
+                      onClick={handleOnTaskClick}
+                    >
+                      {task.details?.split('\n').map((i, index) => (
+                        <React.Fragment key={index}>
+                          {index < 3 && (
+                            <>
+                              <span>{i}</span>
+                              {index !== 2 && <br />}
+                            </>
+                          )}
+                          {index === 3 && <span>...</span>}
+                        </React.Fragment>
+                      ))}
+                    </p>
+                  )}
+                  {task.date && (
+                    <SchedulePicker
+                      value={{
+                        date: task.date ? new Date(task.date) : null,
+                        time: task.time ? new Date(task.time) : null,
+                      }}
+                      setValue={({ date, time }) => {
+                        if ('categoryId' in task) {
+                          editParentTask({
+                            ...task,
+                            date: date ? date.toISOString() : null,
+                            time: time ? time.toISOString() : null,
+                          })
+                        }
+
+                        if ('parentId' in task) {
+                          editChildTask({
+                            ...task,
+                            date: date ? date.toISOString() : null,
+                            time: time ? time.toISOString() : null,
+                          })
+                        }
+                      }}
+                    />
+                  )}
+                </div>
+              )}
+            </div>
+
+            {drop.isOver && dnd.dragPosition && dnd.dragPosition.y < 0 && (
+              <TopIndicator />
             )}
+
+            {drop.isOver && dnd.dragPosition && dnd.dragPosition.y > 0 && (
+              <BottomIndicator />
+            )}
+            {drag.isDragging && <EmptyShell ref={shellRef} />}
           </div>
         </ContextMenuTrigger>
 
@@ -330,3 +376,31 @@ function Checkbox({
     </CheckboxRoot>
   )
 }
+
+function BottomIndicator() {
+  return (
+    <div className="absolute -bottom-[5px] left-0 right-0 flex w-full translate-y-[2px] items-center px-3">
+      <span className="h-1.5 w-1.5 rounded-full border-[1.5px] border-orange-600" />
+      <span className="-ml-[1px] h-[1.5px] w-full rounded-full bg-orange-600" />
+    </div>
+  )
+}
+
+function TopIndicator() {
+  return (
+    <div className="absolute -top-[5px] left-0 right-0 flex w-full translate-y-[-2px] items-center px-3">
+      <span className="h-1.5 w-1.5 rounded-full border-[1.5px] border-orange-600" />
+      <span className="-ml-[1px] h-[1.5px] w-full rounded-full bg-orange-600" />
+    </div>
+  )
+}
+
+const EmptyShell = React.forwardRef<HTMLDivElement, {}>((_, ref) => {
+  return (
+    <div
+      ref={ref}
+      className="absolute inset-0 rounded-lg border border-gray-200 bg-gray-50"
+    />
+  )
+})
+EmptyShell.displayName = 'EmptyShell'

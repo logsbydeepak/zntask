@@ -1,5 +1,6 @@
 import { ulid } from 'ulidx'
 import { create, StateCreator } from 'zustand'
+import { persist } from 'zustand/middleware'
 
 import { useActivityStore } from './activity'
 
@@ -170,4 +171,6 @@ const taskStore: StateCreator<State & Actions> = (set, get) => ({
   },
 })
 
-export const useTaskStore = create(taskStore)
+export const useTaskStore = create(
+  persist(taskStore, { name: 'tasks', skipHydration: true })
+)

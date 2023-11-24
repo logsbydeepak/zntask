@@ -8,7 +8,6 @@ import {
   MoreVerticalIcon,
   Trash2Icon,
 } from 'lucide-react'
-import { classNames } from 'uploadthing/client'
 
 import {
   ContextMenuContent,

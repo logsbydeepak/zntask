@@ -11,6 +11,7 @@ import {
   TabsTrigger,
 } from '@/components/ui/tabs'
 import { useTaskStore } from '@/store/task'
+import { DNDProvider } from '@/utils/dnd'
 
 import { EmptyInbox, TaskContainer } from '../task'
 
@@ -53,9 +54,11 @@ function PlanedTab() {
   if (tasks.length === 0) return <EmptyInbox />
   return (
     <div className="space-y-1">
-      {tasks.map((i) => (
-        <TaskContainer key={i.id} task={i} />
-      ))}
+      <DNDProvider onDrop={() => {}}>
+        {tasks.map((i) => (
+          <TaskContainer key={i.id} task={i} />
+        ))}
+      </DNDProvider>
     </div>
   )
 }

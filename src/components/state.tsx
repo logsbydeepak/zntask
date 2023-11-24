@@ -99,10 +99,11 @@ export function InitAppState({
 
   React.useLayoutEffect(() => {
     useCategoryStore.persist.rehydrate()
+    useTaskStore.persist.rehydrate()
 
     // setNewCategories(categories)
-    setNewParentTask(parentTask)
-    setNewChildTask(childTask)
+    // setNewParentTask(parentTask)
+    // setNewChildTask(childTask)
 
     setIsSidebarOpen(window.innerWidth >= 768)
     setUser(user)
