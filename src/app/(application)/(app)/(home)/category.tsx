@@ -38,13 +38,14 @@ export function DNDCategoryItem({
   const drag = useDrag({ id: category.id })
   const drop = useDrop({ id: category.id })
   const dnd = useDNDState()
-  const ref = React.useRef<HTMLAnchorElement>(null)
-  const shellRef = React.useRef<HTMLDivElement>(null)
+  const ref = React.useRef<HTMLDivElement>(null)
 
   const style = React.useMemo(() => {
     if (!drag.position) return {}
     return {
-      transform: `translate(${drag.position.x}px, ${drag.position.y}px)`,
+      transform: `translate(${drag.position.x + 5}px, ${
+        drag.position.y + 5
+      }px)`,
     }
   }, [drag.position])
 
@@ -52,23 +53,28 @@ export function DNDCategoryItem({
     drag.ref.current = ref.current
   }, [drag])
 
-  useEffect(() => {
-    if (drag.isDragging) {
-      drop.ref.current = shellRef.current
-    } else {
-      drop.ref.current = ref.current
-    }
-  }, [drag, drop])
-
   return (
     <div className="relative">
+      {drag.isDragging && (
+        <div
+          className={cn(
+            'fixed left-0 top-0 z-50 hidden rounded-full bg-orange-600 shadow-sm drop-shadow-sm',
+            drag.isDragging && 'block',
+            drag.isDragging && 'z-50'
+          )}
+          style={style}
+          ref={ref}
+        >
+          <p className="px-2 text-xs font-medium text-white">
+            {category.title}
+          </p>
+        </div>
+      )}
       <CategoryItem
-        style={style}
         category={category}
-        className={drag.isDragging ? 'z-50' : ''}
         href={href}
-        ref={ref}
         {...drag.bind()}
+        ref={drop.ref as any}
       />
       {drop.isOver && dnd.dragPosition && dnd.dragPosition.y < 0 && (
         <TopIndicator />
@@ -77,7 +83,6 @@ export function DNDCategoryItem({
       {drop.isOver && dnd.dragPosition && dnd.dragPosition.y > 0 && (
         <BottomIndicator />
       )}
-      {drag.isDragging && <EmptyShell ref={shellRef} />}
     </div>
   )
 }

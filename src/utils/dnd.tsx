@@ -56,9 +56,9 @@ export function useDrag({ id }: { id: string }) {
       onDragStart: () => {
         setDragContainer({ id, ref })
       },
-      onDrag: ({ movement: [mx, my] }) => {
+      onDrag: ({ movement: [mx, my], xy }) => {
         setDragPosition({ x: mx, y: my })
-        setPosition({ x: mx, y: my })
+        setPosition({ x: xy[0], y: xy[1] })
       },
       onDragEnd: () => {
         window.dispatchEvent(
