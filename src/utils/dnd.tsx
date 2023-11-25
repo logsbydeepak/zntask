@@ -134,7 +134,7 @@ function DNDManager({ onDrop }: { onDrop: OnDropType }) {
   const dragPosition = useAtomValue(dragPositionAtom)
   const setOverId = useSetAtom(overIdAtom)
 
-  const [deferredPosition] = useDebounce(dragPosition, 30)
+  const [deferredPosition] = useDebounce(dragPosition, 20)
 
   React.useEffect(() => {
     const handleDrop = (e: Event) => {

@@ -83,23 +83,72 @@ export function TaskContainer({ task }: { task: ParentTask }) {
 
   return (
     <div className="space-y-2">
-      <TaskItem task={task} />
-      <div className="ml-8 space-y-1">
-        {childTaskToDisplay.map((i) => (
-          <TaskItem key={i.id} task={i} />
-        ))}
+      <DNDTaskItem task={task} />
 
-        {childTask.length > 4 && (
-          <button
-            onClick={() => setIsCollapsibleOpen((open) => !open)}
-            className="rounded-full border border-gray-200 px-3 py-1 text-xs text-gray-600 hover:bg-gray-50"
-          >
-            {isCollapsibleOpen
-              ? 'show less'
-              : `show ${childTask.length - 4} more`}
-          </button>
-        )}
-      </div>
+      {childTaskToDisplay.length !== 0 && (
+        <div className="!mt-1 ml-6 space-y-1">
+          {childTaskToDisplay.map((i) => (
+            <DNDTaskItem key={i.id} task={i} />
+          ))}
+
+          {childTask.length > 4 && (
+            <button
+              onClick={() => setIsCollapsibleOpen((open) => !open)}
+              className="rounded-full border border-gray-200 px-3 py-1 text-xs text-gray-600 hover:bg-gray-50"
+            >
+              {isCollapsibleOpen
+                ? 'show less'
+                : `show ${childTask.length - 4} more`}
+            </button>
+          )}
+        </div>
+      )}
+    </div>
+  )
+}
+
+function DNDTaskItem({ task }: { task: ParentTask | ChildTask }) {
+  const drag = useDrag({ id: task.id })
+  const drop = useDrop({ id: task.id })
+  const dnd = useDNDState()
+  const ref = React.useRef<HTMLDivElement>(null)
+
+  const style = React.useMemo(() => {
+    if (!drag.position) return {}
+    return {
+      transform: `translate(${drag.position.x + 5}px, ${
+        drag.position.y + 5
+      }px)`,
+    }
+  }, [drag.position])
+
+  React.useEffect(() => {
+    drag.ref.current = ref.current
+  }, [drag])
+
+  return (
+    <div className="relative">
+      {drag.isDragging && (
+        <div
+          className={cn(
+            `fixed left-0 top-0 z-50 hidden rounded-full bg-orange-600 shadow-sm drop-shadow-sm`,
+            drag.isDragging && 'z-50 block'
+          )}
+          style={style}
+          ref={ref}
+        >
+          <p className="px-2 text-xs font-medium text-white">{task.title}</p>
+        </div>
+      )}
+
+      <TaskItem task={task} {...drag.bind()} ref={drop.ref as any} />
+      {drop.isOver && dnd.dragPosition && dnd.dragPosition.y < 0 && (
+        <TopIndicator />
+      )}
+
+      {drop.isOver && dnd.dragPosition && dnd.dragPosition.y > 0 && (
+        <BottomIndicator />
+      )}
     </div>
   )
 }
@@ -113,6 +162,7 @@ const TaskItem = React.forwardRef<
   const editChildTask = useTaskStore((s) => s.editChildTask)
   const editParentTask = useTaskStore((s) => s.editParentTask)
   const [preventFocus, setPreventFocus] = React.useState(false)
+  const setDialog = useAppStore((s) => s.setDialog)
 
   const handleOnTaskCheckboxClick = React.useCallback(
     (value: boolean) => {
@@ -129,15 +179,13 @@ const TaskItem = React.forwardRef<
 
   const handleOnTaskClick = React.useCallback(() => {
     if ('categoryId' in task) {
-      setPreventFocus(true)
-      editParentTask({ ...task, isCompleted: !task.isCompleted })
+      setDialog({ editTask: { parentTaskId: task.id } })
     }
 
     if ('parentId' in task) {
-      setPreventFocus(true)
-      editChildTask({ ...task, isCompleted: !task.isCompleted })
+      setDialog({ editTask: { childTaskId: task.id } })
     }
-  }, [editChildTask, editParentTask, task])
+  }, [setDialog, task])
 
   return (
     <ContextMenuRoot>
@@ -161,7 +209,11 @@ const TaskItem = React.forwardRef<
                 </div>
                 <p
                   className="w-full overflow-hidden text-ellipsis text-left"
-                  onClick={handleOnTaskClick}
+                  onClick={(e) => {
+                    console.log('click')
+                    e.stopPropagation()
+                    handleOnTaskClick()
+                  }}
                 >
                   {task.title}
                 </p>
