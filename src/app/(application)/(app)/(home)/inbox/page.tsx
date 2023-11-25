@@ -53,7 +53,7 @@ function PlanedTab() {
 
   if (tasks.length === 0) return <EmptyInbox />
   return (
-    <div className="space-y-1">
+    <div className="space-y-2">
       <DNDProvider onDrop={() => {}}>
         {tasks.map((i) => (
           <TaskContainer key={i.id} task={i} />
@@ -73,7 +73,7 @@ function CompletedTab() {
   if (tasks.length === 0) return <EmptyInbox />
 
   return (
-    <div className="space-y-1">
+    <div className="space-y-2 ">
       {tasks.map((i) => (
         <TaskContainer key={i.id} task={i} />
       ))}

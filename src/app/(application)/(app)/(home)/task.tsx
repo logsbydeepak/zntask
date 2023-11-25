@@ -86,7 +86,7 @@ export function TaskContainer({ task }: { task: ParentTask }) {
       <DNDTaskItem task={task} />
 
       {childTaskToDisplay.length !== 0 && (
-        <div className="!mt-1 ml-6 space-y-1">
+        <div className="!mt-2 ml-6 space-y-2">
           {childTaskToDisplay.map((i) => (
             <DNDTaskItem key={i.id} task={i} />
           ))}
@@ -195,9 +195,12 @@ const TaskItem = React.forwardRef<
             {...props}
             ref={ref}
             className={cn(
-              'relative flex w-full touch-none flex-col space-y-1 rounded-lg border border-transparent px-3 py-2 text-sm data-[state=open]:border-gray-200 data-[state=open]:bg-gray-50',
+              'flex w-full cursor-pointer touch-none flex-col space-y-1 rounded-lg border border-transparent px-3 py-2 text-sm hover:border-gray-200 hover:bg-gray-50 data-[state=open]:border-gray-200 data-[state=open]:bg-gray-50',
               className
             )}
+            onClick={(e) => {
+              handleOnTaskClick()
+            }}
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
@@ -207,21 +210,19 @@ const TaskItem = React.forwardRef<
                     setValue={handleOnTaskCheckboxClick}
                   />
                 </div>
-                <p
-                  className="w-full overflow-hidden text-ellipsis text-left"
-                  onClick={(e) => {
-                    console.log('click')
-                    e.stopPropagation()
-                    handleOnTaskClick()
-                  }}
-                >
+                <p className="w-full overflow-hidden text-ellipsis text-left">
                   {task.title}
                 </p>
               </div>
 
               <div>
                 <DropdownMenuTrigger asChild>
-                  <button className="flex h-6 w-6 items-center justify-center text-gray-400 hover:text-gray-800 data-[state=open]:text-gray-800">
+                  <button
+                    className="flex h-6 w-6 items-center justify-center text-gray-400 hover:text-gray-800 data-[state=open]:text-gray-800"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                    }}
+                  >
                     <span className="inline-block h-4 w-4">
                       <MoreVerticalIcon />
                     </span>
@@ -380,6 +381,7 @@ function Checkbox({
   return (
     <CheckboxRoot
       checked={value}
+      onClick={(e) => e.stopPropagation()}
       onCheckedChange={(value) => {
         if (typeof value === 'boolean') {
           setValue(value)
@@ -413,13 +415,3 @@ function TopIndicator() {
     </div>
   )
 }
-
-const EmptyShell = React.forwardRef<HTMLDivElement, {}>((_, ref) => {
-  return (
-    <div
-      ref={ref}
-      className="absolute inset-0 rounded-lg border border-gray-200 bg-gray-50"
-    />
-  )
-})
-EmptyShell.displayName = 'EmptyShell'
