@@ -14,15 +14,25 @@ interface Rec {
   height: number
 }
 
-function centerOfRectangle(rect: Rec) {
-  return {
-    x: rect.left + rect.width * 0.5,
-    y: rect.top + rect.height * 0.5,
-  }
-}
+export function getIntersectionRatio(entry: Rec, target: Rec): number {
+  const top = Math.max(target.top, entry.top)
+  const left = Math.max(target.left, entry.left)
+  const right = Math.min(target.left + target.width, entry.left + entry.width)
+  const bottom = Math.min(target.top + target.height, entry.top + entry.height)
+  const width = right - left
+  const height = bottom - top
 
-function distance(a: { x: number; y: number }, b: { x: number; y: number }) {
-  return Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2)
+  if (left < right && top < bottom) {
+    const targetArea = target.width * target.height
+    const entryArea = entry.width * entry.height
+    const intersectionArea = width * height
+    const intersectionRatio =
+      intersectionArea / (targetArea + entryArea - intersectionArea)
+
+    return Number(intersectionRatio.toFixed(4))
+  }
+
+  return 0
 }
 
 interface Container {
@@ -134,7 +144,7 @@ function DNDManager({ onDrop }: { onDrop: OnDropType }) {
   const dragPosition = useAtomValue(dragPositionAtom)
   const setOverId = useSetAtom(overIdAtom)
 
-  const [deferredPosition] = useDebounce(dragPosition, 20)
+  const deferredPosition = React.useDeferredValue(dragPosition)
 
   React.useEffect(() => {
     const handleDrop = (e: Event) => {
@@ -156,24 +166,19 @@ function DNDManager({ onDrop }: { onDrop: OnDropType }) {
     const startRect = dragContainer?.ref.current?.getBoundingClientRect()
     if (!startRect) return
 
-    const startCenter = centerOfRectangle(startRect)
+    const intersection = dropContainers
+      .map((c) => ({
+        id: c.id,
+        intersection: getIntersectionRatio(
+          startRect,
+          c.ref.current?.getBoundingClientRect()!
+        ),
+      }))
+      .reduce((prev, curr) =>
+        prev.intersection > curr.intersection ? prev : curr
+      )
 
-    const centerOfDrops: { id: string; center: { x: number; y: number } }[] = []
-    dropContainers.forEach((c) => {
-      const center = centerOfRectangle(c.ref.current?.getBoundingClientRect()!)
-      centerOfDrops.push({ id: c.id, center })
-    })
-
-    const distanceBetween = centerOfDrops.map((c) => ({
-      id: c.id,
-      distance: distance(startCenter, c.center),
-    }))
-
-    const over = distanceBetween.reduce((prev, curr) =>
-      prev.distance < curr.distance ? prev : curr
-    )
-
-    setOverId(over.id)
+    setOverId(intersection.id)
   }, [deferredPosition, dropContainers, setOverId, dragContainer])
 
   return null
