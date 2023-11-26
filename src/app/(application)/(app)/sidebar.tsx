@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import {
   CalendarClockIcon,
+  CalendarIcon,
   ChevronDownIcon,
   ChevronUpIcon,
   FolderIcon,
@@ -60,7 +61,7 @@ function QuickSection() {
 
   const item = [
     {
-      icon: <CalendarClockIcon />,
+      icon: <CalendarIcon />,
       label: 'today',
       href: '/today',
       isActive: pathname.startsWith('/today') || pathname === '/',
