@@ -16,7 +16,7 @@ import {
 import { ResetPasswordDialog } from '@/components/dialogs/reset-password'
 import { Button } from '@/components/ui/button'
 import * as FormPrimitive from '@/components/ui/form'
-import { loginWithCredentials } from '@/data/auth'
+import { loginWithCredentials, redirectGoogleLogin } from '@/data/auth'
 import { zLoginWithCredentials } from '@/data/utils/zSchema'
 import { toast } from '@/store/toast'
 
@@ -147,11 +147,17 @@ export function Action() {
   const onClick = () => {
     setIsLoading(true)
     setIsGoogleRegisterLoading(true)
+    startTransition(async () => {
+      await redirectGoogleLogin()
+    })
   }
   return (
     <>
       <fieldset disabled={isLoading}>
-        <ContinueWithGoogle isLoading={isGoogleLoginLoading} />
+        <ContinueWithGoogle
+          isLoading={isGoogleLoginLoading}
+          onClick={onClick}
+        />
       </fieldset>
       <AccountQuestion.Container>
         <AccountQuestion.Title>

@@ -23,14 +23,14 @@ import {
 } from './utils/zSchema'
 
 const LOGIN_PAGE_URL = `${env.BASE_URL}/login`
-const REGISTER_PAGE_URL = `${env.BASE_URL}/createAccount`
+const REGISTER_PAGE_URL = `${env.BASE_URL}/register`
 
 export const redirectGoogleLogin = h(async () => {
   const url = generateGoogleAuthUrl(LOGIN_PAGE_URL)
   redirect(url)
 })
 
-export const redirectGoogleCreateAccount = h(async () => {
+export const redirectGoogleRegister = h(async () => {
   const url = generateGoogleAuthUrl(REGISTER_PAGE_URL)
   redirect(url)
 })

@@ -55,14 +55,17 @@ export function SubTitle({ children }: { children: React.ReactNode }) {
 
 export function ContinueWithGoogle({
   isLoading = false,
+  onClick,
 }: {
   isLoading?: boolean
+  onClick?: () => void
 }) {
   return (
     <Button
       className="flex w-full items-center justify-center"
       intent="secondary"
       isLoading={isLoading}
+      onClick={onClick}
     >
       <div className="mr-2 h-5 w-5 ">
         <GoogleIcon />

@@ -17,7 +17,7 @@ import {
 } from '@/app/(application)/(auth)/components'
 import { Button } from '@/components/ui/button'
 import * as FormPrimitive from '@/components/ui/form'
-import { registerWithCredentials } from '@/data/auth'
+import { redirectGoogleRegister, registerWithCredentials } from '@/data/auth'
 import { zRegisterWithCredentials } from '@/data/utils/zSchema'
 import { toast } from '@/store/toast'
 
@@ -185,12 +185,18 @@ export function Action() {
   const onClick = () => {
     setIsLoading(true)
     setIsGoogleRegisterLoading(true)
+    startTransition(async () => {
+      await redirectGoogleRegister()
+    })
   }
 
   return (
     <>
       <fieldset disabled={isLoading}>
-        <ContinueWithGoogle isLoading={isGoogleRegisterLoading} />
+        <ContinueWithGoogle
+          isLoading={isGoogleRegisterLoading}
+          onClick={onClick}
+        />
       </fieldset>
 
       <AccountQuestion.Container>
