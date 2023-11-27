@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import Link from 'next/link'
 import {
   ArchiveRestoreIcon,
@@ -25,7 +25,7 @@ import {
 import { useAppStore } from '@/store/app'
 import { useCategoryStore } from '@/store/category'
 import { Category, getCategoryColor } from '@/utils/category'
-import { useDNDState, useDrag, useDrop } from '@/utils/dnd'
+import { useDrag, useDrop } from '@/utils/dnd'
 import { cn } from '@/utils/style'
 
 export function DNDCategoryItem({
@@ -35,55 +35,40 @@ export function DNDCategoryItem({
   category: Category
   href: string
 }) {
-  const drag = useDrag({ id: category.id })
-  const drop = useDrop({ id: category.id })
-  const dnd = useDNDState()
-  const ref = React.useRef<HTMLDivElement>(null)
+  const {
+    isDragging,
+    ref: dragRef,
+    position,
+    bind,
+  } = useDrag({ id: category.id })
 
   const style = React.useMemo(() => {
-    if (!drag.position) return {}
+    if (!position) return {}
     return {
-      transform: `translate(${drag.position.x + 5}px, ${
-        drag.position.y + 5
-      }px)`,
+      top: position.y,
+      left: position.x,
     }
-  }, [drag.position])
-
-  useEffect(() => {
-    drag.ref.current = ref.current
-  }, [drag])
+  }, [position])
 
   return (
-    <div className="relative">
-      {drag.isDragging && (
+    <div>
+      {isDragging && (
         <div
+          ref={dragRef as any}
           className={cn(
-            `fixed left-0 top-0 z-50 hidden rounded-full shadow-sm drop-shadow-sm  bg-${getCategoryColor(
-              category.indicator
-            )}-600`,
-            drag.isDragging && 'z-50 block'
+            'fixed left-0 top-0 z-50 hidden -translate-x-1/2 -translate-y-full rounded-full shadow-sm drop-shadow-sm',
+            `bg-${getCategoryColor(category.indicator)}-600`,
+            isDragging && 'z-50 block'
           )}
           style={style}
-          ref={ref}
         >
           <p className="px-2 text-xs font-medium text-white">
             {category.title}
           </p>
         </div>
       )}
-      <CategoryItem
-        category={category}
-        href={href}
-        {...drag.bind()}
-        ref={drop.ref as any}
-      />
-      {drop.isOver && dnd.dragPosition && dnd.dragPosition.y < 0 && (
-        <TopIndicator />
-      )}
 
-      {drop.isOver && dnd.dragPosition && dnd.dragPosition.y > 0 && (
-        <BottomIndicator />
-      )}
+      <CategoryItem category={category} href={href} {...bind()} />
     </div>
   )
 }
@@ -173,24 +158,6 @@ const EmptyShell = React.forwardRef<HTMLDivElement, {}>((_, ref) => {
 })
 EmptyShell.displayName = 'EmptyShell'
 
-function BottomIndicator() {
-  return (
-    <div className="absolute -bottom-[5px] left-0 right-0 flex w-full translate-y-[2px] items-center px-3">
-      <span className="h-1.5 w-1.5 rounded-full border-[1.5px] border-orange-600" />
-      <span className="-ml-[1px] h-[1.5px] w-full rounded-full bg-orange-600" />
-    </div>
-  )
-}
-
-function TopIndicator() {
-  return (
-    <div className="absolute -top-[5px] left-0 right-0 flex w-full translate-y-[-2px] items-center px-3">
-      <span className="h-1.5 w-1.5 rounded-full border-[1.5px] border-orange-600" />
-      <span className="-ml-[1px] h-[1.5px] w-full rounded-full bg-orange-600" />
-    </div>
-  )
-}
-
 export function CategoryContainer({ children }: { children: React.ReactNode }) {
   return <div className="space-y-2">{children}</div>
 }
@@ -259,4 +226,44 @@ export function CategoryMenuContent({
       <span>{i.label}</span>
     </DropdownMenuItem>
   ))
+}
+
+export function BottomDrop({ id }: { id: string }) {
+  const { ref, isOver } = useDrop({ id })
+
+  return (
+    <>
+      <div className="absolute h-2 w-full" ref={ref as any} />
+      {isOver && <BottomIndicator />}
+    </>
+  )
+}
+
+export function TopDrop({ id }: { id: string }) {
+  const { ref, isOver } = useDrop({ id })
+
+  return (
+    <>
+      <div className="absolute h-2 w-full" ref={ref as any} />
+      {isOver && <TopIndicator />}
+    </>
+  )
+}
+
+function BottomIndicator() {
+  return (
+    <div className="absolute -bottom-[5px] left-0 right-0 flex w-full translate-y-[2px] items-center px-3">
+      <span className="h-1.5 w-1.5 rounded-full border-[1.5px] border-orange-600" />
+      <span className="-ml-[1px] h-[1.5px] w-full rounded-full bg-orange-600" />
+    </div>
+  )
+}
+
+function TopIndicator() {
+  return (
+    <div className="absolute -top-[5px] left-0 right-0 flex w-full translate-y-[-2px] items-center px-3">
+      <span className="h-1.5 w-1.5 rounded-full border-[1.5px] border-orange-600" />
+      <span className="-ml-[1px] h-[1.5px] w-full rounded-full bg-orange-600" />
+    </div>
+  )
 }

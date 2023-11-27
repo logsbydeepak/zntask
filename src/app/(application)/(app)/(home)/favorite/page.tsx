@@ -10,7 +10,13 @@ import { useCategoryStore } from '@/store/category'
 import { Category, sortCategories } from '@/utils/category'
 import { DNDProvider } from '@/utils/dnd'
 
-import { CategoryContainer, CategoryItem, DNDCategoryItem } from '../category'
+import {
+  BottomDrop,
+  CategoryContainer,
+  CategoryItem,
+  DNDCategoryItem,
+  TopDrop,
+} from '../category'
 
 export default function Page() {
   const favorites = useCategoryStore(
@@ -44,12 +50,16 @@ export default function Page() {
               reorderFavorites(start, over)
             }}
           >
-            {favorites.map((i) => (
-              <DNDCategoryItem
-                key={i.id}
-                category={i}
-                href={`/favorite/${i.id}`}
-              />
+            {favorites.map((i, idx) => (
+              <div className="relative" key={i.id}>
+                {idx === 0 && <TopDrop id={`start:${i.id}`} />}
+                <DNDCategoryItem
+                  key={i.id}
+                  category={i}
+                  href={`/favorite/${i.id}`}
+                />
+                <BottomDrop id={`${i.id}:${favorites[idx + 1]}`} />
+              </div>
             ))}
           </DNDProvider>
         </CategoryContainer>
