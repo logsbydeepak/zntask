@@ -64,7 +64,6 @@ function AllTab() {
   const categories = useCategoryStore(
     useShallow((s) => sortCategories(s.categories))
   )
-  const reorderCategories = useCategoryStore((s) => s.reorderCategories)
 
   return (
     <>
@@ -76,7 +75,15 @@ function AllTab() {
             if (!start) return
             if (!over) return
             if (start === over) return
-            reorderCategories(start, over)
+            const overId = over.split(':')
+
+            if (overId[0] === 'start') {
+              return
+            }
+
+            if (overId[0] === 'bottom') {
+              return
+            }
           }}
         >
           {categories.map((i, idx) => (
@@ -87,7 +94,7 @@ function AllTab() {
                 category={i}
                 href={`/category/${i.id}`}
               />
-              <BottomDrop id={`${i.id}:${categories[idx + 1]}`} />
+              <BottomDrop id={`bottom:${i.id}`} />
             </div>
           ))}
         </DNDProvider>

@@ -108,47 +108,32 @@ export function TaskContainer({ task }: { task: ParentTask }) {
 }
 
 function DNDTaskItem({ task }: { task: ParentTask | ChildTask }) {
-  const drag = useDrag({ id: task.id })
-  const drop = useDrop({ id: task.id })
-  const dnd = useDNDState()
-  const ref = React.useRef<HTMLDivElement>(null)
+  const { position, isDragging, ref, bind } = useDrag({ id: task.id })
 
   const style = React.useMemo(() => {
-    if (!drag.position) return {}
+    if (!position) return {}
     return {
-      transform: `translate(${drag.position.x + 5}px, ${
-        drag.position.y + 5
-      }px)`,
+      top: position.y,
+      left: position.x,
     }
-  }, [drag.position])
-
-  React.useEffect(() => {
-    drag.ref.current = ref.current
-  }, [drag])
+  }, [position])
 
   return (
-    <div className="relative">
-      {drag.isDragging && (
+    <div>
+      {isDragging && (
         <div
           className={cn(
-            `fixed left-0 top-0 z-50 hidden rounded-full bg-orange-600 shadow-sm drop-shadow-sm`,
-            drag.isDragging && 'z-50 block'
+            'fixed left-0 top-0 z-50 hidden -translate-x-1/2 -translate-y-full rounded-full bg-orange-600 shadow-sm drop-shadow-sm',
+            isDragging && 'z-50 block'
           )}
           style={style}
-          ref={ref}
+          ref={ref as any}
         >
           <p className="px-2 text-xs font-medium text-white">{task.title}</p>
         </div>
       )}
 
-      <TaskItem task={task} {...drag.bind()} ref={drop.ref as any} />
-      {drop.isOver && dnd.dragPosition && dnd.dragPosition.y < 0 && (
-        <TopIndicator />
-      )}
-
-      {drop.isOver && dnd.dragPosition && dnd.dragPosition.y > 0 && (
-        <BottomIndicator />
-      )}
+      <TaskItem task={task} {...bind()} />
     </div>
   )
 }
@@ -398,20 +383,19 @@ function Checkbox({
   )
 }
 
-function BottomIndicator() {
-  return (
-    <div className="absolute -bottom-[5px] left-0 right-0 flex w-full translate-y-[2px] items-center px-3">
-      <span className="h-1.5 w-1.5 rounded-full border-[1.5px] border-orange-600" />
-      <span className="-ml-[1px] h-[1.5px] w-full rounded-full bg-orange-600" />
-    </div>
-  )
-}
+//   return (
+//     <div className="absolute -bottom-[5px] left-0 right-0 flex w-full translate-y-[2px] items-center px-3">
+//       <span className="h-1.5 w-1.5 rounded-full border-[1.5px] border-orange-600" />
+//       <span className="-ml-[1px] h-[1.5px] w-full rounded-full bg-orange-600" />
+//     </div>
+//   )
+// }
 
-function TopIndicator() {
-  return (
-    <div className="absolute -top-[5px] left-0 right-0 flex w-full translate-y-[-2px] items-center px-3">
-      <span className="h-1.5 w-1.5 rounded-full border-[1.5px] border-orange-600" />
-      <span className="-ml-[1px] h-[1.5px] w-full rounded-full bg-orange-600" />
-    </div>
-  )
-}
+// function TopIndicator() {
+//   return (
+//     <div className="absolute -top-[5px] left-0 right-0 flex w-full translate-y-[-2px] items-center px-3">
+//       <span className="h-1.5 w-1.5 rounded-full border-[1.5px] border-orange-600" />
+//       <span className="-ml-[1px] h-[1.5px] w-full rounded-full bg-orange-600" />
+//     </div>
+//   )
+// }
