@@ -8,6 +8,7 @@ import {
   Title,
 } from '@/app/(application)/(auth)/components'
 import { JotaiProvider } from '@/components/client-providers'
+import { getUserLogin } from '@/data/auth'
 
 import { Action, Form } from './form'
 
@@ -15,7 +16,16 @@ export const metadata: Metadata = {
   title: 'Login',
 }
 
-export default function Page() {
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: {
+    [key: string]: string | string[] | undefined
+  }
+}) {
+  const data = await getUserLogin(searchParams)
+  console.log(data)
+
   return (
     <JotaiProvider>
       <FormContainer>

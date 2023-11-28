@@ -14,7 +14,11 @@ import { db, dbSchema } from './db'
 import { checkToken } from './utils'
 import { generateAuthJWT, generateEmailJWT, setAuthCookie } from './utils/auth'
 import { redis, resend } from './utils/config'
-import { generateGoogleAuthUrl } from './utils/google'
+import {
+  generateGoogleAuthUrl,
+  getGoogleData,
+  googleClient,
+} from './utils/google'
 import { h, r } from './utils/handler'
 import {
   zLoginWithCredentials,
@@ -24,6 +28,10 @@ import {
 
 const LOGIN_PAGE_URL = `${env.BASE_URL}/login`
 const REGISTER_PAGE_URL = `${env.BASE_URL}/register`
+
+export const getUserLogin = async (query: any) => {
+  return await getGoogleData(googleClient(LOGIN_PAGE_URL), query)
+}
 
 export const redirectGoogleLogin = h(async () => {
   const url = generateGoogleAuthUrl(LOGIN_PAGE_URL)
