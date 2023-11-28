@@ -47,7 +47,7 @@ interface Actions {
   >(
     state: T
   ) => void
-  resetAppState: () => void
+  reset: () => void
 }
 
 const appStore: StateCreator<State & Actions> = (set) => ({
@@ -60,7 +60,7 @@ const appStore: StateCreator<State & Actions> = (set) => ({
       },
     }))
   },
-  resetAppState() {
+  reset() {
     set(initialState)
   },
 })

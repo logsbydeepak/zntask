@@ -37,8 +37,6 @@ function EmptyContainer({
   children: React.ReactNode
   className?: string
 }) {
-  const isSidebarOpen = useAtomValue(isSidebarOpenAtom)
-
   return (
     <div
       className={cn(
