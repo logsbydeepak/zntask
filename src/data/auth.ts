@@ -59,8 +59,7 @@ export const loginWithCredentials = h(
 
     const token = await generateAuthJWT(user.id)
     setAuthCookie(token)
-
-    return r('OK')
+    redirect('/')
   }
 )
 
@@ -91,8 +90,7 @@ export const registerWithCredentials = h(
 
     const token = await generateAuthJWT(id)
     setAuthCookie(token)
-
-    return r('OK')
+    redirect('/')
   }
 )
 

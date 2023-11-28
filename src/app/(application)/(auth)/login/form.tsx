@@ -18,14 +18,11 @@ import { Button } from '@/components/ui/button'
 import * as FormPrimitive from '@/components/ui/form'
 import { loginWithCredentials, redirectGoogleLogin } from '@/data/auth'
 import { zLoginWithCredentials } from '@/data/utils/zSchema'
-import { toast } from '@/store/toast'
 
 const isLoadingAtom = atom(false)
 type FormValues = z.infer<typeof zLoginWithCredentials>
 
 export function Form() {
-  const router = useRouter()
-
   const [isResetPasswordDialogOpen, setIsResetPasswordDialogOpen] =
     React.useState(false)
   const startTransition = React.useTransition()[1]
@@ -48,33 +45,26 @@ export function Form() {
     setIsCredentialLoginLoading(true)
 
     startTransition(async () => {
-      setTimeout(async () => {
-        const res = await loginWithCredentials(values)
-        if (res.code === 'INVALID_CREDENTIALS') {
-          setError(
-            'password',
-            {
-              message: 'invalid credentials',
-            },
-            { shouldFocus: true }
-          )
-          setError(
-            'email',
-            {
-              message: 'invalid credentials',
-            },
-            { shouldFocus: true }
-          )
-        }
+      const res = await loginWithCredentials(values)
+      if (res.code === 'INVALID_CREDENTIALS') {
+        setError(
+          'password',
+          {
+            message: 'invalid credentials',
+          },
+          { shouldFocus: true }
+        )
+        setError(
+          'email',
+          {
+            message: 'invalid credentials',
+          },
+          { shouldFocus: true }
+        )
+      }
 
-        if (res.code === 'OK') {
-          toast.success('You are now logged in')
-          router.push('/')
-        }
-
-        setIsLoading(false)
-        setIsCredentialLoginLoading(false)
-      }, 2000)
+      setIsLoading(false)
+      setIsCredentialLoginLoading(false)
     })
   }
 

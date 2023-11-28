@@ -1,10 +1,8 @@
 import React from 'react'
-import { useRouter } from 'next/navigation'
 
 import * as Dialog from '@/components/ui/dialog'
 import { logout } from '@/data/user'
 import { useAppStore } from '@/store/app'
-import { toast } from '@/store/toast'
 
 import { Button } from '../ui/button'
 
@@ -34,7 +32,6 @@ export function LogoutDialog() {
 }
 
 function LogoutDialogContent({
-  handleClose,
   isPending,
   startTransition,
 }: {
@@ -42,17 +39,9 @@ function LogoutDialogContent({
   isPending: boolean
   startTransition: React.TransitionStartFunction
 }) {
-  const router = useRouter()
-  const resetAppState = useAppStore((s) => s.resetAppState)
-
   const handleLogout = () => {
     startTransition(async () => {
-      const res = await logout()
-      if (res.code === 'OK') {
-        toast.success('Logout successful')
-        resetAppState()
-        router.push('/login')
-      }
+      await logout()
     })
   }
 

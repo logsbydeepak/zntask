@@ -1,6 +1,7 @@
 'use server'
 
 import { revalidateTag } from 'next/cache'
+import { redirect } from 'next/navigation'
 import { eq } from 'drizzle-orm'
 
 import { db, dbSchema } from './db'
@@ -14,8 +15,7 @@ export const logout = h('AUTH', async ({ userId, token }) => {
 
   const redisRes = await redis.set(`logout:${token}`, userId)
   if (redisRes !== 'OK') throw new Error('Failed to set logout token in redis')
-
-  return r('OK')
+  redirect('/login')
 })
 
 export const getUser = h('AUTH', async ({ userId }) => {

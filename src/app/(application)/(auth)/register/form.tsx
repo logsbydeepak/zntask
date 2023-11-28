@@ -26,8 +26,6 @@ type FormValues = z.infer<typeof zRegisterWithCredentials>
 const isLoadingAtom = atom(false)
 
 export function Form() {
-  const router = useRouter()
-
   const startTransition = React.useTransition()[1]
   const [isLoading, setIsLoading] = useAtom(isLoadingAtom)
   const [isPasswordVisible, setIsPasswordVisible] = React.useState(false)
@@ -51,21 +49,15 @@ export function Form() {
     setIsCredentialRegisterLoading(true)
 
     startTransition(async () => {
-      setTimeout(async () => {
-        const res = await registerWithCredentials(values)
-        if (res.code === 'EMAIL_ALREADY_EXISTS') {
-          setError('email', {
-            message: 'already exists',
-          })
-        }
+      const res = await registerWithCredentials(values)
+      if (res.code === 'EMAIL_ALREADY_EXISTS') {
+        setError('email', {
+          message: 'already exists',
+        })
+      }
 
-        if (res.code === 'OK') {
-          toast.success('Your account has been created')
-          router.push('/')
-        }
-        setIsLoading(false)
-        setIsCredentialRegisterLoading(false)
-      }, 2000)
+      setIsLoading(false)
+      setIsCredentialRegisterLoading(false)
     })
   }
 
