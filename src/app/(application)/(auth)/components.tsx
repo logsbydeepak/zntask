@@ -1,7 +1,9 @@
 import React from 'react'
 import Link from 'next/link'
 import {
+  CheckCheckIcon,
   CheckCircleIcon,
+  CheckIcon,
   CircleIcon,
   EyeIcon,
   EyeOffIcon,
@@ -183,23 +185,16 @@ export function PasswordChecklistItem({
   isValid: boolean
 }) {
   return (
-    <div
-      className={cn(
-        'mr-2 mt-2 inline-block rounded-full border border-gray-200 px-2 py-0.5',
-        isValid && 'border-gray-100 bg-gray-50'
-      )}
-    >
-      <div className="flex items-center">
-        <span className="mr-1 h-2 w-2 text-gray-500">
-          {isValid ? (
-            <CheckCircleIcon strokeWidth={3} />
-          ) : (
-            <CircleIcon strokeWidth={3} />
-          )}
-        </span>
+    <div className="inline-flex items-center space-x-1 text-xs text-gray-500">
+      <span className="inline-block h-2 w-2">
+        {isValid ? (
+          <CheckIcon strokeWidth={3} />
+        ) : (
+          <CircleIcon strokeWidth={3} />
+        )}
+      </span>
 
-        <p className={cn('text-xs font-medium text-gray-500')}>{children}</p>
-      </div>
+      <p>{children}</p>
     </div>
   )
 }

@@ -103,7 +103,7 @@ export function Form({ token }: { token: string }) {
               )}
             </div>
 
-            <div className="mt-4">
+            <div className="mt-4 inline-flex flex-wrap gap-x-4 gap-y-1">
               {passwordChecklist.map((i) => (
                 <PasswordChecklistItem
                   key={i.label}

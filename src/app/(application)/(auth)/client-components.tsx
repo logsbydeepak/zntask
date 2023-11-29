@@ -7,11 +7,7 @@ import { useTheme } from 'next-themes'
 import { cn } from '@/utils/style'
 
 export function Navbar() {
-  const {
-    theme: themeProvider,
-    setTheme: setThemeProvider,
-    resolvedTheme,
-  } = useTheme()
+  const { theme: themeProvider, setTheme: setThemeProvider } = useTheme()
   const [theme, setCurrentTheme] = React.useState<string>('')
 
   React.useEffect(() => {
