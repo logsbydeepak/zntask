@@ -1,6 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
 import {
+  AsteriskIcon,
   CheckCheckIcon,
   CheckCircleIcon,
   CheckIcon,
@@ -8,6 +9,11 @@ import {
   EyeIcon,
   EyeOffIcon,
   KeyIcon,
+  LockIcon,
+  SpellCheck2,
+  SpellCheck2Icon,
+  TextIcon,
+  TypeIcon,
 } from 'lucide-react'
 
 import { GoogleIcon } from '@/components/icon/google'
@@ -77,18 +83,31 @@ export function ContinueWithGoogle({
   )
 }
 
-export function ResetPassword({ onClick }: { onClick: () => void }) {
+function BadgeButton({
+  children,
+  ...props
+}: { children: React.ReactNode } & React.ComponentPropsWithoutRef<'button'>) {
   return (
     <button
-      onClick={onClick}
-      type="button"
-      className="mr-2 inline-flex items-center rounded-full bg-orange-600 px-2 py-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-600 focus-visible:ring-offset-1"
+      {...props}
+      className="inline-flex items-center space-x-1 rounded-full bg-gray-50 px-3 py-0.5 text-xs font-medium text-gray-600 hover:text-gray-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-600 focus-visible:ring-offset-1"
     >
-      <span className="mr-1 h-2 w-2 text-white">
-        <KeyIcon strokeWidth={3} />
-      </span>
-      <span className="text-xs font-medium text-white">reset password</span>
+      {children}
     </button>
+  )
+}
+function BadgeButtonIcon({ children }: { children: React.ReactNode }) {
+  return <span className="h-2 w-2">{children}</span>
+}
+
+export function ResetPassword({ onClick }: { onClick: () => void }) {
+  return (
+    <BadgeButton onClick={onClick} type="button">
+      <BadgeButtonIcon>
+        <LockIcon strokeWidth={3} />
+      </BadgeButtonIcon>
+      <p>reset password</p>
+    </BadgeButton>
   )
 }
 
@@ -100,22 +119,16 @@ export function PasswordVisibilityToggle({
   onClick: () => void
 }) {
   return (
-    <button
-      onClick={onClick}
-      type="button"
-      className="mr-2 inline-flex items-center rounded-full bg-orange-600 px-2 py-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-600 focus-visible:ring-offset-1"
-    >
-      <span className="mr-1 h-2 w-2 text-white">
+    <BadgeButton type="button" onClick={onClick}>
+      <BadgeButtonIcon>
         {!isVisible ? (
-          <EyeIcon strokeWidth={3} />
+          <TypeIcon strokeWidth={3} />
         ) : (
-          <EyeOffIcon strokeWidth={3} />
+          <AsteriskIcon strokeWidth={3} />
         )}
-      </span>
-      <span className="text-xs font-medium text-white">
-        {!isVisible ? 'show Password' : 'hide password'}
-      </span>
-    </button>
+      </BadgeButtonIcon>
+      <p>{!isVisible ? 'show password' : 'hide password'}</p>
+    </BadgeButton>
   )
 }
 

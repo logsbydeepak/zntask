@@ -91,26 +91,30 @@ export function Form() {
               <FormPrimitive.Label htmlFor="password">
                 Password
               </FormPrimitive.Label>
+
               <FormPrimitive.Input
                 id="password"
                 {...register('password')}
                 placeholder="********"
                 type={isPasswordVisible ? 'text' : 'password'}
               />
-
-              <div>
-                <PasswordVisibilityToggle
-                  isVisible={isPasswordVisible}
-                  onClick={() => setIsPasswordVisible((prev) => !prev)}
-                />
-                <ResetPassword
-                  onClick={() => setIsResetPasswordDialogOpen(true)}
-                />
-                {errors.password && (
-                  <FormPrimitive.Error>
-                    {errors.password?.message}
-                  </FormPrimitive.Error>
-                )}
+              <div className="flex flex-wrap justify-between gap-y-2">
+                <div className="mr-4">
+                  {errors.password && (
+                    <FormPrimitive.Error>
+                      {errors.password?.message}
+                    </FormPrimitive.Error>
+                  )}
+                </div>
+                <div className="space-x-2">
+                  <PasswordVisibilityToggle
+                    isVisible={isPasswordVisible}
+                    onClick={() => setIsPasswordVisible((prev) => !prev)}
+                  />
+                  <ResetPassword
+                    onClick={() => setIsResetPasswordDialogOpen(true)}
+                  />
+                </div>
               </div>
             </div>
           </div>

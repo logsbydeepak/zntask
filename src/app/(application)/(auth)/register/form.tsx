@@ -65,7 +65,7 @@ export function Form() {
       <FormPrimitive.Fieldset disabled={isLoading}>
         <div className="my-8 space-y-4">
           <div className="flex space-x-4">
-            <div>
+            <div className="w-1/2">
               <FormPrimitive.Label htmlFor="firstName">
                 First Name
               </FormPrimitive.Label>
@@ -82,7 +82,7 @@ export function Form() {
               )}
             </div>
 
-            <div>
+            <div className="w-1/2">
               <FormPrimitive.Label htmlFor="lastName">
                 Last Name
               </FormPrimitive.Label>
@@ -117,16 +117,19 @@ export function Form() {
               placeholder="strong password"
               type={isPasswordVisible ? 'text' : 'password'}
             />
-            <div>
+
+            <div className="flex flex-wrap justify-between gap-y-2">
+              <div className="mr-4">
+                {errors.password && (
+                  <FormPrimitive.Error>
+                    {errors.password?.message}
+                  </FormPrimitive.Error>
+                )}
+              </div>
               <PasswordVisibilityToggle
                 isVisible={isPasswordVisible}
                 onClick={() => setIsPasswordVisible((prev) => !prev)}
               />
-              {errors.password && (
-                <FormPrimitive.Error>
-                  {errors.password?.message}
-                </FormPrimitive.Error>
-              )}
             </div>
 
             <div className="mt-4 inline-flex flex-wrap gap-x-4 gap-y-1">
