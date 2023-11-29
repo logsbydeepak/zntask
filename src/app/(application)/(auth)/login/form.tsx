@@ -1,9 +1,8 @@
 'use client'
 
 import React from 'react'
-import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { atom, Provider, useAtom } from 'jotai'
+import { atom, useAtom } from 'jotai'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -25,11 +24,11 @@ type FormValues = z.infer<typeof zLoginWithCredentials>
 export function Form() {
   const [isResetPasswordDialogOpen, setIsResetPasswordDialogOpen] =
     React.useState(false)
-  const startTransition = React.useTransition()[1]
-  const [isLoading, setIsLoading] = useAtom(isLoadingAtom)
+
+  const [isPending, startTransition] = React.useTransition()
   const [isPasswordVisible, setIsPasswordVisible] = React.useState(false)
-  const [isCredentialLoginLoading, setIsCredentialLoginLoading] =
-    React.useState(false)
+
+  const [isLoading, setIsLoading] = useAtom(isLoadingAtom)
 
   const {
     register,
@@ -40,31 +39,31 @@ export function Form() {
     resolver: zodResolver(zLoginWithCredentials),
   })
 
+  React.useEffect(() => {
+    setIsLoading(isPending)
+  }, [setIsLoading, isPending])
+
   const onSubmit = (values: FormValues) => {
-    setIsLoading(true)
-    setIsCredentialLoginLoading(true)
-
     startTransition(async () => {
-      const res = await loginWithCredentials(values)
-      if (res.code === 'INVALID_CREDENTIALS') {
-        setError(
-          'password',
-          {
-            message: 'invalid credentials',
-          },
-          { shouldFocus: true }
-        )
-        setError(
-          'email',
-          {
-            message: 'invalid credentials',
-          },
-          { shouldFocus: true }
-        )
-      }
-
-      setIsLoading(false)
-      setIsCredentialLoginLoading(false)
+      try {
+        const res = await loginWithCredentials(values)
+        if (res.code === 'INVALID_CREDENTIALS') {
+          setError(
+            'password',
+            {
+              message: 'invalid credentials',
+            },
+            { shouldFocus: true }
+          )
+          setError(
+            'email',
+            {
+              message: 'invalid credentials',
+            },
+            { shouldFocus: true }
+          )
+        }
+      } catch (error) {}
     })
   }
 
@@ -115,7 +114,7 @@ export function Form() {
               </div>
             </div>
           </div>
-          <Button className="w-full" isLoading={isCredentialLoginLoading}>
+          <Button className="w-full" isLoading={isPending}>
             Login
           </Button>
         </FormPrimitive.Fieldset>
@@ -129,14 +128,14 @@ export function Form() {
 }
 
 export function Action() {
-  const startTransition = React.useTransition()[1]
+  const [isPending, startTransition] = React.useTransition()
   const [isLoading, setIsLoading] = useAtom(isLoadingAtom)
-  const [isGoogleLoginLoading, setIsGoogleRegisterLoading] =
-    React.useState(false)
+
+  React.useEffect(() => {
+    setIsLoading(isPending)
+  }, [setIsLoading, isPending])
 
   const onClick = () => {
-    setIsLoading(true)
-    setIsGoogleRegisterLoading(true)
     startTransition(async () => {
       await redirectGoogleLogin()
     })
@@ -144,10 +143,7 @@ export function Action() {
   return (
     <>
       <fieldset disabled={isLoading}>
-        <ContinueWithGoogle
-          isLoading={isGoogleLoginLoading}
-          onClick={onClick}
-        />
+        <ContinueWithGoogle isLoading={isPending} onClick={onClick} />
       </fieldset>
       <AccountQuestion.Container>
         <AccountQuestion.Title>

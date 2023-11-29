@@ -26,11 +26,10 @@ type FormValues = z.infer<typeof zRegisterWithCredentials>
 const isLoadingAtom = atom(false)
 
 export function Form() {
-  const startTransition = React.useTransition()[1]
-  const [isLoading, setIsLoading] = useAtom(isLoadingAtom)
+  const [isPending, startTransition] = React.useTransition()
+
   const [isPasswordVisible, setIsPasswordVisible] = React.useState(false)
-  const [isCredentialRegisterLoading, setIsCredentialRegisterLoading] =
-    React.useState(false)
+  const [isLoading, setIsLoading] = useAtom(isLoadingAtom)
 
   const {
     register,
@@ -42,12 +41,13 @@ export function Form() {
     resolver: zodResolver(zRegisterWithCredentials),
   })
 
+  React.useEffect(() => {
+    setIsLoading(isPending)
+  }, [isPending, setIsLoading])
+
   const [watchPassword] = useDebounce(watch('password') ?? '', 500)
 
   const onSubmit = (values: FormValues) => {
-    setIsLoading(true)
-    setIsCredentialRegisterLoading(true)
-
     startTransition(async () => {
       const res = await registerWithCredentials(values)
       if (res.code === 'EMAIL_ALREADY_EXISTS') {
@@ -57,7 +57,6 @@ export function Form() {
       }
 
       setIsLoading(false)
-      setIsCredentialRegisterLoading(false)
     })
   }
 
@@ -160,7 +159,7 @@ export function Form() {
           </div>
         </div>
 
-        <Button className="w-full" isLoading={isCredentialRegisterLoading}>
+        <Button className="w-full" isLoading={isPending}>
           Register
         </Button>
       </FormPrimitive.Fieldset>
@@ -169,26 +168,23 @@ export function Form() {
 }
 
 export function Action() {
-  const startTransition = React.useTransition()[1]
+  const [isPending, startTransition] = React.useTransition()
   const [isLoading, setIsLoading] = useAtom(isLoadingAtom)
-  const [isGoogleRegisterLoading, setIsGoogleRegisterLoading] =
-    React.useState(false)
 
   const onClick = () => {
-    setIsLoading(true)
-    setIsGoogleRegisterLoading(true)
     startTransition(async () => {
       await redirectGoogleRegister()
     })
   }
 
+  React.useEffect(() => {
+    setIsLoading(isPending)
+  }, [setIsLoading, isPending])
+
   return (
     <>
       <fieldset disabled={isLoading}>
-        <ContinueWithGoogle
-          isLoading={isGoogleRegisterLoading}
-          onClick={onClick}
-        />
+        <ContinueWithGoogle isLoading={isPending} onClick={onClick} />
       </fieldset>
 
       <AccountQuestion.Container>
