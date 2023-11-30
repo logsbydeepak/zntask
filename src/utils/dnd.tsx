@@ -133,6 +133,10 @@ function DNDManager({ onDrop }: { onDrop: OnDropType }) {
   const dragPosition = useAtomValue(dragPositionAtom)
   const setOverId = useSetAtom(overIdAtom)
 
+  const [centerOfDrops, setCenterOfDrops] = React.useState<
+    { id: string; center: { x: number; y: number } }[]
+  >([])
+
   const deferredPosition = React.useDeferredValue(dragPosition)
 
   React.useEffect(() => {
@@ -149,22 +153,38 @@ function DNDManager({ onDrop }: { onDrop: OnDropType }) {
   }, [DNDId, onDrop])
 
   React.useEffect(() => {
+    if (!dragContainer) return
+    if (!dropContainers.length) return
+
+    if (dragContainer) {
+      const centerOfDrops: { id: string; center: { x: number; y: number } }[] =
+        []
+
+      dropContainers.forEach((c) => {
+        const dropRect = c.ref.current?.getBoundingClientRect()
+        if (!dropRect) return
+        const center = centerOfRectangle(dropRect)
+        centerOfDrops.push({ id: c.id, center })
+      })
+
+      setCenterOfDrops(centerOfDrops)
+    } else {
+      setCenterOfDrops([])
+    }
+  }, [dragContainer, dropContainers])
+
+  React.useEffect(() => {
     if (!deferredPosition) return
-    if (!!!dropContainers.length) return
+    if (!dragContainer) return
+    if (!centerOfDrops.length) return
 
-    const startRect = dragContainer?.ref.current?.getBoundingClientRect()
-    if (!startRect) return
-    const startCenter = centerOfRectangle(startRect)
+    const dragRect = dragContainer?.ref.current?.getBoundingClientRect()
+    if (!dragRect) return
+    const dragCenter = centerOfRectangle(dragRect)
 
-    const centerOfDrops: { id: string; center: { x: number; y: number } }[] = []
-    dropContainers.forEach((c) => {
-      const center = centerOfRectangle(c.ref.current?.getBoundingClientRect()!)
-      centerOfDrops.push({ id: c.id, center })
-    })
-
-    const distanceBetween = centerOfDrops.map((c) => ({
-      id: c.id,
-      distance: distance(startCenter, c.center),
+    const distanceBetween = centerOfDrops.map((i) => ({
+      id: i.id,
+      distance: distance(dragCenter, i.center),
     }))
 
     const over = distanceBetween.reduce((prev, curr) =>
@@ -172,7 +192,7 @@ function DNDManager({ onDrop }: { onDrop: OnDropType }) {
     )
 
     setOverId(over.id)
-  }, [deferredPosition, dropContainers, setOverId, dragContainer])
+  }, [deferredPosition, setOverId, dragContainer, centerOfDrops])
 
   return null
 }
