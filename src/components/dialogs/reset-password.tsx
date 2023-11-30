@@ -66,7 +66,7 @@ function ResetPasswordDialogContent({
       const res = await resetPassword(values)
       switch (res.code) {
         case 'OK':
-          toast.success('Please check your email')
+          toast.success('Check your email for reset link')
           handleClose()
 
         case 'EMAIL_ALREADY_SENT':

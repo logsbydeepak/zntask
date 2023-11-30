@@ -2,10 +2,12 @@
 
 import React from 'react'
 import * as ToastPrimitive from '@radix-ui/react-toast'
-import { AlertCircle, CheckCheckIcon } from 'lucide-react'
+import { AlertCircle, CheckCheckIcon, CheckIcon, XIcon } from 'lucide-react'
 
 import { Toast, useToastStore } from '@/store/toast'
 import { cn } from '@/utils/style'
+
+import { ExclamationIcon } from './icon/exclamation'
 
 export function ToastProvider() {
   const toast = useToastStore((s) => s.toasts)
@@ -16,7 +18,7 @@ export function ToastProvider() {
         <Item key={t.id} toast={t} />
       ))}
 
-      <ToastPrimitive.Viewport className="fixed bottom-0 right-0 w-96 space-y-3 pb-3 pr-3" />
+      <ToastPrimitive.Viewport className="fixed bottom-0 right-0 w-[340px] space-y-3 pb-5 pr-5" />
     </ToastPrimitive.Provider>
   )
 }
@@ -30,51 +32,31 @@ function Item({ toast }: { toast: Toast }) {
   return (
     <ToastPrimitive.Root
       onOpenChange={() => removeToast(toast.id)}
-      className="flex justify-between rounded-md border border-gray-200 bg-white shadow-sm drop-shadow-sm"
+      className="relative rounded-lg border border-gray-100 bg-white shadow-md shadow-gray-950/5"
     >
-      <div className="flex py-4 pl-5">
-        <div className="mr-3">
+      <div className="flex items-center space-x-2 p-4">
+        <div>
           {isError && (
-            <Icon className="bg-red-700 text-red-50">
-              <AlertCircle strokeWidth={2.5} />
+            <Icon className="bg-red-700">
+              <ExclamationIcon />
             </Icon>
           )}
 
           {isSuccess && (
-            <Icon className="bg-green-700 text-green-50">
-              <CheckCheckIcon strokeWidth={2.5} />
+            <Icon className="bg-green-800">
+              <CheckIcon strokeWidth={3} />
             </Icon>
           )}
         </div>
 
-        <div>
-          <ToastPrimitive.Title className="text-sm font-medium">
-            {isError && 'Error'}
-            {isSuccess && 'Success'}
-          </ToastPrimitive.Title>
-          <ToastPrimitive.Description className="text-sm text-gray-600">
-            {toast.message}
-          </ToastPrimitive.Description>
-        </div>
+        <ToastPrimitive.Description className="text-[13px] font-medium text-gray-700">
+          {toast.message}
+        </ToastPrimitive.Description>
       </div>
 
-      <div className="flex flex-col border-l border-gray-200 text-xs font-medium text-gray-600">
-        <ToastPrimitive.Close asChild>
-          <Button>close</Button>
-        </ToastPrimitive.Close>
-        {toast.action && (
-          <>
-            <div className="border-t border-gray-200" />
-            <ToastPrimitive.Action
-              onClick={toast.action.onClick}
-              altText={toast.action.label}
-              asChild
-            >
-              <Button>{toast.action.label}</Button>
-            </ToastPrimitive.Action>
-          </>
-        )}
-      </div>
+      <ToastPrimitive.Close className="absolute right-1.5 top-1.5 text-gray-500 hover:text-gray-950">
+        <XIcon className="h-3.5 w-3.5" />
+      </ToastPrimitive.Close>
     </ToastPrimitive.Root>
   )
 }
@@ -101,8 +83,13 @@ function Icon({
   className?: string
 }) {
   return (
-    <div className={cn('mt-0.5 rounded-full p-1', className)}>
-      <div className="h-3 w-3">{children}</div>
+    <div
+      className={cn(
+        ' flex h-4 w-4 items-center justify-center rounded-full text-white',
+        className
+      )}
+    >
+      <div className="h-2.5 w-2.5">{children}</div>
     </div>
   )
 }

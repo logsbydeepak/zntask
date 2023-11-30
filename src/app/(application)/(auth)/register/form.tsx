@@ -1,9 +1,8 @@
 'use client'
 
 import React from 'react'
-import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { atom, Provider, useAtom } from 'jotai'
+import { atom, useAtom } from 'jotai'
 import { useForm } from 'react-hook-form'
 import { useDebounce } from 'use-debounce'
 import { z } from 'zod'
@@ -49,14 +48,16 @@ export function Form() {
 
   const onSubmit = (values: FormValues) => {
     startTransition(async () => {
-      const res = await registerWithCredentials(values)
-      if (res.code === 'EMAIL_ALREADY_EXISTS') {
-        setError('email', {
-          message: 'already exists',
-        })
+      try {
+        const res = await registerWithCredentials(values)
+        if (res.code === 'EMAIL_ALREADY_EXISTS') {
+          setError('email', {
+            message: 'already exists',
+          })
+        }
+      } catch (error) {
+        toast.error('Something went wrong')
       }
-
-      setIsLoading(false)
     })
   }
 

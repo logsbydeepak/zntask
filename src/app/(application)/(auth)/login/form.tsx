@@ -17,6 +17,7 @@ import { Button } from '@/components/ui/button'
 import * as FormPrimitive from '@/components/ui/form'
 import { loginWithCredentials, redirectGoogleLogin } from '@/data/auth'
 import { zLoginWithCredentials } from '@/data/utils/zSchema'
+import { toast } from '@/store/toast'
 
 const isLoadingAtom = atom(false)
 type FormValues = z.infer<typeof zLoginWithCredentials>
@@ -63,7 +64,9 @@ export function Form() {
             { shouldFocus: true }
           )
         }
-      } catch (error) {}
+      } catch (error) {
+        toast.error('Something went wrong')
+      }
     })
   }
 
