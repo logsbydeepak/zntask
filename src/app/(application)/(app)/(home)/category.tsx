@@ -2,6 +2,7 @@ import React from 'react'
 import Link from 'next/link'
 import {
   ArchiveRestoreIcon,
+  CircleIcon,
   EditIcon,
   HeartIcon,
   HeartOffIcon,
@@ -98,7 +99,7 @@ export const CategoryItem = React.forwardRef<
               <div>
                 <div
                   className={cn(
-                    'h-3 w-3 rounded-[4.5px]',
+                    'h-2.5 w-2.5 rounded-full',
                     `bg-${getCategoryColor(category.indicator)}-600`
                   )}
                 />

@@ -50,7 +50,7 @@ export function Form() {
     startTransition(async () => {
       try {
         const res = await registerWithCredentials(values)
-        if (res.code === 'EMAIL_ALREADY_EXISTS') {
+        if (res?.code === 'EMAIL_ALREADY_EXISTS') {
           setError('email', {
             message: 'already exists',
           })

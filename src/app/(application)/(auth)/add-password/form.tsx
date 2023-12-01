@@ -46,34 +46,40 @@ export function Form({ token }: { token: string }) {
     handleSubmit,
     formState: { errors },
     watch,
-    setError,
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
   })
 
   const [watchPassword] = useDebounce(watch('password') ?? '', 500)
 
+  React.useEffect(() => {
+    setIsLoading(isPending)
+  }, [isPending, setIsLoading])
+
   const onSubmit = (values: FormValues) => {
     setIsLoading(true)
     startTransition(async () => {
-      const res = await addPassword({ ...values, token })
+      try {
+        const res = await addPassword({ ...values, token })
 
-      switch (res.code) {
-        case 'OK':
-          toast.success('password added successfully')
-          router.push('/login')
-          break
+        switch (res?.code) {
+          case 'OK':
+            toast.success('password added successfully')
+            router.push('/login')
+            break
 
-        case 'INVALID_TOKEN':
-          toast.success('invalid token')
-          break
+          case 'INVALID_TOKEN':
+            toast.success('invalid token')
+            break
 
-        case 'TOKEN_EXPIRED':
-          toast.success('token expired')
-          break
+          case 'TOKEN_EXPIRED':
+            toast.success('token expired')
+            break
+        }
+      } catch (error) {
+        toast.error('Something went wrong')
       }
     })
-    setIsLoading(false)
   }
 
   return (

@@ -48,7 +48,7 @@ export function Form() {
     startTransition(async () => {
       try {
         const res = await loginWithCredentials(values)
-        if (res.code === 'INVALID_CREDENTIALS') {
+        if (res?.code === 'INVALID_CREDENTIALS') {
           setError(
             'password',
             {

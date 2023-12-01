@@ -9,6 +9,7 @@ import {
   CalendarIcon,
   ChevronDownIcon,
   ChevronUpIcon,
+  CircleIcon,
   FolderIcon,
   GanttChartIcon,
   HeartIcon,
@@ -222,7 +223,7 @@ function CategoryItem({
                 <Item.LabelIcon>
                   <div
                     className={cn(
-                      'h-3 w-3 rounded-[4.5px]',
+                      'h-2.5 w-2.5 rounded-full',
                       `bg-${getCategoryColor(category.indicator)}-600`
                     )}
                   />

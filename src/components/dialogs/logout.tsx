@@ -3,6 +3,7 @@ import React from 'react'
 import * as Dialog from '@/components/ui/dialog'
 import { logout } from '@/data/user'
 import { useAppStore } from '@/store/app'
+import { toast } from '@/store/toast'
 
 import { Button } from '../ui/button'
 
@@ -41,7 +42,11 @@ function LogoutDialogContent({
 }) {
   const handleLogout = () => {
     startTransition(async () => {
-      await logout()
+      try {
+        await logout()
+      } catch (error) {
+        toast.error('Something went wrong')
+      }
     })
   }
 

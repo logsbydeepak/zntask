@@ -28,13 +28,16 @@ export function r(code: string, res?: object) {
   throw new Error('Something went wrong!')
 }
 
+// zod | fn
 export function h<
   Z extends z.ZodTypeAny,
   FN extends ({ input }: { input: z.infer<Z> }) => Promise<any>,
 >(z: Z, fn: FN): (input: z.infer<Z>) => ReturnType<FN>
 
+// fn
 export function h<FN extends () => Promise<any>>(fn: FN): () => ReturnType<FN>
 
+// auth + zod + fn
 export function h<
   A extends 'AUTH',
   Z extends z.ZodTypeAny,
@@ -48,6 +51,7 @@ export function h<
   }) => Promise<any>,
 >(auth: A, z: Z, fn: FN): (input: z.infer<Z>) => ReturnType<FN>
 
+// auth + fn
 export function h<
   A extends 'AUTH',
   FN extends ({ userId }: { userId: string; token: string }) => Promise<any>,
@@ -56,7 +60,7 @@ export function h<
 export function h(...args: any[]) {
   // auth
   if (typeof args[0] === 'string') {
-    // auth + zod
+    // auth + fn
     if (typeof args[1] === 'function') {
       return async function () {
         try {
