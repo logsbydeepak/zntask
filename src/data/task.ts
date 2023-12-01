@@ -29,10 +29,9 @@ const zChildTask = z.object({
   parentId: zRequired.refine(isValid, { message: 'Invalid ulid' }),
 })
 
-export const createParentTask = h(
-  'AUTH',
-  zParentTask,
-  async ({ userId, input }) => {
+export const createParentTask = h.auth
+  .input(zParentTask)
+  .fn(async ({ userId, input }) => {
     const categoryId = input.categoryId
 
     if (categoryId) {
@@ -47,12 +46,10 @@ export const createParentTask = h(
 
     await db.insert(dbSchema.parentTasks).values({ ...input, userId })
     return r('OK', { input })
-  }
-)
-export const createChildTask = h(
-  'AUTH',
-  zChildTask,
-  async ({ userId, input }) => {
+  })
+export const createChildTask = h.auth
+  .input(zChildTask)
+  .fn(async ({ userId, input }) => {
     const parentTask = await db.query.parentTasks.findFirst({
       where(fields, operators) {
         return operators.eq(fields.id, input.parentId)
@@ -66,13 +63,11 @@ export const createChildTask = h(
       .values({ ...input, userId, categoryId: parentTask.categoryId })
 
     return r('OK', { input })
-  }
-)
+  })
 
-export const editParentTask = h(
-  'AUTH',
-  zParentTask,
-  async ({ input, userId }) => {
+export const editParentTask = h.auth
+  .input(zParentTask)
+  .fn(async ({ input, userId }) => {
     const parentTask = await db.query.parentTasks.findFirst({
       where(fields, operators) {
         return operators.eq(fields.id, input.id)
@@ -105,30 +100,26 @@ export const editParentTask = h(
     }
 
     return r('OK')
-  }
-)
+  })
 
-export const editChildTask = h(
-  'AUTH',
-  zChildTask,
-  async ({ input, userId }) => {
+export const editChildTask = h.auth
+  .input(zChildTask)
+  .fn(async ({ input, userId }) => {
     await db
       .update(dbSchema.childTask)
       .set(input)
       .where(eq(dbSchema.childTask.id, input.id))
 
     return r('OK')
-  }
-)
+  })
 
 const zDeleteTask = z.object({
   id: zRequired.refine(isValid, { message: 'Invalid ulid' }),
 })
 
-export const deleteParentTask = h(
-  'AUTH',
-  zDeleteTask,
-  async ({ input, userId }) => {
+export const deleteParentTask = h.auth
+  .input(zDeleteTask)
+  .fn(async ({ input, userId }) => {
     await db
       .delete(dbSchema.parentTasks)
       .where(eq(dbSchema.parentTasks.id, input.id))
@@ -138,16 +129,13 @@ export const deleteParentTask = h(
       .where(eq(dbSchema.childTask.parentId, input.id))
 
     return r('OK', { input })
-  }
-)
+  })
 
-export const deleteChildTask = h(
-  'AUTH',
-  zDeleteTask,
-  async ({ input, userId }) => {
+export const deleteChildTask = h.auth
+  .input(zDeleteTask)
+  .fn(async ({ input, userId }) => {
     await db
       .delete(dbSchema.childTask)
       .where(eq(dbSchema.childTask.id, input.id))
     return r('OK', { input })
-  }
-)
+  })

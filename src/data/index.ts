@@ -1,7 +1,7 @@
 import { db } from './db'
 import { h, r } from './utils/handler'
 
-export const getInitialData = h('AUTH', async ({ userId }) => {
+export const getInitialData = h.auth.fn(async ({ userId }) => {
   const data = await db.query.users.findFirst({
     where(fields, operators) {
       return operators.eq(fields.id, userId)

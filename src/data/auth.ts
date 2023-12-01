@@ -33,19 +33,19 @@ export const getUserLogin = async (query: any) => {
   return await getGoogleData(googleClient(LOGIN_PAGE_URL), query)
 }
 
-export const redirectGoogleLogin = h(async () => {
+export const redirectGoogleLogin = h.fn(async () => {
   const url = generateGoogleAuthUrl(LOGIN_PAGE_URL)
   redirect(url)
 })
 
-export const redirectGoogleRegister = h(async () => {
+export const redirectGoogleRegister = h.fn(async () => {
   const url = generateGoogleAuthUrl(REGISTER_PAGE_URL)
   redirect(url)
 })
 
-export const loginWithCredentials = h(
-  zLoginWithCredentials,
-  async ({ input }) => {
+export const loginWithCredentials = h
+  .input(zLoginWithCredentials)
+  .fn(async ({ input }) => {
     const user = await db.query.users.findFirst({
       with: {
         credentialAuth: true,
@@ -68,12 +68,11 @@ export const loginWithCredentials = h(
     const token = await generateAuthJWT(user.id)
     setAuthCookie(token)
     redirect('/')
-  }
-)
+  })
 
-export const registerWithCredentials = h(
-  zRegisterWithCredentials,
-  async function ({ input }) {
+export const registerWithCredentials = h
+  .input(zRegisterWithCredentials)
+  .fn(async function ({ input }) {
     const isEmailAlreadyExists = await db.query.users.findFirst({
       where(fields, operators) {
         return operators.eq(fields.email, input.email)
@@ -99,10 +98,9 @@ export const registerWithCredentials = h(
     const token = await generateAuthJWT(id)
     setAuthCookie(token)
     redirect('/')
-  }
-)
+  })
 
-export const resetPassword = h(zResetPassword, async ({ input }) => {
+export const resetPassword = h.input(zResetPassword).fn(async ({ input }) => {
   const user = await db.query.users.findFirst({
     where(fields, operators) {
       return operators.eq(fields.email, input.email)
@@ -150,7 +148,7 @@ const zSchema = z
     path: ['confirmPassword'],
   })
 
-export const addPassword = h(zSchema, async function ({ input }) {
+export const addPassword = h.input(zSchema).fn(async function ({ input }) {
   const token = await checkToken(input.token)
   if (token.code === 'INVALID_TOKEN') return r('INVALID_TOKEN')
   if (token.code === 'TOKEN_EXPIRED') return r('TOKEN_EXPIRED')

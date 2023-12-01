@@ -10,7 +10,7 @@ import { redis, utapi } from './utils/config'
 import { h, r } from './utils/handler'
 import { zUpdateName } from './utils/zSchema'
 
-export const logout = h('AUTH', async ({ userId, token }) => {
+export const logout = h.auth.fn(async ({ userId, token }) => {
   removeAuthCookie()
 
   const redisRes = await redis.set(`logout:${token}`, userId)
@@ -18,7 +18,7 @@ export const logout = h('AUTH', async ({ userId, token }) => {
   redirect('/login')
 })
 
-export const getUser = h('AUTH', async ({ userId }) => {
+export const getUser = h.auth.fn(async ({ userId }) => {
   const user = await db.query.users.findFirst({
     where(fields, operators) {
       return operators.eq(fields.id, userId)
@@ -41,7 +41,7 @@ export const getUser = h('AUTH', async ({ userId }) => {
   })
 })
 
-export const getUserWithAuth = h('AUTH', async ({ userId }) => {
+export const getUserWithAuth = h.auth.fn(async ({ userId }) => {
   const user = await db.query.users.findFirst({
     with: {
       credentialAuth: true,
@@ -78,17 +78,19 @@ export const getUserWithAuth = h('AUTH', async ({ userId }) => {
   })
 })
 
-export const updateName = h('AUTH', zUpdateName, async ({ userId, input }) => {
-  await db
-    .update(dbSchema.users)
-    .set({ firstName: input.firstName, lastName: input.lastName })
-    .where(eq(dbSchema.users.id, userId))
-  revalidateTag('user')
+export const updateName = h.auth
+  .input(zUpdateName)
+  .fn(async ({ userId, input }) => {
+    await db
+      .update(dbSchema.users)
+      .set({ firstName: input.firstName, lastName: input.lastName })
+      .where(eq(dbSchema.users.id, userId))
+    revalidateTag('user')
 
-  return r('OK')
-})
+    return r('OK')
+  })
 
-export const removeProfilePicture = h('AUTH', async ({ userId }) => {
+export const removeProfilePicture = h.auth.fn(async ({ userId }) => {
   const user = await db.query.users.findFirst({
     where(fields, operators) {
       return operators.eq(fields.id, userId)
@@ -110,7 +112,7 @@ export const removeProfilePicture = h('AUTH', async ({ userId }) => {
   return r('OK')
 })
 
-export const revalidateUser = h('AUTH', async ({ userId }) => {
+export const revalidateUser = h.auth.fn(async ({ userId }) => {
   revalidateTag('user')
 
   return r('OK')
