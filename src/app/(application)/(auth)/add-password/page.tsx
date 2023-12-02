@@ -3,16 +3,17 @@ import { redirect } from 'next/navigation'
 import { z } from 'zod'
 
 import {
-  ActionContainer,
+  AccountQuestion,
   FormContainer,
   Logo,
+  Separator,
   SubTitle,
   Title,
 } from '@/app/(application)/(auth)/components'
 import { checkToken } from '@/data/utils'
 import { zRequired } from '@/utils/zSchema'
 
-import { Action, Form } from './form'
+import { Form } from './form'
 
 export const metadata: Metadata = {
   title: 'Add password',
@@ -36,24 +37,19 @@ export default async function Page({
   const isTokenValid = token.code === 'OK'
 
   return (
-    <>
-      <FormContainer>
-        <Logo />
-        <Title>Add Password</Title>
-        <SubTitle>Add password to your account</SubTitle>
-        {isTokenValid ? (
-          <Form token={validate.data.token} />
-        ) : (
-          <Message>
-            {token.code === 'TOKEN_EXPIRED' && 'time out'}
-            {token.code === 'INVALID_TOKEN' && 'invalid token'}
-          </Message>
-        )}
-      </FormContainer>
-      <ActionContainer>
-        <Action />
-      </ActionContainer>
-    </>
+    <FormContainer>
+      <Logo />
+      <Title>Add Password</Title>
+      <SubTitle>Add password to your account</SubTitle>
+      {isTokenValid ? (
+        <Form token={'dsf'} />
+      ) : (
+        <Message>
+          {token.code === 'TOKEN_EXPIRED' && 'time out'}
+          {token.code === 'INVALID_TOKEN' && 'invalid token'}
+        </Message>
+      )}
+    </FormContainer>
   )
 }
 

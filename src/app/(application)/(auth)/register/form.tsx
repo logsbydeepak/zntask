@@ -2,7 +2,6 @@
 
 import React from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { atom, useAtom } from 'jotai'
 import { useForm } from 'react-hook-form'
 import { useDebounce } from 'use-debounce'
 import { z } from 'zod'
@@ -13,6 +12,7 @@ import {
   passwordChecklist,
   PasswordChecklistItem,
   PasswordVisibilityToggle,
+  Separator,
 } from '@/app/(application)/(auth)/components'
 import { Button } from '@/components/ui/button'
 import * as FormPrimitive from '@/components/ui/form'
@@ -22,13 +22,13 @@ import { toast } from '@/store/toast'
 
 type FormValues = z.infer<typeof zRegisterWithCredentials>
 
-const isLoadingAtom = atom(false)
-
 export function Form() {
-  const [isPending, startTransition] = React.useTransition()
-
   const [isPasswordVisible, setIsPasswordVisible] = React.useState(false)
-  const [isLoading, setIsLoading] = useAtom(isLoadingAtom)
+  const [isLoading, setIsLoading] = React.useState(false)
+
+  const [isCredentialLoading, startRegisterWithCredentials] =
+    React.useTransition()
+  const [isGoogleLoading, startRegisterWithGoogle] = React.useTransition()
 
   const {
     register,
@@ -41,13 +41,13 @@ export function Form() {
   })
 
   React.useEffect(() => {
-    setIsLoading(isPending)
-  }, [isPending, setIsLoading])
+    setIsLoading(isGoogleLoading || isCredentialLoading)
+  }, [setIsLoading, isGoogleLoading, isCredentialLoading])
 
   const [watchPassword] = useDebounce(watch('password') ?? '', 500)
 
-  const onSubmit = (values: FormValues) => {
-    startTransition(async () => {
+  const handleRegisterWithCredentials = (values: FormValues) => {
+    startRegisterWithCredentials(async () => {
       try {
         const res = await registerWithCredentials(values)
         if (res?.code === 'EMAIL_ALREADY_EXISTS') {
@@ -61,10 +61,25 @@ export function Form() {
     })
   }
 
+  const handleRegisterWithGoogle = () => {
+    if (isLoading) return
+    startRegisterWithGoogle(async () => {
+      await redirectGoogleRegister()
+    })
+  }
+
   return (
-    <FormPrimitive.Root onSubmit={handleSubmit(onSubmit)}>
+    <FormPrimitive.Root onSubmit={handleSubmit(handleRegisterWithCredentials)}>
       <FormPrimitive.Fieldset disabled={isLoading}>
         <div className="my-8 space-y-4">
+          <fieldset disabled={isLoading}>
+            <ContinueWithGoogle
+              isLoading={isGoogleLoading}
+              onClick={handleRegisterWithGoogle}
+            />
+          </fieldset>
+
+          <Separator />
           <div className="flex space-x-4">
             <div className="w-1/2">
               <FormPrimitive.Label htmlFor="firstName">
@@ -163,42 +178,20 @@ export function Form() {
           </div>
         </div>
 
-        <Button className="w-full" isLoading={isPending}>
+        <Button className="w-full" isLoading={isCredentialLoading}>
           Register
         </Button>
       </FormPrimitive.Fieldset>
+      <div className="mt-4">
+        <AccountQuestion.Container>
+          <AccountQuestion.Title>
+            Already have an account?{' '}
+            <AccountQuestion.Action href="/login" disabled={isLoading}>
+              Login
+            </AccountQuestion.Action>
+          </AccountQuestion.Title>
+        </AccountQuestion.Container>
+      </div>
     </FormPrimitive.Root>
-  )
-}
-
-export function Action() {
-  const [isPending, startTransition] = React.useTransition()
-  const [isLoading, setIsLoading] = useAtom(isLoadingAtom)
-
-  const onClick = () => {
-    startTransition(async () => {
-      await redirectGoogleRegister()
-    })
-  }
-
-  React.useEffect(() => {
-    setIsLoading(isPending)
-  }, [setIsLoading, isPending])
-
-  return (
-    <>
-      <fieldset disabled={isLoading}>
-        <ContinueWithGoogle isLoading={isPending} onClick={onClick} />
-      </fieldset>
-
-      <AccountQuestion.Container>
-        <AccountQuestion.Title>
-          Already have an account?{' '}
-          <AccountQuestion.Action href="/login" disabled={isLoading}>
-            Login
-          </AccountQuestion.Action>
-        </AccountQuestion.Title>
-      </AccountQuestion.Container>
-    </>
   )
 }

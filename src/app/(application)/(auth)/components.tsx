@@ -2,17 +2,9 @@ import React from 'react'
 import Link from 'next/link'
 import {
   AsteriskIcon,
-  CheckCheckIcon,
-  CheckCircleIcon,
   CheckIcon,
   CircleIcon,
-  EyeIcon,
-  EyeOffIcon,
-  KeyIcon,
   LockIcon,
-  SpellCheck2,
-  SpellCheck2Icon,
-  TextIcon,
   TypeIcon,
 } from 'lucide-react'
 
@@ -35,21 +27,13 @@ export function FormContainer({
   )
 }
 
-export function ActionContainer({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="space-y-4 px-10 py-5 md:mt-10 md:border-t md:border-gray-100 md:bg-gray-50 md:py-10">
-      {children}
-    </div>
-  )
-}
-
 export function Logo() {
   return (
-    <div className="mb-4 rounded-full bg-orange-600 p-3">
+    <Link className="mb-4 rounded-full bg-orange-600 p-3" href="/">
       <div className="h-4 w-4">
         <LogoIcon className="h-full w-full text-white" />
       </div>
-    </div>
+    </Link>
   )
 }
 
@@ -59,6 +43,12 @@ export function Title({ children }: { children: React.ReactNode }) {
 
 export function SubTitle({ children }: { children: React.ReactNode }) {
   return <p className="text-center text-sm text-gray-500">{children}</p>
+}
+
+export function Separator() {
+  return (
+    <div className="-ml-[5%] w-[110%] border-b border-dashed border-gray-200" />
+  )
 }
 
 export function ContinueWithGoogle({

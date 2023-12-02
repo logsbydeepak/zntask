@@ -146,25 +146,3 @@ export function Form({ token }: { token: string }) {
     </FormPrimitive.Root>
   )
 }
-
-export function Action() {
-  const isLoading = useAtomValue(isLoadingAtom)
-  const router = useRouter()
-
-  return (
-    <>
-      <fieldset disabled={isLoading}>
-        <Button
-          intent="secondary"
-          className="w-full"
-          onClick={() => router.push('/')}
-        >
-          <div className="mr-2 h-4 w-4">
-            <HomeIcon />
-          </div>
-          <span>Return to home</span>
-        </Button>
-      </fieldset>
-    </>
-  )
-}

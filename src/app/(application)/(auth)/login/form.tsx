@@ -2,7 +2,6 @@
 
 import React from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { atom, useAtom } from 'jotai'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -11,6 +10,7 @@ import {
   ContinueWithGoogle,
   PasswordVisibilityToggle,
   ResetPassword,
+  Separator,
 } from '@/app/(application)/(auth)/components'
 import { ResetPasswordDialog } from '@/components/dialogs/reset-password'
 import { Button } from '@/components/ui/button'
@@ -87,7 +87,7 @@ export function Form() {
               onClick={handleLoginWithGoogle}
             />
           </fieldset>
-          <div className="-ml-[5%] w-[110%] border-b border-dashed border-gray-200" />
+          <Separator />
           <div>
             <FormPrimitive.Label htmlFor="email">Email</FormPrimitive.Label>
             <FormPrimitive.Input
