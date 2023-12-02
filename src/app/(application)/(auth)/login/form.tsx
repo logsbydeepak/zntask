@@ -78,16 +78,19 @@ export function Form() {
   }
 
   return (
-    <FormPrimitive.Root onSubmit={handleSubmit(handleLoginWithCredentials)}>
-      <FormPrimitive.Fieldset disabled={isLoading}>
-        <div className="my-8 space-y-4">
-          <fieldset disabled={isLoading}>
-            <ContinueWithGoogle
-              isLoading={isGoogleLoading}
-              onClick={handleLoginWithGoogle}
-            />
-          </fieldset>
-          <Separator />
+    <>
+      <fieldset disabled={isLoading}>
+        <ContinueWithGoogle
+          isLoading={isGoogleLoading}
+          onClick={handleLoginWithGoogle}
+        />
+      </fieldset>
+      <Separator />
+      <FormPrimitive.Root
+        onSubmit={handleSubmit(handleLoginWithCredentials)}
+        id="login_credentials_form"
+      >
+        <FormPrimitive.Fieldset disabled={isLoading} className="space-y-2.5">
           <div>
             <FormPrimitive.Label htmlFor="email">Email</FormPrimitive.Label>
             <FormPrimitive.Input
@@ -131,25 +134,27 @@ export function Form() {
               </div>
             </div>
           </div>
-        </div>
-        <Button className="w-full" isLoading={isCredentialLoading}>
-          Login
-        </Button>
-      </FormPrimitive.Fieldset>
-      <div className="pt-4">
-        <AccountQuestion.Container>
-          <AccountQuestion.Title>
-            Already have an account?{' '}
-            <AccountQuestion.Action href="/register" disabled={isLoading}>
-              Register
-            </AccountQuestion.Action>
-          </AccountQuestion.Title>
-        </AccountQuestion.Container>
-      </div>
+        </FormPrimitive.Fieldset>
+      </FormPrimitive.Root>
+      <Button
+        className="w-full"
+        isLoading={isCredentialLoading}
+        form="login_credentials_form"
+      >
+        Login
+      </Button>
+      <AccountQuestion.Container>
+        <AccountQuestion.Title>
+          Already have an account?{' '}
+          <AccountQuestion.Action href="/register" disabled={isLoading}>
+            Register
+          </AccountQuestion.Action>
+        </AccountQuestion.Title>
+      </AccountQuestion.Container>
       <ResetPasswordDialog
         isOpen={isResetPasswordDialogOpen}
         setIsOpen={setIsResetPasswordDialogOpen}
       />
-    </FormPrimitive.Root>
+    </>
   )
 }

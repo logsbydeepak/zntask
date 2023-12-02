@@ -26,9 +26,11 @@ export default async function Page({
 
   return (
     <FormContainer>
-      <Logo />
-      <Title>Login to zntask</Title>
-      <SubTitle>Continue where you left</SubTitle>
+      <div className="flex w-full flex-col items-center">
+        <Logo />
+        <Title>Login to zntask</Title>
+        <SubTitle>Continue where you left</SubTitle>
+      </div>
       <Form />
     </FormContainer>
   )

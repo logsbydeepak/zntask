@@ -69,17 +69,19 @@ export function Form() {
   }
 
   return (
-    <FormPrimitive.Root onSubmit={handleSubmit(handleRegisterWithCredentials)}>
-      <FormPrimitive.Fieldset disabled={isLoading}>
-        <div className="my-8 space-y-4">
-          <fieldset disabled={isLoading}>
-            <ContinueWithGoogle
-              isLoading={isGoogleLoading}
-              onClick={handleRegisterWithGoogle}
-            />
-          </fieldset>
-
-          <Separator />
+    <>
+      <fieldset disabled={isLoading}>
+        <ContinueWithGoogle
+          isLoading={isGoogleLoading}
+          onClick={handleRegisterWithGoogle}
+        />
+      </fieldset>
+      <Separator />
+      <FormPrimitive.Root
+        onSubmit={handleSubmit(handleRegisterWithCredentials)}
+        id="register_credentials_form"
+      >
+        <FormPrimitive.Fieldset disabled={isLoading} className="space-y-2.5">
           <div className="flex space-x-4">
             <div className="w-1/2">
               <FormPrimitive.Label htmlFor="firstName">
@@ -134,29 +136,31 @@ export function Form() {
               type={isPasswordVisible ? 'text' : 'password'}
             />
 
-            <div className="flex flex-wrap justify-between gap-y-2">
-              <div className="mr-4">
-                {errors.password && (
-                  <FormPrimitive.Error>
-                    {errors.password?.message}
-                  </FormPrimitive.Error>
-                )}
+            <div className="space-y-2.5">
+              <div className="flex flex-wrap justify-between gap-y-2">
+                <div className="mr-4">
+                  {errors.password && (
+                    <FormPrimitive.Error>
+                      {errors.password?.message}
+                    </FormPrimitive.Error>
+                  )}
+                </div>
+                <PasswordVisibilityToggle
+                  isVisible={isPasswordVisible}
+                  onClick={() => setIsPasswordVisible((prev) => !prev)}
+                />
               </div>
-              <PasswordVisibilityToggle
-                isVisible={isPasswordVisible}
-                onClick={() => setIsPasswordVisible((prev) => !prev)}
-              />
-            </div>
 
-            <div className="mt-4 inline-flex flex-wrap gap-x-4 gap-y-1">
-              {passwordChecklist.map((i) => (
-                <PasswordChecklistItem
-                  key={i.label}
-                  isValid={i.condition(watchPassword)}
-                >
-                  {i.label}
-                </PasswordChecklistItem>
-              ))}
+              <div className="inline-flex flex-wrap gap-x-4 gap-y-1">
+                {passwordChecklist.map((i) => (
+                  <PasswordChecklistItem
+                    key={i.label}
+                    isValid={i.condition(watchPassword)}
+                  >
+                    {i.label}
+                  </PasswordChecklistItem>
+                ))}
+              </div>
             </div>
           </div>
 
@@ -176,22 +180,23 @@ export function Form() {
               </FormPrimitive.Error>
             )}
           </div>
-        </div>
-
-        <Button className="w-full" isLoading={isCredentialLoading}>
-          Register
-        </Button>
-      </FormPrimitive.Fieldset>
-      <div className="mt-4">
-        <AccountQuestion.Container>
-          <AccountQuestion.Title>
-            Already have an account?{' '}
-            <AccountQuestion.Action href="/login" disabled={isLoading}>
-              Login
-            </AccountQuestion.Action>
-          </AccountQuestion.Title>
-        </AccountQuestion.Container>
-      </div>
-    </FormPrimitive.Root>
+        </FormPrimitive.Fieldset>
+      </FormPrimitive.Root>
+      <Button
+        className="w-full"
+        isLoading={isCredentialLoading}
+        form="register_credentials_form"
+      >
+        Register
+      </Button>
+      <AccountQuestion.Container>
+        <AccountQuestion.Title>
+          Already have an account?{' '}
+          <AccountQuestion.Action href="/login" disabled={isLoading}>
+            Login
+          </AccountQuestion.Action>
+        </AccountQuestion.Title>
+      </AccountQuestion.Container>
+    </>
   )
 }

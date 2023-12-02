@@ -38,9 +38,11 @@ export default async function Page({
 
   return (
     <FormContainer>
-      <Logo />
-      <Title>Add Password</Title>
-      <SubTitle>Add password to your account</SubTitle>
+      <div className="flex w-full flex-col items-center">
+        <Logo />
+        <Title>Add Password</Title>
+        <SubTitle>Add password to your account</SubTitle>
+      </div>
       {isTokenValid ? (
         <Form token={'dsf'} />
       ) : (
@@ -54,5 +56,7 @@ export default async function Page({
 }
 
 function Message({ children }: { children: React.ReactNode }) {
-  return <p className="pt-7 text-sm font-medium text-red-600">{children}</p>
+  return (
+    <p className="text-center text-sm font-medium text-red-600">{children}</p>
+  )
 }

@@ -83,41 +83,48 @@ export function Form({ token }: { token: string }) {
   }
 
   return (
-    <FormPrimitive.Root onSubmit={handleSubmit(onSubmit)}>
-      <FormPrimitive.Fieldset disabled={isLoading}>
-        <div className="my-8 space-y-4">
+    <>
+      <FormPrimitive.Root
+        onSubmit={handleSubmit(onSubmit)}
+        id="add_password_form"
+      >
+        <FormPrimitive.Fieldset disabled={isLoading} className="space-y-2.5">
           <div>
             <FormPrimitive.Label htmlFor="password">
               Password
             </FormPrimitive.Label>
             <FormPrimitive.Input
-              autoFocus
               id="password"
               {...register('password')}
               placeholder="strong password"
               type={isPasswordVisible ? 'text' : 'password'}
             />
-            <div>
-              <PasswordVisibilityToggle
-                isVisible={isPasswordVisible}
-                onClick={() => setIsPasswordVisible((prev) => !prev)}
-              />
-              {errors.password && (
-                <FormPrimitive.Error>
-                  {errors.password?.message}
-                </FormPrimitive.Error>
-              )}
-            </div>
 
-            <div className="mt-4 inline-flex flex-wrap gap-x-4 gap-y-1">
-              {passwordChecklist.map((i) => (
-                <PasswordChecklistItem
-                  key={i.label}
-                  isValid={i.condition(watchPassword)}
-                >
-                  {i.label}
-                </PasswordChecklistItem>
-              ))}
+            <div className="space-y-2.5">
+              <div className="flex flex-wrap justify-between gap-y-2">
+                <div className="mr-4">
+                  {errors.password && (
+                    <FormPrimitive.Error>
+                      {errors.password?.message}
+                    </FormPrimitive.Error>
+                  )}
+                </div>
+                <PasswordVisibilityToggle
+                  isVisible={isPasswordVisible}
+                  onClick={() => setIsPasswordVisible((prev) => !prev)}
+                />
+              </div>
+
+              <div className="inline-flex flex-wrap gap-x-4 gap-y-1">
+                {passwordChecklist.map((i) => (
+                  <PasswordChecklistItem
+                    key={i.label}
+                    isValid={i.condition(watchPassword)}
+                  >
+                    {i.label}
+                  </PasswordChecklistItem>
+                ))}
+              </div>
             </div>
           </div>
 
@@ -137,12 +144,11 @@ export function Form({ token }: { token: string }) {
               </FormPrimitive.Error>
             )}
           </div>
-        </div>
-
-        <Button className="w-full" isLoading={isPending}>
-          Add Password
-        </Button>
-      </FormPrimitive.Fieldset>
-    </FormPrimitive.Root>
+        </FormPrimitive.Fieldset>
+      </FormPrimitive.Root>
+      <Button className="w-full" isLoading={isPending} form="add_password_form">
+        Add Password
+      </Button>
+    </>
   )
 }

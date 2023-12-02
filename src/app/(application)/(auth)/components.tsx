@@ -21,7 +21,7 @@ export function FormContainer({
   className?: string
 }) {
   return (
-    <div className={cn('flex flex-col items-center p-10', className)}>
+    <div className={cn('flex flex-col space-y-6 p-10', className)}>
       {children}
     </div>
   )
@@ -29,10 +29,11 @@ export function FormContainer({
 
 export function Logo() {
   return (
-    <Link className="mb-4 rounded-full bg-orange-600 p-3" href="/">
-      <div className="h-4 w-4">
-        <LogoIcon className="h-full w-full text-white" />
-      </div>
+    <Link
+      className="mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-orange-600 p-3"
+      href="/"
+    >
+      <LogoIcon className="h-4 w-4 text-white" />
     </Link>
   )
 }
@@ -46,9 +47,7 @@ export function SubTitle({ children }: { children: React.ReactNode }) {
 }
 
 export function Separator() {
-  return (
-    <div className="-ml-[5%] w-[110%] border-b border-dashed border-gray-200" />
-  )
+  return <div className="w-full border-b border-dashed border-gray-200" />
 }
 
 export function ContinueWithGoogle({

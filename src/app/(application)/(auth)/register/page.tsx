@@ -16,9 +16,11 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <FormContainer>
-      <Logo />
-      <Title>Register your zntask account</Title>
-      <SubTitle>Start managing your time</SubTitle>
+      <div className="flex w-full flex-col items-center">
+        <Logo />
+        <Title>Register your zntask account</Title>
+        <SubTitle>Start managing your time</SubTitle>
+      </div>
       <Form />
     </FormContainer>
   )
