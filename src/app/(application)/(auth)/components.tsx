@@ -29,7 +29,7 @@ export function FormContainer({
   className?: string
 }) {
   return (
-    <div className={cn('flex flex-col items-center px-10 pt-10', className)}>
+    <div className={cn('flex flex-col items-center p-10', className)}>
       {children}
     </div>
   )
@@ -133,11 +133,11 @@ export function PasswordVisibilityToggle({
 }
 
 function AccountQuestionContainer({ children }: { children: React.ReactNode }) {
-  return <div>{children}</div>
+  return <div className="text-sm text-gray-600">{children}</div>
 }
 
 function AccountQuestionTitle({ children }: { children: React.ReactNode }) {
-  return <p className="text-center text-sm text-gray-500">{children}</p>
+  return <p className="text-center">{children}</p>
 }
 
 function AccountQuestionAction({

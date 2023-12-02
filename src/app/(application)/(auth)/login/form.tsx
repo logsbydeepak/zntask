@@ -19,17 +19,16 @@ import { loginWithCredentials, redirectGoogleLogin } from '@/data/auth'
 import { zLoginWithCredentials } from '@/data/utils/zSchema'
 import { toast } from '@/store/toast'
 
-const isLoadingAtom = atom(false)
 type FormValues = z.infer<typeof zLoginWithCredentials>
 
 export function Form() {
   const [isResetPasswordDialogOpen, setIsResetPasswordDialogOpen] =
     React.useState(false)
-
-  const [isPending, startTransition] = React.useTransition()
   const [isPasswordVisible, setIsPasswordVisible] = React.useState(false)
+  const [isLoading, setIsLoading] = React.useState(false)
 
-  const [isLoading, setIsLoading] = useAtom(isLoadingAtom)
+  const [isCredentialLoading, startLoginWithCredentials] = React.useTransition()
+  const [isGoogleLoading, startLoginWithGoogle] = React.useTransition()
 
   const {
     register,
@@ -41,11 +40,12 @@ export function Form() {
   })
 
   React.useEffect(() => {
-    setIsLoading(isPending)
-  }, [setIsLoading, isPending])
+    setIsLoading(isCredentialLoading || isGoogleLoading)
+  }, [setIsLoading, isCredentialLoading, isGoogleLoading])
 
-  const onSubmit = (values: FormValues) => {
-    startTransition(async () => {
+  const handleLoginWithCredentials = (values: FormValues) => {
+    if (isLoading) return
+    startLoginWithCredentials(async () => {
       try {
         const res = await loginWithCredentials(values)
         if (res?.code === 'INVALID_CREDENTIALS') {
@@ -70,96 +70,86 @@ export function Form() {
     })
   }
 
+  const handleLoginWithGoogle = () => {
+    if (isLoading) return
+    startLoginWithGoogle(async () => {
+      await redirectGoogleLogin()
+    })
+  }
+
   return (
-    <>
-      <FormPrimitive.Root onSubmit={handleSubmit(onSubmit)}>
-        <FormPrimitive.Fieldset disabled={isLoading}>
-          <div className="my-8 space-y-4">
-            <div>
-              <FormPrimitive.Label htmlFor="email">Email</FormPrimitive.Label>
-              <FormPrimitive.Input
-                id="email"
-                autoFocus
-                {...register('email')}
-                placeholder="abc@domain.com"
-              />
-              {errors.email && (
-                <FormPrimitive.Error>
-                  {errors.email?.message}
-                </FormPrimitive.Error>
-              )}
-            </div>
+    <FormPrimitive.Root onSubmit={handleSubmit(handleLoginWithCredentials)}>
+      <FormPrimitive.Fieldset disabled={isLoading}>
+        <div className="my-8 space-y-4">
+          <fieldset disabled={isLoading}>
+            <ContinueWithGoogle
+              isLoading={isGoogleLoading}
+              onClick={handleLoginWithGoogle}
+            />
+          </fieldset>
+          <div className="-ml-[5%] w-[110%] border-b border-dashed border-gray-200" />
+          <div>
+            <FormPrimitive.Label htmlFor="email">Email</FormPrimitive.Label>
+            <FormPrimitive.Input
+              id="email"
+              autoFocus
+              {...register('email')}
+              placeholder="abc@domain.com"
+            />
+            {errors.email && (
+              <FormPrimitive.Error>{errors.email?.message}</FormPrimitive.Error>
+            )}
+          </div>
 
-            <div>
-              <FormPrimitive.Label htmlFor="password">
-                Password
-              </FormPrimitive.Label>
+          <div>
+            <FormPrimitive.Label htmlFor="password">
+              Password
+            </FormPrimitive.Label>
 
-              <FormPrimitive.Input
-                id="password"
-                {...register('password')}
-                placeholder="********"
-                type={isPasswordVisible ? 'text' : 'password'}
-              />
-              <div className="flex flex-wrap justify-between gap-y-2">
-                <div className="mr-4">
-                  {errors.password && (
-                    <FormPrimitive.Error>
-                      {errors.password?.message}
-                    </FormPrimitive.Error>
-                  )}
-                </div>
-                <div className="space-x-2">
-                  <PasswordVisibilityToggle
-                    isVisible={isPasswordVisible}
-                    onClick={() => setIsPasswordVisible((prev) => !prev)}
-                  />
-                  <ResetPassword
-                    onClick={() => setIsResetPasswordDialogOpen(true)}
-                  />
-                </div>
+            <FormPrimitive.Input
+              id="password"
+              {...register('password')}
+              placeholder="********"
+              type={isPasswordVisible ? 'text' : 'password'}
+            />
+            <div className="flex flex-wrap justify-between gap-y-2">
+              <div className="mr-4">
+                {errors.password && (
+                  <FormPrimitive.Error>
+                    {errors.password?.message}
+                  </FormPrimitive.Error>
+                )}
+              </div>
+              <div className="space-x-2">
+                <PasswordVisibilityToggle
+                  isVisible={isPasswordVisible}
+                  onClick={() => setIsPasswordVisible((prev) => !prev)}
+                />
+                <ResetPassword
+                  onClick={() => setIsResetPasswordDialogOpen(true)}
+                />
               </div>
             </div>
           </div>
-          <Button className="w-full" isLoading={isPending}>
-            Login
-          </Button>
-        </FormPrimitive.Fieldset>
-      </FormPrimitive.Root>
+        </div>
+        <Button className="w-full" isLoading={isCredentialLoading}>
+          Login
+        </Button>
+      </FormPrimitive.Fieldset>
+      <div className="pt-4">
+        <AccountQuestion.Container>
+          <AccountQuestion.Title>
+            Already have an account?{' '}
+            <AccountQuestion.Action href="/register" disabled={isLoading}>
+              Register
+            </AccountQuestion.Action>
+          </AccountQuestion.Title>
+        </AccountQuestion.Container>
+      </div>
       <ResetPasswordDialog
         isOpen={isResetPasswordDialogOpen}
         setIsOpen={setIsResetPasswordDialogOpen}
       />
-    </>
-  )
-}
-
-export function Action() {
-  const [isPending, startTransition] = React.useTransition()
-  const [isLoading, setIsLoading] = useAtom(isLoadingAtom)
-
-  React.useEffect(() => {
-    setIsLoading(isPending)
-  }, [setIsLoading, isPending])
-
-  const onClick = () => {
-    startTransition(async () => {
-      await redirectGoogleLogin()
-    })
-  }
-  return (
-    <>
-      <fieldset disabled={isLoading}>
-        <ContinueWithGoogle isLoading={isPending} onClick={onClick} />
-      </fieldset>
-      <AccountQuestion.Container>
-        <AccountQuestion.Title>
-          Already have an account?{' '}
-          <AccountQuestion.Action href="/register" disabled={isLoading}>
-            Register
-          </AccountQuestion.Action>
-        </AccountQuestion.Title>
-      </AccountQuestion.Container>
-    </>
+    </FormPrimitive.Root>
   )
 }
