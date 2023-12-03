@@ -32,30 +32,17 @@ const hAuth = Object.freeze({
   input: function input<Z extends z.ZodTypeAny>(zod: Z) {
     return Object.freeze({
       fn: function fn<
-        FN extends ({
-          input,
-          userId,
-        }: {
+        FN extends (_: {
           input: z.infer<Z>
           userId: string
           token: string
         }) => Promise<any>,
-      >(fn: FN) {
-        return async function (input: z.infer<Z>) {
+      >(fn: FN): (input: z.infer<Z>) => Promise<Awaited<ReturnType<FN>>> {
+        return async function (input) {
           try {
             const parsedInput = await zod.parseAsync(input)
             const { userId, token } = await isAuth()
-            const result = await fn({ input: parsedInput, userId, token })
-            return result as FN extends ({
-              input,
-              userId,
-            }: {
-              input: z.infer<Z>
-              userId: string
-              token: string
-            }) => Promise<infer R>
-              ? R
-              : never
+            return await fn({ input: parsedInput, userId, token })
           } catch (error) {
             handleError(error)
           }
@@ -66,18 +53,11 @@ const hAuth = Object.freeze({
 
   fn: function fn<
     FN extends ({ userId }: { userId: string; token: string }) => Promise<any>,
-  >(fn: FN) {
+  >(fn: FN): () => Promise<Awaited<ReturnType<FN>>> {
     return async function () {
       try {
         const { userId, token } = await isAuth()
-        const result = await fn({ userId, token })
-        return result as FN extends ({
-          userId,
-        }: {
-          userId: string
-        }) => Promise<infer R>
-          ? R
-          : never
+        return await fn({ userId, token })
       } catch (error) {
         handleError(error)
       }
@@ -89,19 +69,12 @@ export const h = Object.freeze({
   input: function input<Z extends z.ZodTypeAny>(zod: Z) {
     return Object.freeze({
       fn: function fn<
-        FN extends ({ input }: { input: z.infer<Z> }) => Promise<any>,
-      >(fn: FN) {
-        return async function (input: z.infer<Z>) {
+        FN extends (input: { input: z.infer<Z> }) => Promise<any>,
+      >(fn: FN): (input: z.infer<Z>) => Promise<Awaited<ReturnType<FN>>> {
+        return async function (input) {
           try {
             const parsedInput = await zod.parseAsync(input)
-            const result = await fn({ input: parsedInput })
-            return result as FN extends ({
-              input,
-            }: {
-              input: z.infer<Z>
-            }) => Promise<infer R>
-              ? R
-              : never
+            return await fn({ input: parsedInput })
           } catch (error) {
             handleError(error)
           }
@@ -110,11 +83,12 @@ export const h = Object.freeze({
     })
   },
 
-  fn: function fn<FN extends () => Promise<any>>(fn: FN) {
+  fn: function fn<FN extends () => Promise<any>>(
+    fn: FN
+  ): () => Promise<Awaited<ReturnType<FN>>> {
     return async function () {
       try {
-        const result = await fn()
-        return result as FN extends () => Promise<infer R> ? R : never
+        return await fn()
       } catch (error) {
         handleError(error)
       }
