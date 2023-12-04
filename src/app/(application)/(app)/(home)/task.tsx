@@ -13,6 +13,7 @@ import {
   MoreVerticalIcon,
   Trash2Icon,
 } from 'lucide-react'
+import { ulid } from 'ulidx'
 import { useShallow } from 'zustand/react/shallow'
 
 import * as Layout from '@/app/(application)/(app)/app-layout'
@@ -88,39 +89,53 @@ export function TaskContainer({
   )
 
   const lastChildIndex = childTaskToDisplay.length - 1
+  const lastChild = childTaskToDisplay[lastChildIndex]
+  const showMoreButton = childTask.length > 4
 
   return (
     <div className="space-y-2">
       <div className="relative">
         {index === 0 && <TopDrop id={task.id} />}
         <DNDTaskItem task={task} />
-        <BottomLeftRightDrop id={`bottom:${task.id}`} />
+        <BottomLeftRightDrop id={task.id} />
       </div>
 
       {childTaskToDisplay.length !== 0 && (
-        <div className="!mt-2 space-y-2">
+        <div className="relative !mt-2 space-y-2">
           {childTaskToDisplay.map((i, idx) => (
             <div className="relative" key={i.id}>
               <div className="ml-9 ">
                 <DNDTaskItem task={i} />
               </div>
-              {idx === lastChildIndex ? (
-                <BottomLeftRightDrop id={`bottom:${i.id}`} />
-              ) : (
-                <BottomDrop id={`bottom:${i.id}`} />
+              {!i.isCompleted && idx !== lastChildIndex && (
+                <BottomDrop id={i.id} />
+              )}
+
+              {showMoreButton && idx === lastChildIndex && !i.isCompleted && (
+                <BottomDrop id={i.id} />
               )}
             </div>
           ))}
 
-          {childTask.length > 4 && (
-            <button
-              onClick={() => setIsCollapsibleOpen((open) => !open)}
-              className="rounded-full border border-gray-200 px-3 py-1 text-xs text-gray-600 hover:bg-gray-50"
-            >
-              {isCollapsibleOpen
-                ? 'show less'
-                : `show ${childTask.length - 4} more`}
-            </button>
+          {showMoreButton && <BottomLeftDrop id={task.id} />}
+
+          {showMoreButton === false && lastChild.isCompleted === false ? (
+            <BottomLeftRightDrop id={`nested:${task.id}`} />
+          ) : (
+            <BottomLeftDrop id={task.id} />
+          )}
+
+          {showMoreButton && (
+            <div>
+              <button
+                onClick={() => setIsCollapsibleOpen((open) => !open)}
+                className="ml-9 rounded-full border border-gray-200 px-3 py-1 text-xs text-gray-600 hover:bg-gray-50"
+              >
+                {isCollapsibleOpen
+                  ? 'show less'
+                  : `show ${childTask.length - 4} more`}
+              </button>
+            </div>
           )}
         </div>
       )}
@@ -129,8 +144,8 @@ export function TaskContainer({
 }
 
 function TopDrop({ id }: { id: string }) {
-  const leftDrop = useDrop({ id: `left:${id}` })
-  const rightDrop = useDrop({ id: `right:${id}` })
+  const leftDrop = useDrop({ id: `top-left:${id}` })
+  const rightDrop = useDrop({ id: `top-right:${id}` })
   const isOver = leftDrop.isOver || rightDrop.isOver
 
   return (
@@ -145,8 +160,8 @@ function TopDrop({ id }: { id: string }) {
 }
 
 function BottomDrop({ id }: { id: string }) {
-  const leftDrop = useDrop({ id: `left:${id}` })
-  const rightDrop = useDrop({ id: `right:${id}` })
+  const leftDrop = useDrop({ id: `bottom-left:${id}` })
+  const rightDrop = useDrop({ id: `bottom-right:${id}` })
   const isOver = leftDrop.isOver || rightDrop.isOver
 
   return (
@@ -161,8 +176,13 @@ function BottomDrop({ id }: { id: string }) {
 }
 
 function BottomLeftRightDrop({ id }: { id: string }) {
-  const leftDrop = useDrop({ id: `left:${id}` })
-  const rightDrop = useDrop({ id: `right:${id}` })
+  const idRef = React.useRef(ulid())
+  const leftDrop = useDrop({
+    id: `bottom-left-right-left:${id}-${idRef.current}`,
+  })
+  const rightDrop = useDrop({
+    id: `bottom-left-right-right:${id}-${idRef.current}`,
+  })
   const isOver = leftDrop.isOver || rightDrop.isOver
 
   return (
@@ -174,6 +194,22 @@ function BottomLeftRightDrop({ id }: { id: string }) {
       {isOver && (
         <BottomIndicator className={rightDrop.isOver ? 'pl-12' : ''} />
       )}
+    </>
+  )
+}
+
+function BottomLeftDrop({ id }: { id: string }) {
+  const leftDrop = useDrop({ id: `bottom-left-left:${id}` })
+  const rightDrop = useDrop({ id: `bottom-left-right:${id}` })
+  const isOver = leftDrop.isOver || rightDrop.isOver
+
+  return (
+    <>
+      <div className="absolute -bottom-2 flex h-2 w-full">
+        <div className="h-full w-[30%]" ref={leftDrop.ref as any} />
+        <div className="h-full w-[70%]" ref={rightDrop.ref as any} />
+      </div>
+      {isOver && <BottomIndicator />}
     </>
   )
 }
