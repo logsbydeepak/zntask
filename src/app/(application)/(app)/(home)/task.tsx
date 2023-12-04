@@ -32,7 +32,7 @@ import {
 } from '@/components/ui/menu'
 import { useAppStore } from '@/store/app'
 import { ChildTask, ParentTask, useTaskStore } from '@/store/task'
-import { DNDProvider, useDNDState, useDrag, useDrop } from '@/utils/dnd'
+import { useDrag, useDrop } from '@/utils/dnd'
 import { cn } from '@/utils/style'
 
 export function EmptyInbox() {
@@ -57,7 +57,13 @@ export function EmptyTaskCategory() {
   )
 }
 
-export function TaskContainer({ task }: { task: ParentTask }) {
+export function TaskContainer({
+  task,
+  index,
+}: {
+  task: ParentTask
+  index: number
+}) {
   const [isCollapsibleOpen, setIsCollapsibleOpen] = React.useState(false)
 
   const childTask = useTaskStore(
@@ -81,14 +87,28 @@ export function TaskContainer({ task }: { task: ParentTask }) {
     childTask.length >= 5 && !isCollapsibleOpen ? 4 : childTask.length
   )
 
+  const lastChildIndex = childTaskToDisplay.length - 1
+
   return (
     <div className="space-y-2">
-      <DNDTaskItem task={task} />
+      <div className="relative">
+        <DNDTaskItem task={task} />
+        <BottomLeftRightDrop id={`bottom:${task.id}`} />
+      </div>
 
       {childTaskToDisplay.length !== 0 && (
-        <div className="!mt-2 ml-6 space-y-2">
-          {childTaskToDisplay.map((i) => (
-            <DNDTaskItem key={i.id} task={i} />
+        <div className="!mt-2 space-y-2">
+          {childTaskToDisplay.map((i, idx) => (
+            <div className="relative" key={i.id}>
+              <div className="ml-9 ">
+                <DNDTaskItem task={i} />
+              </div>
+              {idx === lastChildIndex ? (
+                <BottomLeftRightDrop id={`bottom:${i.id}`} />
+              ) : (
+                <BottomDrop id={`bottom:${i.id}`} />
+              )}
+            </div>
           ))}
 
           {childTask.length > 4 && (
@@ -103,6 +123,54 @@ export function TaskContainer({ task }: { task: ParentTask }) {
           )}
         </div>
       )}
+    </div>
+  )
+}
+
+function BottomDrop({ id }: { id: string }) {
+  const leftDrop = useDrop({ id: `left:${id}` })
+  const rightDrop = useDrop({ id: `right:${id}` })
+  const isOver = leftDrop.isOver || rightDrop.isOver
+
+  return (
+    <>
+      <div className="absolute -bottom-2 flex h-2 w-full">
+        <div className="h-full w-[30%]" ref={leftDrop.ref as any} />
+        <div className="h-full w-[70%]" ref={rightDrop.ref as any} />
+      </div>
+      {isOver && <BottomIndicator className={'pl-12'} />}
+    </>
+  )
+}
+
+function BottomLeftRightDrop({ id }: { id: string }) {
+  const leftDrop = useDrop({ id: `left:${id}` })
+  const rightDrop = useDrop({ id: `right:${id}` })
+  const isOver = leftDrop.isOver || rightDrop.isOver
+
+  return (
+    <>
+      <div className="absolute -bottom-2 flex h-2 w-full">
+        <div className="h-full w-[30%]" ref={leftDrop.ref as any} />
+        <div className="h-full w-[70%]" ref={rightDrop.ref as any} />
+      </div>
+      {isOver && (
+        <BottomIndicator className={rightDrop.isOver ? 'pl-12' : ''} />
+      )}
+    </>
+  )
+}
+
+function BottomIndicator({ className }: { className?: string }) {
+  return (
+    <div
+      className={cn(
+        'absolute -bottom-[5px] left-0 right-0 flex w-full translate-y-[2px] items-center px-3',
+        className
+      )}
+    >
+      <span className="h-1.5 w-1.5 rounded-full border-[1.5px] border-orange-600" />
+      <span className="-ml-[1px] h-[1.5px] w-full rounded-full bg-orange-600" />
     </div>
   )
 }

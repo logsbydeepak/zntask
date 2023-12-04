@@ -55,8 +55,8 @@ function PlanedTab() {
   return (
     <div className="space-y-2">
       <DNDProvider onDrop={() => {}}>
-        {tasks.map((i) => (
-          <TaskContainer key={i.id} task={i} />
+        {tasks.map((i, idx) => (
+          <TaskContainer key={i.id} task={i} index={idx} />
         ))}
       </DNDProvider>
     </div>
@@ -74,8 +74,8 @@ function CompletedTab() {
 
   return (
     <div className="space-y-2 ">
-      {tasks.map((i) => (
-        <TaskContainer key={i.id} task={i} />
+      {tasks.map((i, idx) => (
+        <TaskContainer key={i.id} task={i} index={idx} />
       ))}
     </div>
   )
