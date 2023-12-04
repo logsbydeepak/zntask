@@ -92,6 +92,7 @@ export function TaskContainer({
   return (
     <div className="space-y-2">
       <div className="relative">
+        {index === 0 && <TopDrop id={task.id} />}
         <DNDTaskItem task={task} />
         <BottomLeftRightDrop id={`bottom:${task.id}`} />
       </div>
@@ -124,6 +125,22 @@ export function TaskContainer({
         </div>
       )}
     </div>
+  )
+}
+
+function TopDrop({ id }: { id: string }) {
+  const leftDrop = useDrop({ id: `left:${id}` })
+  const rightDrop = useDrop({ id: `right:${id}` })
+  const isOver = leftDrop.isOver || rightDrop.isOver
+
+  return (
+    <>
+      <div className="absolute -top-2 flex h-2 w-full">
+        <div className="h-full w-[30%]" ref={leftDrop.ref as any} />
+        <div className="h-full w-[70%]" ref={rightDrop.ref as any} />
+      </div>
+      {isOver && <TopIndicator />}
+    </>
   )
 }
 
@@ -166,6 +183,20 @@ function BottomIndicator({ className }: { className?: string }) {
     <div
       className={cn(
         'absolute -bottom-[5px] left-0 right-0 flex w-full translate-y-[2px] items-center px-3',
+        className
+      )}
+    >
+      <span className="h-1.5 w-1.5 rounded-full border-[1.5px] border-orange-600" />
+      <span className="-ml-[1px] h-[1.5px] w-full rounded-full bg-orange-600" />
+    </div>
+  )
+}
+
+function TopIndicator({ className }: { className?: string }) {
+  return (
+    <div
+      className={cn(
+        'absolute -top-[5px] left-0 right-0 flex w-full translate-y-[-2px] items-center px-3',
         className
       )}
     >
