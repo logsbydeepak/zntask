@@ -24,7 +24,7 @@ import * as Dialog from '@/components/ui/dialog'
 import * as Form from '@/components/ui/form'
 import { useAppStore } from '@/store/app'
 import { useCategoryStore } from '@/store/category'
-import { ChildTask, ParentTask, useTaskStore } from '@/store/task'
+import { ChildTask, ParentTask, Task, useTaskStore } from '@/store/task'
 import { getCategoryColor } from '@/utils/category'
 import { cn } from '@/utils/style'
 
@@ -40,6 +40,7 @@ const schema = z.object({
       time: z.date().nullable(),
       details: z.string().nullable(),
       isCompleted: z.boolean(),
+      completedAt: z.date().nullable(),
     })
   ),
 })
@@ -165,13 +166,14 @@ function TaskDialogContent({
       _id: i.id,
       date: i.date ? new Date(i.date) : null,
       time: i.time ? new Date(i.time) : null,
+      completedAt: i.completedAt ? new Date(i.completedAt) : null,
     }
   })
 
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState,
     getValues,
     setValue,
     watch,
@@ -188,6 +190,7 @@ function TaskDialogContent({
           date: parentTask?.date ? new Date(parentTask.date) : null,
           time: parentTask?.time ? new Date(parentTask.time) : null,
           isCompleted: parentTask?.isCompleted ?? false,
+          completedAt: parentTask?.completedAt ? new Date() : null,
         },
         ...childTask,
       ],
@@ -212,6 +215,7 @@ function TaskDialogContent({
             date: i.date ? i.date.toISOString() : null,
             time: i.time ? i.time.toISOString() : null,
             isCompleted: i.isCompleted,
+            completedAt: i.completedAt ? i.completedAt.toISOString() : null,
           }
 
           if (index === 0) {
@@ -244,18 +248,23 @@ function TaskDialogContent({
             date: i.date ? i.date.toISOString() : null,
             time: i.time ? i.time.toISOString() : null,
             isCompleted: i.isCompleted,
+            completedAt: i.completedAt ? new Date().toISOString() : null,
           }
 
           if (index === 0) {
             let isParentTaskEdited = false
-            if (parentTask.title !== task.title) isParentTaskEdited = true
-            if (parentTask.details !== task.details) isParentTaskEdited = true
-            if (parentTask.date !== task.date) isParentTaskEdited = true
-            if (parentTask.time !== task.time) isParentTaskEdited = true
-            if (parentTask.categoryId !== data.categoryId)
+            if (
+              parentTask.title !== task.title ||
+              parentTask.details !== task.details ||
+              parentTask.date !== task.date ||
+              parentTask.time !== task.time ||
+              parentTask.categoryId !== data.categoryId ||
+              parentTask.isCompleted !== task.isCompleted ||
+              parentTask.completedAt !== task.completedAt
+            ) {
               isParentTaskEdited = true
-            if (parentTask.isCompleted !== task.isCompleted)
-              isParentTaskEdited = true
+            }
+
             if (isParentTaskEdited) {
               editParentTask({
                 ...parentTask,
@@ -346,9 +355,13 @@ function TaskDialogContent({
                   <div className="w-7">
                     <Checkbox
                       value={watch(`tasks.${index}.isCompleted`)}
-                      setValue={(value) =>
+                      setValue={(value) => {
                         setValue(`tasks.${index}.isCompleted`, value)
-                      }
+                        setValue(
+                          `tasks.${index}.completedAt`,
+                          value ? new Date() : null
+                        )
+                      }}
                     />
                   </div>
 
@@ -396,6 +409,7 @@ function TaskDialogContent({
                           time: null,
                           isCompleted: false,
                           details: null,
+                          completedAt: null,
                         })
                       }}
                     >

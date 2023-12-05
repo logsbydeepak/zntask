@@ -12,6 +12,7 @@ export interface Task {
   date: string | null
   time: string | null
   details: string | null
+  completedAt: string | null
 }
 
 export interface ParentTask extends Task {
@@ -107,17 +108,29 @@ const taskStore: StateCreator<State & Actions> = (set, get) => ({
     if (parentTask.isCompleted) {
       set((state) => ({
         parentTasks: state.parentTasks.map((item) => {
-          if (item.id === parentTask.id) return parentTask
+          if (item.id === parentTask.id)
+            return {
+              ...parentTask,
+              isCompleted: true,
+              completedAt: new Date().toISOString(),
+            }
           return item
         }),
         childTasks: state.childTasks.map((i) =>
-          i.parentId === parentTask.id ? { ...i, isCompleted: true } : i
+          i.parentId === parentTask.id
+            ? { ...i, isCompleted: true, completedAt: new Date().toISOString() }
+            : i
         ),
       }))
     } else {
       set((state) => ({
         parentTasks: state.parentTasks.map((item) => {
-          if (item.id === parentTask.id) return parentTask
+          if (item.id === parentTask.id)
+            return {
+              ...parentTask,
+              isCompleted: false,
+              completedAt: null,
+            }
           return item
         }),
       }))
@@ -133,7 +146,13 @@ const taskStore: StateCreator<State & Actions> = (set, get) => ({
   editChildTask(childTask) {
     set((state) => ({
       childTasks: state.childTasks.map((item) => {
-        if (item.id === childTask.id) return childTask
+        if (item.id === childTask.id)
+          return {
+            ...childTask,
+            completedAt: childTask.isCompleted
+              ? new Date().toISOString()
+              : null,
+          }
         return item
       }),
     }))
