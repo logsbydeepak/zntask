@@ -68,19 +68,23 @@ export function TaskContainer({
   const [isCollapsibleOpen, setIsCollapsibleOpen] = React.useState(false)
 
   const childTask = useTaskStore(
-    useShallow((s) =>
-      s.childTasks
-        .filter((i) => i.parentId === task.id)
+    useShallow((s) => {
+      const list = s.childTasks.filter((i) => i.parentId === task.id)
+
+      const completedList = list
+        .filter((i) => i.completedAt !== null)
         .sort((a, b) => {
-          if (a.isCompleted && !b.isCompleted) {
-            return 1
-          }
-          if (!a.isCompleted && b.isCompleted) {
-            return -1
-          }
-          return 0
+          if (a.completedAt === null) return 1
+          if (b.completedAt === null) return -1
+
+          if (a.completedAt < b.completedAt) return -1
+          return 1
         })
-    )
+      const uncompletedList = list
+        .filter((i) => i.completedAt === null)
+        .sort((a, b) => (a.orderId > b.orderId ? 1 : -1))
+      return [...uncompletedList, ...completedList]
+    })
   )
 
   const childTaskToDisplay = childTask.slice(
@@ -107,11 +111,11 @@ export function TaskContainer({
               <div className="ml-9 ">
                 <DNDTaskItem task={i} />
               </div>
-              {!i.isCompleted && idx !== lastChildIndex && (
+              {!!!i.completedAt && idx !== lastChildIndex && (
                 <BottomDrop id={i.id} />
               )}
 
-              {showMoreButton && idx === lastChildIndex && !i.isCompleted && (
+              {showMoreButton && idx === lastChildIndex && !!!i.completedAt && (
                 <BottomDrop id={i.id} />
               )}
             </div>
@@ -119,7 +123,7 @@ export function TaskContainer({
 
           {showMoreButton && <BottomLeftDrop id={task.id} />}
 
-          {showMoreButton === false && lastChild.isCompleted === false ? (
+          {showMoreButton === false && lastChild.completedAt === null ? (
             <BottomLeftRightDrop id={`nested:${task.id}`} />
           ) : (
             <BottomLeftDrop id={task.id} />
@@ -287,11 +291,17 @@ const TaskItem = React.forwardRef<
   const handleOnTaskCheckboxClick = React.useCallback(
     (value: boolean) => {
       if ('categoryId' in task) {
-        editParentTask({ ...task, isCompleted: value })
+        editParentTask({
+          ...task,
+          completedAt: value ? new Date().toISOString() : null,
+        })
       }
 
       if ('parentId' in task) {
-        editChildTask({ ...task, isCompleted: value })
+        editChildTask({
+          ...task,
+          completedAt: value ? new Date().toISOString() : null,
+        })
       }
     },
     [editChildTask, editParentTask, task]
@@ -326,7 +336,7 @@ const TaskItem = React.forwardRef<
               <div className="flex items-center space-x-3">
                 <div className="flex items-center">
                   <Checkbox
-                    value={task.isCompleted}
+                    value={!!task.completedAt}
                     setValue={handleOnTaskCheckboxClick}
                   />
                 </div>

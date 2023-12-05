@@ -5,6 +5,7 @@ import {
   Root as CheckboxRoot,
 } from '@radix-ui/react-checkbox'
 import * as Popover from '@radix-ui/react-popover'
+import { or } from 'drizzle-orm'
 import {
   CheckCircleIcon,
   CircleIcon,
@@ -39,7 +40,6 @@ const schema = z.object({
       date: z.date().nullable(),
       time: z.date().nullable(),
       details: z.string().nullable(),
-      isCompleted: z.boolean(),
       completedAt: z.date().nullable(),
     })
   ),
@@ -189,7 +189,6 @@ function TaskDialogContent({
           details: parentTask?.details ?? '',
           date: parentTask?.date ? new Date(parentTask.date) : null,
           time: parentTask?.time ? new Date(parentTask.time) : null,
-          isCompleted: parentTask?.isCompleted ?? false,
           completedAt: parentTask?.completedAt ? new Date() : null,
         },
         ...childTask,
@@ -214,7 +213,6 @@ function TaskDialogContent({
             details: i.details,
             date: i.date ? i.date.toISOString() : null,
             time: i.time ? i.time.toISOString() : null,
-            isCompleted: i.isCompleted,
             completedAt: i.completedAt ? i.completedAt.toISOString() : null,
           }
 
@@ -247,8 +245,7 @@ function TaskDialogContent({
             details: i.details,
             date: i.date ? i.date.toISOString() : null,
             time: i.time ? i.time.toISOString() : null,
-            isCompleted: i.isCompleted,
-            completedAt: i.completedAt ? new Date().toISOString() : null,
+            completedAt: i.completedAt ? i.completedAt.toISOString() : null,
           }
 
           if (index === 0) {
@@ -259,7 +256,6 @@ function TaskDialogContent({
               parentTask.date !== task.date ||
               parentTask.time !== task.time ||
               parentTask.categoryId !== data.categoryId ||
-              parentTask.isCompleted !== task.isCompleted ||
               parentTask.completedAt !== task.completedAt
             ) {
               isParentTaskEdited = true
@@ -287,12 +283,17 @@ function TaskDialogContent({
           let isChildTaskEdited = false
           const originalChildTask = childTask.find((j) => j.id === i._id)
           if (!originalChildTask) return
-          if (originalChildTask.title !== i.title) isChildTaskEdited = true
-          if (originalChildTask.details !== i.details) isChildTaskEdited = true
-          if (originalChildTask.date !== i.date) isChildTaskEdited = true
-          if (originalChildTask.time !== i.time) isChildTaskEdited = true
-          if (originalChildTask.isCompleted !== i.isCompleted)
+
+          if (
+            originalChildTask.completedAt !== i.completedAt ||
+            originalChildTask.details !== i.details ||
+            originalChildTask.title !== i.title ||
+            originalChildTask.date !== i.date ||
+            originalChildTask.time !== i.time ||
+            originalChildTask.completedAt !== i.completedAt
+          )
             isChildTaskEdited = true
+
           if (isChildTaskEdited) {
             editChildTask({
               ...task,
@@ -354,9 +355,8 @@ function TaskDialogContent({
                 <div className="flex items-center">
                   <div className="w-7">
                     <Checkbox
-                      value={watch(`tasks.${index}.isCompleted`)}
+                      value={!!watch(`tasks.${index}.completedAt`)}
                       setValue={(value) => {
-                        setValue(`tasks.${index}.isCompleted`, value)
                         setValue(
                           `tasks.${index}.completedAt`,
                           value ? new Date() : null
@@ -407,7 +407,6 @@ function TaskDialogContent({
                           title: '',
                           date: null,
                           time: null,
-                          isCompleted: false,
                           details: null,
                           completedAt: null,
                         })

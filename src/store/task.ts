@@ -7,7 +7,6 @@ import { useActivityStore } from './activity'
 export interface Task {
   id: string
   title: string
-  isCompleted: boolean
   orderId: string
   date: string | null
   time: string | null
@@ -105,20 +104,18 @@ const taskStore: StateCreator<State & Actions> = (set, get) => ({
   },
 
   editParentTask(parentTask) {
-    if (parentTask.isCompleted) {
+    if (!!parentTask.completedAt) {
       set((state) => ({
         parentTasks: state.parentTasks.map((item) => {
           if (item.id === parentTask.id)
             return {
               ...parentTask,
-              isCompleted: true,
-              completedAt: new Date().toISOString(),
             }
           return item
         }),
         childTasks: state.childTasks.map((i) =>
           i.parentId === parentTask.id
-            ? { ...i, isCompleted: true, completedAt: new Date().toISOString() }
+            ? { ...i, completedAt: parentTask.completedAt }
             : i
         ),
       }))
@@ -128,7 +125,6 @@ const taskStore: StateCreator<State & Actions> = (set, get) => ({
           if (item.id === parentTask.id)
             return {
               ...parentTask,
-              isCompleted: false,
               completedAt: null,
             }
           return item
@@ -146,13 +142,7 @@ const taskStore: StateCreator<State & Actions> = (set, get) => ({
   editChildTask(childTask) {
     set((state) => ({
       childTasks: state.childTasks.map((item) => {
-        if (item.id === childTask.id)
-          return {
-            ...childTask,
-            completedAt: childTask.isCompleted
-              ? new Date().toISOString()
-              : null,
-          }
+        if (item.id === childTask.id) return childTask
         return item
       }),
     }))

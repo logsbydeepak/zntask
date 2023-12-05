@@ -47,7 +47,7 @@ export default function Page() {
 function PlanedTab() {
   const tasks = useTaskStore(
     useShallow((s) =>
-      s.parentTasks.filter((i) => !i.categoryId && !i.isCompleted)
+      s.parentTasks.filter((i) => !i.categoryId && !!!i.completedAt)
     )
   )
 
@@ -66,7 +66,7 @@ function PlanedTab() {
 function CompletedTab() {
   const tasks = useTaskStore(
     useShallow((s) =>
-      s.parentTasks.filter((i) => !i.categoryId && i.isCompleted)
+      s.parentTasks.filter((i) => !i.categoryId && !!i.completedAt)
     )
   )
 
