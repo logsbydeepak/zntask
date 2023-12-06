@@ -36,27 +36,60 @@ export const redirectGoogleRegister = h.fn(async () => {
   redirect(url)
 })
 
-const zLoginWithGoogle = z.object({
+const zGoogleCode = z.object({
   code: zRequired,
 })
 
-export const loginWithGoogle = h
-  .input(zLoginWithGoogle)
-  .fn(async ({ input }) => {
-    const data = await getGoogleData(input)
-    if (data.code !== 'OK') return r('INVALID_CREDENTIALS')
+export const loginWithGoogle = h.input(zGoogleCode).fn(async ({ input }) => {
+  const data = await getGoogleData(input)
+  if (data.code !== 'OK') return r('INVALID_CREDENTIALS')
 
-    const user = await db.query.googleAuth.findFirst({
-      where(fields, operators) {
-        return operators.eq(fields.email, data.email)
-      },
-    })
-
-    if (!user) return r('USER_NOT_FOUND')
-    const token = await generateAuthJWT(user.id)
-    setAuthCookie(token)
-    redirect('/')
+  const user = await db.query.googleAuth.findFirst({
+    where(fields, operators) {
+      return operators.eq(fields.email, data.email)
+    },
   })
+
+  if (!user) return r('USER_NOT_FOUND')
+  const token = await generateAuthJWT(user.id)
+  setAuthCookie(token)
+  redirect('/')
+})
+
+export const registerWithGoogle = h.input(zGoogleCode).fn(async ({ input }) => {
+  const data = await getGoogleData(input)
+  if (data.code !== 'OK') return r('INVALID_CREDENTIALS')
+
+  const user = await db.query.users.findFirst({
+    where(fields, operators) {
+      return operators.eq(fields.email, data.email)
+    },
+  })
+  const googleAuthProvider = await db.query.googleAuth.findFirst({
+    where(fields, operators) {
+      return operators.eq(fields.email, data.email)
+    },
+  })
+  if (user || googleAuthProvider) return r('EMAIL_ALREADY_EXISTS')
+
+  const id = ulid()
+
+  await db.insert(dbSchema.users).values({
+    id: id,
+    firstName: data.given_name,
+    lastName: data.family_name,
+    email: data.email,
+  })
+  await db.insert(dbSchema.googleAuth).values({
+    id: ulid(),
+    userId: id,
+    email: data.email,
+  })
+
+  const token = await generateAuthJWT(id)
+  setAuthCookie(token)
+  redirect('/')
+})
 
 export const loginWithCredentials = h
   .input(zLoginWithCredentials)
