@@ -26,10 +26,6 @@ import {
   zResetPassword,
 } from './utils/zSchema'
 
-export const getUserLogin = async (query: any) => {
-  return await getGoogleData(googleClient(), query)
-}
-
 export const redirectGoogleLogin = h.fn(async () => {
   const url = generateGoogleAuthUrl()
   return r('OK', { url })
@@ -39,6 +35,28 @@ export const redirectGoogleRegister = h.fn(async () => {
   const url = generateGoogleAuthUrl()
   redirect(url)
 })
+
+const zLoginWithGoogle = z.object({
+  code: zRequired,
+})
+
+export const loginWithGoogle = h
+  .input(zLoginWithGoogle)
+  .fn(async ({ input }) => {
+    const data = await getGoogleData(input)
+    if (data.code !== 'OK') return r('INVALID_CREDENTIALS')
+
+    const user = await db.query.googleAuth.findFirst({
+      where(fields, operators) {
+        return operators.eq(fields.email, data.email)
+      },
+    })
+
+    if (!user) return r('USER_NOT_FOUND')
+    const token = await generateAuthJWT(user.id)
+    setAuthCookie(token)
+    redirect('/')
+  })
 
 export const loginWithCredentials = h
   .input(zLoginWithCredentials)

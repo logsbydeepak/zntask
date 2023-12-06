@@ -61,7 +61,7 @@ export const googleAuth = mysqlTable(
   {
     id: id().primaryKey(),
     userId: id('user_id').notNull(),
-    googleId: varchar('google_id', { length: 256 }).notNull(),
+    email: varchar('email', { length: 256 }).notNull(),
   },
   (table) => {
     return {

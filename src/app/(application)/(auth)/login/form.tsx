@@ -17,8 +17,8 @@ import { ResetPasswordDialog } from '@/components/dialogs/reset-password'
 import { Button } from '@/components/ui/button'
 import * as FormPrimitive from '@/components/ui/form'
 import {
-  getUserLogin,
   loginWithCredentials,
+  loginWithGoogle,
   redirectGoogleLogin,
 } from '@/data/auth'
 import { zLoginWithCredentials } from '@/data/utils/zSchema'
@@ -67,7 +67,7 @@ export function Form() {
 
   const handleGoogleCode = async (code: string) => {
     startLoginWithGoogle(async () => {
-      const res = await getUserLogin({ code })
+      const res = await loginWithGoogle({ code })
       console.log(res)
     })
   }
