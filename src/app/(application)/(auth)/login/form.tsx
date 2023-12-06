@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import { useSearchParams } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -15,17 +16,25 @@ import {
 import { ResetPasswordDialog } from '@/components/dialogs/reset-password'
 import { Button } from '@/components/ui/button'
 import * as FormPrimitive from '@/components/ui/form'
-import { loginWithCredentials, redirectGoogleLogin } from '@/data/auth'
+import {
+  getUserLogin,
+  loginWithCredentials,
+  redirectGoogleLogin,
+} from '@/data/auth'
 import { zLoginWithCredentials } from '@/data/utils/zSchema'
 import { toast } from '@/store/toast'
 
 type FormValues = z.infer<typeof zLoginWithCredentials>
 
 export function Form() {
+  const searchParams = useSearchParams()
+
+  const googleCode = searchParams.get('code')
   const [isResetPasswordDialogOpen, setIsResetPasswordDialogOpen] =
     React.useState(false)
   const [isPasswordVisible, setIsPasswordVisible] = React.useState(false)
-  const [isLoading, setIsLoading] = React.useState(false)
+  const [isLoading, setIsLoading] = React.useState(true)
+  const [isNewTabLoading, setIsNewTabLoading] = React.useState(false)
 
   const [isCredentialLoading, startLoginWithCredentials] = React.useTransition()
   const [isGoogleLoading, startLoginWithGoogle] = React.useTransition()
@@ -40,14 +49,35 @@ export function Form() {
   })
 
   React.useEffect(() => {
-    setIsLoading(isCredentialLoading || isGoogleLoading)
-  }, [setIsLoading, isCredentialLoading, isGoogleLoading])
+    setIsLoading(isCredentialLoading || isGoogleLoading || isNewTabLoading)
+  }, [setIsLoading, isCredentialLoading, isGoogleLoading, isNewTabLoading])
+
+  React.useEffect(() => {
+    if (!isNewTabLoading) return
+
+    const bc = new BroadcastChannel('google_auth')
+    bc.addEventListener('message', (e) => {
+      setIsNewTabLoading(false)
+      handleGoogleCode(e.data.code)
+      bc.close()
+    })
+
+    return () => bc.close()
+  }, [isNewTabLoading])
+
+  const handleGoogleCode = async (code: string) => {
+    startLoginWithGoogle(async () => {
+      const res = await getUserLogin({ code })
+      console.log(res)
+    })
+  }
 
   const handleLoginWithCredentials = (values: FormValues) => {
     if (isLoading) return
     startLoginWithCredentials(async () => {
       try {
         const res = await loginWithCredentials(values)
+
         if (res?.code === 'INVALID_CREDENTIALS') {
           setError(
             'password',
@@ -73,7 +103,9 @@ export function Form() {
   const handleLoginWithGoogle = () => {
     if (isLoading) return
     startLoginWithGoogle(async () => {
-      await redirectGoogleLogin()
+      const res = await redirectGoogleLogin()
+      setIsNewTabLoading(true)
+      window.open(res.url, '_blank', 'noopener, noreferrer')
     })
   }
 
@@ -81,7 +113,7 @@ export function Form() {
     <>
       <fieldset disabled={isLoading}>
         <ContinueWithGoogle
-          isLoading={isGoogleLoading}
+          isLoading={isGoogleLoading || isNewTabLoading}
           onClick={handleLoginWithGoogle}
         />
       </fieldset>

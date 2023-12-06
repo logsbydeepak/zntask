@@ -26,20 +26,17 @@ import {
   zResetPassword,
 } from './utils/zSchema'
 
-const LOGIN_PAGE_URL = `${env.BASE_URL}/login`
-const REGISTER_PAGE_URL = `${env.BASE_URL}/register`
-
 export const getUserLogin = async (query: any) => {
-  return await getGoogleData(googleClient(LOGIN_PAGE_URL), query)
+  return await getGoogleData(googleClient(), query)
 }
 
 export const redirectGoogleLogin = h.fn(async () => {
-  const url = generateGoogleAuthUrl(LOGIN_PAGE_URL)
-  redirect(url)
+  const url = generateGoogleAuthUrl()
+  return r('OK', { url })
 })
 
 export const redirectGoogleRegister = h.fn(async () => {
-  const url = generateGoogleAuthUrl(REGISTER_PAGE_URL)
+  const url = generateGoogleAuthUrl()
   redirect(url)
 })
 

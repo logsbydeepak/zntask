@@ -47,7 +47,9 @@ export default function Page() {
 function PlanedTab() {
   const tasks = useTaskStore(
     useShallow((s) =>
-      s.parentTasks.filter((i) => !i.categoryId && !!!i.completedAt)
+      s.parentTasks
+        .filter((i) => !i.categoryId && !!!i.completedAt)
+        .sort((a, b) => (a.orderId > b.orderId ? 1 : -1))
     )
   )
 

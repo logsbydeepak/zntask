@@ -6,7 +6,6 @@ import {
   SubTitle,
   Title,
 } from '@/app/(application)/(auth)/components'
-import { getUserLogin } from '@/data/auth'
 
 import { Form } from './form'
 
@@ -14,16 +13,7 @@ export const metadata: Metadata = {
   title: 'Login',
 }
 
-export default async function Page({
-  searchParams,
-}: {
-  searchParams: {
-    [key: string]: string | string[] | undefined
-  }
-}) {
-  const data = await getUserLogin(searchParams)
-  console.log(data)
-
+export default function Page() {
   return (
     <FormContainer>
       <div className="flex w-full flex-col items-center">

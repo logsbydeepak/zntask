@@ -12,16 +12,16 @@ const scope = [
   'https://www.googleapis.com/auth/userinfo.email',
 ]
 
-export function googleClient(URL: string) {
+export function googleClient() {
   return new google.auth.OAuth2(
     env.GOOGLE_CLIENT_ID,
     env.GOOGLE_CLIENT_SECRET,
-    URL
+    `${env.BASE_URL}/google`
   )
 }
 
-export const generateGoogleAuthUrl = (redirectURL: string) => {
-  return googleClient(redirectURL).generateAuthUrl({
+export const generateGoogleAuthUrl = () => {
+  return googleClient().generateAuthUrl({
     access_type: 'offline',
     scope,
     prompt: 'select_account',
