@@ -1,8 +1,8 @@
-import { env } from 'process'
 import { google } from 'googleapis'
 import * as jose from 'jose'
 import { z } from 'zod'
 
+import { env } from '@/env.mjs'
 import { zEmail, zRequired } from '@/utils/zSchema'
 
 import { r } from './handler'
@@ -11,15 +11,21 @@ const scope = [
   'https://www.googleapis.com/auth/userinfo.profile',
   'https://www.googleapis.com/auth/userinfo.email',
 ]
+export const googleURL = {
+  login: `${env.BASE_URL}/login`,
+  register: `${env.BASE_URL}/register`,
+}
 
-export const googleClient = new google.auth.OAuth2(
-  env.GOOGLE_CLIENT_ID,
-  env.GOOGLE_CLIENT_SECRET,
-  `${env.BASE_URL}/login`
-)
+export function googleClient(URL: string) {
+  return new google.auth.OAuth2(
+    env.GOOGLE_CLIENT_ID,
+    env.GOOGLE_CLIENT_SECRET,
+    URL
+  )
+}
 
-export const generateGoogleAuthUrl = () => {
-  return googleClient.generateAuthUrl({
+export function generateGoogleURL(url: string) {
+  return googleClient(url).generateAuthUrl({
     access_type: 'offline',
     scope,
     prompt: 'select_account',
@@ -43,14 +49,22 @@ const zGoogleIdTokenDataSchema = z.object({
   picture: z.string().url().nullable(),
 })
 
-export async function getGoogleData({ code }: { code: string }) {
+export async function getGoogleData({
+  code,
+  URL,
+}: {
+  code: string
+  URL: string
+}) {
   try {
     const parsedQuery = zGoogleLoginRedirectQuerySchema.safeParse({ code })
     if (!parsedQuery.success) {
       return r('INVALID_INPUT')
     }
 
-    const googleTokenRes = await googleClient.getToken(parsedQuery.data.code)
+    const googleTokenRes = await googleClient(URL).getToken(
+      parsedQuery.data.code
+    )
     const parsedGoogleTokenRes = zGoogleTokenResSchema.safeParse(googleTokenRes)
     if (!parsedGoogleTokenRes.success) {
       return r('INVALID_INPUT')

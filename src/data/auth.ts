@@ -15,9 +15,10 @@ import { checkToken } from './utils'
 import { generateAuthJWT, generateEmailJWT, setAuthCookie } from './utils/auth'
 import { redis, resend } from './utils/config'
 import {
-  generateGoogleAuthUrl,
+  generateGoogleURL,
   getGoogleData,
   googleClient,
+  googleURL,
 } from './utils/google'
 import { h, r } from './utils/handler'
 import {
@@ -27,12 +28,12 @@ import {
 } from './utils/zSchema'
 
 export const redirectGoogleLogin = h.fn(async () => {
-  const url = generateGoogleAuthUrl()
+  const url = generateGoogleURL(googleURL.login)
   redirect(url)
 })
 
 export const redirectGoogleRegister = h.fn(async () => {
-  const url = generateGoogleAuthUrl()
+  const url = generateGoogleURL(googleURL.register)
   redirect(url)
 })
 
@@ -41,7 +42,10 @@ const zGoogleCode = z.object({
 })
 
 export const loginWithGoogle = h.input(zGoogleCode).fn(async ({ input }) => {
-  const data = await getGoogleData(input)
+  const data = await getGoogleData({
+    code: input.code,
+    URL: googleURL.login,
+  })
   if (data.code !== 'OK') return r('INVALID_CREDENTIALS')
 
   const user = await db.query.googleAuth.findFirst({
@@ -57,7 +61,10 @@ export const loginWithGoogle = h.input(zGoogleCode).fn(async ({ input }) => {
 })
 
 export const registerWithGoogle = h.input(zGoogleCode).fn(async ({ input }) => {
-  const data = await getGoogleData(input)
+  const data = await getGoogleData({
+    code: input.code,
+    URL: googleURL.register,
+  })
   if (data.code !== 'OK') return r('INVALID_CREDENTIALS')
 
   const user = await db.query.users.findFirst({
