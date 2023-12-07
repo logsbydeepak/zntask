@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import { useSearchParams } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { useDebounce } from 'use-debounce'
@@ -16,19 +17,27 @@ import {
 } from '@/app/(application)/(auth)/components'
 import { Button } from '@/components/ui/button'
 import * as FormPrimitive from '@/components/ui/form'
-import { redirectGoogleRegister, registerWithCredentials } from '@/data/auth'
+import {
+  redirectGoogleRegister,
+  registerWithCredentials,
+  registerWithGoogle,
+} from '@/data/auth'
 import { zRegisterWithCredentials } from '@/data/utils/zSchema'
 import { toast } from '@/store/toast'
 
 type FormValues = z.infer<typeof zRegisterWithCredentials>
 
 export function Form() {
-  const [isPasswordVisible, setIsPasswordVisible] = React.useState(false)
-  const [isLoading, setIsLoading] = React.useState(false)
+  const searchParams = useSearchParams()
 
-  const [isCredentialLoading, startRegisterWithCredentials] =
+  const [isPasswordVisible, setIsPasswordVisible] = React.useState(false)
+  const [isGoogleLoading, setIsGoogleLoading] = React.useState(
+    !!searchParams.get('code')
+  )
+
+  const [isCredentialPending, startRegisterWithCredentials] =
     React.useTransition()
-  const [isGoogleLoading, startRegisterWithGoogle] = React.useTransition()
+  const [isGooglePending, startRegisterWithGoogle] = React.useTransition()
 
   const {
     register,
@@ -40,11 +49,26 @@ export function Form() {
     resolver: zodResolver(zRegisterWithCredentials),
   })
 
-  React.useEffect(() => {
-    setIsLoading(isGoogleLoading || isCredentialLoading)
-  }, [setIsLoading, isGoogleLoading, isCredentialLoading])
+  const isLoading = isGooglePending || isCredentialPending || isGoogleLoading
 
   const [watchPassword] = useDebounce(watch('password') ?? '', 500)
+
+  const handleGoogleCode = React.useCallback(() => {
+    const code = searchParams.get('code')
+    if (!code) return
+    startRegisterWithGoogle(async () => {
+      const res = await registerWithGoogle({ code })
+      console.log(res)
+    })
+  }, [searchParams])
+
+  React.useEffect(() => {
+    return () => handleGoogleCode()
+  }, [handleGoogleCode])
+
+  React.useEffect(() => {
+    setIsGoogleLoading(isGooglePending)
+  }, [isGooglePending])
 
   const handleRegisterWithCredentials = (values: FormValues) => {
     startRegisterWithCredentials(async () => {
@@ -72,7 +96,7 @@ export function Form() {
     <>
       <fieldset disabled={isLoading}>
         <ContinueWithGoogle
-          isLoading={isGoogleLoading}
+          isLoading={isGooglePending || isGoogleLoading}
           onClick={handleRegisterWithGoogle}
         />
       </fieldset>
@@ -184,7 +208,7 @@ export function Form() {
       </FormPrimitive.Root>
       <Button
         className="w-full"
-        isLoading={isCredentialLoading}
+        isLoading={isCredentialPending}
         form="register_credentials_form"
       >
         Register

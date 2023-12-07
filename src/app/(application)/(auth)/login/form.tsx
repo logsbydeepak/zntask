@@ -60,7 +60,7 @@ export function Form() {
       const res = await loginWithGoogle({ code })
       console.log(res)
     })
-  }, [searchParams, startLoginWithGoogle])
+  }, [searchParams])
 
   React.useEffect(() => {
     return () => handleGoogleCode()
