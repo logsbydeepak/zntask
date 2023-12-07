@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useCallback } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
@@ -29,15 +29,14 @@ type FormValues = z.infer<typeof zLoginWithCredentials>
 export function Form() {
   const searchParams = useSearchParams()
 
-  const googleCode = searchParams.get('code')
   const [isResetPasswordDialogOpen, setIsResetPasswordDialogOpen] =
     React.useState(false)
   const [isPasswordVisible, setIsPasswordVisible] = React.useState(false)
-  const [isLoading, setIsLoading] = React.useState(true)
-  const [isNewTabLoading, setIsNewTabLoading] = React.useState(false)
-
-  const [isCredentialLoading, startLoginWithCredentials] = React.useTransition()
-  const [isGoogleLoading, startLoginWithGoogle] = React.useTransition()
+  const [isGoogleLoading, setIsGoogleLoading] = React.useState(
+    !!searchParams.get('code')
+  )
+  const [isCredentialPending, startLoginWithCredentials] = React.useTransition()
+  const [isGooglePending, startLoginWithGoogle] = React.useTransition()
 
   const {
     register,
@@ -48,29 +47,24 @@ export function Form() {
     resolver: zodResolver(zLoginWithCredentials),
   })
 
-  React.useEffect(() => {
-    setIsLoading(isCredentialLoading || isGoogleLoading || isNewTabLoading)
-  }, [setIsLoading, isCredentialLoading, isGoogleLoading, isNewTabLoading])
+  const isLoading = isCredentialPending || isGooglePending || isGoogleLoading
 
   React.useEffect(() => {
-    if (!isNewTabLoading) return
+    setIsGoogleLoading(isGooglePending)
+  }, [isGooglePending])
 
-    const bc = new BroadcastChannel('google_auth')
-    bc.addEventListener('message', (e) => {
-      setIsNewTabLoading(false)
-      handleGoogleCode(e.data.code)
-      bc.close()
-    })
-
-    return () => bc.close()
-  }, [isNewTabLoading])
-
-  const handleGoogleCode = async (code: string) => {
+  const handleGoogleCode = React.useCallback(() => {
+    const code = searchParams.get('code')
+    if (!code) return
     startLoginWithGoogle(async () => {
       const res = await loginWithGoogle({ code })
       console.log(res)
     })
-  }
+  }, [searchParams, startLoginWithGoogle])
+
+  React.useEffect(() => {
+    return () => handleGoogleCode()
+  }, [handleGoogleCode])
 
   const handleLoginWithCredentials = (values: FormValues) => {
     if (isLoading) return
@@ -103,9 +97,7 @@ export function Form() {
   const handleLoginWithGoogle = () => {
     if (isLoading) return
     startLoginWithGoogle(async () => {
-      const res = await redirectGoogleLogin()
-      setIsNewTabLoading(true)
-      window.open(res.url, '_blank', 'noopener, noreferrer')
+      await redirectGoogleLogin()
     })
   }
 
@@ -113,7 +105,7 @@ export function Form() {
     <>
       <fieldset disabled={isLoading}>
         <ContinueWithGoogle
-          isLoading={isGoogleLoading || isNewTabLoading}
+          isLoading={isGooglePending || isGoogleLoading}
           onClick={handleLoginWithGoogle}
         />
       </fieldset>
@@ -170,7 +162,7 @@ export function Form() {
       </FormPrimitive.Root>
       <Button
         className="w-full"
-        isLoading={isCredentialLoading}
+        isLoading={isCredentialPending}
         form="login_credentials_form"
       >
         Login

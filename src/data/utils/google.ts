@@ -15,7 +15,7 @@ const scope = [
 export const googleClient = new google.auth.OAuth2(
   env.GOOGLE_CLIENT_ID,
   env.GOOGLE_CLIENT_SECRET,
-  `${env.BASE_URL}/google`
+  `${env.BASE_URL}/login`
 )
 
 export const generateGoogleAuthUrl = () => {

@@ -28,7 +28,7 @@ import {
 
 export const redirectGoogleLogin = h.fn(async () => {
   const url = generateGoogleAuthUrl()
-  return r('OK', { url })
+  redirect(url)
 })
 
 export const redirectGoogleRegister = h.fn(async () => {
