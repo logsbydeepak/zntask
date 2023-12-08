@@ -37,6 +37,11 @@ export const redirectGoogleRegister = h.fn(async () => {
   redirect(url)
 })
 
+export const redirectGoogleAddNew = h.auth.fn(async () => {
+  const url = generateGoogleURL(googleURL.user)
+  redirect(url)
+})
+
 const zGoogleCode = z.object({
   code: zRequired,
 })

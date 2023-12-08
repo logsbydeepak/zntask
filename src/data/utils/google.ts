@@ -12,8 +12,9 @@ const scope = [
   'https://www.googleapis.com/auth/userinfo.email',
 ]
 export const googleURL = {
-  login: `${env.BASE_URL}/login`,
-  register: `${env.BASE_URL}/register`,
+  login: `${env.BASE_URL}/google?type=login`,
+  register: `${env.BASE_URL}/google?type=register`,
+  user: `${env.BASE_URL}/google?type=new`,
 }
 
 export function googleClient(URL: string) {
