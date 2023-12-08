@@ -1,18 +1,20 @@
 import React from 'react'
+import { LoaderIcon } from 'lucide-react'
 
 import { cn } from '@/utils/style'
 
 export const Button = React.forwardRef<
   HTMLButtonElement,
-  React.ComponentPropsWithoutRef<'button'>
->(({ className, ...props }, ref) => {
+  React.ComponentPropsWithoutRef<'button'> & { isLoading?: boolean }
+>(({ className, isLoading, ...props }, ref) => {
   return (
     <button
       {...props}
       ref={ref}
+      data-loading={isLoading}
       type="button"
       className={cn(
-        'mr-2 inline-flex items-center space-x-1 rounded-full border border-gray-200 px-3 py-1 text-gray-600 hover:bg-gray-50 hover:text-gray-950 data-[state=open]:bg-gray-50 data-[state=open]:text-gray-950',
+        'group mr-2 inline-flex items-center space-x-1 rounded-full border border-gray-200 px-3 py-1 text-gray-600 hover:bg-gray-50 hover:text-gray-950 data-[state=open]:bg-gray-50 data-[state=open]:text-gray-950',
         className
       )}
     />
@@ -21,7 +23,14 @@ export const Button = React.forwardRef<
 Button.displayName = 'Badge.Button'
 
 export function Icon({ children }: { children: React.ReactNode }) {
-  return <span className="grid h-3 w-3 place-content-center">{children}</span>
+  return (
+    <span className="grid h-3 w-3 place-content-center">
+      <span className="block group-data-[loading=true]:hidden">{children}</span>
+      <span className="hidden group-data-[loading=true]:block">
+        <LoaderIcon className="animate-spin" />
+      </span>
+    </span>
+  )
 }
 
 export function Label({

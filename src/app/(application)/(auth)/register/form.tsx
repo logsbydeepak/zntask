@@ -58,6 +58,7 @@ export function Form() {
   const handleGoogleCode = React.useCallback(() => {
     const code = searchParams.get('code')
     if (!code) return
+    window.history.replaceState({}, '', '/login')
     startRegisterWithGoogle(async () => {
       const res = await registerWithGoogle({ code })
       if (res.code === 'INVALID_CREDENTIALS') {
