@@ -54,7 +54,7 @@ export const loginWithGoogle = h.input(zGoogleCode).fn(async ({ input }) => {
     },
   })
 
-  if (!user) return r('USER_NOT_FOUND')
+  if (!user) return r('INVALID_CREDENTIALS')
   const token = await generateAuthJWT(user.id)
   setAuthCookie(token)
   redirect('/')

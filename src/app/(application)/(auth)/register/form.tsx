@@ -9,6 +9,7 @@ import { z } from 'zod'
 
 import {
   AccountQuestion,
+  Alert,
   ContinueWithGoogle,
   passwordChecklist,
   PasswordChecklistItem,
@@ -30,6 +31,7 @@ type FormValues = z.infer<typeof zRegisterWithCredentials>
 export function Form() {
   const searchParams = useSearchParams()
 
+  const [alertMessage, setAlertMessage] = React.useState('')
   const [isPasswordVisible, setIsPasswordVisible] = React.useState(false)
   const [isGoogleLoading, setIsGoogleLoading] = React.useState(
     !!searchParams.get('code')
@@ -58,17 +60,14 @@ export function Form() {
     if (!code) return
     startRegisterWithGoogle(async () => {
       const res = await registerWithGoogle({ code })
-      console.log(res)
+      if (res.code === 'INVALID_CREDENTIALS') {
+        setAlertMessage('Invalid credentials')
+      }
+      if (res.code === 'EMAIL_ALREADY_EXISTS') {
+        setAlertMessage('User already exists')
+      }
     })
   }, [searchParams])
-
-  React.useEffect(() => {
-    return () => handleGoogleCode()
-  }, [handleGoogleCode])
-
-  React.useEffect(() => {
-    setIsGoogleLoading(isGooglePending)
-  }, [isGooglePending])
 
   const handleRegisterWithCredentials = (values: FormValues) => {
     startRegisterWithCredentials(async () => {
@@ -92,14 +91,30 @@ export function Form() {
     })
   }
 
+  React.useEffect(() => {
+    return () => handleGoogleCode()
+  }, [handleGoogleCode])
+
+  React.useEffect(() => {
+    if (isLoading) setAlertMessage('')
+  }, [isLoading])
+
+  React.useEffect(() => {
+    setIsGoogleLoading(isGooglePending)
+  }, [isGooglePending])
+
   return (
     <>
-      <fieldset disabled={isLoading}>
-        <ContinueWithGoogle
-          isLoading={isGooglePending || isGoogleLoading}
-          onClick={handleRegisterWithGoogle}
-        />
-      </fieldset>
+      <div className="space-y-3">
+        <fieldset disabled={isLoading}>
+          <ContinueWithGoogle
+            isLoading={isGooglePending || isGoogleLoading}
+            onClick={handleRegisterWithGoogle}
+          />
+        </fieldset>
+        {alertMessage && <Alert>{alertMessage}</Alert>}
+      </div>
+
       <Separator />
       <FormPrimitive.Root
         onSubmit={handleSubmit(handleRegisterWithCredentials)}

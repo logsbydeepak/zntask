@@ -1,19 +1,21 @@
 'use client'
 
 import React, { useCallback } from 'react'
-import { useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 import {
   AccountQuestion,
+  Alert,
   ContinueWithGoogle,
   PasswordVisibilityToggle,
   ResetPassword,
   Separator,
 } from '@/app/(application)/(auth)/components'
 import { ResetPasswordDialog } from '@/components/dialogs/reset-password'
+import { ExclamationIcon } from '@/components/icon/exclamation'
 import { Button } from '@/components/ui/button'
 import * as FormPrimitive from '@/components/ui/form'
 import {
@@ -35,6 +37,8 @@ export function Form() {
   const [isGoogleLoading, setIsGoogleLoading] = React.useState(
     !!searchParams.get('code')
   )
+  const [alertMessage, setAlertMessage] = React.useState('')
+
   const [isCredentialPending, startLoginWithCredentials] = React.useTransition()
   const [isGooglePending, startLoginWithGoogle] = React.useTransition()
 
@@ -49,22 +53,16 @@ export function Form() {
 
   const isLoading = isCredentialPending || isGooglePending || isGoogleLoading
 
-  React.useEffect(() => {
-    setIsGoogleLoading(isGooglePending)
-  }, [isGooglePending])
-
   const handleGoogleCode = React.useCallback(() => {
     const code = searchParams.get('code')
     if (!code) return
     startLoginWithGoogle(async () => {
       const res = await loginWithGoogle({ code })
-      console.log(res)
+      if (res.code === 'INVALID_CREDENTIALS') {
+        setAlertMessage('User not found')
+      }
     })
   }, [searchParams])
-
-  React.useEffect(() => {
-    return () => handleGoogleCode()
-  }, [handleGoogleCode])
 
   const handleLoginWithCredentials = (values: FormValues) => {
     if (isLoading) return
@@ -101,14 +99,29 @@ export function Form() {
     })
   }
 
+  React.useEffect(() => {
+    return () => handleGoogleCode()
+  }, [handleGoogleCode])
+
+  React.useEffect(() => {
+    if (isLoading) setAlertMessage('')
+  }, [isLoading])
+
+  React.useEffect(() => {
+    setIsGoogleLoading(isGooglePending)
+  }, [isGooglePending])
+
   return (
     <>
-      <fieldset disabled={isLoading}>
-        <ContinueWithGoogle
-          isLoading={isGooglePending || isGoogleLoading}
-          onClick={handleLoginWithGoogle}
-        />
-      </fieldset>
+      <div className="space-y-3">
+        <fieldset disabled={isLoading}>
+          <ContinueWithGoogle
+            isLoading={isGooglePending || isGoogleLoading}
+            onClick={handleLoginWithGoogle}
+          />
+        </fieldset>
+        {alertMessage && <Alert>{alertMessage}</Alert>}
+      </div>
       <Separator />
       <FormPrimitive.Root
         onSubmit={handleSubmit(handleLoginWithCredentials)}

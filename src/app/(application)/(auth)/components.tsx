@@ -8,6 +8,7 @@ import {
   TypeIcon,
 } from 'lucide-react'
 
+import { ExclamationIcon } from '@/components/icon/exclamation'
 import { GoogleIcon } from '@/components/icon/google'
 import { LogoIcon } from '@/components/icon/logo'
 import { Button } from '@/components/ui/button'
@@ -23,6 +24,17 @@ export function FormContainer({
   return (
     <div className={cn('flex flex-col space-y-6 p-10', className)}>
       {children}
+    </div>
+  )
+}
+
+export function Alert({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="flex items-center space-x-2 rounded-lg bg-red-50 px-4 py-2 text-xs font-medium text-red-700">
+      <div className="flex h-3.5 w-3.5 items-center justify-center rounded-full bg-red-700">
+        <ExclamationIcon className="h-2.5 w-2.5 text-white" />
+      </div>
+      <p>{children}</p>
     </div>
   )
 }
