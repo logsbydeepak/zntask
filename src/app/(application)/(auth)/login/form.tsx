@@ -61,12 +61,18 @@ export function Form() {
     if (!code) return
     router.replace('/login')
     startLoginWithGoogle(async () => {
-      requestRef.current = true
-      const res = await loginWithGoogle({ code })
-      requestRef.current = false
-      console.log(res)
-      if (res.code === 'INVALID_CREDENTIALS') {
-        setAlertMessage('User not found')
+      try {
+        requestRef.current = true
+        const res = await loginWithGoogle({ code })
+        const resCode = res?.code
+
+        if (resCode === 'INVALID_CREDENTIALS') {
+          setAlertMessage('User not found')
+        }
+      } catch (error) {
+        toast.error('Something went wrong')
+      } finally {
+        requestRef.current = false
       }
     })
   }, [searchParams, router])
@@ -76,8 +82,9 @@ export function Form() {
     startLoginWithCredentials(async () => {
       try {
         const res = await loginWithCredentials(values)
+        const resCode = res?.code
 
-        if (res?.code === 'INVALID_CREDENTIALS') {
+        if (resCode === 'INVALID_CREDENTIALS') {
           setError(
             'password',
             {
@@ -102,7 +109,11 @@ export function Form() {
   const handleLoginWithGoogle = () => {
     if (isLoading) return
     startLoginWithGoogle(async () => {
-      await redirectGoogleLogin()
+      try {
+        await redirectGoogleLogin()
+      } catch (error) {
+        toast.error('Something went wrong')
+      }
     })
   }
 

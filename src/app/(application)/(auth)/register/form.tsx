@@ -64,14 +64,18 @@ export function Form() {
     if (!code) return
     router.replace('/register')
     startRegisterWithGoogle(async () => {
-      requestRef.current = true
-      const res = await registerWithGoogle({ code })
-      requestRef.current = false
-      if (res.code === 'INVALID_CREDENTIALS') {
-        setAlertMessage('Invalid credentials')
-      }
-      if (res.code === 'EMAIL_ALREADY_EXISTS') {
-        setAlertMessage('User already exists')
+      try {
+        requestRef.current = true
+        const res = await registerWithGoogle({ code })
+        const resCode = res?.code
+
+        if (resCode === 'INVALID_CREDENTIALS') {
+          setAlertMessage('User not found')
+        }
+      } catch (error) {
+        toast.error('Something went wrong')
+      } finally {
+        requestRef.current = false
       }
     })
   }, [searchParams, router])
@@ -80,7 +84,8 @@ export function Form() {
     startRegisterWithCredentials(async () => {
       try {
         const res = await registerWithCredentials(values)
-        if (res?.code === 'EMAIL_ALREADY_EXISTS') {
+        const resCode = res?.code
+        if (resCode === 'EMAIL_ALREADY_EXISTS') {
           setError('email', {
             message: 'already exists',
           })
@@ -94,7 +99,11 @@ export function Form() {
   const handleRegisterWithGoogle = () => {
     if (isLoading) return
     startRegisterWithGoogle(async () => {
-      await redirectGoogleRegister()
+      try {
+        await redirectGoogleRegister()
+      } catch (error) {
+        toast.error('Something went wrong')
+      }
     })
   }
 
