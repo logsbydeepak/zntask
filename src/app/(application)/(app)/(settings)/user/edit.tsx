@@ -6,7 +6,7 @@ import { BookUserIcon, LockIcon, UserCircle2Icon } from 'lucide-react'
 
 import { GoogleIcon } from '@/components/icon/google'
 import * as Badge from '@/components/ui/badge'
-import { redirectGoogleAddNew } from '@/data/auth'
+import { addGoogleAuthProvider, redirectGoogleAddNew } from '@/data/auth'
 import { useAppStore } from '@/store/app'
 
 export function Update() {
@@ -25,7 +25,10 @@ export function Update() {
     const code = searchParams.get('code')
     if (!code) return
     window.history.replaceState({}, '', '/user')
-    startGoogleTransition(async () => {})
+    startGoogleTransition(async () => {
+      const res = await addGoogleAuthProvider({ code })
+      console.log(res)
+    })
   }, [searchParams])
 
   React.useEffect(() => {

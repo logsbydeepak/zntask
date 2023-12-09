@@ -46,6 +46,31 @@ const zGoogleCode = z.object({
   code: zRequired,
 })
 
+export const addGoogleAuthProvider = h.auth
+  .input(zGoogleCode)
+  .fn(async ({ input, userId }) => {
+    const data = await getGoogleData({
+      code: input.code,
+      URL: googleURL.user,
+    })
+    if (data.code !== 'OK') return r('INVALID_CREDENTIALS')
+
+    const googleAuthProvider = await db.query.googleAuth.findFirst({
+      where(fields, operators) {
+        return operators.eq(fields.id, userId)
+      },
+    })
+    if (googleAuthProvider) return r('ALREADY_ADDED')
+
+    await db.insert(dbSchema.googleAuth).values({
+      id: ulid(),
+      userId,
+      email: data.email,
+    })
+
+    return r('OK')
+  })
+
 export const loginWithGoogle = h.input(zGoogleCode).fn(async ({ input }) => {
   const data = await getGoogleData({
     code: input.code,
@@ -60,7 +85,7 @@ export const loginWithGoogle = h.input(zGoogleCode).fn(async ({ input }) => {
   })
 
   if (!user) return r('INVALID_CREDENTIALS')
-  const token = await generateAuthJWT(user.id)
+  const token = await generateAuthJWT(user.userId)
   setAuthCookie(token)
   redirect('/')
 })
