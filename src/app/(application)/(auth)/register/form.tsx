@@ -2,6 +2,7 @@
 
 import React from 'react'
 import { useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/router'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { useDebounce } from 'use-debounce'
@@ -29,8 +30,10 @@ import { toast } from '@/store/toast'
 type FormValues = z.infer<typeof zRegisterWithCredentials>
 
 export function Form() {
+  const router = useRouter()
   const searchParams = useSearchParams()
 
+  const requestRef = React.useRef(false)
   const [alertMessage, setAlertMessage] = React.useState('')
   const [isPasswordVisible, setIsPasswordVisible] = React.useState(false)
   const [isGoogleLoading, setIsGoogleLoading] = React.useState(
@@ -56,11 +59,14 @@ export function Form() {
   const [watchPassword] = useDebounce(watch('password') ?? '', 500)
 
   const handleGoogleCode = React.useCallback(() => {
+    if (requestRef.current) return
     const code = searchParams.get('code')
     if (!code) return
-    window.history.replaceState({}, '', '/login')
+    router.replace('/register')
     startRegisterWithGoogle(async () => {
+      requestRef.current = true
       const res = await registerWithGoogle({ code })
+      requestRef.current = false
       if (res.code === 'INVALID_CREDENTIALS') {
         setAlertMessage('Invalid credentials')
       }
@@ -68,7 +74,7 @@ export function Form() {
         setAlertMessage('User already exists')
       }
     })
-  }, [searchParams])
+  }, [searchParams, router])
 
   const handleRegisterWithCredentials = (values: FormValues) => {
     startRegisterWithCredentials(async () => {
@@ -93,7 +99,7 @@ export function Form() {
   }
 
   React.useEffect(() => {
-    return () => handleGoogleCode()
+    handleGoogleCode()
   }, [handleGoogleCode])
 
   React.useEffect(() => {

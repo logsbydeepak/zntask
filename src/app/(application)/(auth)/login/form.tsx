@@ -30,7 +30,9 @@ type FormValues = z.infer<typeof zLoginWithCredentials>
 
 export function Form() {
   const searchParams = useSearchParams()
+  const router = useRouter()
 
+  const requestRef = React.useRef(false)
   const [isResetPasswordDialogOpen, setIsResetPasswordDialogOpen] =
     React.useState(false)
   const [isPasswordVisible, setIsPasswordVisible] = React.useState(false)
@@ -54,16 +56,20 @@ export function Form() {
   const isLoading = isCredentialPending || isGooglePending || isGoogleLoading
 
   const handleGoogleCode = React.useCallback(() => {
+    if (requestRef.current) return
     const code = searchParams.get('code')
     if (!code) return
-    window.history.replaceState({}, '', '/login')
+    router.replace('/login')
     startLoginWithGoogle(async () => {
+      requestRef.current = true
       const res = await loginWithGoogle({ code })
+      requestRef.current = false
+      console.log(res)
       if (res.code === 'INVALID_CREDENTIALS') {
         setAlertMessage('User not found')
       }
     })
-  }, [searchParams])
+  }, [searchParams, router])
 
   const handleLoginWithCredentials = (values: FormValues) => {
     if (isLoading) return
@@ -101,7 +107,7 @@ export function Form() {
   }
 
   React.useEffect(() => {
-    return () => handleGoogleCode()
+    handleGoogleCode()
   }, [handleGoogleCode])
 
   React.useEffect(() => {

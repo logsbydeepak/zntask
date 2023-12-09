@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { BookUserIcon, LockIcon, UserCircle2Icon } from 'lucide-react'
 
 import { GoogleIcon } from '@/components/icon/google'
@@ -10,29 +10,32 @@ import { addGoogleAuthProvider, redirectGoogleAddNew } from '@/data/auth'
 import { useAppStore } from '@/store/app'
 
 export function Update() {
+  const router = useRouter()
   const searchParams = useSearchParams()
 
-  const setDialog = useAppStore((state) => state.setDialog)
-
+  const requestRef = React.useRef(false)
   const [isGooglePending, startGoogleTransition] = React.useTransition()
   const [isGoogleLoading, setIsGoogleLoading] = React.useState(
     !!searchParams.get('code')
   )
 
+  const setDialog = useAppStore((state) => state.setDialog)
+
   const isLoading = isGooglePending || isGoogleLoading
 
   const handleAddGoogle = React.useCallback(() => {
+    if (requestRef.current) return
     const code = searchParams.get('code')
     if (!code) return
-    window.history.replaceState({}, '', '/user')
+    router.replace('/user')
     startGoogleTransition(async () => {
       const res = await addGoogleAuthProvider({ code })
       console.log(res)
     })
-  }, [searchParams])
+  }, [searchParams, router])
 
   React.useEffect(() => {
-    return () => handleAddGoogle()
+    handleAddGoogle()
   }, [handleAddGoogle])
 
   React.useEffect(() => {
