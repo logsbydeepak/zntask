@@ -14,12 +14,7 @@ import { db, dbSchema } from './db'
 import { checkToken } from './utils'
 import { generateAuthJWT, generateEmailJWT, setAuthCookie } from './utils/auth'
 import { redis, resend } from './utils/config'
-import {
-  generateGoogleURL,
-  getGoogleData,
-  googleClient,
-  googleURL,
-} from './utils/google'
+import { GC } from './utils/google'
 import { h, r } from './utils/handler'
 import {
   zLoginWithCredentials,
@@ -27,18 +22,22 @@ import {
   zResetPassword,
 } from './utils/zSchema'
 
+const gcLogin = new GC(`${env.BASE_URL}/google?type=login`)
+const gcRegister = new GC(`${env.BASE_URL}/google?type=register`)
+const gcNew = new GC(`${env.BASE_URL}/google?type=new`)
+
 export const redirectGoogleLogin = h.fn(async () => {
-  const url = generateGoogleURL(googleURL.login)
+  const url = gcLogin.genURL()
   redirect(url)
 })
 
 export const redirectGoogleRegister = h.fn(async () => {
-  const url = generateGoogleURL(googleURL.register)
+  const url = gcRegister.genURL()
   redirect(url)
 })
 
 export const redirectGoogleAddNew = h.auth.fn(async () => {
-  const url = generateGoogleURL(googleURL.user)
+  const url = gcNew.genURL()
   redirect(url)
 })
 
@@ -49,10 +48,7 @@ const zGoogleCode = z.object({
 export const addGoogleAuthProvider = h.auth
   .input(zGoogleCode)
   .fn(async ({ input, userId }) => {
-    const data = await getGoogleData({
-      code: input.code,
-      URL: googleURL.user,
-    })
+    const data = await gcNew.getData(input.code)
     if (data.code !== 'OK') return r('INVALID_CREDENTIALS')
 
     const googleAuthProvider = await db.query.googleAuth.findFirst({
@@ -72,10 +68,7 @@ export const addGoogleAuthProvider = h.auth
   })
 
 export const loginWithGoogle = h.input(zGoogleCode).fn(async ({ input }) => {
-  const data = await getGoogleData({
-    code: input.code,
-    URL: googleURL.login,
-  })
+  const data = await gcLogin.getData(input.code)
   if (data.code !== 'OK') return r('INVALID_CREDENTIALS')
 
   const user = await db.query.googleAuth.findFirst({
@@ -91,10 +84,7 @@ export const loginWithGoogle = h.input(zGoogleCode).fn(async ({ input }) => {
 })
 
 export const registerWithGoogle = h.input(zGoogleCode).fn(async ({ input }) => {
-  const data = await getGoogleData({
-    code: input.code,
-    URL: googleURL.register,
-  })
+  const data = await gcRegister.getData(input.code)
   if (data.code !== 'OK') return r('INVALID_CREDENTIALS')
 
   const user = await db.query.users.findFirst({
