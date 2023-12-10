@@ -1,5 +1,6 @@
 'use client'
 
+import React from 'react'
 import { useShallow } from 'zustand/react/shallow'
 
 import * as Layout from '@/app/(application)/(app)/app-layout'

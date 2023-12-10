@@ -4,20 +4,18 @@ import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import Avvvatars from 'avvvatars-react'
 import { useAtomValue, useSetAtom } from 'jotai'
 import {
   CheckCircleIcon,
-  CommandIcon,
   FolderPlusIcon,
   LogOutIcon,
   MenuSquareIcon,
   MonitorIcon,
   MoonStarIcon,
   PanelLeftIcon,
-  PlusIcon,
   SearchIcon,
   SunIcon,
+  UserIcon,
 } from 'lucide-react'
 import { useTheme } from 'next-themes'
 
@@ -43,10 +41,8 @@ export function Navbar() {
   const setDialog = useAppStore((s) => s.setDialog)
   const setIsSidebarOpen = useSetAtom(isSidebarOpenAtom)
   const isSidebarOpen = useAtomValue(isSidebarOpenAtom)
-  const user = useAtomValue(userAtom)
   const isAppSyncing = useAtomValue(isAppSyncingAtom)
 
-  const name = `${user.firstName} ${user.lastName}`
   return (
     <nav className="fixed z-20 w-full border-b border-gray-200 bg-white bg-opacity-50 backdrop-blur-sm">
       <div className="flex h-14 items-center justify-between px-4 md:px-5">
@@ -80,8 +76,8 @@ export function Navbar() {
 
           <DropdownMenuRoot>
             <DropdownMenuTrigger asChild>
-              <button className="relative">
-                <Avatar src={user.profilePicture} name={name} />
+              <button className="relative flex h-8 w-8 items-center justify-center rounded-full border border-gray-100 bg-gray-50">
+                <Avatar />
                 <span
                   data-active={isAppSyncing}
                   className="absolute bottom-0 right-[1px] hidden h-2 w-2 items-center justify-center rounded-full border border-white bg-white data-[active=true]:flex"
@@ -92,12 +88,8 @@ export function Navbar() {
             </DropdownMenuTrigger>
 
             <DropdownMenuPortal>
-              <DropdownMenuContent align="end" sideOffset={8}>
-                <UserMenu
-                  name={name}
-                  email={user.email}
-                  src={user.profilePicture}
-                />
+              <DropdownMenuContent align="end" sideOffset={8} className="w-44">
+                <UserMenu />
               </DropdownMenuContent>
             </DropdownMenuPortal>
           </DropdownMenuRoot>
@@ -107,29 +99,26 @@ export function Navbar() {
   )
 }
 
-function UserMenu({
-  name,
-  email,
-  src,
-}: {
-  name: string
-  email: string
-  src: string | null
-}) {
+function UserMenu() {
   const { theme, setTheme } = useTheme()
   const setDialog = useAppStore((s) => s.setDialog)
+  const { email, firstName, lastName } = useAtomValue(userAtom)
   const router = useRouter()
 
   return (
     <>
-      <DropdownMenuItem onSelect={() => router.push('/user')} className="">
-        <Avatar src={src} name={name} />
-        <span>
-          <p className="w-24 overflow-hidden text-ellipsis">{name}</p>
-          <p className="w-24 overflow-hidden text-ellipsis text-[10px] font-normal">
-            {email}
-          </p>
-        </span>
+      <div className="px-2 py-2 text-xs font-medium">
+        <p className="overflow-hidden text-ellipsis text-sm">{`${firstName} ${lastName}`}</p>
+        <p className="overflow-hidden text-ellipsis text-xs font-normal text-gray-600">
+          {email}
+        </p>
+      </div>
+
+      <DropdownMenuItem onSelect={() => router.push('/user')}>
+        <MenuIcon intent="destructive">
+          <UserIcon />
+        </MenuIcon>
+        <span>User</span>
       </DropdownMenuItem>
 
       <DropdownMenuRadioGroup
@@ -219,19 +208,36 @@ function Search() {
   )
 }
 
-function Avatar({ src, name }: { src: string | null; name: string }) {
-  if (src) {
-    return (
-      <div className="relative h-8 w-8">
+function genInitial(firstName: string, lastName: string | null) {
+  if (!lastName && firstName.length >= 2) {
+    return `${firstName[0]}${firstName[1]}`
+  }
+  if (firstName && lastName) {
+    return `${firstName[0]}${lastName[0]}`
+  }
+  return firstName[0]
+}
+
+function Avatar() {
+  const { profilePicture, firstName, lastName } = useAtomValue(userAtom)
+  const initial = genInitial(firstName, lastName).toUpperCase()
+
+  return (
+    <div className="relative flex h-7 w-7 items-center justify-center rounded-full">
+      {profilePicture && (
         <Image
-          src={src || ''}
+          src={profilePicture}
           alt="avatar"
           fill
-          className="h-full  w-full rounded-full object-cover"
+          className="h-full w-full rounded-full object-cover"
         />
-      </div>
-    )
-  }
+      )}
 
-  return <Avvvatars value={name} />
+      {!profilePicture && (
+        <p className="text-xs font-medium tracking-wider text-gray-600">
+          {initial}
+        </p>
+      )}
+    </div>
+  )
 }
