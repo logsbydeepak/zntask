@@ -1,8 +1,7 @@
 'use client'
 
 import React from 'react'
-import { useSearchParams } from 'next/navigation'
-import { useRouter } from 'next/router'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { useDebounce } from 'use-debounce'
@@ -71,6 +70,9 @@ export function Form() {
 
         if (resCode === 'INVALID_CREDENTIALS') {
           setAlertMessage('User not found')
+        }
+        if (resCode === 'EMAIL_ALREADY_EXISTS') {
+          setAlertMessage('Email already exists')
         }
       } catch (error) {
         toast.error('Something went wrong')

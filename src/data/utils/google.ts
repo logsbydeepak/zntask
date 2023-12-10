@@ -46,8 +46,8 @@ const zGoogleTokenResSchema = z.object({
 const zGoogleIdTokenDataSchema = z.object({
   email: zEmail,
   given_name: zRequired,
-  family_name: z.string().nullable(),
-  picture: z.string().url().nullable(),
+  family_name: z.string().nullable().optional(),
+  picture: z.string().url().nullable().optional(),
 })
 
 export async function getGoogleData({

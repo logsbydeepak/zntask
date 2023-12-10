@@ -29,8 +29,13 @@ export function Update() {
     if (!code) return
     router.replace('/user')
     startGoogleTransition(async () => {
-      const res = await addGoogleAuthProvider({ code })
-      console.log(res)
+      try {
+        requestRef.current = true
+        await addGoogleAuthProvider({ code })
+      } catch (error) {
+      } finally {
+        requestRef.current = false
+      }
     })
   }, [searchParams, router])
 
