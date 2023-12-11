@@ -17,7 +17,7 @@ const id = (name?: string) => varchar(name || 'id', { length: 26 })
 const tasks = {
   id: id().primaryKey(),
   userId: id('user_id').notNull(),
-  isCompleted: boolean('is_completed').notNull(),
+  completedAt: varchar('completed_at', { length: 30 }),
   title: varchar('title', { length: 256 }).notNull(),
   orderId: varchar('order_id', { length: 26 }).notNull(),
   date: varchar('date', { length: 30 }),
@@ -83,8 +83,8 @@ export const categories = mysqlTable(
     })
       .default(categoryDefaultIndicatorOption.label)
       .notNull(),
-    orderNumber: int('order_number').notNull(),
-    favoriteOrderNumber: int('favorite_order_number').notNull(),
+    orderNumber: int('order_number'),
+    favoriteOrderNumber: int('favorite_order_number'),
     archivedAt: varchar('archived_at', { length: 30 }),
   },
   (table) => {
