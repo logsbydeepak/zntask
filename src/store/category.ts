@@ -2,7 +2,7 @@ import { isValid, ulid } from 'ulidx'
 import { create, StateCreator } from 'zustand'
 import { persist } from 'zustand/middleware'
 
-import { Category } from '@/utils/category'
+import { Category, sortCategories } from '@/utils/category'
 
 import { useActivityStore } from './activity'
 
@@ -21,6 +21,8 @@ interface Actions {
 
   toggleArchive: (category: Category) => void
   toggleFavorite: (category: Category) => void
+  reorderCategoryToTop: (id: string) => void
+  reorderCategoryToBottomOf: (from: string, to: string) => void
 
   setNewCategories: (categories: Category[]) => void
 }
@@ -155,6 +157,81 @@ const categoryStore: StateCreator<State & Actions> = (set, get) => ({
       }))
     }
   },
+
+  reorderCategoryToTop(id) {
+    const category = get().categories.find((item) => item.id === id)
+    if (!category) return
+
+    const firstOrderNumber = sortCategories(get().categories)[0].orderNumber
+
+    set((state) => ({
+      categories: state.categories.map((item) => {
+        if (item.id === category.id)
+          return {
+            ...item,
+            orderNumber: firstOrderNumber - 1,
+          }
+        return item
+      }),
+    }))
+  },
+
+  reorderCategoryToBottomOf(from, to) {
+    const fromCategory = get().categories.find((item) => item.id === from)
+    if (!fromCategory) return
+
+    const toCategory = get().categories.find((item) => item.id === to)
+    if (!toCategory) return
+
+    if (fromCategory.orderNumber > toCategory.orderNumber) {
+      set((state) => ({
+        categories: state.categories.map((i) => {
+          if (
+            i.orderNumber > toCategory.orderNumber &&
+            i.orderNumber < fromCategory.orderNumber
+          ) {
+            return {
+              ...i,
+              orderNumber: i.orderNumber + 1,
+            }
+          }
+
+          if (i.id === fromCategory.id) {
+            return {
+              ...i,
+              orderNumber: toCategory.orderNumber + 1,
+            }
+          }
+
+          return i
+        }),
+      }))
+    } else {
+      set((state) => ({
+        categories: state.categories.map((i) => {
+          if (
+            i.orderNumber < toCategory.orderNumber &&
+            i.orderNumber > fromCategory.orderNumber
+          ) {
+            return {
+              ...i,
+              orderNumber: i.orderNumber - 1,
+            }
+          }
+
+          if (i.id === fromCategory.id) {
+            return {
+              ...i,
+              orderNumber: toCategory.orderNumber + 1,
+            }
+          }
+
+          return i
+        }),
+      }))
+    }
+  },
+
   setNewCategories(categories) {
     set(() => ({
       categories,

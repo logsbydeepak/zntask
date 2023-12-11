@@ -49,7 +49,7 @@ export default function Page() {
             <TabsTrigger value="archive">Archive</TabsTrigger>
           </TabsList>
           <TabsContent value="active">
-            <AllTab />
+            <ActiveTab />
           </TabsContent>
           <TabsContent value="archive">
             <ArchiveTab />
@@ -60,9 +60,13 @@ export default function Page() {
   )
 }
 
-function AllTab() {
+function ActiveTab() {
   const categories = useCategoryStore(
     useShallow((s) => sortCategories(s.categories))
+  )
+  const reorderCategoryToTop = useCategoryStore((s) => s.reorderCategoryToTop)
+  const reorderCategoryToBottomOf = useCategoryStore(
+    (s) => s.reorderCategoryToBottomOf
   )
 
   return (
@@ -76,13 +80,14 @@ function AllTab() {
             if (!over) return
             if (start === over) return
             const overId = over.split(':')
+            if (overId[0] === start) return
 
             if (overId[0] === 'start') {
-              return
+              reorderCategoryToTop(start)
             }
 
             if (overId[0] === 'bottom') {
-              return
+              reorderCategoryToBottomOf(start, overId[1])
             }
           }}
         >
