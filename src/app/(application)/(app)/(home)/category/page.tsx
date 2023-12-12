@@ -44,6 +44,13 @@ export default function Page() {
           value={activeTab}
           onValueChange={(value) => router.push(`/category?status=${value}`)}
         >
+          <button
+            onClick={() => {
+              useCategoryStore.persist.rehydrate()
+            }}
+          >
+            reload
+          </button>
           <TabsList className="mb-4">
             <TabsTrigger value="active">Active</TabsTrigger>
             <TabsTrigger value="archive">Archive</TabsTrigger>

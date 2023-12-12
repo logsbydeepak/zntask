@@ -187,19 +187,19 @@ const categoryStore: StateCreator<State & Actions> = (set, get) => ({
       set((state) => ({
         categories: state.categories.map((i) => {
           if (
-            i.orderNumber > toCategory.orderNumber &&
-            i.orderNumber < fromCategory.orderNumber
+            i.orderNumber <= fromCategory.orderNumber &&
+            i.orderNumber > toCategory.orderNumber
           ) {
+            if (i.id === fromCategory.id) {
+              return {
+                ...i,
+                orderNumber: toCategory.orderNumber + 1,
+              }
+            }
+
             return {
               ...i,
               orderNumber: i.orderNumber + 1,
-            }
-          }
-
-          if (i.id === fromCategory.id) {
-            return {
-              ...i,
-              orderNumber: toCategory.orderNumber + 1,
             }
           }
 
@@ -210,19 +210,19 @@ const categoryStore: StateCreator<State & Actions> = (set, get) => ({
       set((state) => ({
         categories: state.categories.map((i) => {
           if (
-            i.orderNumber < toCategory.orderNumber &&
-            i.orderNumber > fromCategory.orderNumber
+            i.orderNumber <= toCategory.orderNumber &&
+            i.orderNumber >= fromCategory.orderNumber
           ) {
+            if (i.id === fromCategory.id) {
+              return {
+                ...i,
+                orderNumber: toCategory.orderNumber,
+              }
+            }
+
             return {
               ...i,
               orderNumber: i.orderNumber - 1,
-            }
-          }
-
-          if (i.id === fromCategory.id) {
-            return {
-              ...i,
-              orderNumber: toCategory.orderNumber + 1,
             }
           }
 
