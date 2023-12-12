@@ -35,7 +35,7 @@ export const zCategory = z.object({
   title: zRequired,
   indicator: z.enum(categoryIndicatorLabel),
   orderNumber: z.number(),
-  favoriteOrderNumber: z.number(),
+  favoriteOrderNumber: z.number().nullable(),
   archivedAt: z.string().nullable(),
 })
 
@@ -51,17 +51,73 @@ export const getCategoryColor = (indicator: CategoryIndicatorLabelType) => {
 
 export type Category = z.infer<typeof zCategory>
 
-export const sortCategories = (
-  allCategories: Category[],
-  { sortByFavorite }: { sortByFavorite?: boolean } = {}
-) => {
-  const categories = sortByFavorite
-    ? allCategories
-        .filter((c) => !!c.favoriteOrderNumber)
-        .sort((a, b) => a.favoriteOrderNumber - b.favoriteOrderNumber)
-    : allCategories
-        .filter((c) => !!!c.archivedAt)
-        .sort((a, b) => a.orderNumber - b.orderNumber)
+interface FavoriteCategory extends Category {
+  favoriteOrderNumber: number
+}
 
-  return categories
+interface ActiveCategory extends Category {
+  archivedAt: null
+}
+
+interface ArchivedCategory extends Category {
+  archivedAt: string
+}
+
+const getFavoriteCategories = (categories: Category[]) => {
+  const favoriteCategories: FavoriteCategory[] = []
+
+  categories.forEach((c) => {
+    if (c.favoriteOrderNumber) favoriteCategories.push(c as FavoriteCategory)
+  })
+
+  return favoriteCategories
+}
+
+const getActiveCategories = (categories: Category[]) => {
+  const activeCategories: ActiveCategory[] = []
+
+  categories.forEach((i) => {
+    if (i.archivedAt === null) activeCategories.push(i as ActiveCategory)
+  })
+
+  return activeCategories
+}
+
+const getArchivedCategories = (categories: Category[]) => {
+  const archivedCategories: ArchivedCategory[] = []
+
+  categories.forEach((i) => {
+    if (i.archivedAt) archivedCategories.push(i as ArchivedCategory)
+  })
+
+  return archivedCategories
+}
+
+const sortFavoriteCategories = (categories: FavoriteCategory[]) => {
+  return categories.sort(
+    (a, b) => a.favoriteOrderNumber - b.favoriteOrderNumber
+  )
+}
+
+const sortActiveCategories = (categories: ActiveCategory[]) => {
+  return categories.sort((a, b) => a.orderNumber - b.orderNumber)
+}
+
+const sortArchivedCategories = (categories: ArchivedCategory[]) => {
+  return categories.sort((a, b) => a.orderNumber - b.orderNumber)
+}
+
+const isFavoriteCategory = (category: Category) => {
+  return typeof category.favoriteOrderNumber === 'number'
+}
+
+export const categoryHelper = {
+  getFavoriteCategories,
+  getActiveCategories,
+  getArchivedCategories,
+  sortFavoriteCategories,
+  sortActiveCategories,
+  sortArchivedCategories,
+  getCategoryColor,
+  isFavoriteCategory,
 }

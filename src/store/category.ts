@@ -2,7 +2,7 @@ import { isValid, ulid } from 'ulidx'
 import { create, StateCreator } from 'zustand'
 import { persist } from 'zustand/middleware'
 
-import { Category, sortCategories } from '@/utils/category'
+import { Category, categoryHelper } from '@/utils/category'
 
 import { useActivityStore } from './activity'
 
@@ -21,6 +21,7 @@ interface Actions {
 
   toggleArchive: (category: Category) => void
   toggleFavorite: (category: Category) => void
+
   reorderCategoryToTop: (id: string) => void
   reorderCategoryToBottomOf: (from: string, to: string) => void
 
@@ -127,20 +128,23 @@ const categoryStore: StateCreator<State & Actions> = (set, get) => ({
   },
 
   toggleFavorite(category) {
-    if (!!category.archivedAt) return
-    if (!!category.favoriteOrderNumber) {
+    if (categoryHelper.isFavoriteCategory(category)) {
       set((state) => ({
         categories: state.categories.map((item) => {
           if (item.id === category.id)
             return {
               ...item,
-              favoriteOrderNumber: 0,
+              favoriteOrderNumber: null,
             }
           return item
         }),
       }))
     } else {
-      const lastFavoriteOrderNumber = get().categories.reduce((acc, curr) => {
+      const categories = get().categories
+      const favoriteCategories =
+        categoryHelper.getFavoriteCategories(categories)
+
+      const lastFavoriteOrderNumber = favoriteCategories.reduce((acc, curr) => {
         if (curr.favoriteOrderNumber > acc) return curr.favoriteOrderNumber
         return acc
       }, 0)
@@ -162,7 +166,10 @@ const categoryStore: StateCreator<State & Actions> = (set, get) => ({
     const category = get().categories.find((item) => item.id === id)
     if (!category) return
 
-    const firstOrderNumber = sortCategories(get().categories)[0].orderNumber
+    const categories = get().categories
+    const firstOrderNumber = categoryHelper.sortActiveCategories(
+      categoryHelper.getActiveCategories(categories)
+    )[0].orderNumber
 
     set((state) => ({
       categories: state.categories.map((item) => {

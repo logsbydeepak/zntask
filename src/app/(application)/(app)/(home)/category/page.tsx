@@ -1,13 +1,11 @@
 'use client'
 
 import { useRouter, useSearchParams } from 'next/navigation'
-import { DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu'
-import { FolderIcon, MoreVerticalIcon } from 'lucide-react'
+import { FolderIcon } from 'lucide-react'
 import { useShallow } from 'zustand/react/shallow'
 
 import * as Layout from '@/app/(application)/(app)/app-layout'
 import { Head } from '@/components/head'
-import { DropdownMenuRoot } from '@/components/ui/menu'
 import {
   TabsContent,
   TabsList,
@@ -15,8 +13,8 @@ import {
   TabsTrigger,
 } from '@/components/ui/tabs'
 import { useCategoryStore } from '@/store/category'
-import { Category, sortCategories } from '@/utils/category'
-import { DNDProvider, useDrop } from '@/utils/dnd'
+import { categoryHelper } from '@/utils/category'
+import { DNDProvider } from '@/utils/dnd'
 
 import {
   BottomDrop,
@@ -44,13 +42,6 @@ export default function Page() {
           value={activeTab}
           onValueChange={(value) => router.push(`/category?status=${value}`)}
         >
-          <button
-            onClick={() => {
-              useCategoryStore.persist.rehydrate()
-            }}
-          >
-            reload
-          </button>
           <TabsList className="mb-4">
             <TabsTrigger value="active">Active</TabsTrigger>
             <TabsTrigger value="archive">Archive</TabsTrigger>
@@ -69,7 +60,11 @@ export default function Page() {
 
 function ActiveTab() {
   const categories = useCategoryStore(
-    useShallow((s) => sortCategories(s.categories))
+    useShallow((s) =>
+      categoryHelper.sortActiveCategories(
+        categoryHelper.getActiveCategories(s.categories)
+      )
+    )
   )
   const reorderCategoryToTop = useCategoryStore((s) => s.reorderCategoryToTop)
   const reorderCategoryToBottomOf = useCategoryStore(
@@ -117,17 +112,11 @@ function ActiveTab() {
 
 function ArchiveTab() {
   const categories = useCategoryStore(
-    useShallow((s) => {
-      const category = s.categories.filter((c) => c.archivedAt)
-
-      return category.sort((a, b) => {
-        if (!a.archivedAt) return 1
-        if (!b.archivedAt) return -1
-        if (a.archivedAt > b.archivedAt) return -1
-        if (a.archivedAt < b.archivedAt) return 1
-        return 0
-      })
-    })
+    useShallow((s) =>
+      categoryHelper.sortArchivedCategories(
+        categoryHelper.getArchivedCategories(s.categories)
+      )
+    )
   )
 
   return (

@@ -29,7 +29,7 @@ import {
 } from '@/components/ui/menu'
 import { isScreenSMAtom, isSidebarOpenAtom } from '@/store/app'
 import { useCategoryStore } from '@/store/category'
-import { Category, getCategoryColor, sortCategories } from '@/utils/category'
+import { Category, categoryHelper, getCategoryColor } from '@/utils/category'
 import { cn } from '@/utils/style'
 
 import { CategoryMenuContent } from './(home)/category'
@@ -116,7 +116,11 @@ function FavoriteSection() {
   const [isCollapsibleOpen, setIsCollapsibleOpen] = React.useState(false)
 
   const favorites = useCategoryStore(
-    useShallow((s) => sortCategories(s.categories, { sortByFavorite: true }))
+    useShallow((s) =>
+      categoryHelper.sortFavoriteCategories(
+        categoryHelper.getFavoriteCategories(s.categories)
+      )
+    )
   )
 
   const favoritesToDisplay = favorites.slice(
@@ -159,7 +163,11 @@ function CategorySection() {
   const pathname = usePathname()
   const [isCollapsibleOpen, setIsCollapsibleOpen] = React.useState(false)
   const categories = useCategoryStore(
-    useShallow((s) => sortCategories(s.categories))
+    useShallow((s) =>
+      categoryHelper.sortActiveCategories(
+        categoryHelper.getActiveCategories(s.categories)
+      )
+    )
   )
 
   const categoriesToDisplay = categories.slice(
