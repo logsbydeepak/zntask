@@ -24,6 +24,8 @@ interface Actions {
 
   reorderCategoryToTop: (id: string) => void
   reorderCategoryToBottomOf: (from: string, to: string) => void
+  reorderFavoriteCategoryToTop: (id: string) => void
+  reorderFavoriteCategoryToBottomOf: (from: string, to: string) => void
 
   setNewCategories: (categories: Category[]) => void
 }
@@ -44,7 +46,7 @@ const categoryStore: StateCreator<State & Actions> = (set, get) => ({
       title: category.title,
       indicator: category.indicator,
       orderNumber: lastOrderNumber + 1,
-      favoriteOrderNumber: 0,
+      favoriteOrderNumber: null,
       archivedAt: null,
     }
 
@@ -141,20 +143,19 @@ const categoryStore: StateCreator<State & Actions> = (set, get) => ({
       }))
     } else {
       const categories = get().categories
-      const favoriteCategories =
-        categoryHelper.getFavoriteCategories(categories)
 
-      const lastFavoriteOrderNumber = favoriteCategories.reduce((acc, curr) => {
-        if (curr.favoriteOrderNumber > acc) return curr.favoriteOrderNumber
-        return acc
-      }, 0)
+      let lastOrderNumber = 0
+      const lastFavorite = categoryHelper.sortFavoriteCategories(
+        categoryHelper.getFavoriteCategories(categories)
+      )[-1]
+      if (lastFavorite) lastOrderNumber = lastFavorite.favoriteOrderNumber
 
       set((state) => ({
         categories: state.categories.map((item) => {
           if (item.id === category.id)
             return {
               ...item,
-              favoriteOrderNumber: lastFavoriteOrderNumber + 1,
+              favoriteOrderNumber: lastOrderNumber + 1,
             }
           return item
         }),
@@ -230,6 +231,88 @@ const categoryStore: StateCreator<State & Actions> = (set, get) => ({
             return {
               ...i,
               orderNumber: i.orderNumber - 1,
+            }
+          }
+
+          return i
+        }),
+      }))
+    }
+  },
+  reorderFavoriteCategoryToTop(id) {
+    const category = get().categories.find((item) => item.id === id)
+    if (!category) return
+
+    const categories = get().categories
+    const firstOrderNumber = categoryHelper.sortFavoriteCategories(
+      categoryHelper.getFavoriteCategories(categories)
+    )[0].favoriteOrderNumber
+
+    set((state) => ({
+      categories: state.categories.map((item) => {
+        if (item.id === category.id)
+          return {
+            ...item,
+            favoriteOrderNumber: firstOrderNumber - 1,
+          }
+        return item
+      }),
+    }))
+  },
+
+  reorderFavoriteCategoryToBottomOf(from, to) {
+    const favoriteCategories = categoryHelper.getFavoriteCategories(
+      get().categories
+    )
+    const fromCategory = favoriteCategories.find((item) => item.id === from)
+    if (!fromCategory) return
+    const toCategory = favoriteCategories.find((item) => item.id === to)
+    if (!toCategory) return
+
+    if (fromCategory.favoriteOrderNumber > toCategory.favoriteOrderNumber) {
+      set((state) => ({
+        categories: state.categories.map((i) => {
+          if (i.favoriteOrderNumber === null) return i
+
+          if (
+            i.favoriteOrderNumber <= fromCategory.favoriteOrderNumber &&
+            i.favoriteOrderNumber > toCategory.favoriteOrderNumber
+          ) {
+            if (i.id === fromCategory.id) {
+              return {
+                ...i,
+                favoriteOrderNumber: toCategory.favoriteOrderNumber + 1,
+              }
+            }
+
+            return {
+              ...i,
+              favoriteOrderNumber: i.favoriteOrderNumber + 1,
+            }
+          }
+
+          return i
+        }),
+      }))
+    } else {
+      set((state) => ({
+        categories: state.categories.map((i) => {
+          if (i.favoriteOrderNumber === null) return i
+
+          if (
+            i.favoriteOrderNumber <= toCategory.favoriteOrderNumber &&
+            i.favoriteOrderNumber >= fromCategory.favoriteOrderNumber
+          ) {
+            if (i.id === fromCategory.id) {
+              return {
+                ...i,
+                favoriteOrderNumber: toCategory.favoriteOrderNumber,
+              }
+            }
+
+            return {
+              ...i,
+              favoriteOrderNumber: i.favoriteOrderNumber - 1,
             }
           }
 

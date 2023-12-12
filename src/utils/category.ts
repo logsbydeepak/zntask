@@ -67,7 +67,9 @@ const getFavoriteCategories = (categories: Category[]) => {
   const favoriteCategories: FavoriteCategory[] = []
 
   categories.forEach((c) => {
-    if (c.favoriteOrderNumber) favoriteCategories.push(c as FavoriteCategory)
+    if (typeof c.favoriteOrderNumber === 'number') {
+      favoriteCategories.push(c as FavoriteCategory)
+    }
   })
 
   return favoriteCategories
@@ -111,6 +113,15 @@ const isFavoriteCategory = (category: Category) => {
   return typeof category.favoriteOrderNumber === 'number'
 }
 
+const workWithFavoriteCategories = (
+  categories: Category[],
+  callback: (categories: FavoriteCategory[]) => void
+) => {
+  const favoriteCategories = getFavoriteCategories(categories)
+  const returnValue = callback(favoriteCategories)
+  return returnValue
+}
+
 export const categoryHelper = {
   getFavoriteCategories,
   getActiveCategories,
@@ -120,4 +131,5 @@ export const categoryHelper = {
   sortArchivedCategories,
   getCategoryColor,
   isFavoriteCategory,
+  workWithFavoriteCategories,
 }

@@ -25,6 +25,12 @@ export default function Page() {
       )
     )
   )
+  const reorderFavoriteCategoryToTop = useCategoryStore(
+    (i) => i.reorderFavoriteCategoryToTop
+  )
+  const reorderFavoriteCategoryToBottomOf = useCategoryStore(
+    (i) => i.reorderFavoriteCategoryToBottomOf
+  )
 
   return (
     <Layout.Root>
@@ -45,9 +51,20 @@ export default function Page() {
         <CategoryContainer>
           <DNDProvider
             onDrop={({ start, over }) => {
+              console.log(start, over)
               if (!start) return
               if (!over) return
               if (start === over) return
+              const overId = over.split(':')
+              if (overId[0] === start) return
+
+              if (overId[0] === 'start') {
+                reorderFavoriteCategoryToTop(start)
+              }
+
+              if (overId[0] === 'bottom') {
+                reorderFavoriteCategoryToBottomOf(start, overId[1])
+              }
             }}
           >
             {favorites.map((i, idx) => (
@@ -58,7 +75,7 @@ export default function Page() {
                   category={i}
                   href={`/favorite/${i.id}`}
                 />
-                <BottomDrop id={`${i.id}:${favorites[idx + 1]}`} />
+                <BottomDrop id={`bottom:${i.id}`} />
               </div>
             ))}
           </DNDProvider>
