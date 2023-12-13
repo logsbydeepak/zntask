@@ -42,6 +42,6 @@ interface Action {
 export const toast = {
   success: (message: string, action?: Action) =>
     useToastStore.getState().addToast({ message, type: 'success', action }),
-  error: (message: string, action?: Action) =>
+  error: (message = 'Something went wrong', action?: Action) =>
     useToastStore.getState().addToast({ message, type: 'error', action }),
 }

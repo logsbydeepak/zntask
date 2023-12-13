@@ -70,7 +70,7 @@ export function Form() {
           setAlertMessage('User not found')
         }
       } catch (error) {
-        toast.error('Something went wrong')
+        toast.error()
       } finally {
         requestRef.current = false
       }
@@ -101,7 +101,7 @@ export function Form() {
           )
         }
       } catch (error) {
-        toast.error('Something went wrong')
+        toast.error()
       }
     })
   }
@@ -112,7 +112,7 @@ export function Form() {
       try {
         await redirectGoogleLogin()
       } catch (error) {
-        toast.error('Something went wrong')
+        toast.error()
       }
     })
   }

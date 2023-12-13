@@ -45,7 +45,7 @@ function LogoutDialogContent({
       try {
         await logout()
       } catch (error) {
-        toast.error('Something went wrong')
+        toast.error()
       }
     })
   }

@@ -2,7 +2,7 @@
 
 import React from 'react'
 import * as ToastPrimitive from '@radix-ui/react-toast'
-import { AlertCircle, CheckCheckIcon, CheckIcon, XIcon } from 'lucide-react'
+import { CheckIcon, XIcon } from 'lucide-react'
 
 import { Toast, useToastStore } from '@/store/toast'
 import { cn } from '@/utils/style'

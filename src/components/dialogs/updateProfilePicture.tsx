@@ -67,14 +67,15 @@ function UpdateProfilePictureDialogContent({
       toast.success('Profile picture updated')
       handleClose()
     },
-    onUploadError: (error) => {
-      console.error(error)
+    onUploadError: () => {
+      toast.error()
     },
   })
 
   const isLoading = isPending || isUploading
 
-  const onSubmit = () => {
+  const onSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
     if (file) {
       startUpload([file])
     }
@@ -111,7 +112,7 @@ function UpdateProfilePictureDialogContent({
               />
             )}
 
-            {(reset || !user.profilePicture) && (
+            {(reset || !user.profilePicture) && !preview && (
               <p className="text-4xl font-medium tracking-wider text-gray-600">
                 {initials}
               </p>

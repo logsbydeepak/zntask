@@ -77,7 +77,7 @@ export function Form({ token }: { token: string }) {
             break
         }
       } catch (error) {
-        toast.error('Something went wrong')
+        toast.error('')
       }
     })
   }
