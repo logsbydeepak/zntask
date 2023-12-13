@@ -1,10 +1,8 @@
 import React from 'react'
 import Image from 'next/image'
 import { generateReactHelpers } from '@uploadthing/react/hooks'
-import Avvvatars from 'avvvatars-react'
 import { useAtomValue } from 'jotai'
 import { Trash2Icon, UploadIcon } from 'lucide-react'
-import { useForm } from 'react-hook-form'
 
 import { Button } from '@/components/ui/button'
 import * as Dialog from '@/components/ui/dialog'
@@ -14,6 +12,7 @@ import type { OurFileRouter } from '@/data/utils/uploadthing'
 import { useAppStore, userAtom } from '@/store/app'
 import { toast } from '@/store/toast'
 
+import { genInitials } from '../avatar'
 import { Head } from '../head'
 
 export const { useUploadThing, uploadFiles } =
@@ -75,17 +74,6 @@ function UpdateProfilePictureDialogContent({
 
   const isLoading = isPending || isUploading
 
-  const {
-    register,
-    formState: { errors },
-    handleSubmit,
-  } = useForm({
-    defaultValues: {
-      firstName: user.firstName,
-      lastName: user.lastName,
-    },
-  })
-
   const onSubmit = () => {
     if (file) {
       startUpload([file])
@@ -100,28 +88,33 @@ function UpdateProfilePictureDialogContent({
     }
   }
 
-  const name = `${user.firstName} ${user.lastName}`
+  const initials = genInitials(user.firstName, user.lastName)
+
   return (
     <>
       <Head title="Update profile picture" />
-      <Form.Root onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+      <Form.Root onSubmit={onSubmit} className="space-y-5">
         <div>
           <Dialog.Title>Profile picture</Dialog.Title>
         </div>
         <div className="flex items-center justify-center space-x-4">
-          <div className="relative h-24 w-24 rounded-full">
+          <div className="flex h-24 w-24 items-center justify-center rounded-full border border-gray-100 bg-gray-50">
             {preview && (
               <Image
                 src={preview}
                 onLoad={() => URL.revokeObjectURL(preview)}
-                fill
+                width={96}
+                height={96}
+                quality={100}
                 alt="avatar"
                 className="h-full w-full rounded-full object-cover"
               />
             )}
 
             {(reset || !user.profilePicture) && (
-              <Avvvatars value={name} size={96} />
+              <p className="text-4xl font-medium tracking-wider text-gray-600">
+                {initials}
+              </p>
             )}
           </div>
 

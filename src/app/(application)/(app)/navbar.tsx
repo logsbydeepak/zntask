@@ -19,6 +19,7 @@ import {
 } from 'lucide-react'
 import { useTheme } from 'next-themes'
 
+import { genInitials } from '@/components/avatar'
 import { LogoIcon } from '@/components/icon/logo'
 import {
   DropdownMenuContent,
@@ -75,16 +76,14 @@ export function Navbar() {
           </div>
 
           <DropdownMenuRoot>
-            <DropdownMenuTrigger asChild>
-              <button className="relative flex h-8 w-8 items-center justify-center rounded-full border border-gray-100 bg-gray-50">
-                <Avatar />
-                <span
-                  data-active={isAppSyncing}
-                  className="absolute bottom-0 right-[1px] hidden h-2 w-2 items-center justify-center rounded-full border border-white bg-white data-[active=true]:flex"
-                >
-                  <span className="h-full w-full animate-pulse rounded-full bg-orange-500" />
-                </span>
-              </button>
+            <DropdownMenuTrigger className="relative h-8 w-8 rounded-full">
+              <Avatar />
+              <span
+                data-active={isAppSyncing}
+                className="absolute bottom-0 right-[1px] hidden h-2 w-2 items-center justify-center rounded-full border border-white bg-white data-[active=true]:flex"
+              >
+                <span className="h-full w-full animate-pulse rounded-full bg-orange-500" />
+              </span>
             </DropdownMenuTrigger>
 
             <DropdownMenuPortal>
@@ -208,34 +207,26 @@ function Search() {
   )
 }
 
-function genInitial(firstName: string, lastName: string | null) {
-  if (!lastName && firstName.length >= 2) {
-    return `${firstName[0]}${firstName[1]}`
-  }
-  if (firstName && lastName) {
-    return `${firstName[0]}${lastName[0]}`
-  }
-  return firstName[0]
-}
-
 function Avatar() {
   const { profilePicture, firstName, lastName } = useAtomValue(userAtom)
-  const initial = genInitial(firstName, lastName).toUpperCase()
+  const initials = genInitials(firstName, lastName)
 
   return (
-    <div className="relative flex h-7 w-7 items-center justify-center rounded-full">
+    <div className="flex h-full w-full items-center justify-center rounded-full border border-gray-100 bg-gray-50">
       {profilePicture && (
         <Image
           src={profilePicture}
           alt="avatar"
-          fill
+          width={32}
+          height={32}
+          quality={100}
           className="h-full w-full rounded-full object-cover"
         />
       )}
 
       {!profilePicture && (
         <p className="text-xs font-medium tracking-wider text-gray-600">
-          {initial}
+          {initials}
         </p>
       )}
     </div>
