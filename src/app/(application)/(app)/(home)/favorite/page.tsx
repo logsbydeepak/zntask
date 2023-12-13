@@ -51,7 +51,6 @@ export default function Page() {
         <CategoryContainer>
           <DNDProvider
             onDrop={({ start, over }) => {
-              console.log(start, over)
               if (!start) return
               if (!over) return
               if (start === over) return

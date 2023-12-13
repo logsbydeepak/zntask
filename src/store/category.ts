@@ -96,7 +96,7 @@ const categoryStore: StateCreator<State & Actions> = (set, get) => ({
     return get().categories.find((category) => category.id === id)
   },
   toggleArchive(category) {
-    if (!!category.archivedAt) {
+    if (categoryHelper.isArchivedCategory(category)) {
       const lastOrderNumber = get().categories.reduce((acc, curr) => {
         if (curr.orderNumber > acc) return curr.orderNumber
         return acc
@@ -121,7 +121,7 @@ const categoryStore: StateCreator<State & Actions> = (set, get) => ({
               ...item,
               archivedAt: new Date().toISOString(),
               orderNumber: 0,
-              favoriteOrderNumber: 0,
+              favoriteOrderNumber: null,
             }
           return item
         }),

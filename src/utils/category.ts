@@ -113,6 +113,10 @@ const isFavoriteCategory = (category: Category) => {
   return typeof category.favoriteOrderNumber === 'number'
 }
 
+const isArchivedCategory = (category: Category) => {
+  return typeof category.archivedAt === 'string'
+}
+
 const workWithFavoriteCategories = (
   categories: Category[],
   callback: (categories: FavoriteCategory[]) => void
@@ -130,6 +134,7 @@ export const categoryHelper = {
   sortActiveCategories,
   sortArchivedCategories,
   getCategoryColor,
-  isFavoriteCategory,
   workWithFavoriteCategories,
+  isFavoriteCategory,
+  isArchivedCategory,
 }
