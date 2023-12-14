@@ -12,7 +12,12 @@ import { zPassword, zRequired } from '@/utils/zSchema'
 
 import { db, dbSchema } from './db'
 import { checkToken } from './utils'
-import { generateAuthJWT, generateEmailJWT, setAuthCookie } from './utils/auth'
+import {
+  generateAuthJWT,
+  generateEmailJWT,
+  setAuthCookie,
+  UnauthorizedError,
+} from './utils/auth'
 import { redis, resend } from './utils/config'
 import { GC } from './utils/google'
 import { h, r } from './utils/handler'
@@ -63,6 +68,68 @@ export const addGoogleAuthProvider = h.auth
       userId,
       email: data.email,
     })
+
+    return r('OK')
+  })
+
+const zUpdateAuthProvider = z.object({
+  password: zPassword('invalid password'),
+})
+
+export const removeGoogleAuthProvider = h.auth
+  .input(zUpdateAuthProvider)
+  .fn(async ({ userId, input }) => {
+    const user = await db.query.users.findFirst({
+      with: {
+        credentialAuth: true,
+        googleAuth: true,
+      },
+      where(fields, operators) {
+        return operators.eq(fields.id, userId)
+      },
+    })
+    if (!user) throw new UnauthorizedError()
+    if (!user.credentialAuth) return r('INVALID_CREDENTIALS')
+    if (!user.googleAuth) return r('NOT_ADDED')
+
+    const password = await bcrypt.compare(
+      input.password,
+      user.credentialAuth.password
+    )
+    if (!password) return r('INVALID_CREDENTIALS')
+
+    await db
+      .delete(dbSchema.googleAuth)
+      .where(eq(dbSchema.googleAuth.id, userId))
+
+    return r('OK')
+  })
+
+export const removeCredentialAuthProvider = h.auth
+  .input(zUpdateAuthProvider)
+  .fn(async ({ userId, input }) => {
+    const user = await db.query.users.findFirst({
+      with: {
+        credentialAuth: true,
+        googleAuth: true,
+      },
+      where(fields, operators) {
+        return operators.eq(fields.id, userId)
+      },
+    })
+    if (!user) throw new UnauthorizedError()
+    if (!user.credentialAuth) return r('INVALID_CREDENTIALS')
+    if (!user.googleAuth) return r('NOT_ADDED')
+
+    const password = await bcrypt.compare(
+      input.password,
+      user.credentialAuth.password
+    )
+    if (!password) return r('INVALID_CREDENTIALS')
+
+    await db
+      .delete(dbSchema.credentialAuth)
+      .where(eq(dbSchema.credentialAuth.id, userId))
 
     return r('OK')
   })

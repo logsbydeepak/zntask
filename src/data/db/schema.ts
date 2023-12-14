@@ -1,4 +1,4 @@
-import { relations } from 'drizzle-orm'
+import { InferSelectModel, relations } from 'drizzle-orm'
 import {
   boolean,
   index,
@@ -12,7 +12,7 @@ import {
   categoryIndicatorLabel,
 } from '../../utils/category'
 
-const id = (name?: string) => varchar(name || 'id', { length: 26 })
+const id = (name = 'id') => varchar(name, { length: 26 })
 
 const tasks = {
   id: id().primaryKey(),
@@ -74,7 +74,6 @@ export const categories = mysqlTable(
   'categories',
   {
     userId: id('user_id').notNull(),
-
     id: id().primaryKey(),
     title: varchar('title', { length: 256 }).notNull(),
     indicator: varchar('indicator', {
