@@ -2,7 +2,11 @@
 
 import { revalidateTag } from 'next/cache'
 import { redirect } from 'next/navigation'
+import bcrypt from 'bcryptjs'
 import { eq } from 'drizzle-orm'
+import { z } from 'zod'
+
+import { zEmail, zPassword } from '@/utils/zSchema'
 
 import { db, dbSchema } from './db'
 import { removeAuthCookie, UnauthorizedError } from './utils/auth'
@@ -117,3 +121,38 @@ export const revalidateUser = h.auth.fn(async ({ userId }) => {
 
   return r('OK')
 })
+
+const zUpdateEmail = z.object({
+  email: zEmail,
+  password: zPassword('invalid password'),
+})
+
+export const updateEmail = h.auth
+  .input(zUpdateEmail)
+  .fn(async ({ userId, input }) => {
+    const user = await db.query.users.findFirst({
+      with: {
+        credentialAuth: true,
+      },
+      where(fields, operators) {
+        return operators.eq(fields.id, userId)
+      },
+    })
+    if (!user) throw new UnauthorizedError()
+    if (!user.credentialAuth) return r('INVALID_CREDENTIALS')
+
+    const password = await bcrypt.compare(
+      input.password,
+      user.credentialAuth.password
+    )
+    if (!password) return r('INVALID_CREDENTIALS')
+
+    await db
+      .update(dbSchema.users)
+      .set({ email: input.email })
+      .where(eq(dbSchema.users.id, userId))
+
+    revalidateTag('user')
+
+    return r('OK')
+  })
