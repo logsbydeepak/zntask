@@ -79,6 +79,9 @@ export function Update() {
         </Badge.Icon>
         <Badge.Label>Add google</Badge.Label>
       </Badge.Button>
+      <button onClick={() => setDialog({ removeGoogleAuth: true })}>
+        remove google
+      </button>
     </div>
   )
 }
