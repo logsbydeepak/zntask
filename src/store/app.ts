@@ -25,12 +25,17 @@ const dialogState = {
 
   updateName: false,
   updateProfilePicture: false,
+  updateEmail: false,
 
   createCategory: false,
   editCategory: null as null | Category,
   deleteCategory: null as null | Category,
   createTask: false,
   editTask: null as null | { parentTaskId: string } | { childTaskId: string },
+
+  addGoogleAuth: false,
+  removeGoogleAuth: false,
+  removePasswordAuth: false,
 }
 
 const initialState = {

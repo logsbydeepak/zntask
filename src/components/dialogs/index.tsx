@@ -4,6 +4,7 @@ import React from 'react'
 
 import { useAppStore } from '@/store/app'
 
+import { AddGoogleDialog } from './add-google'
 import { CategoryDialog } from './category'
 import { CommandPaletteDialog } from './command-pallet'
 import { DeleteCategoryDialog } from './delete-category'
@@ -35,6 +36,7 @@ export function Dialogs() {
       <DeleteCategoryDialog />
       <TaskDialog />
       <CommandPaletteDialog />
+      <AddGoogleDialog />
     </>
   )
 }

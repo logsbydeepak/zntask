@@ -72,11 +72,7 @@ export function Update() {
 
       <Badge.Button
         isLoading={isGoogleLoading || isGooglePending}
-        onClick={() =>
-          startGoogleTransition(async () => {
-            await redirectGoogleAddNew()
-          })
-        }
+        onClick={() => setDialog({ addGoogleAuth: true })}
       >
         <Badge.Icon>
           <GoogleIcon />
