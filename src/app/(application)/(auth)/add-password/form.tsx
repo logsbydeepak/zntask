@@ -103,11 +103,9 @@ export function Form({ token }: { token: string }) {
             <div className="space-y-2.5">
               <div className="flex flex-wrap justify-between gap-y-2">
                 <div className="mr-4">
-                  {errors.password && (
-                    <FormPrimitive.Error>
-                      {errors.password?.message}
-                    </FormPrimitive.Error>
-                  )}
+                  <FormPrimitive.Error>
+                    {errors.password?.message}
+                  </FormPrimitive.Error>
                 </div>
                 <PasswordVisibilityToggle
                   isVisible={isPasswordVisible}
@@ -138,11 +136,9 @@ export function Form({ token }: { token: string }) {
               placeholder="strong password"
               type={isPasswordVisible ? 'text' : 'password'}
             />
-            {errors.confirmPassword && (
-              <FormPrimitive.Error>
-                {errors.confirmPassword?.message}
-              </FormPrimitive.Error>
-            )}
+            <FormPrimitive.Error>
+              {errors.confirmPassword?.message}
+            </FormPrimitive.Error>
           </div>
         </FormPrimitive.Fieldset>
       </FormPrimitive.Root>

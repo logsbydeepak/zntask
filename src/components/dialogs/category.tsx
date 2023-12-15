@@ -116,7 +116,7 @@ function CategoryDialogContent({
           <div>
             <Form.Label htmlFor="title">Title</Form.Label>
             <Form.Input {...register('title')} id="title" />
-            {errors.title && <Form.Error>{errors.title?.message}</Form.Error>}
+            <Form.Error>{errors.title?.message}</Form.Error>
           </div>
 
           <div className="space-y-2">

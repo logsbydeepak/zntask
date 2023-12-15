@@ -154,9 +154,7 @@ export function Form() {
               {...register('email')}
               placeholder="abc@domain.com"
             />
-            {errors.email && (
-              <FormPrimitive.Error>{errors.email?.message}</FormPrimitive.Error>
-            )}
+            <FormPrimitive.Error>{errors.email?.message}</FormPrimitive.Error>
           </div>
 
           <div>
@@ -172,11 +170,9 @@ export function Form() {
             />
             <div className="flex flex-wrap justify-between gap-y-2">
               <div className="mr-4">
-                {errors.password && (
-                  <FormPrimitive.Error>
-                    {errors.password?.message}
-                  </FormPrimitive.Error>
-                )}
+                <FormPrimitive.Error>
+                  {errors.password?.message}
+                </FormPrimitive.Error>
               </div>
               <div className="space-x-2">
                 <PasswordVisibilityToggle

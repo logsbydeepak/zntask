@@ -66,7 +66,7 @@ function Content({
 
   return (
     <>
-      <Head title="Reset Password" />
+      <Head title="Add google auth" />
       <Form.Root onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         <div>
           <Dialog.Title className="text text-lg font-medium">
@@ -84,9 +84,7 @@ function Content({
             placeholder="********"
             autoFocus
           />
-          {errors.password && (
-            <Form.Error>{errors.password?.message}</Form.Error>
-          )}
+          <Form.Error>{errors.password?.message}</Form.Error>
         </div>
 
         <fieldset className="flex space-x-4" disabled={isPending}>

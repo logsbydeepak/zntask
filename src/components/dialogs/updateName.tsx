@@ -99,9 +99,7 @@ function UpdateNameDialogContent({
               {...register('firstName')}
               placeholder="Haven"
             />
-            {errors.firstName && (
-              <Form.Error>{errors.firstName?.message}</Form.Error>
-            )}
+            <Form.Error>{errors.firstName?.message}</Form.Error>
           </div>
 
           <div>

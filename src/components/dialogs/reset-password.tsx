@@ -113,7 +113,7 @@ function ResetPasswordDialogContent({
             placeholder="abc@domain.com"
             autoFocus
           />
-          {errors.email && <Form.Error>{errors.email?.message}</Form.Error>}
+          <Form.Error>{errors.email?.message}</Form.Error>
         </div>
 
         <fieldset className="flex space-x-4" disabled={isPending}>

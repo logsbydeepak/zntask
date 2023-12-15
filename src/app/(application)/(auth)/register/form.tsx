@@ -150,11 +150,9 @@ export function Form() {
                 {...register('firstName')}
                 placeholder="Haven"
               />
-              {errors.firstName && (
-                <FormPrimitive.Error>
-                  {errors.firstName?.message}
-                </FormPrimitive.Error>
-              )}
+              <FormPrimitive.Error>
+                {errors.firstName?.message}
+              </FormPrimitive.Error>
             </div>
 
             <div className="w-1/2">
@@ -196,11 +194,9 @@ export function Form() {
             <div className="space-y-2.5">
               <div className="flex flex-wrap justify-between gap-y-2">
                 <div className="mr-4">
-                  {errors.password && (
-                    <FormPrimitive.Error>
-                      {errors.password?.message}
-                    </FormPrimitive.Error>
-                  )}
+                  <FormPrimitive.Error>
+                    {errors.password?.message}
+                  </FormPrimitive.Error>
                 </div>
                 <PasswordVisibilityToggle
                   isVisible={isPasswordVisible}
@@ -231,11 +227,9 @@ export function Form() {
               placeholder="strong password"
               type={isPasswordVisible ? 'text' : 'password'}
             />
-            {errors.confirmPassword && (
-              <FormPrimitive.Error>
-                {errors.confirmPassword?.message}
-              </FormPrimitive.Error>
-            )}
+            <FormPrimitive.Error>
+              {errors.confirmPassword?.message}
+            </FormPrimitive.Error>
           </div>
         </FormPrimitive.Fieldset>
       </FormPrimitive.Root>
