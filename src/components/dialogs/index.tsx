@@ -13,8 +13,8 @@ import { RemoveGoogleDialog } from './remove-google'
 import { ResetPasswordDialog } from './reset-password'
 import { TaskDialog } from './task'
 import { UpdateEmailDialog } from './update-email'
-import { UpdateNameDialog } from './updateName'
-import { UpdateProfilePictureDialog } from './updateProfilePicture'
+import { UpdateNameDialog } from './update-name'
+import { UpdateProfilePictureDialog } from './update-profile-picture'
 
 export function Dialogs() {
   const isResetPasswordOpen = useAppStore((state) => state.dialog.resetPassword)
