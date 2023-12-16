@@ -4,8 +4,6 @@ import ms from 'ms'
 
 import { env } from '@/env.mjs'
 
-import { redis } from './config'
-
 const secret = jose.base64url.decode(env.JWT_SECRET)
 const maxAge = ms('30 days')
 
@@ -58,22 +56,12 @@ export class UnauthorizedError extends Error {
 
 export async function isAuth() {
   try {
-    const token = cookies().get('auth')?.value
+    const userId = cookies().get('middlewareData-auth-userId')?.value
+    const token = cookies().get('middlewareData-auth-token')?.value
     if (!token) throw new Error("Token doesn't exist!")
+    if (!userId) throw new Error("UserId doesn't exist!")
 
-    const secret = jose.base64url.decode(env.JWT_SECRET)
-    const { payload } = await jose.jwtDecrypt(token, secret, {
-      audience: 'auth',
-    })
-
-    if (!payload) throw new Error("Payload doesn't exist!")
-    if (!payload?.userId) throw new Error("Payload doesn't have userId!")
-    if (typeof payload.userId !== 'string') throw new Error('Invalid payload!')
-
-    const redisRes = await redis.exists(`logout:${token}`)
-    if (redisRes === 1) throw new Error('Token is invalid!')
-
-    return { userId: payload.userId, token }
+    return { userId, token }
   } catch (error) {
     throw new UnauthorizedError()
   }

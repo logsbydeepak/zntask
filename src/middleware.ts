@@ -4,11 +4,15 @@ import * as jose from 'jose'
 
 import { env } from '@/env.mjs'
 
+import { redis } from './data/utils/config'
+import { r } from './data/utils/handler'
+
 export async function middleware(req: NextRequest) {
   try {
     const url = req.url
     const token = cookies().get('auth')?.value
-    const isAuth = await checkIsAuth(token)
+    const authData = await checkIsAuth(token)
+    const isAuth = authData.code === 'OK'
 
     const { pathname } = req.nextUrl
 
@@ -36,16 +40,30 @@ export async function middleware(req: NextRequest) {
       pathname.startsWith('/upcoming') ||
       pathname.startsWith('/favorite') ||
       pathname.startsWith('/category') ||
-      pathname.startsWith('/user')
+      pathname.startsWith('/user') ||
+      pathname.startsWith('/api/uploadthing')
 
     if (isAuth) {
+      const clonedRequest = req.clone()
+      clonedRequest.headers.append(
+        'Cookie',
+        `middlewareData-auth-userId=${authData.userId}`
+      )
+      clonedRequest.headers.append(
+        'Cookie',
+        `middlewareData-auth-token=${authData.token}`
+      )
+
       if (isIndexPage) {
-        return NextResponse.rewrite(new URL('/today', url))
+        return NextResponse.rewrite(new URL('/today', url), {
+          request: clonedRequest,
+        })
       }
 
       if (isAuthPage) {
         return NextResponse.redirect(new URL('/', url))
       }
+      return NextResponse.next({ request: clonedRequest })
     }
 
     if (!isAuth) {
@@ -77,6 +95,7 @@ export const config = {
     '/upcoming/:path*',
     '/favorite/:path*',
     '/category/:path*',
+    '/api/uploadthing:path*',
 
     '/user/:path*',
   ],
@@ -84,16 +103,22 @@ export const config = {
 
 async function checkIsAuth(token?: string) {
   try {
-    if (!token) return false
+    if (!token) return r('NO_TOKEN')
     const secret = jose.base64url.decode(env.JWT_SECRET)
     const { payload } = await jose.jwtDecrypt(token, secret, {
       audience: 'auth',
     })
-    if (!payload) return false
-    if (!payload?.userId) return false
-    if (typeof payload.userId !== 'string') return false
-    return true
+    if (!payload || !payload?.userId || typeof payload.userId !== 'string')
+      return r('INVALID_PAYLOAD')
+
+    const redisRes = await redis.exists(`logout:${token}`)
+    if (redisRes === 1) return r('LOGGED_OUT')
+
+    return r('OK', {
+      userId: payload.userId,
+      token: token,
+    })
   } catch (error) {
-    return false
+    return r('ERROR')
   }
 }
