@@ -82,6 +82,9 @@ export function Update() {
       <button onClick={() => setDialog({ removeGoogleAuth: true })}>
         remove google
       </button>
+      <button onClick={() => setDialog({ updateEmail: true })}>
+        update email
+      </button>
     </div>
   )
 }

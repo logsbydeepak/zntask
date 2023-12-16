@@ -12,6 +12,7 @@ import { LogoutDialog } from './logout'
 import { RemoveGoogleDialog } from './remove-google'
 import { ResetPasswordDialog } from './reset-password'
 import { TaskDialog } from './task'
+import { UpdateEmailDialog } from './update-email'
 import { UpdateNameDialog } from './updateName'
 import { UpdateProfilePictureDialog } from './updateProfilePicture'
 
@@ -39,6 +40,7 @@ export function Dialogs() {
       <CommandPaletteDialog />
       <AddGoogleDialog />
       <RemoveGoogleDialog />
+      <UpdateEmailDialog />
     </>
   )
 }
