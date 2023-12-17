@@ -6,7 +6,9 @@ import { z } from 'zod'
 import { Button } from '@/components/ui/button'
 import * as Dialog from '@/components/ui/dialog'
 import * as Form from '@/components/ui/form'
+import { removeGoogleAuthProvider } from '@/data/auth'
 import { useAppStore } from '@/store/app'
+import { toast } from '@/store/toast'
 import { zPassword } from '@/utils/zSchema'
 
 import { Head } from '../head'
@@ -60,7 +62,30 @@ function Content({
     resolver: zodResolver(zSchema),
   })
 
-  const onSubmit = (values: FormValues) => {}
+  const onSubmit = (values: FormValues) => {
+    startTransition(async () => {
+      try {
+        const res = await removeGoogleAuthProvider(values)
+        const resCode = res?.code
+        if (resCode === 'INVALID_CREDENTIALS') {
+          setError('password', {
+            type: 'manual',
+            message: 'invalid credentials',
+          })
+        }
+        if (resCode === 'NOT_ADDED') {
+          handleClose()
+          toast.error('google auth provider not added')
+        }
+        if (resCode === 'OK') {
+          handleClose()
+          toast.success('google auth provider removed')
+        }
+      } catch (error) {
+        toast.error()
+      }
+    })
+  }
 
   return (
     <>
