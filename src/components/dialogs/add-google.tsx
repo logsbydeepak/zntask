@@ -6,7 +6,7 @@ import { z } from 'zod'
 import { Button } from '@/components/ui/button'
 import * as Dialog from '@/components/ui/dialog'
 import * as Form from '@/components/ui/form'
-import { resetPassword } from '@/data/auth'
+import { addGoogleAuthProvider, redirectGoogleAddNew } from '@/data/auth'
 import { useAppStore } from '@/store/app'
 import { toast } from '@/store/toast'
 import { zPassword } from '@/utils/zSchema'
@@ -62,7 +62,26 @@ function Content({
     resolver: zodResolver(zSchema),
   })
 
-  const onSubmit = (values: FormValues) => {}
+  const onSubmit = (values: FormValues) => {
+    startTransition(async () => {
+      try {
+        const res = await redirectGoogleAddNew(values)
+        const resCode = res?.code
+        if (resCode === 'INVALID_CREDENTIALS') {
+          setError('password', {
+            message: 'invalid credentials',
+          })
+          return
+        }
+        if (resCode === 'ALREADY_ADDED') {
+          handleClose()
+          toast.error('google auth already added')
+        }
+      } catch (error) {
+        toast.error()
+      }
+    })
+  }
 
   return (
     <>

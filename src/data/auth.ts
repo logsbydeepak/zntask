@@ -31,6 +31,10 @@ const gcLogin = new GC(`${env.BASE_URL}/google?type=login`)
 const gcRegister = new GC(`${env.BASE_URL}/google?type=register`)
 const gcNew = new GC(`${env.BASE_URL}/google?type=new`)
 
+const zUpdateAuthProvider = z.object({
+  password: zPassword('invalid password'),
+})
+
 export const redirectGoogleLogin = h.fn(async () => {
   const url = gcLogin.genURL()
   redirect(url)
@@ -41,10 +45,32 @@ export const redirectGoogleRegister = h.fn(async () => {
   redirect(url)
 })
 
-export const redirectGoogleAddNew = h.auth.fn(async () => {
-  const url = gcNew.genURL()
-  redirect(url)
-})
+export const redirectGoogleAddNew = h.auth
+  .input(zUpdateAuthProvider)
+  .fn(async ({ input, userId }) => {
+    const user = await db.query.users.findFirst({
+      with: {
+        credentialAuth: true,
+        googleAuth: true,
+      },
+      where(fields, operators) {
+        return operators.eq(fields.id, userId)
+      },
+    })
+
+    if (!user) throw new UnauthorizedError()
+    if (!user.credentialAuth) return r('INVALID_CREDENTIALS')
+    if (user.googleAuth) return r('ALREADY_ADDED')
+
+    const password = await bcrypt.compare(
+      input.password,
+      user.credentialAuth.password
+    )
+    if (!password) return r('INVALID_CREDENTIALS')
+
+    const url = gcNew.genURL()
+    redirect(url)
+  })
 
 const zGoogleCode = z.object({
   code: zRequired,
@@ -71,10 +97,6 @@ export const addGoogleAuthProvider = h.auth
 
     return r('OK')
   })
-
-const zUpdateAuthProvider = z.object({
-  password: zPassword('invalid password'),
-})
 
 export const removeGoogleAuthProvider = h.auth
   .input(zUpdateAuthProvider)
