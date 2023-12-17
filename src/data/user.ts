@@ -147,6 +147,13 @@ export const updateEmail = h.auth
     )
     if (!password) return r('INVALID_CREDENTIALS')
 
+    const existingUser = await db.query.users.findFirst({
+      where(fields, operators) {
+        return operators.eq(fields.email, input.email)
+      },
+    })
+    if (existingUser) return r('EMAIL_EXISTS')
+
     await db
       .update(dbSchema.users)
       .set({ email: input.email })

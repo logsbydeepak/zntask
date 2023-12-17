@@ -6,7 +6,9 @@ import { z } from 'zod'
 import { Button } from '@/components/ui/button'
 import * as Dialog from '@/components/ui/dialog'
 import * as Form from '@/components/ui/form'
+import { updateEmail } from '@/data/user'
 import { useAppStore } from '@/store/app'
+import { toast } from '@/store/toast'
 import { zEmail, zPassword } from '@/utils/zSchema'
 
 import { Head } from '../head'
@@ -61,7 +63,33 @@ function Content({
     resolver: zodResolver(zSchema),
   })
 
-  const onSubmit = (values: FormValues) => {}
+  const onSubmit = (values: FormValues) => {
+    startTransition(async () => {
+      try {
+        const res = await updateEmail(values)
+        const resCode = res?.code
+
+        if (resCode === 'INVALID_CREDENTIALS') {
+          setError('password', {
+            type: 'manual',
+            message: 'invalid credentials',
+          })
+        }
+        if (resCode === 'EMAIL_EXISTS') {
+          setError('email', {
+            type: 'manual',
+            message: 'email already exists',
+          })
+        }
+        if (resCode === 'OK') {
+          toast.success('Email updated successfully')
+          handleClose()
+        }
+      } catch (error) {
+        toast.error()
+      }
+    })
+  }
 
   return (
     <>
