@@ -210,6 +210,7 @@ function CommandPaletteContent({ handleClose }: { handleClose: () => void }) {
             value={search}
             placeholder="search"
             onValueChange={setSearch}
+            autoFocus
             className="ml-2 h-5 w-full border-none p-0 outline-none placeholder:text-gray-400 focus:ring-0"
           />
         </div>
