@@ -3,6 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
+import { PasswordVisibilityToggle } from '@/app/(application)/(auth)/components'
 import { Button } from '@/components/ui/button'
 import * as Dialog from '@/components/ui/dialog'
 import * as Form from '@/components/ui/form'
@@ -53,6 +54,8 @@ function Content({
   isPending: boolean
   startTransition: React.TransitionStartFunction
 }) {
+  const [isPasswordVisible, setIsPasswordVisible] = React.useState(false)
+
   const {
     register,
     formState: { errors },
@@ -105,9 +108,20 @@ function Content({
             id="password"
             {...register('password')}
             placeholder="********"
+            type={isPasswordVisible ? 'text' : 'password'}
             autoFocus
           />
-          <Form.Error>{errors.password?.message}</Form.Error>
+          <div className="flex flex-wrap justify-between gap-y-2">
+            <div className="mr-4">
+              <Form.Error>{errors.password?.message}</Form.Error>
+            </div>
+            <div className="space-x-2">
+              <PasswordVisibilityToggle
+                isVisible={isPasswordVisible}
+                onClick={() => setIsPasswordVisible((prev) => !prev)}
+              />
+            </div>
+          </div>
         </div>
 
         <fieldset className="flex space-x-4" disabled={isPending}>
