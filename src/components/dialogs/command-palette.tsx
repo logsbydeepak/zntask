@@ -1,9 +1,7 @@
 import React from 'react'
 import { useRouter } from 'next/navigation'
-import * as Dialog from '@radix-ui/react-dialog'
-import * as Popover from '@radix-ui/react-popover'
 import { Command } from 'cmdk'
-import { useAtom, useAtomValue, useSetAtom } from 'jotai'
+import { useSetAtom } from 'jotai'
 import {
   ArchiveIcon,
   CalendarClockIcon,
@@ -22,10 +20,11 @@ import {
 } from 'lucide-react'
 import { useShallow } from 'zustand/react/shallow'
 
+import * as Dialog from '@/components/ui/dialog'
 import { isSidebarOpenAtom, useAppStore } from '@/store/app'
 import { useCategoryStore } from '@/store/category'
 import { useTaskStore } from '@/store/task'
-import { getCategoryColor } from '@/utils/category'
+import { categoryHelper, getCategoryColor } from '@/utils/category'
 import { cn } from '@/utils/style'
 
 export function CommandPaletteDialog() {
@@ -38,12 +37,11 @@ export function CommandPaletteDialog() {
 
   return (
     <Dialog.Root open={isOpen} onOpenChange={handleClose}>
-      <Dialog.Content
-        id="task-dialog"
-        className="fixed left-1/2 top-16 z-50 w-[400px] -translate-x-1/2 transform rounded-md border border-gray-200 bg-white p-0 shadow-sm drop-shadow-sm focus:outline-none"
-      >
-        <CommandPaletteContent handleClose={handleClose} />
-      </Dialog.Content>
+      <Dialog.Portal>
+        <Dialog.Content className="p-0 sm:rounded-lg sm:p-0">
+          <CommandPaletteContent handleClose={handleClose} />
+        </Dialog.Content>
+      </Dialog.Portal>
     </Dialog.Root>
   )
 }
@@ -62,10 +60,10 @@ function CommandPaletteContent({ handleClose }: { handleClose: () => void }) {
   const setDialog = useAppStore((s) => s.setDialog)
   const setIsSidebarOpen = useSetAtom(isSidebarOpenAtom)
   const activeCategory = useCategoryStore(
-    useShallow((s) => s.categories.filter((i) => !i.isArchived))
+    useShallow((s) => categoryHelper.getActiveCategories(s.categories))
   )
   const archiveCategory = useCategoryStore(
-    useShallow((s) => s.categories.filter((i) => i.isArchived))
+    useShallow((s) => categoryHelper.getArchivedCategories(s.categories))
   )
   const categories = useCategoryStore(useShallow((s) => s.categories))
   const parentTask = useTaskStore(useShallow((s) => s.parentTasks))
@@ -206,7 +204,7 @@ function CommandPaletteContent({ handleClose }: { handleClose: () => void }) {
           }
         }}
       >
-        <div className="flex items-center border-b border-gray-200 py-2.5 pl-3.5 pr-2.5">
+        <div className="flex items-center border-b border-gray-200 px-3 py-4">
           <SearchIcon className="h-3 w-3 text-gray-400" />
           <Command.Input
             value={search}
@@ -215,7 +213,7 @@ function CommandPaletteContent({ handleClose }: { handleClose: () => void }) {
             className="ml-2 h-5 w-full border-none p-0 outline-none placeholder:text-gray-400 focus:ring-0"
           />
         </div>
-        <Command.List className="[&>[cmdk-list-sizer]]:ml-2 [&>[cmdk-list-sizer]]:h-40 [&>[cmdk-list-sizer]]:space-y-2 [&>[cmdk-list-sizer]]:overflow-y-scroll [&>[cmdk-list-sizer]]:py-2 [&>[cmdk-list-sizer]]:pr-1">
+        <Command.List className="[&>[cmdk-list-sizer]]:ml-2 [&>[cmdk-list-sizer]]:h-60 [&>[cmdk-list-sizer]]:space-y-2 [&>[cmdk-list-sizer]]:overflow-y-scroll [&>[cmdk-list-sizer]]:py-2 [&>[cmdk-list-sizer]]:pr-1">
           <Command.Empty className="flex h-[calc(100%-5%)] items-center justify-center">
             <div className="flex flex-col items-center justify-center space-y-1 rounded-md border px-4 py-4 shadow-sm">
               <span className="inline-block h-5 w-5">
@@ -387,7 +385,7 @@ const CommandItemContainer = React.forwardRef<
     <Command.Item
       ref={ref}
       {...props}
-      className="group/item my-0.5 flex cursor-pointer items-center rounded-md border border-transparent px-2 py-1.5 data-[selected=true]:border-gray-200 data-[selected=true]:bg-gray-50"
+      className="group/item my-0.5 flex cursor-pointer items-center rounded-lg border border-transparent px-3 py-2 data-[selected=true]:border-gray-950/5 data-[selected=true]:bg-gray-100/50"
     />
   )
 })
@@ -401,7 +399,7 @@ const CommandItemGroup = React.forwardRef<
     <Command.Group
       ref={ref}
       {...props}
-      className="space-y-1 text-xs font-medium text-gray-400"
+      className="space-y-1 text-xs font-medium text-gray-400 [&>[cmdk-group-heading]]:px-2"
     />
   )
 })
@@ -409,7 +407,7 @@ CommandItemGroup.displayName = Command.Group.displayName
 
 function CommandItemIcon({ children }: { children: React.ReactNode }) {
   return (
-    <div className="mr-2 flex h-4 w-4 items-center justify-center text-gray-600 group-data-[selected=true]/item:text-gray-950">
+    <div className="mr-2 flex h-4 w-4 items-center justify-center border border-transparent text-gray-600 group-data-[selected=true]/item:text-gray-950">
       {children}
     </div>
   )
@@ -417,7 +415,7 @@ function CommandItemIcon({ children }: { children: React.ReactNode }) {
 
 function CommandItemTitle({ children }: { children: React.ReactNode }) {
   return (
-    <p className="overflow-hidden overflow-ellipsis text-xs font-normal text-gray-600 group-data-[selected=true]/item:text-gray-950">
+    <p className="overflow-hidden overflow-ellipsis text-sm font-normal text-gray-600 group-data-[selected=true]/item:text-gray-950">
       {children}
     </p>
   )

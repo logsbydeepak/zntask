@@ -3,17 +3,14 @@
 import React from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useAtom, useAtomValue, useSetAtom } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 import {
-  CalendarClockIcon,
   CalendarIcon,
   ChevronDownIcon,
   ChevronUpIcon,
-  CircleIcon,
   FolderIcon,
   GanttChartIcon,
   HeartIcon,
-  HeartOffIcon,
   InboxIcon,
   MoreVerticalIcon,
 } from 'lucide-react'

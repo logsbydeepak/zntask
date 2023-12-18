@@ -6,7 +6,7 @@ import { useAppStore } from '@/store/app'
 
 import { AddGoogleDialog } from './add-google'
 import { CategoryDialog } from './category'
-import { CommandPaletteDialog } from './command-pallet'
+import { CommandPaletteDialog } from './command-palette'
 import { DeleteCategoryDialog } from './delete-category'
 import { LogoutDialog } from './logout'
 import { RemoveGoogleDialog } from './remove-google'
