@@ -122,7 +122,7 @@ export const removeGoogleAuthProvider = h.auth
 
     await db
       .delete(dbSchema.googleAuth)
-      .where(eq(dbSchema.googleAuth.id, userId))
+      .where(eq(dbSchema.googleAuth.id, user.googleAuth.id))
 
     return r('OK')
   })
