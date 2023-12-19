@@ -369,8 +369,9 @@ function ItemRoot({
   )
 }
 
-const itemContentStyle =
-  'flex items-center h-9 px-2 w-full hover:bg-gray-50 rounded-md border border-transparent hover:border-gray-200 group-data-[active=true]:bg-gray-50 group-data-[active=true]:border-gray-200'
+const itemContentStyle = cn(
+  'flex h-9 w-full items-center rounded-md border border-transparent px-2 hover:border-gray-200 hover:bg-gray-50 group-data-[active=true]:border-gray-200 group-data-[active=true]:bg-gray-50'
+)
 function ItemContentLink({
   children,
   href,

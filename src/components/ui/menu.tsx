@@ -29,11 +29,12 @@ export const DropdownMenuTrigger = DropdownMenuTriggerPrimitives
 export const DropdownMenuRadioGroup = DropdownMenuRadioGroupPrimitives
 export const DropdownMenuRadioItem = DropdownMenuRadioItemPrimitives
 
-const menuContentStyle =
-  'bg-white rounded-md border border-gray-200 p-1 shadow-md drop-shadow-sm z-40'
+const menuContentStyle = cn(
+  'z-40 rounded-md border border-gray-200 bg-white p-1 shadow-md drop-shadow-sm'
+)
 
 const menuItemStyle = cva({
-  base: 'bg-white text-xs focus:outline-none rounded-[4px] py-2 px-4 data-[highlighted]:cursor-pointer flex items-center space-x-3 font-medium group/item',
+  base: 'group/item flex items-center space-x-3 rounded-[4px] bg-white px-4 py-2 text-xs font-medium focus:outline-none data-[highlighted]:cursor-pointer',
   variants: {
     intent: {
       neutral: 'text-gray-950 data-[highlighted]:bg-gray-100',
