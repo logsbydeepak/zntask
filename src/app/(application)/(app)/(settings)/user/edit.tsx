@@ -85,6 +85,9 @@ export function Update() {
       <button onClick={() => setDialog({ updateEmail: true })}>
         update email
       </button>
+      <button onClick={() => setDialog({ removePasswordAuth: true })}>
+        remove credential
+      </button>
     </div>
   )
 }

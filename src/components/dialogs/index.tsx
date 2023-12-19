@@ -9,6 +9,7 @@ import { CategoryDialog } from './category'
 import { CommandPaletteDialog } from './command-palette'
 import { DeleteCategoryDialog } from './delete-category'
 import { LogoutDialog } from './logout'
+import { RemoveCredentialDialog } from './remove-credential'
 import { RemoveGoogleDialog } from './remove-google'
 import { ResetPasswordDialog } from './reset-password'
 import { TaskDialog } from './task'
@@ -41,6 +42,7 @@ export function Dialogs() {
       <AddGoogleDialog />
       <RemoveGoogleDialog />
       <UpdateEmailDialog />
+      <RemoveCredentialDialog />
     </>
   )
 }
