@@ -226,7 +226,7 @@ function BottomIndicator({ className }: { className?: string }) {
         className
       )}
     >
-      <span className="h-1.5 w-1.5 rounded-full border-[1.5px] border-orange-600" />
+      <span className="size-1.5 rounded-full border-[1.5px] border-orange-600" />
       <span className="-ml-[1px] h-[1.5px] w-full rounded-full bg-orange-600" />
     </div>
   )
@@ -240,7 +240,7 @@ function TopIndicator({ className }: { className?: string }) {
         className
       )}
     >
-      <span className="h-1.5 w-1.5 rounded-full border-[1.5px] border-orange-600" />
+      <span className="size-1.5 rounded-full border-[1.5px] border-orange-600" />
       <span className="-ml-[1px] h-[1.5px] w-full rounded-full bg-orange-600" />
     </div>
   )
@@ -348,7 +348,7 @@ const TaskItem = React.forwardRef<
               <div>
                 <DropdownMenuTrigger asChild>
                   <button
-                    className="flex h-6 w-6 items-center justify-center text-gray-400 hover:text-gray-800 data-[state=open]:text-gray-800"
+                    className="flex size-6 items-center justify-center text-gray-400 hover:text-gray-800 data-[state=open]:text-gray-800"
                     onClick={(e) => {
                       e.stopPropagation()
                     }}
@@ -517,7 +517,7 @@ function Checkbox({
           setValue(value)
         }
       }}
-      className="h-3.5 w-3.5 rounded-full text-gray-600 outline-offset-4 hover:text-gray-950"
+      className="size-3.5 rounded-full text-gray-600 outline-offset-4 hover:text-gray-950"
       name="task status"
     >
       {!value && <CircleIcon />}

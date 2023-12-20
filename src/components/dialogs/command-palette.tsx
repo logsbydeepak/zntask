@@ -205,7 +205,7 @@ function CommandPaletteContent({ handleClose }: { handleClose: () => void }) {
         }}
       >
         <div className="flex items-center border-b border-gray-200 px-3 py-4">
-          <SearchIcon className="h-3 w-3 text-gray-400" />
+          <SearchIcon className="size-3 text-gray-400" />
           <Command.Input
             value={search}
             placeholder="search"
@@ -280,7 +280,7 @@ function CommandPaletteContent({ handleClose }: { handleClose: () => void }) {
                   <CommandItem.Icon>
                     <div
                       className={cn(
-                        'h-2.5 w-2.5 rounded-[4px]',
+                        'size-2.5 rounded-[4px]',
                         `bg-${getCategoryColor(i.indicator)}-600`
                       )}
                     />
@@ -306,7 +306,7 @@ function CommandPaletteContent({ handleClose }: { handleClose: () => void }) {
                   <CommandItem.Icon>
                     <div
                       className={cn(
-                        'h-2.5 w-2.5 rounded-[4px]',
+                        'size-2.5 rounded-[4px]',
                         `bg-${getCategoryColor(i.indicator)}-600`
                       )}
                     />
@@ -332,7 +332,7 @@ function CommandPaletteContent({ handleClose }: { handleClose: () => void }) {
                   <CommandItem.Icon>
                     <div
                       className={cn(
-                        'h-2.5 w-2.5 rounded-[4px]',
+                        'size-2.5 rounded-[4px]',
                         `bg-${getCategoryColor(i.indicator)}-600`
                       )}
                     />
@@ -408,7 +408,7 @@ CommandItemGroup.displayName = Command.Group.displayName
 
 function CommandItemIcon({ children }: { children: React.ReactNode }) {
   return (
-    <div className="mr-2 flex h-4 w-4 items-center justify-center border border-transparent text-gray-600 group-data-[selected=true]/item:text-gray-950">
+    <div className="mr-2 flex size-4 items-center justify-center border border-transparent text-gray-600 group-data-[selected=true]/item:text-gray-950">
       {children}
     </div>
   )

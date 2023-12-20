@@ -50,7 +50,7 @@ const menuItemStyle = cva({
 type MenuItemStyleProps = React.ComponentPropsWithoutRef<typeof menuItemStyle>
 
 const menuIconStyle = cva({
-  base: 'h-4 w-4 text-gray-600',
+  base: 'size-4 text-gray-600',
   variants: {
     intent: {
       neutral: 'text-gray-600',

@@ -55,7 +55,7 @@ function Item({ toast }: { toast: Toast }) {
       </div>
 
       <ToastPrimitive.Close className="absolute right-1.5 top-1.5 text-gray-500 hover:text-gray-950">
-        <XIcon className="h-3.5 w-3.5" />
+        <XIcon className="size-3.5" />
       </ToastPrimitive.Close>
     </ToastPrimitive.Root>
   )
@@ -85,7 +85,7 @@ function Icon({
   return (
     <div
       className={cn(
-        ' flex h-4 w-4 items-center justify-center rounded-full text-white',
+        ' flex size-4 items-center justify-center rounded-full text-white',
         className
       )}
     >

@@ -138,13 +138,13 @@ function CategoryDialogContent({
                 >
                   <div
                     className={cn(
-                      'h-[18px] w-[18px] cursor-pointer rounded-full hover:ring-2',
+                      'size-[18px] cursor-pointer rounded-full hover:ring-2',
                       `bg-${option.color}-600 hover:ring-${option.color}-300 `,
                       'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-950 focus-visible:ring-offset-2 focus-visible:ring-offset-white'
                     )}
                   >
                     <RadioGroup.Indicator asChild>
-                      <div className="h-2 w-2 rounded-full bg-white"></div>
+                      <div className="size-2 rounded-full bg-white"></div>
                     </RadioGroup.Indicator>
                   </div>
                 </RadioGroup.Item>

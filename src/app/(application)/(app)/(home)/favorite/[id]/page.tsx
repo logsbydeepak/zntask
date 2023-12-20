@@ -46,7 +46,7 @@ export default function Page({ params }: { params: { id?: string } }) {
 
           <DropdownMenuRoot>
             <DropdownMenuTrigger asChild>
-              <button className="flex h-6 w-6 items-center justify-center text-gray-400 hover:text-gray-800 data-[state=open]:text-gray-800">
+              <button className="flex size-6 items-center justify-center text-gray-400 hover:text-gray-800 data-[state=open]:text-gray-800">
                 <span className="inline-block h-4 w-4">
                   <MoreVerticalIcon />
                 </span>

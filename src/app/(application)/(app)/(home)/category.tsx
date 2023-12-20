@@ -99,7 +99,7 @@ export const CategoryItem = React.forwardRef<
               <div>
                 <div
                   className={cn(
-                    'h-2.5 w-2.5 rounded-full',
+                    'size-2.5 rounded-full',
                     `bg-${getCategoryColor(category.indicator)}-600`
                   )}
                 />
@@ -111,7 +111,7 @@ export const CategoryItem = React.forwardRef<
             <div className="flex items-center space-x-1">
               <DropdownMenuTrigger asChild>
                 <button
-                  className="flex h-6 w-6 items-center justify-center text-gray-400 hover:text-gray-800 data-[state=open]:text-gray-800"
+                  className="flex size-6 items-center justify-center text-gray-400 hover:text-gray-800 data-[state=open]:text-gray-800"
                   onClick={(e) => e.preventDefault()}
                 >
                   <span className="inline-block h-4 w-4">
@@ -257,7 +257,7 @@ export function TopDrop({ id }: { id: string }) {
 function BottomIndicator() {
   return (
     <div className="absolute -bottom-[5px] left-0 right-0 flex w-full translate-y-[2px] items-center px-3">
-      <span className="h-1.5 w-1.5 rounded-full border-[1.5px] border-orange-600" />
+      <span className="size-1.5 rounded-full border-[1.5px] border-orange-600" />
       <span className="-ml-[1px] h-[1.5px] w-full rounded-full bg-orange-600" />
     </div>
   )
@@ -266,7 +266,7 @@ function BottomIndicator() {
 function TopIndicator() {
   return (
     <div className="absolute -top-[5px] left-0 right-0 flex w-full translate-y-[-2px] items-center px-3">
-      <span className="h-1.5 w-1.5 rounded-full border-[1.5px] border-orange-600" />
+      <span className="size-1.5 rounded-full border-[1.5px] border-orange-600" />
       <span className="-ml-[1px] h-[1.5px] w-full rounded-full bg-orange-600" />
     </div>
   )

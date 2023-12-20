@@ -485,7 +485,7 @@ function Checkbox({
           setValue(value)
         }
       }}
-      className="h-4 w-4 rounded-full text-gray-600 outline-offset-4 hover:text-gray-950"
+      className="size-4 rounded-full text-gray-600 outline-offset-4 hover:text-gray-950"
       name="task status"
     >
       {!value && <CircleIcon />}
@@ -518,7 +518,7 @@ function CategoryPicker({
             {currentCategory && (
               <div
                 className={cn(
-                  'h-2.5 w-2.5 rounded-[4.5px]',
+                  'size-2.5 rounded-[4.5px]',
                   `bg-${getCategoryColor(currentCategory.indicator)}-600`
                 )}
               />

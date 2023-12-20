@@ -66,7 +66,7 @@ export const CategoryPopover = React.forwardRef<
         }}
       >
         <div className="flex items-center border-b border-gray-200 py-2.5 pl-3.5 pr-2.5">
-          <SearchIcon className="h-3 w-3 text-gray-400" />
+          <SearchIcon className="size-3 text-gray-400" />
           <Command.Input
             ref={searchInputRef}
             value={search}
@@ -96,7 +96,7 @@ export const CategoryPopover = React.forwardRef<
               <CategoryItem.Icon>
                 <div
                   className={cn(
-                    'h-2.5 w-2.5 rounded-[4px]',
+                    'size-2.5 rounded-[4px]',
                     `bg-${getCategoryColor(currentCategory.indicator)}-600`
                   )}
                 />
@@ -113,7 +113,7 @@ export const CategoryPopover = React.forwardRef<
             }}
           >
             <CategoryItem.Icon>
-              <InboxIcon className="h-3.5 w-3.5 text-gray-600" />
+              <InboxIcon className="size-3.5 text-gray-600" />
             </CategoryItem.Icon>
             <CategoryItem.Title>Inbox</CategoryItem.Title>
           </CategoryItem.Container>
@@ -135,7 +135,7 @@ export const CategoryPopover = React.forwardRef<
                 <CategoryItem.Icon>
                   <div
                     className={cn(
-                      'h-2.5 w-2.5 rounded-[4px]',
+                      'size-2.5 rounded-[4px]',
                       `bg-${getCategoryColor(i.indicator)}-600`
                     )}
                   />
@@ -210,7 +210,7 @@ CategoryItemContainer.displayName = Command.Item.displayName
 
 function CategoryItemIcon({ children }: { children: React.ReactNode }) {
   return (
-    <div className="mr-2 flex h-4 w-4 items-center justify-center">
+    <div className="mr-2 flex size-4 items-center justify-center">
       {children}
     </div>
   )

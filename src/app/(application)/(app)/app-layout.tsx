@@ -44,7 +44,7 @@ function EmptyContainer({
         className
       )}
     >
-      <div className="flex h-32 w-32 items-center justify-center rounded-lg border border-gray-200 bg-white shadow-sm">
+      <div className="flex size-32 items-center justify-center rounded-lg border border-gray-200 bg-white shadow-sm">
         <span className="flex flex-col items-center space-y-1 text-center text-gray-600">
           {children}
         </span>

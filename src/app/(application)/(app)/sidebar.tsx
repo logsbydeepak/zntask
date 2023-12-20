@@ -228,7 +228,7 @@ function CategoryItem({
                 <Item.LabelIcon>
                   <div
                     className={cn(
-                      'h-2.5 w-2.5 rounded-full',
+                      'size-2.5 rounded-full',
                       `bg-${getCategoryColor(category.indicator)}-600`
                     )}
                   />
@@ -237,7 +237,7 @@ function CategoryItem({
               </Item.LabelContainer>
               <span className="flex items-center space-x-0.5">
                 <DropdownMenuTrigger asChild>
-                  <button className="flex h-6 w-6 items-center justify-center text-gray-400 hover:text-gray-800 data-[state=open]:text-gray-800">
+                  <button className="flex size-6 items-center justify-center text-gray-400 hover:text-gray-800 data-[state=open]:text-gray-800">
                     <span className="inline-block h-4 w-4">
                       <MoreVerticalIcon />
                     </span>
@@ -308,7 +308,7 @@ function EmptyLabel({ children }: { children: React.ReactNode }) {
 }
 
 function EmptyIcon({ children }: { children: React.ReactNode }) {
-  return <div className="h-4 w-4 text-gray-600">{children}</div>
+  return <div className="size-4 text-gray-600">{children}</div>
 }
 
 function ShowMore({
@@ -326,9 +326,9 @@ function ShowMore({
         <Item.LabelContainer>
           <Item.LabelIcon>
             {isOpen ? (
-              <ChevronUpIcon className="h-4 w-4" />
+              <ChevronUpIcon className="size-4" />
             ) : (
-              <ChevronDownIcon className="h-4 w-4" />
+              <ChevronDownIcon className="size-4" />
             )}
           </Item.LabelIcon>
           <Item.Label>
@@ -415,7 +415,7 @@ function ItemLabel({ children }: React.ComponentProps<'span'>) {
 
 function ItemLabelIcon({ className, children }: React.ComponentProps<'span'>) {
   return (
-    <span className={cn('flex h-4 w-4 items-center justify-center', className)}>
+    <span className={cn('flex size-4 items-center justify-center', className)}>
       {children}
     </span>
   )

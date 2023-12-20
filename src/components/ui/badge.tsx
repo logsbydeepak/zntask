@@ -24,7 +24,7 @@ Button.displayName = 'Badge.Button'
 
 export function Icon({ children }: { children: React.ReactNode }) {
   return (
-    <span className="grid h-3 w-3 place-content-center">
+    <span className="grid size-3 place-content-center">
       <span className="block group-data-[loading=true]:hidden">{children}</span>
       <span className="hidden group-data-[loading=true]:block">
         <LoaderIcon className="animate-spin" />

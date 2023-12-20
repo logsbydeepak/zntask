@@ -122,7 +122,7 @@ const SchedulePopover = React.forwardRef<
     >
       <div className="flex flex-col border-b border-gray-200 px-4 pb-4 pt-2.5">
         <div className="flex items-center">
-          <CalendarCheckIcon className="h-3 w-3 text-gray-400" />
+          <CalendarCheckIcon className="size-3 text-gray-400" />
           <input
             placeholder="today at 9am"
             autoFocus
@@ -275,19 +275,19 @@ function Calendar({
         nav_button_next: 'absolute right-1',
         nav_button_previous: 'absolute left-1',
         nav_button:
-          'h-7 w-7 bg-transparent p-0 hover:text-gray-950 text-gray-600 flex justify-center items-center rounded-md',
+          'size-7 bg-transparent p-0 hover:text-gray-950 text-gray-600 flex justify-center items-center rounded-md',
 
         head_cell: 'font-normal text-gray-400 text-xs pb-1',
         day_today: 'text-orange-600 font-medium aria-[]:text-white',
-        day: 'h-7 w-7 rounded-full border border-transparent hover:border-gray-200 hover:bg-gray-100 m-0.5 text-xs aria-[selected=true]:font-medium',
+        day: 'size-7 rounded-full border border-transparent hover:border-gray-200 hover:bg-gray-100 m-0.5 text-xs aria-[selected=true]:font-medium',
         day_selected:
           'bg-orange-600 text-white hover:bg-orange-600 hover:border-orange-600',
         day_outside: 'text-gray-400',
         table: 'w-full',
       }}
       components={{
-        IconLeft: () => <ChevronLeftIcon className="h-4 w-4" />,
-        IconRight: () => <ChevronRightIcon className="h-4 w-4" />,
+        IconLeft: () => <ChevronLeftIcon className="size-4" />,
+        IconRight: () => <ChevronRightIcon className="size-4" />,
       }}
     />
   )

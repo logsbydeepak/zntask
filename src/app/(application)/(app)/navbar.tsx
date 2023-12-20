@@ -76,11 +76,11 @@ export function Navbar() {
           </div>
 
           <DropdownMenuRoot>
-            <DropdownMenuTrigger className="relative h-8 w-8 rounded-full">
+            <DropdownMenuTrigger className="relative size-8 rounded-full">
               <Avatar />
               <span
                 data-active={isAppSyncing}
-                className="absolute bottom-0 right-[1px] hidden h-2 w-2 items-center justify-center rounded-full border border-white bg-white data-[active=true]:flex"
+                className="absolute bottom-0 right-[1px] hidden size-2 items-center justify-center rounded-full border border-white bg-white data-[active=true]:flex"
               >
                 <span className="size-full animate-pulse rounded-full bg-orange-500" />
               </span>
@@ -165,7 +165,7 @@ const ThemeItem = React.forwardRef<
   <button
     {...props}
     ref={ref}
-    className="flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 bg-gray-50 text-gray-500 outline-none data-[state=checked]:border-orange-700 data-[highlighted]:bg-gray-100 data-[state=checked]:bg-orange-600 data-[highlighted]:text-gray-950 data-[state=checked]:text-white data-[highlighted]:ring-2 data-[highlighted]:ring-gray-950 data-[highlighted]:ring-offset-2"
+    className="flex size-8 items-center justify-center rounded-lg border border-gray-200 bg-gray-50 text-gray-500 outline-none data-[state=checked]:border-orange-700 data-[highlighted]:bg-gray-100 data-[state=checked]:bg-orange-600 data-[highlighted]:text-gray-950 data-[state=checked]:text-white data-[highlighted]:ring-2 data-[highlighted]:ring-gray-950 data-[highlighted]:ring-offset-2"
   >
     <span className="inline-block h-4 w-4">{children}</span>
   </button>
@@ -182,7 +182,7 @@ function Icon({
   return (
     <button
       onClick={onClick}
-      className="flex h-8 w-8 items-center justify-center rounded-lg border border-gray-100 bg-gray-50 text-gray-500 hover:bg-gray-100 hover:text-gray-950"
+      className="flex size-8 items-center justify-center rounded-lg border border-gray-100 bg-gray-50 text-gray-500 hover:bg-gray-100 hover:text-gray-950"
     >
       <span className="inline-block h-4 w-4">{children}</span>
     </button>
@@ -197,7 +197,7 @@ function Search() {
       className="group flex items-center rounded-lg border border-gray-100 bg-gray-50 px-[7px] hover:bg-gray-100 hover:text-gray-950 sm:pl-3 sm:pr-1.5"
       onClick={() => setDialog({ commandPalette: true })}
     >
-      <span className="h-4 w-4 text-gray-500 group-hover:text-gray-950">
+      <span className="size-4 text-gray-500 group-hover:text-gray-950">
         <SearchIcon />
       </span>
       <span className="hidden sm:inline-block">

@@ -99,7 +99,7 @@ function UpdateProfilePictureDialogContent({
           <Dialog.Title>Profile picture</Dialog.Title>
         </div>
         <div className="flex items-center justify-center space-x-4">
-          <div className="flex h-24 w-24 items-center justify-center rounded-full border border-gray-100 bg-gray-50">
+          <div className="flex size-24 items-center justify-center rounded-full border border-gray-100 bg-gray-50">
             {preview && (
               <Image
                 src={preview}
@@ -139,7 +139,7 @@ function UpdateProfilePictureDialogContent({
                 }
               }}
             >
-              <UploadIcon className="h-4 w-4" />
+              <UploadIcon className="size-4" />
               <span>Pick new</span>
             </Button>
 
@@ -153,7 +153,7 @@ function UpdateProfilePictureDialogContent({
                 setReset(true)
               }}
             >
-              <Trash2Icon className="h-4 w-4" />
+              <Trash2Icon className="size-4" />
               <span>Remove</span>
             </Button>
           </fieldset>

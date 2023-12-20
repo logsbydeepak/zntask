@@ -31,8 +31,8 @@ export function FormContainer({
 export function Alert({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex items-center space-x-2 rounded-lg bg-red-50 px-4 py-2 text-xs font-medium text-red-700">
-      <div className="flex h-3.5 w-3.5 items-center justify-center rounded-full bg-red-700">
-        <ExclamationIcon className="h-2.5 w-2.5 text-white" />
+      <div className="flex size-3.5 items-center justify-center rounded-full bg-red-700">
+        <ExclamationIcon className="size-2.5 text-white" />
       </div>
       <p>{children}</p>
     </div>
@@ -42,10 +42,10 @@ export function Alert({ children }: { children: React.ReactNode }) {
 export function Logo() {
   return (
     <Link
-      className="mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-orange-600 p-3"
+      className="mb-2 flex size-10 items-center justify-center rounded-full bg-orange-600 p-3"
       href="/"
     >
-      <LogoIcon className="h-4 w-4 text-white" />
+      <LogoIcon className="size-4 text-white" />
     </Link>
   )
 }
@@ -76,7 +76,7 @@ export function ContinueWithGoogle({
       isLoading={isLoading}
       onClick={onClick}
     >
-      <div className="mr-2 h-5 w-5 ">
+      <div className="mr-2 size-5 ">
         <GoogleIcon />
       </div>
       <span>Continue with Google</span>

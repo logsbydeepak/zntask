@@ -33,7 +33,7 @@ export const Button = React.forwardRef<
     className={cn(buttonStyle({ intent }), className)}
   >
     {children}
-    {isLoading && <LoaderIcon className="ml-2 h-4 w-4 animate-spin" />}
+    {isLoading && <LoaderIcon className="ml-2 size-4 animate-spin" />}
   </button>
 ))
 Button.displayName = 'Button'
