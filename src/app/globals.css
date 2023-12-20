@@ -47,7 +47,7 @@
   }
 
   svg {
-    @apply h-full w-full;
+    @apply size-full;
   }
 
   [cmdk-list-sizer] {

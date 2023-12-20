@@ -67,7 +67,7 @@ const Button = React.forwardRef<
 >(({ children, ...props }, ref) => (
   <button
     ref={ref}
-    className="h-full w-full px-6 hover:bg-gray-50 hover:text-gray-950"
+    className="size-full px-6 hover:bg-gray-50 hover:text-gray-950"
     {...props}
   >
     {children}

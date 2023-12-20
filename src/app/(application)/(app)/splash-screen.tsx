@@ -9,7 +9,7 @@ export function SplashScreen() {
         <LogoIcon className="h-4 w-4" />
       </span>
       <span className="h-5 w-5">
-        <LoaderIcon className="h-full w-full animate-spin text-gray-600" />
+        <LoaderIcon className="size-full animate-spin text-gray-600" />
       </span>
     </div>
   )

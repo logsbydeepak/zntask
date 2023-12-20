@@ -48,7 +48,7 @@ export function Navbar() {
     <nav className="fixed z-20 w-full border-b border-gray-200 bg-white bg-opacity-50 backdrop-blur-sm">
       <div className="flex h-14 items-center justify-between px-4 md:px-5">
         <Link href="/" className="flex items-center space-x-2">
-          <span className="flex h-7 w-7 items-center justify-center rounded-full bg-orange-600 text-white">
+          <span className="flex size-7 items-center justify-center rounded-full bg-orange-600 text-white">
             <span className="h-3 w-3">
               <LogoIcon />
             </span>
@@ -82,7 +82,7 @@ export function Navbar() {
                 data-active={isAppSyncing}
                 className="absolute bottom-0 right-[1px] hidden h-2 w-2 items-center justify-center rounded-full border border-white bg-white data-[active=true]:flex"
               >
-                <span className="h-full w-full animate-pulse rounded-full bg-orange-500" />
+                <span className="size-full animate-pulse rounded-full bg-orange-500" />
               </span>
             </DropdownMenuTrigger>
 
@@ -212,7 +212,7 @@ function Avatar() {
   const initials = genInitials(firstName, lastName)
 
   return (
-    <div className="flex h-full w-full items-center justify-center rounded-full border border-gray-100 bg-gray-50">
+    <div className="flex size-full items-center justify-center rounded-full border border-gray-100 bg-gray-50">
       {profilePicture && (
         <Image
           src={profilePicture}
@@ -220,7 +220,7 @@ function Avatar() {
           width={32}
           height={32}
           quality={100}
-          className="h-full w-full rounded-full object-cover"
+          className="size-full rounded-full object-cover"
         />
       )}
 

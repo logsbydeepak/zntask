@@ -513,7 +513,7 @@ function CategoryPicker({
         <Badge.Button className="max-w-[95%] overflow-hidden">
           <Badge.Icon>
             {!currentCategory && (
-              <InboxIcon className="h-full w-full text-gray-600" />
+              <InboxIcon className="size-full text-gray-600" />
             )}
             {currentCategory && (
               <div

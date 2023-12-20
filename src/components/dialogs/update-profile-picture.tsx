@@ -108,7 +108,7 @@ function UpdateProfilePictureDialogContent({
                 height={96}
                 quality={100}
                 alt="avatar"
-                className="h-full w-full rounded-full object-cover"
+                className="size-full rounded-full object-cover"
               />
             )}
 
