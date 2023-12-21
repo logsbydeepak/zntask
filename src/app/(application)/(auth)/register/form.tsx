@@ -123,7 +123,7 @@ export function Form() {
 
   return (
     <>
-      <div className="space-y-3">
+      <div className="w-full space-y-3">
         <fieldset disabled={isLoading}>
           <ContinueWithGoogle
             isLoading={isGooglePending || isGoogleLoading}

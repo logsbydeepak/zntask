@@ -1,11 +1,6 @@
 import { Metadata } from 'next'
 
-import {
-  FormContainer,
-  Logo,
-  SubTitle,
-  Title,
-} from '@/app/(application)/(auth)/components'
+import { Logo, SubTitle, Title } from '@/app/(application)/(auth)/components'
 
 import { Form } from './form'
 
@@ -15,13 +10,13 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <FormContainer>
+    <>
       <div className="flex w-full flex-col items-center">
         <Logo />
         <Title>Login to zntask</Title>
         <SubTitle>Continue where you left</SubTitle>
       </div>
       <Form />
-    </FormContainer>
+    </>
   )
 }

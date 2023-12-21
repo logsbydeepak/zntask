@@ -6,7 +6,7 @@ import { useTheme } from 'next-themes'
 
 import { cn } from '@/utils/style'
 
-export function Navbar() {
+export function Theme() {
   const { theme: themeProvider, setTheme: setThemeProvider } = useTheme()
   const [theme, setCurrentTheme] = React.useState<string>('')
 
@@ -19,24 +19,17 @@ export function Navbar() {
   }
 
   return (
-    <nav className="m-2 md:m-4">
-      <div className="flex justify-end">
-        <div className="flex space-x-2 rounded-full border px-1 py-1">
-          <Icon isActive={theme === 'light'} onClick={() => setTheme('light')}>
-            <MoonIcon strokeWidth={2} />
-          </Icon>
-          <Icon isActive={theme === 'dark'} onClick={() => setTheme('dark')}>
-            <SunIcon strokeWidth={2} />
-          </Icon>
-          <Icon
-            isActive={theme === 'system'}
-            onClick={() => setTheme('system')}
-          >
-            <MonitorIcon strokeWidth={2} />
-          </Icon>
-        </div>
-      </div>
-    </nav>
+    <div className="inline-flex space-x-2 self-center rounded-full border px-1 py-1">
+      <Icon isActive={theme === 'light'} onClick={() => setTheme('light')}>
+        <MoonIcon />
+      </Icon>
+      <Icon isActive={theme === 'dark'} onClick={() => setTheme('dark')}>
+        <SunIcon />
+      </Icon>
+      <Icon isActive={theme === 'system'} onClick={() => setTheme('system')}>
+        <MonitorIcon />
+      </Icon>
+    </div>
   )
 }
 
@@ -57,7 +50,7 @@ function Icon({
       )}
       onClick={onClick}
     >
-      <div className="h-3 w-3">{children}</div>
+      <div className="size-3.5">{children}</div>
     </button>
   )
 }

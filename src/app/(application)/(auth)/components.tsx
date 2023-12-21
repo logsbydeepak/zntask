@@ -14,20 +14,6 @@ import { LogoIcon } from '@/components/icon/logo'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/utils/style'
 
-export function FormContainer({
-  children,
-  className,
-}: {
-  children: React.ReactNode
-  className?: string
-}) {
-  return (
-    <div className={cn('flex flex-col space-y-6 p-10', className)}>
-      {children}
-    </div>
-  )
-}
-
 export function Alert({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex items-center space-x-2 rounded-lg bg-red-50 px-4 py-2 text-xs font-medium text-red-700">

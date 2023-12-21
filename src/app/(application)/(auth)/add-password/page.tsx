@@ -4,7 +4,6 @@ import { z } from 'zod'
 
 import {
   AccountQuestion,
-  FormContainer,
   Logo,
   Separator,
   SubTitle,
@@ -48,7 +47,7 @@ export default async function Page({
   }
 
   return (
-    <FormContainer>
+    <>
       <div className="flex w-full flex-col items-center">
         <Logo />
         <Title>Add Password</Title>
@@ -59,7 +58,7 @@ export default async function Page({
       ) : (
         <AlertMessage>{message()}</AlertMessage>
       )}
-    </FormContainer>
+    </>
   )
 }
 
