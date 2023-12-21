@@ -3,7 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-import { PasswordVisibilityToggle } from '@/app/(application)/(auth)/components'
+import { PasswordVisibilityToggle } from '@/app/(auth)/components'
 import { Button } from '@/components/ui/button'
 import * as Dialog from '@/components/ui/dialog'
 import * as Form from '@/components/ui/form'
