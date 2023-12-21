@@ -1,13 +1,6 @@
-import type { Metadata } from 'next'
-import { Inter, JetBrains_Mono } from 'next/font/google'
-
 import './globals.css'
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
-const jetBrainsMono = JetBrains_Mono({
-  subsets: ['latin'],
-  variable: '--font-jetBrains',
-})
+import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: {
@@ -21,13 +14,5 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  return (
-    <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${inter.variable} ${jetBrainsMono.variable} overflow-x-hidden overflow-y-scroll bg-background font-sans text-text`}
-      >
-        {children}
-      </body>
-    </html>
-  )
+  return children
 }
