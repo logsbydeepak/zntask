@@ -1,4 +1,3 @@
-import { revalidatePath, revalidateTag } from 'next/cache'
 import { eq } from 'drizzle-orm'
 import { createUploadthing, type FileRouter } from 'uploadthing/next'
 
@@ -10,7 +9,7 @@ import { r } from './handler'
 const f = createUploadthing()
 
 export const ourFileRouter = {
-  imageUploader: f({ image: { maxFileSize: '4MB' } })
+  profilePicture: f({ image: { maxFileSize: '4MB' } })
     .middleware(async () => {
       return await isAuth()
     })

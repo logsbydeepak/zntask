@@ -53,13 +53,14 @@ function UpdateProfilePictureDialogContent({
   startTransition: React.TransitionStartFunction
 }) {
   const user = useAtomValue(userAtom)
+
+  const [file, setFile] = React.useState<File | null>(null)
+  const [reset, setReset] = React.useState(false)
   const [preview, setPreview] = React.useState<string | null>(
     user.profilePicture
   )
 
-  const [file, setFile] = React.useState<File | null>(null)
-  const [reset, setReset] = React.useState(false)
-  const { startUpload, isUploading } = useUploadThing('imageUploader', {
+  const { startUpload, isUploading } = useUploadThing('profilePicture', {
     onClientUploadComplete: (file) => {
       startTransition(async () => {
         await revalidateUser()
