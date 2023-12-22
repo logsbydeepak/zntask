@@ -32,7 +32,7 @@ export default async function Layout({
         className={cn(
           inter.variable,
           jetBrainsMono.variable,
-          'overflow-x-hidden font-sans text-text'
+          'overflow-x-hidden overflow-y-scroll font-sans text-text'
         )}
       >
         <JotaiProvider>

@@ -67,6 +67,8 @@ export async function middleware(req: NextRequest) {
     }
 
     if (!isAuth) {
+      if (pathname.startsWith('/api/uploadthing')) return NextResponse.next()
+
       if (isIndexPage) {
         return NextResponse.rewrite(new URL('/home', url))
       }

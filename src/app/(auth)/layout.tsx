@@ -18,7 +18,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         )}
       >
         <ThemeProvider>
-          <div className="flex flex-col items-center space-y-6 border-gray-100 p-4 sm:p-8 md:my-[180px]  md:w-[500px] md:rounded-xl md:border md:border-gray-950/5 md:bg-white md:p-10 md:drop-shadow-sm">
+          <div className="flex flex-col items-center space-y-6 border-gray-100 p-6 sm:p-8 md:my-[180px]  md:w-[500px] md:rounded-xl md:border md:border-gray-950/5 md:bg-white md:p-10 md:drop-shadow-sm">
             {children}
             <Theme />
           </div>
