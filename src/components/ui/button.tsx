@@ -5,7 +5,7 @@ import { LoaderIcon } from 'lucide-react'
 import { cn } from '@/utils/style'
 
 export const buttonStyle = cva({
-  base: 'flex items-center justify-center rounded-md border border-transparent px-4 py-2.5 text-sm font-medium text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2',
+  base: 'flex items-center justify-center space-x-1.5 rounded-lg border border-transparent px-4 py-2.5 text-sm font-medium text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2',
   variants: {
     intent: {
       primary:

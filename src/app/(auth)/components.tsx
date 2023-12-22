@@ -12,11 +12,10 @@ import { ExclamationIcon } from '@/components/icon/exclamation'
 import { GoogleIcon } from '@/components/icon/google'
 import { LogoIcon } from '@/components/icon/logo'
 import { Button } from '@/components/ui/button'
-import { cn } from '@/utils/style'
 
 export function Alert({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex items-center space-x-2 rounded-lg bg-red-50 px-4 py-2 text-xs font-medium text-red-700">
+    <div className="flex w-full items-center space-x-2 rounded-lg bg-red-50 px-4 py-2 text-xs font-medium text-red-700">
       <div className="flex size-3.5 items-center justify-center rounded-full bg-red-700">
         <ExclamationIcon className="size-2.5 text-white" />
       </div>
@@ -57,14 +56,12 @@ export function ContinueWithGoogle({
 }) {
   return (
     <Button
-      className="flex w-full items-center justify-center"
+      className="w-full"
       intent="secondary"
       isLoading={isLoading}
       onClick={onClick}
     >
-      <div className="mr-2 size-5 ">
-        <GoogleIcon />
-      </div>
+      <GoogleIcon className="size-5" />
       <span>Continue with Google</span>
     </Button>
   )

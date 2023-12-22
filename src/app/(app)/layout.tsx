@@ -45,7 +45,6 @@ export default async function Layout({
                 <AppLayout>{children}</AppLayout>
                 <GlobalShortcut />
                 <Dialogs />
-                {children}
               </InitData>
             </Suspense>
             <ToastProvider />
