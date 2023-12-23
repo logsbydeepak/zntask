@@ -38,7 +38,7 @@ export function CommandPaletteDialog() {
   return (
     <Dialog.Root open={isOpen} onOpenChange={handleClose}>
       <Dialog.Portal>
-        <Dialog.Content className="p-0 sm:rounded-lg sm:p-0">
+        <Dialog.Content className="p-0 sm:p-0">
           <CommandPaletteContent handleClose={handleClose} />
         </Dialog.Content>
       </Dialog.Portal>
@@ -204,7 +204,7 @@ function CommandPaletteContent({ handleClose }: { handleClose: () => void }) {
           }
         }}
       >
-        <div className="flex items-center border-b border-gray-200 px-3 py-4">
+        <div className="flex items-center border-b border-gray-200 px-3 py-3">
           <SearchIcon className="size-3 text-gray-400" />
           <Command.Input
             value={search}

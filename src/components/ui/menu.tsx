@@ -30,7 +30,7 @@ export const DropdownMenuRadioGroup = DropdownMenuRadioGroupPrimitives
 export const DropdownMenuRadioItem = DropdownMenuRadioItemPrimitives
 
 const menuContentStyle = cn(
-  'z-40 rounded-md border border-gray-200 bg-white p-1 shadow-md drop-shadow-sm'
+  'z-40 rounded-xl border border-gray-200 bg-white p-1 drop-shadow-sm'
 )
 
 const menuItemStyle = cva({

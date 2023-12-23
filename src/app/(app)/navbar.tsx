@@ -9,10 +9,10 @@ import {
   CheckCircleIcon,
   FolderPlusIcon,
   LogOutIcon,
-  MenuSquareIcon,
   MonitorIcon,
   MoonStarIcon,
   PanelLeftIcon,
+  PanelLeftInactiveIcon,
   SearchIcon,
   SunIcon,
   UserIcon,
@@ -37,6 +37,7 @@ import {
   useAppStore,
   userAtom,
 } from '@/store/app'
+import { cn } from '@/utils/style'
 
 export function Navbar() {
   const setDialog = useAppStore((s) => s.setDialog)
@@ -60,7 +61,7 @@ export function Navbar() {
             <Search />
 
             <Icon onClick={() => setIsSidebarOpen((open) => !open)}>
-              {isSidebarOpen ? <MenuSquareIcon /> : <PanelLeftIcon />}
+              {isSidebarOpen ? <PanelLeftInactiveIcon /> : <PanelLeftIcon />}
             </Icon>
           </div>
           <div className="my-1 w-[1px] bg-gray-200" />
@@ -172,6 +173,10 @@ const ThemeItem = React.forwardRef<
 ))
 ThemeItem.displayName = 'ThemeItem'
 
+const iconStyle = cn(
+  'flex items-center justify-center rounded-lg border border-gray-200 bg-gray-50 text-gray-500 hover:bg-gray-100 hover:text-gray-950'
+)
+
 function Icon({
   children,
   onClick,
@@ -180,11 +185,8 @@ function Icon({
   onClick?: () => void
 }) {
   return (
-    <button
-      onClick={onClick}
-      className="flex size-8 items-center justify-center rounded-lg border border-gray-100 bg-gray-50 text-gray-500 hover:bg-gray-100 hover:text-gray-950"
-    >
-      <span className="inline-block h-4 w-4">{children}</span>
+    <button onClick={onClick} className={cn(iconStyle, 'size-8')}>
+      <span className="size-4">{children}</span>
     </button>
   )
 }
@@ -194,14 +196,14 @@ function Search() {
 
   return (
     <button
-      className="group flex items-center rounded-lg border border-gray-100 bg-gray-50 px-[7px] hover:bg-gray-100 hover:text-gray-950 sm:pl-3 sm:pr-1.5"
+      className={cn(iconStyle)}
       onClick={() => setDialog({ commandPalette: true })}
     >
-      <span className="size-4 text-gray-500 group-hover:text-gray-950">
-        <SearchIcon />
+      <span className="flex size-8 items-center justify-center">
+        <SearchIcon className="size-3.5" />
       </span>
       <span className="hidden sm:inline-block">
-        <span className="ml-2 mr-8 text-xs text-gray-500">Search</span>
+        <span className="mr-10 text-xs text-gray-500">Search</span>
       </span>
     </button>
   )
