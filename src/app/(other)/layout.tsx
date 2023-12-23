@@ -1,7 +1,5 @@
+import { BaseLayout } from '@/components/base-layout'
+
 export default function Layout({ children }: { children: React.ReactNode }) {
-  return (
-    <html>
-      <body>{children}</body>
-    </html>
-  )
+  return <BaseLayout>{children}</BaseLayout>
 }

@@ -1,5 +1,7 @@
 'use client'
 
+import { BaseLayout } from '@/components/base-layout'
+
 export default function Error({
   error,
   reset,
@@ -8,11 +10,9 @@ export default function Error({
   reset: () => void
 }) {
   return (
-    <html>
-      <body>
-        <h2>Something went wrong!</h2>
-        <button onClick={() => reset()}>Try again</button>
-      </body>
-    </html>
+    <BaseLayout>
+      <h2>Something went wrong!</h2>
+      <button onClick={() => reset()}>Try again</button>
+    </BaseLayout>
   )
 }
