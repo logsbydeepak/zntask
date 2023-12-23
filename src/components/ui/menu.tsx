@@ -34,7 +34,7 @@ const menuContentStyle = cn(
 )
 
 const menuItemStyle = cva({
-  base: 'group/item flex items-center space-x-3 rounded-[4px] bg-white px-4 py-2 text-xs font-medium focus:outline-none data-[highlighted]:cursor-pointer',
+  base: 'group/item flex items-center space-x-3 rounded-md bg-white px-4 py-2 text-xs font-medium focus:outline-none data-[highlighted]:cursor-pointer',
   variants: {
     intent: {
       neutral: 'text-gray-950 data-[highlighted]:bg-gray-100',

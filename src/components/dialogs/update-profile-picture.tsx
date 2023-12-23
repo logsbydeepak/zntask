@@ -4,6 +4,7 @@ import { generateReactHelpers } from '@uploadthing/react/hooks'
 import { useAtomValue } from 'jotai'
 import { Trash2Icon, UploadIcon } from 'lucide-react'
 
+import * as Badge from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import * as Dialog from '@/components/ui/dialog'
 import * as Form from '@/components/ui/form'
@@ -120,11 +121,8 @@ function UpdateProfilePictureDialogContent({
             )}
           </div>
 
-          <fieldset className="space-y-2" disabled={isLoading}>
-            <Button
-              className="w-full space-x-2"
-              intent="secondary"
-              type="button"
+          <fieldset className="flex flex-col space-y-2" disabled={isLoading}>
+            <Badge.Button
               onClick={() => {
                 const input = document.createElement('input')
                 input.type = 'file'
@@ -140,23 +138,24 @@ function UpdateProfilePictureDialogContent({
                 }
               }}
             >
-              <UploadIcon className="size-4" />
-              <span>Pick new</span>
-            </Button>
+              <Badge.Icon>
+                <UploadIcon />
+              </Badge.Icon>
+              <Badge.Label>Pick new</Badge.Label>
+            </Badge.Button>
 
-            <Button
-              className="w-full space-x-2"
-              intent="secondary"
-              type="button"
+            <Badge.Button
               onClick={() => {
                 setPreview(null)
                 setFile(null)
                 setReset(true)
               }}
             >
-              <Trash2Icon className="size-4" />
-              <span>Remove</span>
-            </Button>
+              <Badge.Icon>
+                <Trash2Icon />
+              </Badge.Icon>
+              <Badge.Label>Remove</Badge.Label>
+            </Badge.Button>
           </fieldset>
         </div>
 
