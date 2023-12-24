@@ -3,10 +3,7 @@ import './globals.css'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: {
-    default: 'zntask',
-    template: '%s - zntask',
-  },
+  title: 'zntask',
 }
 
 export default function RootLayout({
