@@ -20,6 +20,10 @@ const config: Config = {
       screens: {
         xs: '355px',
       },
+      backgroundImage: {
+        'auth-layout-square': 'url(/square.svg)',
+        'auth-layout-gradient': 'var(--auth-layout-gradient)',
+      },
     },
   },
   plugins: [require('@tailwindcss/forms')],

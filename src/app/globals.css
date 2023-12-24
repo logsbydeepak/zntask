@@ -66,3 +66,41 @@
     animation: slideRight 100ms ease-out;
   }
 }
+
+:root {
+  --auth-layout-gradient: radial-gradient(
+      at 48% 8%,
+      hsla(55, 90%, 66%, 1) 0,
+      hsla(55, 90%, 66%, 0) 50%
+    ),
+    radial-gradient(
+      at 87% 84%,
+      hsla(258, 85%, 50%, 1) 0,
+      hsla(258, 85%, 50%, 0) 50%
+    ),
+    radial-gradient(
+      at 49% 74%,
+      hsla(224, 86%, 53%, 1) 0,
+      hsla(224, 86%, 53%, 0) 50%
+    ),
+    radial-gradient(
+      at 12% 5%,
+      hsla(83, 89%, 52%, 1) 0,
+      hsla(83, 89%, 52%, 0) 50%
+    ),
+    radial-gradient(
+      at 40% 61%,
+      hsla(55, 94%, 50%, 1) 0,
+      hsla(55, 94%, 50%, 0) 50%
+    ),
+    radial-gradient(
+      at 67% 86%,
+      hsla(342, 86%, 68%, 1) 0,
+      hsla(342, 86%, 68%, 0) 50%
+    ),
+    radial-gradient(
+      at 94% 22%,
+      hsla(180, 90%, 50%, 1) 0,
+      hsla(180, 90%, 50%, 0) 50%
+    );
+}
