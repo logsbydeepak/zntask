@@ -1,7 +1,6 @@
 'use client'
 
 import React from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { useDebounce } from 'use-debounce'
@@ -29,15 +28,12 @@ import { toast } from '@/store/toast'
 type FormValues = z.infer<typeof zRegisterWithCredentials>
 
 export function Form() {
-  const router = useRouter()
-  const searchParams = useSearchParams()
-
-  const requestRef = React.useRef(false)
   const [alertMessage, setAlertMessage] = React.useState('')
   const [isPasswordVisible, setIsPasswordVisible] = React.useState(false)
-  const [isGoogleLoading, setIsGoogleLoading] = React.useState(
-    !!searchParams.get('code')
-  )
+  const [isGoogleLoading, setIsGoogleLoading] = React.useState(() => {
+    if (typeof window === 'undefined') return false
+    return !!window.localStorage.getItem('googleCode')
+  })
 
   const [isCredentialPending, startRegisterWithCredentials] =
     React.useTransition()
@@ -58,13 +54,11 @@ export function Form() {
   const [watchPassword] = useDebounce(watch('password') ?? '', 500)
 
   const handleGoogleCode = React.useCallback(() => {
-    if (requestRef.current) return
-    const code = searchParams.get('code')
+    const code = window.localStorage.getItem('googleCode')
     if (!code) return
-    router.replace('/register')
+    window.localStorage.removeItem('googleCode')
     startRegisterWithGoogle(async () => {
       try {
-        requestRef.current = true
         const res = await registerWithGoogle({ code })
         const resCode = res?.code
 
@@ -76,11 +70,9 @@ export function Form() {
         }
       } catch (error) {
         toast.error()
-      } finally {
-        requestRef.current = false
       }
     })
-  }, [searchParams, router])
+  }, [])
 
   const handleRegisterWithCredentials = (values: FormValues) => {
     startRegisterWithCredentials(async () => {

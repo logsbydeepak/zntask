@@ -1,7 +1,6 @@
 'use client'
 
-import React, { useCallback } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import React from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -15,7 +14,6 @@ import {
   Separator,
 } from '@/app/(auth)/components'
 import { ResetPasswordDialog } from '@/components/dialogs/reset-password'
-import { ExclamationIcon } from '@/components/icon/exclamation'
 import { Button } from '@/components/ui/button'
 import * as FormPrimitive from '@/components/ui/form'
 import {
@@ -32,6 +30,7 @@ export function Form() {
   const [isResetPasswordDialogOpen, setIsResetPasswordDialogOpen] =
     React.useState(false)
   const [isPasswordVisible, setIsPasswordVisible] = React.useState(false)
+
   const [isGoogleLoading, setIsGoogleLoading] = React.useState(() => {
     if (typeof window === 'undefined') return false
     return !!window.localStorage.getItem('googleCode')

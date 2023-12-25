@@ -22,15 +22,15 @@ const zSchema = z.object({
 type FormValues = z.infer<typeof zSchema>
 
 export function AddGoogleDialog() {
-  const router = useRouter()
-  const searchParams = useSearchParams()
-
   const [isPending, startTransition] = React.useTransition()
   const isAddGoogleAuthOpen = useAppStore((state) => state.dialog.addGoogleAuth)
   const setIsOpen = useAppStore((state) => state.setDialog)
 
   const requestRef = React.useRef(false)
-  const isOpen = isAddGoogleAuthOpen || !!searchParams.get('code')
+  const isOpen =
+    isAddGoogleAuthOpen || typeof window === 'undefined'
+      ? false
+      : !!window.localStorage.getItem('googleCode')
 
   const handleClose = React.useCallback(() => {
     if (isPending) return
@@ -38,23 +38,21 @@ export function AddGoogleDialog() {
   }, [isPending, setIsOpen])
 
   const handleAddGoogle = React.useCallback(() => {
-    if (requestRef.current) return
-    const code = searchParams.get('code')
+    const code = window.localStorage.getItem('googleCode')
     if (!code) return
-    setIsOpen({ addGoogleAuth: true })
-    router.replace('/user')
+    window.localStorage.removeItem('googleCode')
     startTransition(async () => {
       try {
         requestRef.current = true
         await addGoogleAuthProvider({ code })
         toast.success('google auth added')
-        handleClose()
+        setIsOpen({ addGoogleAuth: false })
       } catch (error) {
       } finally {
         requestRef.current = false
       }
     })
-  }, [searchParams, router, handleClose, setIsOpen])
+  }, [setIsOpen])
 
   React.useEffect(() => {
     handleAddGoogle()

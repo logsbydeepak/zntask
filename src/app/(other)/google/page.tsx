@@ -14,7 +14,6 @@ export default function Page() {
     if (code) {
       window.localStorage.setItem('googleCode', code)
       if (type === 'login') {
-        window.localStorage.setItem('googleCode', code)
         router.replace('/login')
       }
       if (type === 'register') {
