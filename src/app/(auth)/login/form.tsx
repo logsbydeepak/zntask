@@ -29,16 +29,13 @@ import { toast } from '@/store/toast'
 type FormValues = z.infer<typeof zLoginWithCredentials>
 
 export function Form() {
-  const searchParams = useSearchParams()
-  const router = useRouter()
-
-  const requestRef = React.useRef(false)
   const [isResetPasswordDialogOpen, setIsResetPasswordDialogOpen] =
     React.useState(false)
   const [isPasswordVisible, setIsPasswordVisible] = React.useState(false)
-  const [isGoogleLoading, setIsGoogleLoading] = React.useState(
-    !!searchParams.get('code')
-  )
+  const [isGoogleLoading, setIsGoogleLoading] = React.useState(() => {
+    if (typeof window === 'undefined') return false
+    return !!window.localStorage.getItem('googleCode')
+  })
   const [alertMessage, setAlertMessage] = React.useState('')
 
   const [isCredentialPending, startLoginWithCredentials] = React.useTransition()
@@ -56,13 +53,11 @@ export function Form() {
   const isLoading = isCredentialPending || isGooglePending || isGoogleLoading
 
   const handleGoogleCode = React.useCallback(() => {
-    if (requestRef.current) return
-    const code = searchParams.get('code')
+    const code = window.localStorage.getItem('googleCode')
     if (!code) return
-    router.replace('/login')
+    window.localStorage.removeItem('googleCode')
     startLoginWithGoogle(async () => {
       try {
-        requestRef.current = true
         const res = await loginWithGoogle({ code })
         const resCode = res?.code
 
@@ -71,11 +66,9 @@ export function Form() {
         }
       } catch (error) {
         toast.error()
-      } finally {
-        requestRef.current = false
       }
     })
-  }, [searchParams, router])
+  }, [])
 
   const handleLoginWithCredentials = (values: FormValues) => {
     if (isLoading) return

@@ -11,14 +11,18 @@ export default function Page() {
     const type = searchParams.get('type')
     const code = searchParams.get('code')
 
-    if (type === 'login') {
-      router.replace(`/login?code=${code}`)
-    }
-    if (type === 'register') {
-      router.replace(`/register?code=${code}`)
-    }
-    if (type === 'new') {
-      router.replace(`/user?code=${code}`)
+    if (code) {
+      window.localStorage.setItem('googleCode', code)
+      if (type === 'login') {
+        window.localStorage.setItem('googleCode', code)
+        router.replace('/login')
+      }
+      if (type === 'register') {
+        router.replace('/register')
+      }
+      if (type === 'new') {
+        router.replace('/user')
+      }
     }
   }, [searchParams, router])
 
