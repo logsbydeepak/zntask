@@ -1,4 +1,5 @@
 import React from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -21,14 +22,43 @@ const zSchema = z.object({
 type FormValues = z.infer<typeof zSchema>
 
 export function AddGoogleDialog() {
+  const router = useRouter()
+  const searchParams = useSearchParams()
+
   const [isPending, startTransition] = React.useTransition()
-  const isOpen = useAppStore((state) => state.dialog.addGoogleAuth)
+  const isAddGoogleAuthOpen = useAppStore((state) => state.dialog.addGoogleAuth)
   const setIsOpen = useAppStore((state) => state.setDialog)
 
-  const handleClose = () => {
+  const requestRef = React.useRef(false)
+  const isOpen = isAddGoogleAuthOpen || !!searchParams.get('code')
+
+  const handleClose = React.useCallback(() => {
     if (isPending) return
-    setIsOpen({ updateName: false })
-  }
+    setIsOpen({ addGoogleAuth: false })
+  }, [isPending, setIsOpen])
+
+  const handleAddGoogle = React.useCallback(() => {
+    if (requestRef.current) return
+    const code = searchParams.get('code')
+    if (!code) return
+    setIsOpen({ addGoogleAuth: true })
+    router.replace('/user')
+    startTransition(async () => {
+      try {
+        requestRef.current = true
+        await addGoogleAuthProvider({ code })
+        toast.success('google auth added')
+        handleClose()
+      } catch (error) {
+      } finally {
+        requestRef.current = false
+      }
+    })
+  }, [searchParams, router, handleClose, setIsOpen])
+
+  React.useEffect(() => {
+    handleAddGoogle()
+  }, [handleAddGoogle])
 
   return (
     <Dialog.Root open={isOpen} onOpenChange={handleClose}>
