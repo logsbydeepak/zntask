@@ -97,7 +97,7 @@ export function Form({ token }: { token: string }) {
 
   return (
     <>
-      {alertMessage && <Alert>{alertMessage}</Alert>}
+      {alertMessage && <Alert align="center">{alertMessage}</Alert>}
       <FormPrimitive.Root
         onSubmit={handleSubmit(onSubmit)}
         id="add_password_form"

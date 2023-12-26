@@ -1,5 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
+import { cva, VariantProps } from 'cva'
 import {
   AsteriskIcon,
   CheckIcon,
@@ -12,13 +13,48 @@ import { ExclamationIcon } from '@/components/icon/exclamation'
 import { GoogleIcon } from '@/components/icon/google'
 import { LogoIcon } from '@/components/icon/logo'
 import { Button } from '@/components/ui/button'
+import { cn } from '@/utils/style'
 
-export function Alert({ children }: { children: React.ReactNode }) {
+const alertStyle = cva({
+  base: 'flex w-full items-center space-x-2 rounded-lg px-4 py-2 text-xs font-medium',
+  variants: {
+    intent: {
+      success: 'bg-green-50 text-green-700',
+      destructive: 'bg-red-50 text-red-700',
+    },
+    align: {
+      right: 'justify-start',
+      center: 'justify-center',
+    },
+  },
+  defaultVariants: {
+    intent: 'destructive',
+    align: 'right',
+  },
+})
+
+type AlertStyleProps = VariantProps<typeof alertStyle>
+
+export function Alert({
+  children,
+  intent = 'destructive',
+  align = 'right',
+}: { children: React.ReactNode } & AlertStyleProps) {
   return (
-    <div className="flex w-full items-center justify-center space-x-2 rounded-lg bg-red-50 px-4 py-2 text-xs font-medium text-red-700">
-      <div className="flex size-3.5 items-center justify-center rounded-full bg-red-700">
-        <ExclamationIcon className="size-2.5 text-white" />
+    <div className={cn(alertStyle({ intent, align }))}>
+      <div className="*:fle*:items-center *:justify-center *:rounded-full *:p-0.5">
+        {intent === 'destructive' && (
+          <div className="bg-red-700">
+            <ExclamationIcon className="size-2.5 text-white" />
+          </div>
+        )}
+        {intent === 'success' && (
+          <div className="bg-green-700">
+            <CheckIcon className="size-2.5 text-white" />
+          </div>
+        )}
       </div>
+
       <p>{children}</p>
     </div>
   )

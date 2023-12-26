@@ -122,7 +122,7 @@ export function Form() {
 
   return (
     <>
-      {alertMessage && <Alert>{alertMessage}</Alert>}
+      {alertMessage && <Alert align="center">{alertMessage}</Alert>}
       <div className="w-full space-y-3">
         <fieldset disabled={isLoading}>
           <ContinueWithGoogle

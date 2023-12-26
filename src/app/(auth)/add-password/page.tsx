@@ -50,7 +50,7 @@ export default async function Page({
       {isTokenValid ? (
         <Form token={validate.data.token} />
       ) : (
-        <Alert>{message()}</Alert>
+        <Alert align="center">{message()}</Alert>
       )}
     </>
   )
