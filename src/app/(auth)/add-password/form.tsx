@@ -3,13 +3,13 @@
 import React from 'react'
 import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { atom, useAtom, useAtomValue } from 'jotai'
-import { HomeIcon } from 'lucide-react'
+import { atom, useAtom } from 'jotai'
 import { useForm } from 'react-hook-form'
 import { useDebounce } from 'use-debounce'
 import { z } from 'zod'
 
 import {
+  Alert,
   passwordChecklist,
   PasswordChecklistItem,
   PasswordVisibilityToggle,
@@ -17,7 +17,6 @@ import {
 import { Button } from '@/components/ui/button'
 import * as FormPrimitive from '@/components/ui/form'
 import { addPassword } from '@/data/auth'
-import { toast } from '@/store/toast'
 import { zPassword, zRequired } from '@/utils/zSchema'
 
 const schema = z
@@ -37,6 +36,7 @@ const isLoadingAtom = atom(false)
 export function Form({ token }: { token: string }) {
   const router = useRouter()
 
+  const [alertMessage, setAlertMessage] = React.useState('')
   const [isPending, startTransition] = React.useTransition()
   const [isLoading, setIsLoading] = useAtom(isLoadingAtom)
   const [isPasswordVisible, setIsPasswordVisible] = React.useState(false)
@@ -56,6 +56,10 @@ export function Form({ token }: { token: string }) {
     setIsLoading(isPending)
   }, [isPending, setIsLoading])
 
+  const defaultError = () => {
+    setAlertMessage('Something went wrong!')
+  }
+
   const onSubmit = (values: FormValues) => {
     setIsLoading(true)
     startTransition(async () => {
@@ -64,26 +68,36 @@ export function Form({ token }: { token: string }) {
 
         switch (res?.code) {
           case 'OK':
-            toast.success('password added successfully')
+            setAlertMessage('Password added successfully')
             router.push('/login')
             break
 
           case 'INVALID_TOKEN':
-            toast.success('invalid token')
+            setAlertMessage('invalid token')
             break
 
           case 'TOKEN_EXPIRED':
-            toast.success('token expired')
+            setAlertMessage('token expired')
             break
         }
       } catch (error) {
-        toast.error('')
+        defaultError()
       }
     })
   }
 
+  React.useEffect(() => {
+    if (isLoading) setAlertMessage('')
+  }, [isLoading])
+
+  React.useEffect(() => {
+    console.log(errors)
+    if (errors) setAlertMessage('')
+  }, [errors])
+
   return (
     <>
+      {alertMessage && <Alert>{alertMessage}</Alert>}
       <FormPrimitive.Root
         onSubmit={handleSubmit(onSubmit)}
         id="add_password_form"
@@ -96,6 +110,7 @@ export function Form({ token }: { token: string }) {
             <FormPrimitive.Input
               id="password"
               {...register('password')}
+              autoFocus
               placeholder="strong password"
               type={isPasswordVisible ? 'text' : 'password'}
             />

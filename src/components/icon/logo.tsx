@@ -3,7 +3,7 @@ export function LogoIcon({
   style,
 }: {
   className?: string
-  style: React.CSSProperties
+  style?: React.CSSProperties
 }) {
   return (
     <svg

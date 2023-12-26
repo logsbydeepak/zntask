@@ -22,7 +22,6 @@ import {
   redirectGoogleLogin,
 } from '@/data/auth'
 import { zLoginWithCredentials } from '@/data/utils/zSchema'
-import { toast } from '@/store/toast'
 
 type FormValues = z.infer<typeof zLoginWithCredentials>
 
@@ -51,6 +50,10 @@ export function Form() {
 
   const isLoading = isCredentialPending || isGooglePending || isGoogleLoading
 
+  const defaultError = () => {
+    setAlertMessage('Something went wrong!')
+  }
+
   const handleGoogleCode = React.useCallback(() => {
     const code = window.localStorage.getItem('googleCode')
     if (!code) return
@@ -64,7 +67,7 @@ export function Form() {
           setAlertMessage('User not found')
         }
       } catch (error) {
-        toast.error()
+        defaultError()
       }
     })
   }, [])
@@ -77,23 +80,10 @@ export function Form() {
         const resCode = res?.code
 
         if (resCode === 'INVALID_CREDENTIALS') {
-          setError(
-            'password',
-            {
-              message: 'invalid credentials',
-            },
-            { shouldFocus: true }
-          )
-          setError(
-            'email',
-            {
-              message: 'invalid credentials',
-            },
-            { shouldFocus: true }
-          )
+          setAlertMessage('Invalid credentials')
         }
       } catch (error) {
-        toast.error()
+        defaultError()
       }
     })
   }
@@ -104,7 +94,7 @@ export function Form() {
       try {
         await redirectGoogleLogin()
       } catch (error) {
-        toast.error()
+        defaultError()
       }
     })
   }
@@ -118,11 +108,16 @@ export function Form() {
   }, [isLoading])
 
   React.useEffect(() => {
+    if (errors) setAlertMessage('')
+  }, [errors])
+
+  React.useEffect(() => {
     setIsGoogleLoading(isGooglePending)
   }, [isGooglePending])
 
   return (
     <>
+      {alertMessage && <Alert>{alertMessage}</Alert>}
       <div className="w-full space-y-3">
         <fieldset disabled={isLoading}>
           <ContinueWithGoogle
@@ -130,7 +125,6 @@ export function Form() {
             onClick={handleLoginWithGoogle}
           />
         </fieldset>
-        {alertMessage && <Alert>{alertMessage}</Alert>}
       </div>
       <Separator />
       <FormPrimitive.Root

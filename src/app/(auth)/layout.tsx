@@ -1,7 +1,6 @@
 import { Inter } from 'next/font/google'
 
-import { JotaiProvider, ThemeProvider } from '@/components/client-providers'
-import { ToastProvider } from '@/components/toast'
+import { ThemeProvider } from '@/components/client-providers'
 import { cn } from '@/utils/style'
 
 import { Theme } from './client-components'
@@ -27,7 +26,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             {children}
             <Theme />
           </div>
-          <ToastProvider />
         </ThemeProvider>
       </body>
     </html>

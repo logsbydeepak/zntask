@@ -23,7 +23,6 @@ import {
   registerWithGoogle,
 } from '@/data/auth'
 import { zRegisterWithCredentials } from '@/data/utils/zSchema'
-import { toast } from '@/store/toast'
 
 type FormValues = z.infer<typeof zRegisterWithCredentials>
 
@@ -53,6 +52,10 @@ export function Form() {
 
   const [watchPassword] = useDebounce(watch('password') ?? '', 500)
 
+  const defaultError = () => {
+    setAlertMessage('Something went wrong!')
+  }
+
   const handleGoogleCode = React.useCallback(() => {
     const code = window.localStorage.getItem('googleCode')
     if (!code) return
@@ -69,7 +72,7 @@ export function Form() {
           setAlertMessage('Email already exists')
         }
       } catch (error) {
-        toast.error()
+        defaultError()
       }
     })
   }, [])
@@ -85,7 +88,7 @@ export function Form() {
           })
         }
       } catch (error) {
-        toast.error()
+        defaultError()
       }
     })
   }
@@ -96,7 +99,7 @@ export function Form() {
       try {
         await redirectGoogleRegister()
       } catch (error) {
-        toast.error()
+        defaultError()
       }
     })
   }
@@ -113,8 +116,13 @@ export function Form() {
     setIsGoogleLoading(isGooglePending)
   }, [isGooglePending])
 
+  React.useEffect(() => {
+    if (errors) setAlertMessage('')
+  }, [errors])
+
   return (
     <>
+      {alertMessage && <Alert>{alertMessage}</Alert>}
       <div className="w-full space-y-3">
         <fieldset disabled={isLoading}>
           <ContinueWithGoogle
@@ -122,7 +130,6 @@ export function Form() {
             onClick={handleRegisterWithGoogle}
           />
         </fieldset>
-        {alertMessage && <Alert>{alertMessage}</Alert>}
       </div>
 
       <Separator />

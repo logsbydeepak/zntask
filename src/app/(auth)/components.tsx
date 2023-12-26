@@ -15,7 +15,7 @@ import { Button } from '@/components/ui/button'
 
 export function Alert({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex w-full items-center space-x-2 rounded-lg bg-red-50 px-4 py-2 text-xs font-medium text-red-700">
+    <div className="flex w-full items-center justify-center space-x-2 rounded-lg bg-red-50 px-4 py-2 text-xs font-medium text-red-700">
       <div className="flex size-3.5 items-center justify-center rounded-full bg-red-700">
         <ExclamationIcon className="size-2.5 text-white" />
       </div>
