@@ -7,13 +7,13 @@ import { z } from 'zod'
 
 import {
   AccountQuestion,
-  Alert,
   ContinueWithGoogle,
   PasswordVisibilityToggle,
   ResetPassword,
   Separator,
 } from '@/app/(auth)/components'
 import { ResetPasswordDialog } from '@/components/dialogs/reset-password'
+import { Alert } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import * as FormPrimitive from '@/components/ui/form'
 import {

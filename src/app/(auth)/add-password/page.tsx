@@ -2,8 +2,9 @@ import { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import { z } from 'zod'
 
-import { Alert, Logo, SubTitle, Title } from '@/app/(auth)/components'
+import { Logo, SubTitle, Title } from '@/app/(auth)/components'
 import { ExclamationIcon } from '@/components/icon/exclamation'
+import { Alert } from '@/components/ui/alert'
 import { checkToken } from '@/data/utils'
 import { zRequired } from '@/utils/zSchema'
 

@@ -9,11 +9,11 @@ import { useDebounce } from 'use-debounce'
 import { z } from 'zod'
 
 import {
-  Alert,
   passwordChecklist,
   PasswordChecklistItem,
   PasswordVisibilityToggle,
 } from '@/app/(auth)/components'
+import { Alert } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import * as FormPrimitive from '@/components/ui/form'
 import { addPassword } from '@/data/auth'
