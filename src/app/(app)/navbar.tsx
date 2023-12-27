@@ -31,6 +31,7 @@ import {
   DropdownMenuTrigger,
   MenuIcon,
 } from '@/components/ui/menu'
+import * as Tooltip from '@/components/ui/tooltip'
 import {
   isAppSyncingAtom,
   isSidebarOpenAtom,
@@ -56,44 +57,94 @@ export function Navbar() {
           </span>
           <span className="hidden text-sm font-medium xs:block">zntask</span>
         </Link>
-        <div className="flex space-x-2 md:space-x-4">
-          <div className="flex space-x-1.5 sm:space-x-2">
-            <Search />
+        <Tooltip.Provider>
+          <div className="flex space-x-2 md:space-x-4">
+            <div className="flex space-x-1.5 sm:space-x-2">
+              <Search />
 
-            <Icon onClick={() => setIsSidebarOpen((open) => !open)}>
-              {isSidebarOpen ? <PanelLeftInactiveIcon /> : <PanelLeftIcon />}
-            </Icon>
+              <Tooltip.Root>
+                <Tooltip.Trigger>
+                  <Icon onClick={() => setIsSidebarOpen((open) => !open)}>
+                    {isSidebarOpen ? (
+                      <PanelLeftInactiveIcon />
+                    ) : (
+                      <PanelLeftIcon />
+                    )}
+                  </Icon>
+                </Tooltip.Trigger>
+                <Tooltip.Portal>
+                  <Tooltip.Content className="z-50">
+                    {isSidebarOpen ? 'close sidebar' : 'open sidebar'}
+                    <Tooltip.Arrow className="fill-black" />
+                  </Tooltip.Content>
+                </Tooltip.Portal>
+              </Tooltip.Root>
+            </div>
+            <div className="my-1 w-[1px] bg-gray-200" />
+
+            <div className="flex space-x-1.5 sm:space-x-2">
+              <Tooltip.Root>
+                <Tooltip.Trigger>
+                  <Icon onClick={() => setDialog({ createCategory: true })}>
+                    <FolderPlusIcon />
+                  </Icon>
+                </Tooltip.Trigger>
+                <Tooltip.Portal>
+                  <Tooltip.Content className="z-50">
+                    new category
+                    <Tooltip.Arrow className="fill-black" />
+                  </Tooltip.Content>
+                </Tooltip.Portal>
+              </Tooltip.Root>
+
+              <Tooltip.Root>
+                <Tooltip.Trigger>
+                  <Icon onClick={() => setDialog({ createTask: true })}>
+                    <CheckCircleIcon />
+                  </Icon>
+                </Tooltip.Trigger>
+                <Tooltip.Portal>
+                  <Tooltip.Content className="z-50">
+                    new task
+                    <Tooltip.Arrow className="fill-black" />
+                  </Tooltip.Content>
+                </Tooltip.Portal>
+              </Tooltip.Root>
+            </div>
+
+            <DropdownMenuRoot>
+              <Tooltip.Root>
+                <Tooltip.Trigger>
+                  <DropdownMenuTrigger className="relative size-8 rounded-full">
+                    <Avatar />
+                    <span
+                      data-active={isAppSyncing}
+                      className="absolute bottom-0 right-[1px] hidden size-2 items-center justify-center rounded-full border border-white bg-white data-[active=true]:flex"
+                    >
+                      <span className="size-full animate-pulse rounded-full bg-orange-500" />
+                    </span>
+                  </DropdownMenuTrigger>
+                </Tooltip.Trigger>
+                <Tooltip.Portal>
+                  <Tooltip.Content className="z-50">
+                    user
+                    <Tooltip.Arrow className="fill-black" />
+                  </Tooltip.Content>
+                </Tooltip.Portal>
+              </Tooltip.Root>
+
+              <DropdownMenuPortal>
+                <DropdownMenuContent
+                  align="end"
+                  sideOffset={8}
+                  className="w-44"
+                >
+                  <UserMenu />
+                </DropdownMenuContent>
+              </DropdownMenuPortal>
+            </DropdownMenuRoot>
           </div>
-          <div className="my-1 w-[1px] bg-gray-200" />
-
-          <div className="flex space-x-1.5 sm:space-x-2">
-            <Icon onClick={() => setDialog({ createCategory: true })}>
-              <FolderPlusIcon />
-            </Icon>
-
-            <Icon onClick={() => setDialog({ createTask: true })}>
-              <CheckCircleIcon />
-            </Icon>
-          </div>
-
-          <DropdownMenuRoot>
-            <DropdownMenuTrigger className="relative size-8 rounded-full">
-              <Avatar />
-              <span
-                data-active={isAppSyncing}
-                className="absolute bottom-0 right-[1px] hidden size-2 items-center justify-center rounded-full border border-white bg-white data-[active=true]:flex"
-              >
-                <span className="size-full animate-pulse rounded-full bg-orange-500" />
-              </span>
-            </DropdownMenuTrigger>
-
-            <DropdownMenuPortal>
-              <DropdownMenuContent align="end" sideOffset={8} className="w-44">
-                <UserMenu />
-              </DropdownMenuContent>
-            </DropdownMenuPortal>
-          </DropdownMenuRoot>
-        </div>
+        </Tooltip.Provider>
       </div>
     </nav>
   )
