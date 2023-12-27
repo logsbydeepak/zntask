@@ -8,9 +8,9 @@ import * as Dialog from '@/components/ui/dialog'
 import * as Form from '@/components/ui/form'
 import { resetPassword } from '@/data/auth'
 import { zResetPassword } from '@/data/utils/zSchema'
-import { toast } from '@/store/toast'
 
 import { Head } from '../head'
+import { Alert, AlertStyleProps } from '../ui/alert'
 
 type FormValues = z.infer<typeof zResetPassword>
 
@@ -52,6 +52,10 @@ function ResetPasswordDialogContent({
   isPending: boolean
   startTransition: React.TransitionStartFunction
 }) {
+  const [alertMessage, setAlertMessage] = React.useState<{
+    message: string
+    intent: AlertStyleProps['intent']
+  } | null>(null)
   const {
     register,
     formState: { errors },
@@ -66,19 +70,17 @@ function ResetPasswordDialogContent({
       const res = await resetPassword(values)
       switch (res.code) {
         case 'OK':
-          toast.success('Check your email for reset link')
-          handleClose()
+          setAlertMessage({
+            message: 'Check your email for reset link',
+            intent: 'success',
+          })
 
         case 'EMAIL_ALREADY_SENT':
-          setError(
-            'email',
-            {
-              message: 'Email already sent',
-            },
-            {
-              shouldFocus: true,
-            }
-          )
+          setAlertMessage({
+            message: 'Email already sent',
+            intent: 'success',
+          })
+          break
 
         case 'INVALID_CREDENTIALS':
           setError(
@@ -93,6 +95,10 @@ function ResetPasswordDialogContent({
     })
   }
 
+  React.useEffect(() => {
+    if (errors) setAlertMessage(null)
+  }, [errors])
+
   return (
     <>
       <Head title="Reset Password" />
@@ -105,6 +111,9 @@ function ResetPasswordDialogContent({
             Enter your email to reset password
           </Dialog.Description>
         </div>
+        {alertMessage && (
+          <Alert intent={alertMessage.intent}>{alertMessage.message}</Alert>
+        )}
         <div>
           <Form.Label htmlFor="email">Email</Form.Label>
           <Form.Input

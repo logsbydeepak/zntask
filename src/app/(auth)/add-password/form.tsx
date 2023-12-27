@@ -13,7 +13,7 @@ import {
   PasswordChecklistItem,
   PasswordVisibilityToggle,
 } from '@/app/(auth)/components'
-import { Alert } from '@/components/ui/alert'
+import { Alert, AlertStyleProps } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import * as FormPrimitive from '@/components/ui/form'
 import { addPassword } from '@/data/auth'
@@ -36,7 +36,11 @@ const isLoadingAtom = atom(false)
 export function Form({ token }: { token: string }) {
   const router = useRouter()
 
-  const [alertMessage, setAlertMessage] = React.useState('')
+  const [alertMessage, setAlertMessage] = React.useState<{
+    message: string
+    intent: AlertStyleProps['intent']
+  } | null>(null)
+
   const [isPending, startTransition] = React.useTransition()
   const [isLoading, setIsLoading] = useAtom(isLoadingAtom)
   const [isPasswordVisible, setIsPasswordVisible] = React.useState(false)
@@ -57,7 +61,10 @@ export function Form({ token }: { token: string }) {
   }, [isPending, setIsLoading])
 
   const defaultError = () => {
-    setAlertMessage('Something went wrong!')
+    setAlertMessage({
+      message: 'Something went wrong!',
+      intent: 'destructive',
+    })
   }
 
   const onSubmit = (values: FormValues) => {
@@ -68,16 +75,26 @@ export function Form({ token }: { token: string }) {
 
         switch (res?.code) {
           case 'OK':
-            setAlertMessage('Password added successfully')
+            setAlertMessage({
+              message: 'Password added successfully',
+              intent: 'success',
+            })
+
             router.push('/login')
             break
 
           case 'INVALID_TOKEN':
-            setAlertMessage('invalid token')
+            setAlertMessage({
+              message: 'invalid token',
+              intent: 'destructive',
+            })
             break
 
           case 'TOKEN_EXPIRED':
-            setAlertMessage('token expired')
+            setAlertMessage({
+              message: 'token expired',
+              intent: 'destructive',
+            })
             break
         }
       } catch (error) {
@@ -87,17 +104,21 @@ export function Form({ token }: { token: string }) {
   }
 
   React.useEffect(() => {
-    if (isLoading) setAlertMessage('')
+    if (isLoading) setAlertMessage(null)
   }, [isLoading])
 
   React.useEffect(() => {
     console.log(errors)
-    if (errors) setAlertMessage('')
+    if (errors) setAlertMessage(null)
   }, [errors])
 
   return (
     <>
-      {alertMessage && <Alert align="center">{alertMessage}</Alert>}
+      {alertMessage && (
+        <Alert align="center" intent={alertMessage.intent}>
+          {alertMessage.message}
+        </Alert>
+      )}
       <FormPrimitive.Root
         onSubmit={handleSubmit(onSubmit)}
         id="add_password_form"

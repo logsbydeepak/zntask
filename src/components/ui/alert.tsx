@@ -23,7 +23,7 @@ const alertStyle = cva({
   },
 })
 
-type AlertStyleProps = VariantProps<typeof alertStyle>
+export type AlertStyleProps = VariantProps<typeof alertStyle>
 
 export function Alert({
   children,
