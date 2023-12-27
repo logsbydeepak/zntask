@@ -159,6 +159,10 @@ function UserMenu() {
   )
 }
 
+const iconStyle = cn(
+  'flex items-center justify-center rounded-lg border border-gray-200 bg-gray-50 text-gray-500 hover:border-gray-300 hover:bg-gray-100 hover:text-gray-950'
+)
+
 const ThemeItem = React.forwardRef<
   HTMLButtonElement,
   React.ComponentPropsWithoutRef<'button'>
@@ -166,16 +170,15 @@ const ThemeItem = React.forwardRef<
   <button
     {...props}
     ref={ref}
-    className="flex size-8 items-center justify-center rounded-lg border border-gray-200 bg-gray-50 text-gray-500 outline-none data-[state=checked]:border-orange-700 data-[highlighted]:bg-gray-100 data-[state=checked]:bg-orange-600 data-[highlighted]:text-gray-950 data-[state=checked]:text-white data-[highlighted]:ring-2 data-[highlighted]:ring-gray-950 data-[highlighted]:ring-offset-2"
+    className={cn(
+      iconStyle,
+      'size-8 outline-none data-[state=checked]:border-orange-700 data-[highlighted]:bg-gray-100 data-[state=checked]:bg-orange-600 data-[highlighted]:text-gray-950 data-[state=checked]:text-white data-[highlighted]:ring-2 data-[highlighted]:ring-gray-200 data-[state=checked]:ring-orange-200'
+    )}
   >
-    <span className="inline-block h-4 w-4">{children}</span>
+    <span className="size-4">{children}</span>
   </button>
 ))
 ThemeItem.displayName = 'ThemeItem'
-
-const iconStyle = cn(
-  'flex items-center justify-center rounded-lg border border-gray-200 bg-gray-50 text-gray-500 hover:bg-gray-100 hover:text-gray-950'
-)
 
 function Icon({
   children,
