@@ -17,7 +17,7 @@ import {
 } from '@radix-ui/react-dropdown-menu'
 import { cva } from 'cva'
 
-import { cn } from '@/utils/style'
+import { cn, tw } from '@/utils/style'
 
 export const ContextMenuRoot = ContextMenuRootPrimitives
 export const ContextMenuTrigger = ContextMenuTriggerPrimitives
@@ -29,9 +29,7 @@ export const DropdownMenuTrigger = DropdownMenuTriggerPrimitives
 export const DropdownMenuRadioGroup = DropdownMenuRadioGroupPrimitives
 export const DropdownMenuRadioItem = DropdownMenuRadioItemPrimitives
 
-const menuContentStyle = cn(
-  'z-40 rounded-xl border border-gray-200 bg-white p-1 drop-shadow-sm'
-)
+const menuContentStyle = tw`z-40 rounded-xl border border-gray-200 bg-white p-1 drop-shadow-sm`
 
 const menuItemStyle = cva({
   base: 'group/item flex items-center space-x-3 rounded-md bg-white px-4 py-2 text-xs font-medium focus:outline-none data-[highlighted]:cursor-pointer',

@@ -38,7 +38,7 @@ import {
   useAppStore,
   userAtom,
 } from '@/store/app'
-import { cn } from '@/utils/style'
+import { cn, tw } from '@/utils/style'
 
 export function Navbar() {
   const setDialog = useAppStore((s) => s.setDialog)
@@ -240,9 +240,7 @@ function UserMenu() {
   )
 }
 
-const iconStyle = cn(
-  'flex items-center justify-center rounded-lg border border-gray-200 bg-gray-50 text-gray-500 hover:border-gray-300 hover:bg-gray-100 hover:text-gray-950'
-)
+const iconStyle = tw`flex items-center justify-center rounded-lg border border-gray-200 bg-gray-50 text-gray-500 hover:border-gray-300 hover:bg-gray-100 hover:text-gray-950`
 
 const ThemeItem = React.forwardRef<
   HTMLButtonElement,
@@ -265,7 +263,7 @@ const Icon = React.forwardRef<
   React.ElementRef<'button'>,
   React.ComponentPropsWithoutRef<'button'>
 >(({ children, ...props }, ref) => (
-  <button {...props} ref={ref} className={cn(iconStyle, 'size-8 outline-none')}>
+  <button {...props} ref={ref} className={cn(iconStyle, 'size-8')}>
     <span className="size-4">{children}</span>
   </button>
 ))

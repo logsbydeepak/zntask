@@ -27,7 +27,7 @@ import {
 import { isScreenSMAtom, isSidebarOpenAtom } from '@/store/app'
 import { useCategoryStore } from '@/store/category'
 import { Category, categoryHelper, getCategoryColor } from '@/utils/category'
-import { cn } from '@/utils/style'
+import { cn, tw } from '@/utils/style'
 
 import { CategoryMenuContent } from './(home)/category'
 
@@ -369,9 +369,8 @@ function ItemRoot({
   )
 }
 
-const itemContentStyle = cn(
-  'flex h-9 w-full items-center rounded-md border border-transparent px-2 hover:border-gray-200 hover:bg-gray-50 group-data-[active=true]:border-gray-200 group-data-[active=true]:bg-gray-50'
-)
+const itemContentStyle = tw`flex h-9 w-full items-center rounded-lg border border-transparent px-2 hover:border-gray-200 hover:bg-gray-50 group-data-[active=true]:border-gray-200 group-data-[active=true]:bg-gray-50`
+
 function ItemContentLink({
   children,
   href,
