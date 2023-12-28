@@ -16,7 +16,7 @@
     "tw:gen": "bun tw-safelist.ts"
   },
   "dependencies": {
-    "@hookform/resolvers": "^3.3.2",
+    "@hookform/resolvers": "^3.3.3",
     "@ianvs/prettier-plugin-sort-imports": "^4.1.1",
     "@planetscale/database": "^1.13.0",
     "@radix-ui/react-checkbox": "^1.0.4",
@@ -42,19 +42,19 @@
     "@use-gesture/react": "^10.3.0",
     "autoprefixer": "10.4.16",
     "bcryptjs": "^2.4.3",
-    "bun-types": "^1.0.18",
+    "bun-types": "^1.0.20",
     "chrono-node": "^2.7.3",
     "cmdk": "^0.2.0",
-    "cspell": "^8.1.3",
+    "cspell": "^8.2.4",
     "cva": "1.0.0-beta.1",
-    "date-fns": "^3.0.1",
-    "drizzle-orm": "^0.29.1",
+    "date-fns": "^3.0.6",
+    "drizzle-orm": "^0.29.2",
     "eslint": "8.56.0",
     "eslint-config-next": "14.0.4",
     "googleapis": "^129.0.0",
-    "jose": "^5.1.3",
+    "jose": "^5.2.0",
     "jotai": "^2.6.0",
-    "lucide-react": "0.300.0",
+    "lucide-react": "0.303.0",
     "ms": "^2.1.3",
     "mudder": "^2.1.1",
     "next": "14.0.4",
@@ -65,11 +65,11 @@
     "prettier": "^3.1.1",
     "prettier-plugin-tailwindcss": "^0.5.9",
     "react": "18.2.0",
-    "react-day-picker": "^8.9.1",
+    "react-day-picker": "^8.10.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.49.2",
-    "resend": "^2.0.0",
-    "tailwind-merge": "^2.1.0",
+    "resend": "^2.1.0",
+    "tailwind-merge": "^2.2.0",
     "tailwindcss": "3.4.0",
     "typescript": "5.3.3",
     "ulidx": "^2.2.1",
@@ -80,6 +80,6 @@
     "zustand": "^4.4.7"
   },
   "devDependencies": {
-    "drizzle-kit": "^0.20.7"
+    "drizzle-kit": "^0.20.9"
   }
 }
