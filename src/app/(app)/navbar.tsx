@@ -60,10 +60,27 @@ export function Navbar() {
         <Tooltip.Provider>
           <div className="flex space-x-2 md:space-x-4">
             <div className="flex space-x-1.5 sm:space-x-2">
-              <Search />
+              <div className="flex">
+                <div className="hidden sm:inline-block">
+                  <SearchXL />
+                </div>
+
+                <div className="inline-block sm:hidden">
+                  <Tooltip.Root>
+                    <Tooltip.Trigger asChild>
+                      <Icon onClick={() => setDialog({ createCategory: true })}>
+                        <SearchIcon />
+                      </Icon>
+                    </Tooltip.Trigger>
+                    <Tooltip.Portal>
+                      <Tooltip.Content sideOffset={8}>search</Tooltip.Content>
+                    </Tooltip.Portal>
+                  </Tooltip.Root>
+                </div>
+              </div>
 
               <Tooltip.Root>
-                <Tooltip.Trigger>
+                <Tooltip.Trigger asChild>
                   <Icon onClick={() => setIsSidebarOpen((open) => !open)}>
                     {isSidebarOpen ? (
                       <PanelLeftInactiveIcon />
@@ -73,9 +90,8 @@ export function Navbar() {
                   </Icon>
                 </Tooltip.Trigger>
                 <Tooltip.Portal>
-                  <Tooltip.Content className="z-50">
+                  <Tooltip.Content sideOffset={8}>
                     {isSidebarOpen ? 'close sidebar' : 'open sidebar'}
-                    <Tooltip.Arrow className="fill-black" />
                   </Tooltip.Content>
                 </Tooltip.Portal>
               </Tooltip.Root>
@@ -84,37 +100,31 @@ export function Navbar() {
 
             <div className="flex space-x-1.5 sm:space-x-2">
               <Tooltip.Root>
-                <Tooltip.Trigger>
+                <Tooltip.Trigger asChild>
                   <Icon onClick={() => setDialog({ createCategory: true })}>
                     <FolderPlusIcon />
                   </Icon>
                 </Tooltip.Trigger>
                 <Tooltip.Portal>
-                  <Tooltip.Content className="z-50">
-                    new category
-                    <Tooltip.Arrow className="fill-black" />
-                  </Tooltip.Content>
+                  <Tooltip.Content sideOffset={8}>new category</Tooltip.Content>
                 </Tooltip.Portal>
               </Tooltip.Root>
 
               <Tooltip.Root>
-                <Tooltip.Trigger>
+                <Tooltip.Trigger asChild>
                   <Icon onClick={() => setDialog({ createTask: true })}>
                     <CheckCircleIcon />
                   </Icon>
                 </Tooltip.Trigger>
                 <Tooltip.Portal>
-                  <Tooltip.Content className="z-50">
-                    new task
-                    <Tooltip.Arrow className="fill-black" />
-                  </Tooltip.Content>
+                  <Tooltip.Content sideOffset={8}>new task</Tooltip.Content>
                 </Tooltip.Portal>
               </Tooltip.Root>
             </div>
 
             <DropdownMenuRoot>
               <Tooltip.Root>
-                <Tooltip.Trigger>
+                <Tooltip.Trigger asChild>
                   <DropdownMenuTrigger className="relative size-8 rounded-full">
                     <Avatar />
                     <span
@@ -126,10 +136,7 @@ export function Navbar() {
                   </DropdownMenuTrigger>
                 </Tooltip.Trigger>
                 <Tooltip.Portal>
-                  <Tooltip.Content className="z-50">
-                    user
-                    <Tooltip.Arrow className="fill-black" />
-                  </Tooltip.Content>
+                  <Tooltip.Content sideOffset={8}>user</Tooltip.Content>
                 </Tooltip.Portal>
               </Tooltip.Root>
 
@@ -181,21 +188,44 @@ function UserMenu() {
           }
         }}
       >
-        <DropdownMenuRadioItem value="light" asChild>
-          <ThemeItem>
-            <SunIcon />
-          </ThemeItem>
-        </DropdownMenuRadioItem>
-        <DropdownMenuRadioItem value="dark" asChild>
-          <ThemeItem>
-            <MoonStarIcon />
-          </ThemeItem>
-        </DropdownMenuRadioItem>
-        <DropdownMenuRadioItem value="system" asChild>
-          <ThemeItem>
-            <MonitorIcon />
-          </ThemeItem>
-        </DropdownMenuRadioItem>
+        <Tooltip.Root>
+          <Tooltip.Trigger asChild>
+            <DropdownMenuRadioItem value="light" asChild>
+              <ThemeItem>
+                <SunIcon />
+              </ThemeItem>
+            </DropdownMenuRadioItem>
+          </Tooltip.Trigger>
+          <Tooltip.Portal>
+            <Tooltip.Content sideOffset={8}>light theme</Tooltip.Content>
+          </Tooltip.Portal>
+        </Tooltip.Root>
+
+        <Tooltip.Root>
+          <Tooltip.Trigger asChild>
+            <DropdownMenuRadioItem value="dark" asChild>
+              <ThemeItem>
+                <MoonStarIcon />
+              </ThemeItem>
+            </DropdownMenuRadioItem>
+          </Tooltip.Trigger>
+          <Tooltip.Portal>
+            <Tooltip.Content sideOffset={8}>dark theme</Tooltip.Content>
+          </Tooltip.Portal>
+        </Tooltip.Root>
+
+        <Tooltip.Root>
+          <Tooltip.Trigger asChild>
+            <DropdownMenuRadioItem value="system" asChild>
+              <ThemeItem>
+                <MonitorIcon />
+              </ThemeItem>
+            </DropdownMenuRadioItem>
+          </Tooltip.Trigger>
+          <Tooltip.Portal>
+            <Tooltip.Content sideOffset={8}>system theme</Tooltip.Content>
+          </Tooltip.Portal>
+        </Tooltip.Root>
       </DropdownMenuRadioGroup>
       <DropdownMenuItem
         onSelect={() => setDialog({ logout: true })}
@@ -231,21 +261,17 @@ const ThemeItem = React.forwardRef<
 ))
 ThemeItem.displayName = 'ThemeItem'
 
-function Icon({
-  children,
-  onClick,
-}: {
-  children: React.ReactNode
-  onClick?: () => void
-}) {
-  return (
-    <button onClick={onClick} className={cn(iconStyle, 'size-8')}>
-      <span className="size-4">{children}</span>
-    </button>
-  )
-}
+const Icon = React.forwardRef<
+  React.ElementRef<'button'>,
+  React.ComponentPropsWithoutRef<'button'>
+>(({ children, ...props }, ref) => (
+  <button {...props} ref={ref} className={cn(iconStyle, 'size-8 outline-none')}>
+    <span className="size-4">{children}</span>
+  </button>
+))
+Icon.displayName = 'Icon'
 
-function Search() {
+function SearchXL() {
   const setDialog = useAppStore((s) => s.setDialog)
 
   return (
@@ -256,9 +282,7 @@ function Search() {
       <span className="flex size-8 items-center justify-center">
         <SearchIcon className="size-3.5" />
       </span>
-      <span className="hidden sm:inline-block">
-        <span className="mr-10 text-xs text-gray-500">Search</span>
-      </span>
+      <span className="mr-10 text-xs text-gray-500">Search</span>
     </button>
   )
 }
