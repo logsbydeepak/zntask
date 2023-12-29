@@ -13,7 +13,7 @@
     "^[./]"
   ],
   "importOrderParserPlugins": ["typescript", "jsx", "decorators-legacy"],
-  "tailwindFunctions": ["cva", "tw"],
+  "tailwindFunctions": ["cva", "tw", "cn"],
   "plugins": [
     "@ianvs/prettier-plugin-sort-imports",
     "prettier-plugin-tailwindcss"
