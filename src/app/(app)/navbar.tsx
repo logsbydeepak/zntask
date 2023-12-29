@@ -58,69 +58,64 @@ export function Navbar() {
           <span className="hidden text-sm font-medium xs:block">zntask</span>
         </Link>
         <Tooltip.Provider>
-          <div className="flex space-x-2 md:space-x-4">
-            <div className="flex space-x-1.5 sm:space-x-2">
-              <div className="flex">
-                <div className="hidden sm:inline-block">
-                  <SearchXL />
-                </div>
+          <div className="flex space-x-2.5">
+            <span className="hidden sm:inline-block">
+              <SearchXL />
+            </span>
 
-                <div className="inline-block sm:hidden">
-                  <Tooltip.Root>
-                    <Tooltip.Trigger asChild>
-                      <Icon onClick={() => setDialog({ createCategory: true })}>
-                        <SearchIcon />
-                      </Icon>
-                    </Tooltip.Trigger>
-                    <Tooltip.Portal>
-                      <Tooltip.Content sideOffset={8}>search</Tooltip.Content>
-                    </Tooltip.Portal>
-                  </Tooltip.Root>
-                </div>
-              </div>
-
-              <Tooltip.Root>
-                <Tooltip.Trigger asChild>
-                  <Icon onClick={() => setIsSidebarOpen((open) => !open)}>
-                    {isSidebarOpen ? (
-                      <PanelLeftInactiveIcon />
-                    ) : (
-                      <PanelLeftIcon />
-                    )}
-                  </Icon>
-                </Tooltip.Trigger>
-                <Tooltip.Portal>
-                  <Tooltip.Content sideOffset={8}>
-                    {isSidebarOpen ? 'close sidebar' : 'open sidebar'}
-                  </Tooltip.Content>
-                </Tooltip.Portal>
-              </Tooltip.Root>
-            </div>
-            <div className="my-1 w-[1px] bg-gray-200" />
-
-            <div className="flex space-x-1.5 sm:space-x-2">
+            <span className="inline-block sm:hidden">
               <Tooltip.Root>
                 <Tooltip.Trigger asChild>
                   <Icon onClick={() => setDialog({ createCategory: true })}>
-                    <FolderPlusIcon />
+                    <SearchIcon />
                   </Icon>
                 </Tooltip.Trigger>
                 <Tooltip.Portal>
-                  <Tooltip.Content sideOffset={8}>new category</Tooltip.Content>
+                  <Tooltip.Content sideOffset={8}>search</Tooltip.Content>
                 </Tooltip.Portal>
               </Tooltip.Root>
+            </span>
 
-              <Tooltip.Root>
-                <Tooltip.Trigger asChild>
-                  <Icon onClick={() => setDialog({ createTask: true })}>
-                    <CheckCircleIcon />
-                  </Icon>
-                </Tooltip.Trigger>
-                <Tooltip.Portal>
-                  <Tooltip.Content sideOffset={8}>new task</Tooltip.Content>
-                </Tooltip.Portal>
-              </Tooltip.Root>
-            </div>
+            <Tooltip.Root>
+              <Tooltip.Trigger asChild>
+                <Icon onClick={() => setIsSidebarOpen((open) => !open)}>
+                  {isSidebarOpen ? (
+                    <PanelLeftInactiveIcon />
+                  ) : (
+                    <PanelLeftIcon />
+                  )}
+                </Icon>
+              </Tooltip.Trigger>
+              <Tooltip.Portal>
+                <Tooltip.Content sideOffset={8}>
+                  {isSidebarOpen ? 'close sidebar' : 'open sidebar'}
+                </Tooltip.Content>
+              </Tooltip.Portal>
+            </Tooltip.Root>
+
+            <span className="my-1.5 w-[1px] bg-gray-200" />
+
+            <Tooltip.Root>
+              <Tooltip.Trigger asChild>
+                <Icon onClick={() => setDialog({ createCategory: true })}>
+                  <FolderPlusIcon />
+                </Icon>
+              </Tooltip.Trigger>
+              <Tooltip.Portal>
+                <Tooltip.Content sideOffset={8}>new category</Tooltip.Content>
+              </Tooltip.Portal>
+            </Tooltip.Root>
+
+            <Tooltip.Root>
+              <Tooltip.Trigger asChild>
+                <Icon onClick={() => setDialog({ createTask: true })}>
+                  <CheckCircleIcon />
+                </Icon>
+              </Tooltip.Trigger>
+              <Tooltip.Portal>
+                <Tooltip.Content sideOffset={8}>new task</Tooltip.Content>
+              </Tooltip.Portal>
+            </Tooltip.Root>
 
             <DropdownMenuRoot>
               <Tooltip.Root>
@@ -129,7 +124,7 @@ export function Navbar() {
                     <Avatar />
                     <span
                       data-active={isAppSyncing}
-                      className="absolute bottom-0 right-[1px] hidden size-2 items-center justify-center rounded-full border border-white bg-white data-[active=true]:flex"
+                      className="absolute bottom-0 right-[1px] hidden size-2 items-center justify-center rounded-full border-[1.5px] border-white bg-white data-[active=true]:flex"
                     >
                       <span className="size-full animate-pulse rounded-full bg-orange-500" />
                     </span>
