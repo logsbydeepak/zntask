@@ -42,7 +42,7 @@ export function Sidebar() {
         'transition-all duration-150 ease-in-out'
       )}
     >
-      <div className="my-4 space-y-6 pr-1">
+      <div className="my-4 space-y-6 pr-1 ">
         <div className="space-y-2">
           <QuickSection />
         </div>
