@@ -37,7 +37,10 @@ export function Sidebar() {
   return (
     <aside
       data-sidebar={isSidebarOpen}
-      className="fixed bottom-0 top-14 z-10 w-full overflow-y-scroll bg-white pr-1 data-[sidebar=true]:fixed data-[sidebar=false]:hidden md:w-56"
+      className={cn(
+        'invisible fixed bottom-0 top-14 z-10 w-full -translate-x-full overflow-y-scroll bg-white pr-1 data-[sidebar=true]:visible data-[sidebar=true]:translate-x-0 md:w-56',
+        'transition-all duration-150 ease-in-out'
+      )}
     >
       <div className="my-4 space-y-6 pr-1">
         <div className="space-y-2">
