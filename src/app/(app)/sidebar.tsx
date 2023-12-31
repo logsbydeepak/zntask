@@ -18,9 +18,11 @@ import { useShallow } from 'zustand/react/shallow'
 
 import {
   ContextMenuContent,
+  ContextMenuPortal,
   ContextMenuRoot,
   ContextMenuTrigger,
   DropdownMenuContent,
+  DropdownMenuPortal,
   DropdownMenuRoot,
   DropdownMenuTrigger,
 } from '@/components/ui/menu'
@@ -249,25 +251,29 @@ function CategoryItem({
               </span>
             </Item.Content.Link>
           </ContextMenuTrigger>
-          <ContextMenuContent
-            onCloseAutoFocus={(e) => preventFocus && e.preventDefault()}
-          >
-            <CategoryMenuContent
-              category={category}
-              type="context"
-              setPreventFocus={setPreventFocus}
-            />
-          </ContextMenuContent>
-          <DropdownMenuContent
-            align={isScreenSM ? 'end' : 'start'}
-            onCloseAutoFocus={(e) => preventFocus && e.preventDefault()}
-          >
-            <CategoryMenuContent
-              category={category}
-              type="dropdown"
-              setPreventFocus={setPreventFocus}
-            />
-          </DropdownMenuContent>
+          <ContextMenuPortal>
+            <ContextMenuContent
+              onCloseAutoFocus={(e) => preventFocus && e.preventDefault()}
+            >
+              <CategoryMenuContent
+                category={category}
+                type="context"
+                setPreventFocus={setPreventFocus}
+              />
+            </ContextMenuContent>
+          </ContextMenuPortal>
+          <DropdownMenuPortal>
+            <DropdownMenuContent
+              align={isScreenSM ? 'end' : 'start'}
+              onCloseAutoFocus={(e) => preventFocus && e.preventDefault()}
+            >
+              <CategoryMenuContent
+                category={category}
+                type="dropdown"
+                setPreventFocus={setPreventFocus}
+              />
+            </DropdownMenuContent>
+          </DropdownMenuPortal>
         </DropdownMenuRoot>
       </ContextMenuRoot>
     </Item.Root>
