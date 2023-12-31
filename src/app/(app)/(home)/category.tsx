@@ -152,16 +152,6 @@ export const CategoryItem = React.forwardRef<
 })
 CategoryItem.displayName = 'CategoryItem'
 
-const EmptyShell = React.forwardRef<HTMLDivElement, {}>((_, ref) => {
-  return (
-    <div
-      ref={ref}
-      className="absolute inset-0 rounded-lg border border-gray-200 bg-gray-50"
-    />
-  )
-})
-EmptyShell.displayName = 'EmptyShell'
-
 export function CategoryContainer({ children }: { children: React.ReactNode }) {
   return <div className="space-y-2">{children}</div>
 }

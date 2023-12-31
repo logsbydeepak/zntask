@@ -133,20 +133,14 @@ function CategoryDialogContent({
                 <RadioGroup.Item
                   key={option.label}
                   value={option.label}
-                  className="flex items-center justify-center"
-                  asChild
+                  id={option.label}
+                  className={cn(
+                    'flex size-[18px] items-center justify-center rounded-full',
+                    'cursor-pointer hover:ring-2 focus-visible:outline-offset-[3px]',
+                    `bg-${option.color}-600 hover:ring-${option.color}-300`
+                  )}
                 >
-                  <div
-                    className={cn(
-                      'size-[18px] cursor-pointer rounded-full hover:ring-2',
-                      `bg-${option.color}-600 hover:ring-${option.color}-300 `,
-                      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-950 focus-visible:ring-offset-2 focus-visible:ring-offset-white'
-                    )}
-                  >
-                    <RadioGroup.Indicator asChild>
-                      <div className="size-2 rounded-full bg-white"></div>
-                    </RadioGroup.Indicator>
-                  </div>
+                  <RadioGroup.Indicator className="size-2 rounded-full bg-white animate-in zoom-in" />
                 </RadioGroup.Item>
               ))}
             </RadioGroup.Root>
