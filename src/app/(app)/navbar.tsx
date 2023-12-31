@@ -158,6 +158,24 @@ function UserMenu() {
   const { email, firstName, lastName } = useAtomValue(userAtom)
   const router = useRouter()
 
+  const themeOptions = [
+    {
+      icon: <SunIcon />,
+      label: 'light theme',
+      value: 'light',
+    },
+    {
+      icon: <MoonStarIcon />,
+      label: 'dark theme',
+      value: 'dark',
+    },
+    {
+      icon: <MonitorIcon />,
+      label: 'system theme',
+      value: 'system',
+    },
+  ]
+
   return (
     <>
       <div className="px-2 py-2 text-xs font-medium">
@@ -183,45 +201,28 @@ function UserMenu() {
           }
         }}
       >
-        <Tooltip.Root>
-          <Tooltip.Trigger asChild>
-            <DropdownMenuRadioItem value="light" asChild>
-              <ThemeItem>
-                <SunIcon />
-              </ThemeItem>
-            </DropdownMenuRadioItem>
-          </Tooltip.Trigger>
-          <Tooltip.Portal>
-            <Tooltip.Content sideOffset={8}>light theme</Tooltip.Content>
-          </Tooltip.Portal>
-        </Tooltip.Root>
-
-        <Tooltip.Root>
-          <Tooltip.Trigger asChild>
-            <DropdownMenuRadioItem value="dark" asChild>
-              <ThemeItem>
-                <MoonStarIcon />
-              </ThemeItem>
-            </DropdownMenuRadioItem>
-          </Tooltip.Trigger>
-          <Tooltip.Portal>
-            <Tooltip.Content sideOffset={8}>dark theme</Tooltip.Content>
-          </Tooltip.Portal>
-        </Tooltip.Root>
-
-        <Tooltip.Root>
-          <Tooltip.Trigger asChild>
-            <DropdownMenuRadioItem value="system" asChild>
-              <ThemeItem>
-                <MonitorIcon />
-              </ThemeItem>
-            </DropdownMenuRadioItem>
-          </Tooltip.Trigger>
-          <Tooltip.Portal>
-            <Tooltip.Content sideOffset={8}>system theme</Tooltip.Content>
-          </Tooltip.Portal>
-        </Tooltip.Root>
+        {themeOptions.map((i) => (
+          <Tooltip.Root key={i.value}>
+            <Tooltip.Trigger asChild>
+              <DropdownMenuRadioItem
+                value={i.value}
+                className={cn(
+                  iconStyle,
+                  'size-8 cursor-pointer outline-none',
+                  'data-[highlighted]:text-gray-950 data-[state=checked]:text-white',
+                  'data-[highlighted]:bg-gray-100 data-[state=checked]:bg-orange-600',
+                  'data-[highlighted]:ring-2 data-[highlighted]:ring-gray-200',
+                  'data-[state=checked]:border-orange-700 data-[state=checked]:ring-orange-200'
+                )}
+              >
+                <span className="size-3">{i.icon}</span>
+              </DropdownMenuRadioItem>
+            </Tooltip.Trigger>
+            <Tooltip.Content sideOffset={8}>{i.label}</Tooltip.Content>
+          </Tooltip.Root>
+        ))}
       </DropdownMenuRadioGroup>
+
       <DropdownMenuItem
         onSelect={() => setDialog({ logout: true })}
         intent="destructive"
@@ -236,23 +237,6 @@ function UserMenu() {
 }
 
 const iconStyle = tw`flex items-center justify-center rounded-lg border border-gray-200 bg-gray-50 text-gray-500 hover:border-gray-300 hover:bg-gray-100 hover:text-gray-950`
-
-const ThemeItem = React.forwardRef<
-  HTMLButtonElement,
-  React.ComponentPropsWithoutRef<'button'>
->(({ children, ...props }, ref) => (
-  <button
-    {...props}
-    ref={ref}
-    className={cn(
-      iconStyle,
-      'size-8 outline-none data-[state=checked]:border-orange-700 data-[highlighted]:bg-gray-100 data-[state=checked]:bg-orange-600 data-[highlighted]:text-gray-950 data-[state=checked]:text-white data-[highlighted]:ring-2 data-[highlighted]:ring-gray-200 data-[state=checked]:ring-orange-200'
-    )}
-  >
-    <span className="size-4">{children}</span>
-  </button>
-))
-ThemeItem.displayName = 'ThemeItem'
 
 const Icon = React.forwardRef<
   React.ElementRef<'button'>,
