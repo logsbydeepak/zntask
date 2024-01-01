@@ -101,10 +101,10 @@ function QuickSection() {
         <Item.Root key={i.label} isActive={i.isActive}>
           <Item.Content.Link href={i.href}>
             <LabelContainer>
-              <Item.LabelIcon className="text-gray-600 group-data-[active=true]:text-orange-600">
+              <Item.Label.Icon className="text-gray-600 group-data-[active=true]:text-orange-600">
                 {i.icon}
-              </Item.LabelIcon>
-              <Item.Label>{i.label}</Item.Label>
+              </Item.Label.Icon>
+              <Item.Label.Content>{i.label}</Item.Label.Content>
             </LabelContainer>
           </Item.Content.Link>
         </Item.Root>
@@ -224,22 +224,22 @@ function CategoryItem({
     <Item.Root isActive={isActive}>
       <ContextMenuRoot>
         <DropdownMenuRoot>
-          <ContextMenuTrigger className="group">
+          <ContextMenuTrigger asChild>
             <Item.Content.Link
               href={href}
-              className="justify-between group-data-[state=open]:border-gray-200 group-data-[state=open]:bg-gray-50"
+              className="justify-between data-[state=open]:border-gray-200 data-[state=open]:bg-gray-50"
             >
-              <Item.LabelContainer>
-                <Item.LabelIcon>
+              <Item.Label.Container>
+                <Item.Label.Icon>
                   <div
                     className={cn(
                       'size-2.5 rounded-full',
                       `bg-${getCategoryColor(category.indicator)}-600`
                     )}
                   />
-                </Item.LabelIcon>
-                <Item.Label>{category.title}</Item.Label>
-              </Item.LabelContainer>
+                </Item.Label.Icon>
+                <Item.Label.Content>{category.title}</Item.Label.Content>
+              </Item.Label.Container>
               <span className="flex items-center space-x-0.5">
                 <DropdownMenuTrigger asChild>
                   <button className="flex size-6 items-center justify-center text-gray-400 hover:text-gray-800 data-[state=open]:text-gray-800">
@@ -332,18 +332,18 @@ function ShowMore({
   return (
     <Item.Root>
       <Item.Content.Button onClick={onClick}>
-        <Item.LabelContainer>
-          <Item.LabelIcon>
+        <Item.Label.Container>
+          <Item.Label.Icon>
             {isOpen ? (
               <ChevronUpIcon className="size-4" />
             ) : (
               <ChevronDownIcon className="size-4" />
             )}
-          </Item.LabelIcon>
-          <Item.Label>
+          </Item.Label.Icon>
+          <Item.Label.Content>
             {isOpen ? 'Show less' : `Show ${number} more`}
-          </Item.Label>
-        </Item.LabelContainer>
+          </Item.Label.Content>
+        </Item.Label.Container>
       </Item.Content.Button>
     </Item.Root>
   )
@@ -373,24 +373,24 @@ function ItemRoot({
   return (
     <div className="group flex items-center" data-active={isActive}>
       <ItemIndicator />
-      <div className="group w-full">{children}</div>
+      <div className="w-full">{children}</div>
     </div>
   )
 }
 
 const itemContentStyle = tw`flex h-9 w-full items-center rounded-lg border border-transparent px-2 hover:border-gray-200 hover:bg-gray-50 group-data-[active=true]:border-gray-200 group-data-[active=true]:bg-gray-50`
 
-function ItemContentLink({
-  children,
-  href,
-  className,
-}: React.ComponentProps<typeof Link>) {
+const ItemContentLink = React.forwardRef<
+  React.ElementRef<typeof Link>,
+  React.ComponentPropsWithRef<typeof Link>
+>(({ children, className, ...props }, ref) => {
   const isScreenSM = useAtomValue(isScreenSMAtom)
   const setIsSidebarOpen = useSetAtom(isSidebarOpenAtom)
 
   return (
     <Link
-      href={href}
+      {...props}
+      ref={ref}
       className={cn(itemContentStyle, className)}
       onClick={() => {
         if (isScreenSM) return setIsSidebarOpen(false)
@@ -399,7 +399,8 @@ function ItemContentLink({
       {children}
     </Link>
   )
-}
+})
+ItemContentLink.displayName = 'ItemContainerLink'
 
 function ItemContentButton({
   children,
@@ -413,7 +414,7 @@ function ItemContentButton({
   )
 }
 
-function ItemLabel({ children }: React.ComponentProps<'span'>) {
+function LabelContent({ children }: React.ComponentProps<'span'>) {
   return (
     <span className="inline-block overflow-hidden text-ellipsis whitespace-nowrap text-sm text-gray-600 data-[active=true]:font-medium group-data-[active=true]:text-gray-900">
       {children}
@@ -421,7 +422,7 @@ function ItemLabel({ children }: React.ComponentProps<'span'>) {
   )
 }
 
-function ItemLabelIcon({ className, children }: React.ComponentProps<'span'>) {
+function LabelIcon({ className, children }: React.ComponentProps<'span'>) {
   return (
     <span className={cn('flex size-4 items-center justify-center', className)}>
       {children}
@@ -443,7 +444,9 @@ const Item = {
     Link: ItemContentLink,
     Button: ItemContentButton,
   },
-  Label: ItemLabel,
-  LabelIcon: ItemLabelIcon,
-  LabelContainer: LabelContainer,
+  Label: {
+    Container: LabelContainer,
+    Content: LabelContent,
+    Icon: LabelIcon,
+  },
 }
