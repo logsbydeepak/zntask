@@ -6,12 +6,7 @@ import { useShallow } from 'zustand/react/shallow'
 
 import * as Layout from '@/app/(app)/app-layout'
 import { Head } from '@/components/head'
-import {
-  TabsContent,
-  TabsList,
-  TabsRoot,
-  TabsTrigger,
-} from '@/components/ui/tabs'
+import * as Tabs from '@/components/ui/tabs'
 import { useCategoryStore } from '@/store/category'
 import { categoryHelper } from '@/utils/category'
 import { DNDProvider } from '@/utils/dnd'
@@ -38,21 +33,21 @@ export default function Page() {
         </div>
       </Layout.Header>
       <Layout.Content>
-        <TabsRoot
+        <Tabs.Root
           value={activeTab}
           onValueChange={(value) => router.push(`/category?status=${value}`)}
         >
-          <TabsList className="mb-4">
-            <TabsTrigger value="active">Active</TabsTrigger>
-            <TabsTrigger value="archive">Archive</TabsTrigger>
-          </TabsList>
-          <TabsContent value="active">
+          <Tabs.List className="mb-4">
+            <Tabs.Trigger value="active">Active</Tabs.Trigger>
+            <Tabs.Trigger value="archive">Archive</Tabs.Trigger>
+          </Tabs.List>
+          <Tabs.Content value="active">
             <ActiveTab />
-          </TabsContent>
-          <TabsContent value="archive">
+          </Tabs.Content>
+          <Tabs.Content value="archive">
             <ArchiveTab />
-          </TabsContent>
-        </TabsRoot>
+          </Tabs.Content>
+        </Tabs.Root>
       </Layout.Content>
     </Layout.Root>
   )

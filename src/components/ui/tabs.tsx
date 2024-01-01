@@ -1,23 +1,17 @@
 import React from 'react'
-import {
-  Content as ContentPrimitives,
-  List as ListPrimitives,
-  Root as RootPrimitives,
-  Tabs as TabsPrimitives,
-  Trigger as TriggerPrimitives,
-} from '@radix-ui/react-tabs'
+import * as TabsPrimitives from '@radix-ui/react-tabs'
 
 import { cn } from '@/utils/style'
 
-export const TabsRoot = RootPrimitives
-export const TabsContent = ContentPrimitives
+export const Root = TabsPrimitives.Root
+export const Content = TabsPrimitives.Content
 
-export const TabsList = React.forwardRef<
-  React.ElementRef<typeof ListPrimitives>,
-  React.ComponentProps<typeof ListPrimitives>
+export const List = React.forwardRef<
+  React.ElementRef<typeof TabsPrimitives.List>,
+  React.ComponentProps<typeof TabsPrimitives.List>
 >(({ className, ...props }, ref) => {
   return (
-    <ListPrimitives
+    <TabsPrimitives.List
       ref={ref}
       {...props}
       className={cn(
@@ -27,17 +21,17 @@ export const TabsList = React.forwardRef<
     />
   )
 })
-TabsList.displayName = ListPrimitives.displayName
+List.displayName = TabsPrimitives.List.displayName
 
-export const TabsTrigger = React.forwardRef<
-  React.ElementRef<typeof TriggerPrimitives>,
-  React.ComponentProps<typeof TriggerPrimitives>
+export const Trigger = React.forwardRef<
+  React.ElementRef<typeof TabsPrimitives.Trigger>,
+  React.ComponentProps<typeof TabsPrimitives.Trigger>
 >((props, ref) => (
-  <TriggerPrimitives
+  <TabsPrimitives.Trigger
     {...props}
     ref={ref}
     className="rounded-md bg-gray-100 px-3 py-1 text-xs text-gray-600 hover:text-gray-950 aria-[selected=true]:bg-white aria-[selected=true]:text-gray-950 aria-[selected=true]:shadow-sm aria-[selected=true]:drop-shadow-sm"
   />
 ))
 
-TabsTrigger.displayName = TabsPrimitives.displayName
+Trigger.displayName = TabsPrimitives.Trigger.displayName

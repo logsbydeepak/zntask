@@ -5,12 +5,7 @@ import { useShallow } from 'zustand/react/shallow'
 
 import * as Layout from '@/app/(app)/app-layout'
 import { Head } from '@/components/head'
-import {
-  TabsContent,
-  TabsList,
-  TabsRoot,
-  TabsTrigger,
-} from '@/components/ui/tabs'
+import * as Tabs from '@/components/ui/tabs'
 import { useTaskStore } from '@/store/task'
 import { DNDProvider } from '@/utils/dnd'
 
@@ -24,22 +19,22 @@ export default function Page() {
         <Head title="Inbox" />
       </Layout.Header>
       <Layout.Content>
-        <TabsRoot defaultValue="planed">
-          <TabsList>
-            <TabsTrigger value="planed">Planed</TabsTrigger>
-            <TabsTrigger value="completed">Completed</TabsTrigger>
-          </TabsList>
-          <TabsContent value="planed">
+        <Tabs.Root defaultValue="planed">
+          <Tabs.List>
+            <Tabs.Trigger value="planed">Planed</Tabs.Trigger>
+            <Tabs.Trigger value="completed">Completed</Tabs.Trigger>
+          </Tabs.List>
+          <Tabs.Content value="planed">
             <div className="mt-4">
               <PlanedTab />
             </div>
-          </TabsContent>
-          <TabsContent value="completed">
+          </Tabs.Content>
+          <Tabs.Content value="completed">
             <div className="mt-4">
               <CompletedTab />
             </div>
-          </TabsContent>
-        </TabsRoot>
+          </Tabs.Content>
+        </Tabs.Root>
       </Layout.Content>
     </Layout.Root>
   )

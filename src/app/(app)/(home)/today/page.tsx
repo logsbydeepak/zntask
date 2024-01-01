@@ -7,12 +7,7 @@ import { useShallow } from 'zustand/react/shallow'
 
 import * as Layout from '@/app/(app)/app-layout'
 import { Head } from '@/components/head'
-import {
-  TabsContent,
-  TabsList,
-  TabsRoot,
-  TabsTrigger,
-} from '@/components/ui/tabs'
+import * as Tabs from '@/components/ui/tabs'
 import { useAppStore } from '@/store/app'
 import { ParentTask, useTaskStore } from '@/store/task'
 
@@ -24,18 +19,18 @@ export default function Page() {
         <Head title="Today" />
       </Layout.Header>
       <Layout.Content>
-        <TabsRoot defaultValue="planed">
-          <TabsList>
-            <TabsTrigger value="planed">Planed</TabsTrigger>
-            <TabsTrigger value="completed">Completed</TabsTrigger>
-          </TabsList>
-          <TabsContent value="planed">
+        <Tabs.Root defaultValue="planed">
+          <Tabs.List>
+            <Tabs.Trigger value="planed">Planed</Tabs.Trigger>
+            <Tabs.Trigger value="completed">Completed</Tabs.Trigger>
+          </Tabs.List>
+          <Tabs.Content value="planed">
             <PlanedTab />
-          </TabsContent>
-          <TabsContent value="completed">
+          </Tabs.Content>
+          <Tabs.Content value="completed">
             <CompletedTab />
-          </TabsContent>
-        </TabsRoot>
+          </Tabs.Content>
+        </Tabs.Root>
       </Layout.Content>
     </Layout.Root>
   )
