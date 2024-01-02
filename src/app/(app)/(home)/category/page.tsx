@@ -73,31 +73,27 @@ function ActiveTab() {
       <CategoryContainer>
         <DNDProvider
           onDrop={({ start, over }) => {
-            if (!start) return
-            if (!over) return
-            if (start === over) return
-            const overId = over.split(':')
-            if (overId[0] === start) return
-
-            if (overId[0] === 'start') {
-              reorderCategoryToTop(start)
-            }
-
-            if (overId[0] === 'bottom') {
-              reorderCategoryToBottomOf(start, overId[1])
-            }
+            // if (!start) return
+            // if (!over) return
+            // if (start === over) return
+            // const overId = over.split(':')
+            // if (overId[0] === start) return
+            //
+            // if (overId[0] === 'start') {
+            //   reorderCategoryToTop(start)
+            // }
+            //
+            // if (overId[0] === 'bottom') {
+            //   reorderCategoryToBottomOf(start, overId[1])
+            // }
           }}
         >
-          {categories.map((i, idx) => (
-            <div className="relative" key={i.id}>
-              {idx === 0 && <TopDrop id={`start:${i.id}`} />}
-              <DNDCategoryItem
-                key={i.id}
-                category={i}
-                href={`/category/${i.id}`}
-              />
-              <BottomDrop id={`bottom:${i.id}`} />
-            </div>
+          {categories.map((i) => (
+            <DNDCategoryItem
+              key={i.id}
+              category={i}
+              href={`/category/${i.id}`}
+            />
           ))}
         </DNDProvider>
       </CategoryContainer>

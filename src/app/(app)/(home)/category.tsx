@@ -43,6 +43,8 @@ export function DNDCategoryItem({
     bind,
   } = useDrag({ id: category.id })
 
+  const { ref } = useDrop({ id: category.id })
+
   const style = React.useMemo(() => {
     if (!position) return {}
     return {
@@ -52,7 +54,7 @@ export function DNDCategoryItem({
   }, [position])
 
   return (
-    <div>
+    <div className="relative">
       {isDragging && (
         <div
           ref={dragRef as any}
@@ -69,7 +71,28 @@ export function DNDCategoryItem({
         </div>
       )}
 
-      <CategoryItem category={category} href={href} {...bind()} />
+      <div
+        data-active={true}
+        className="absolute -bottom-[5px] left-0 right-0 hidden w-full translate-y-[2px] items-center px-3 data-[active=true]:flex"
+      >
+        <span className="size-1.5 rounded-full border-[1.5px] border-orange-600" />
+        <span className="-ml-[1px] h-[1.5px] w-full rounded-full bg-orange-600" />
+      </div>
+
+      <CategoryItem
+        category={category}
+        href={href}
+        {...bind()}
+        ref={ref as React.Ref<HTMLAnchorElement>}
+      />
+
+      <div
+        className="absolute -top-[5px] left-0 right-0 hidden w-full translate-y-[-2px] items-center px-3 data-[active=true]:flex"
+        data-active={true}
+      >
+        <span className="size-1.5 rounded-full border-[1.5px] border-orange-600" />
+        <span className="-ml-[1px] h-[1.5px] w-full rounded-full bg-orange-600" />
+      </div>
     </div>
   )
 }
@@ -105,7 +128,7 @@ export const CategoryItem = React.forwardRef<
                 />
               </div>
               <p className="overflow-hidden text-ellipsis text-sm">
-                {category.title} {`order: ${category.orderNumber}`}
+                {category.title}
               </p>
             </div>
             <div className="flex items-center space-x-1">
