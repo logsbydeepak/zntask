@@ -215,7 +215,7 @@ function UserMenu() {
                   'data-[state=checked]:border-orange-700 data-[state=checked]:ring-orange-200'
                 )}
               >
-                <span className="size-3">{i.icon}</span>
+                <span className="size-3.5">{i.icon}</span>
               </DropdownMenuRadioItem>
             </Tooltip.Trigger>
             <Tooltip.Content sideOffset={8}>{i.label}</Tooltip.Content>
