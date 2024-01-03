@@ -1,6 +1,4 @@
 import React from 'react'
-import { PopoverContent } from '@radix-ui/react-popover'
-import * as Popover from '@radix-ui/react-popover'
 import { parse as chronoParse } from 'chrono-node'
 import {
   addDays,
@@ -22,7 +20,7 @@ import { DayPicker } from 'react-day-picker'
 import { useDebounce } from 'use-debounce'
 
 import * as Badge from '@/components/ui/badge'
-import { cn } from '@/utils/style'
+import * as Popover from '@/components/ui/popover'
 
 export function SchedulePicker({
   value,
@@ -73,8 +71,8 @@ export function SchedulePicker({
 }
 
 const SchedulePopover = React.forwardRef<
-  React.ElementRef<typeof PopoverContent>,
-  React.ComponentProps<typeof PopoverContent> & {
+  React.ElementRef<typeof Popover.Content>,
+  React.ComponentProps<typeof Popover.Content> & {
     setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
     value: { date: Date | null; time: Date | null }
     setValue: ({ date, time }: { date: Date | null; time: Date | null }) => void
@@ -109,16 +107,15 @@ const SchedulePopover = React.forwardRef<
   }
 
   return (
-    <PopoverContent
+    <Popover.Content
       {...props}
       ref={ref}
       align="center"
       side="top"
       sideOffset={10}
-      className="category-popover z-50 w-72 space-y-4 rounded-lg border border-gray-200 bg-white shadow-sm"
+      className="space-y-4 p-0 shadow-sm"
       autoFocus={true}
       collisionPadding={10}
-      sticky="always"
     >
       <div className="flex flex-col border-b border-gray-200 px-4 pb-4 pt-2.5">
         <div className="flex items-center">
@@ -245,7 +242,7 @@ const SchedulePopover = React.forwardRef<
           }}
         />
       </div>
-    </PopoverContent>
+    </Popover.Content>
   )
 })
 
