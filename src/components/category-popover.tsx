@@ -1,9 +1,7 @@
 import React from 'react'
 import { Command } from 'cmdk'
 import { FolderIcon, InboxIcon, SearchIcon } from 'lucide-react'
-import { isValid } from 'ulidx'
 
-import { ActionButton } from '@/components/ui/button'
 import * as Popover from '@/components/ui/popover'
 import { useCategoryStore } from '@/store/category'
 import { Category, getCategoryColor } from '@/utils/category'
@@ -17,21 +15,12 @@ export const CategoryPopover = React.forwardRef<
     currentCategory: Category | undefined
   }
 >(({ setIsOpen, setValue: setParentValue, currentCategory, ...props }, ref) => {
-  const searchInputRef = React.useRef<HTMLInputElement>(null)
-  const [search, setSearch] = React.useState('')
-  const addCategory = useCategoryStore((state) => state.addCategory)
-  const [commandValue, setCommandValue] = React.useState('')
   const categories = useCategoryStore((state) => state.categories)
 
   const setValue = (value: string | null) => {
     setParentValue(value)
     setIsOpen(false)
   }
-
-  React.useEffect(() => {
-    const el = document.querySelector('[cmdk-list-sizer]')
-    el?.scrollTo({ top: 0 })
-  }, [search])
 
   return (
     <Popover.Content
@@ -41,38 +30,13 @@ export const CategoryPopover = React.forwardRef<
       sideOffset={5}
       align="center"
       collisionPadding={10}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' && e.shiftKey) {
-          e.preventDefault()
-
-          if (!search) return
-          const newCategory = addCategory({
-            title: search,
-            indicator: 'orange',
-          })
-          if (!newCategory) return
-          setValue(newCategory.id)
-        }
-      }}
     >
-      <Command
-        className="w-full"
-        value={commandValue}
-        onValueChange={(v) => setCommandValue(v)}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' && e.shiftKey) {
-            e.preventDefault()
-          }
-        }}
-      >
-        <div className="flex items-center border-b border-gray-200 py-2.5 pl-3.5 pr-2.5">
-          <SearchIcon className="size-3 text-gray-400" />
+      <Command className="w-full">
+        <div className="flex items-center space-x-2 border-b border-gray-200 py-2.5 pl-3.5 pr-2.5">
+          <SearchIcon className="size-3 text-gray-500" />
           <Command.Input
-            ref={searchInputRef}
-            value={search}
             placeholder="search"
-            onValueChange={setSearch}
-            className="ml-2 h-5 w-full border-none p-0 outline-none placeholder:text-gray-400 focus:ring-0"
+            className="border-none p-0 outline-none placeholder:text-gray-400 focus:ring-0"
           />
         </div>
 
@@ -96,7 +60,7 @@ export const CategoryPopover = React.forwardRef<
               <CategoryItem.Icon>
                 <div
                   className={cn(
-                    'size-2.5 rounded-[4px]',
+                    'size-2.5 rounded-full',
                     `bg-${getCategoryColor(currentCategory.indicator)}-600`
                   )}
                 />
@@ -135,7 +99,7 @@ export const CategoryPopover = React.forwardRef<
                 <CategoryItem.Icon>
                   <div
                     className={cn(
-                      'size-2.5 rounded-[4px]',
+                      'size-2.5 rounded-full',
                       `bg-${getCategoryColor(i.indicator)}-600`
                     )}
                   />
@@ -145,50 +109,6 @@ export const CategoryPopover = React.forwardRef<
             ))}
         </Command.List>
       </Command>
-
-      <div
-        className="border-t border-gray-200 px-2.5 py-1.5"
-        onKeyDown={(e) => {
-          if (e.key === '/') {
-            e.preventDefault()
-            searchInputRef.current?.focus()
-          }
-        }}
-      >
-        <div className="flex justify-between">
-          <ActionButton
-            type="button"
-            onClick={() => {
-              if (!commandValue) return
-              if (commandValue === 'inbox') {
-                setValue(null)
-                return
-              }
-              const id = commandValue.split(' ')[1]
-              if (isValid(id.toUpperCase())) {
-                setValue(id.toUpperCase())
-                return
-              }
-            }}
-          >
-            Select
-          </ActionButton>
-          <ActionButton
-            type="button"
-            onClick={() => {
-              if (!search) return
-              const newCategory = addCategory({
-                title: search,
-                indicator: 'orange',
-              })
-              if (!newCategory) return
-              setValue(newCategory.id)
-            }}
-          >
-            Create new
-          </ActionButton>
-        </div>
-      </div>
     </Popover.Content>
   )
 })
