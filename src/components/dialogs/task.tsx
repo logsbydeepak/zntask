@@ -4,7 +4,6 @@ import {
   CheckboxIndicator,
   Root as CheckboxRoot,
 } from '@radix-ui/react-checkbox'
-import * as Popover from '@radix-ui/react-popover'
 import {
   CheckCircleIcon,
   CircleIcon,
@@ -22,6 +21,7 @@ import { SchedulePicker } from '@/components/schedule'
 import * as Badge from '@/components/ui/badge'
 import * as Dialog from '@/components/ui/dialog'
 import * as Form from '@/components/ui/form'
+import * as Popover from '@/components/ui/popover'
 import { useAppStore } from '@/store/app'
 import { useCategoryStore } from '@/store/category'
 import { ChildTask, ParentTask, Task, useTaskStore } from '@/store/task'

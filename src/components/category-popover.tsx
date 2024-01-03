@@ -1,17 +1,17 @@
 import React from 'react'
-import { PopoverContent } from '@radix-ui/react-popover'
 import { Command } from 'cmdk'
 import { FolderIcon, InboxIcon, SearchIcon } from 'lucide-react'
 import { isValid } from 'ulidx'
 
 import { ActionButton } from '@/components/ui/button'
+import * as Popover from '@/components/ui/popover'
 import { useCategoryStore } from '@/store/category'
 import { Category, getCategoryColor } from '@/utils/category'
 import { cn } from '@/utils/style'
 
 export const CategoryPopover = React.forwardRef<
-  React.ElementRef<typeof PopoverContent>,
-  React.ComponentProps<typeof PopoverContent> & {
+  React.ElementRef<typeof Popover.Content>,
+  React.ComponentProps<typeof Popover.Content> & {
     setValue: (value: string | null) => void
     setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
     currentCategory: Category | undefined
@@ -34,10 +34,10 @@ export const CategoryPopover = React.forwardRef<
   }, [search])
 
   return (
-    <PopoverContent
+    <Popover.Content
       {...props}
       ref={ref}
-      className="category-popover w-60 rounded-lg border border-gray-200 bg-white shadow-sm"
+      className="w-60 p-0"
       sideOffset={5}
       align="center"
       collisionPadding={10}
@@ -189,7 +189,7 @@ export const CategoryPopover = React.forwardRef<
           </ActionButton>
         </div>
       </div>
-    </PopoverContent>
+    </Popover.Content>
   )
 })
 CategoryPopover.displayName = 'CategoryPopover'
