@@ -1,10 +1,11 @@
 import React from 'react'
 import { Command } from 'cmdk'
 import { FolderIcon, InboxIcon, SearchIcon } from 'lucide-react'
+import { useShallow } from 'zustand/react/shallow'
 
 import * as Popover from '@/components/ui/popover'
 import { useCategoryStore } from '@/store/category'
-import { Category, getCategoryColor } from '@/utils/category'
+import { Category, categoryHelper, getCategoryColor } from '@/utils/category'
 import { cn } from '@/utils/style'
 
 export const CategoryPopover = React.forwardRef<
@@ -15,7 +16,13 @@ export const CategoryPopover = React.forwardRef<
     currentCategory: Category | undefined
   }
 >(({ setIsOpen, setValue: setParentValue, currentCategory, ...props }, ref) => {
-  const categories = useCategoryStore((state) => state.categories)
+  const categories = useCategoryStore(
+    useShallow((s) =>
+      categoryHelper
+        .getActiveCategories(s.categories)
+        .filter((i) => i.id !== currentCategory?.id)
+    )
+  )
 
   const setValue = (value: string | null) => {
     setParentValue(value)
@@ -40,7 +47,7 @@ export const CategoryPopover = React.forwardRef<
           />
         </div>
 
-        <Command.List className="[&>[cmdk-list-sizer]]:ml-2 [&>[cmdk-list-sizer]]:h-40 [&>[cmdk-list-sizer]]:space-y-1 [&>[cmdk-list-sizer]]:overflow-y-scroll [&>[cmdk-list-sizer]]:py-2 [&>[cmdk-list-sizer]]:pr-1">
+        <Command.List className="[&>[cmdk-list-sizer]]:ml-2 [&>[cmdk-list-sizer]]:h-44 [&>[cmdk-list-sizer]]:space-y-0.5 [&>[cmdk-list-sizer]]:overflow-y-scroll [&>[cmdk-list-sizer]]:py-2 [&>[cmdk-list-sizer]]:pr-1">
           <Command.Empty className="flex h-36 items-center justify-center">
             <div className="flex flex-col items-center justify-center space-y-1 rounded-md border px-4 py-4 shadow-sm">
               <span className="inline-block h-5 w-5">
@@ -86,27 +93,25 @@ export const CategoryPopover = React.forwardRef<
             <Command.Separator className="mx-2 my-2 border-t border-gray-100" />
           </span>
 
-          {categories
-            .filter((i) => i.id !== currentCategory?.id)
-            .map((i) => (
-              <CategoryItem.Container
-                key={i.id}
-                value={`${i.title} ${i.id}`}
-                onSelect={() => {
-                  setValue(i.id)
-                }}
-              >
-                <CategoryItem.Icon>
-                  <div
-                    className={cn(
-                      'size-2.5 rounded-full',
-                      `bg-${getCategoryColor(i.indicator)}-600`
-                    )}
-                  />
-                </CategoryItem.Icon>
-                <CategoryItem.Title>{i.title}</CategoryItem.Title>
-              </CategoryItem.Container>
-            ))}
+          {categories.map((i) => (
+            <CategoryItem.Container
+              key={i.id}
+              value={`${i.title} ${i.id}`}
+              onSelect={() => {
+                setValue(i.id)
+              }}
+            >
+              <CategoryItem.Icon>
+                <div
+                  className={cn(
+                    'size-2.5 rounded-full',
+                    `bg-${getCategoryColor(i.indicator)}-600`
+                  )}
+                />
+              </CategoryItem.Icon>
+              <CategoryItem.Title>{i.title}</CategoryItem.Title>
+            </CategoryItem.Container>
+          ))}
         </Command.List>
       </Command>
     </Popover.Content>
@@ -122,7 +127,7 @@ const CategoryItemContainer = React.forwardRef<
     <Command.Item
       ref={ref}
       {...props}
-      className="group/item my-0.5 flex cursor-pointer items-center rounded-md border border-transparent px-2 py-1.5 data-[selected=true]:border-gray-200 data-[selected=true]:bg-gray-50"
+      className="group/item my-0.5 flex cursor-pointer items-center rounded-lg border border-transparent px-3 py-1.5 data-[selected=true]:border-gray-950/5 data-[selected=true]:bg-gray-100/50"
     />
   )
 })
@@ -138,7 +143,7 @@ function CategoryItemIcon({ children }: { children: React.ReactNode }) {
 
 function CategoryItemTitle({ children }: { children: React.ReactNode }) {
   return (
-    <p className="overflow-hidden overflow-ellipsis text-xs text-gray-600 group-data-[selected=true]/item:text-gray-950">
+    <p className="overflow-hidden overflow-ellipsis text-sm text-gray-600 group-data-[selected=true]/item:text-gray-950">
       {children}
     </p>
   )
