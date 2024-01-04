@@ -24,7 +24,7 @@ import * as Form from '@/components/ui/form'
 import * as Popover from '@/components/ui/popover'
 import { useAppStore } from '@/store/app'
 import { useCategoryStore } from '@/store/category'
-import { ChildTask, ParentTask, Task, useTaskStore } from '@/store/task'
+import { ChildTask, ParentTask, useTaskStore } from '@/store/task'
 import { getCategoryColor } from '@/utils/category'
 import { cn } from '@/utils/style'
 
@@ -104,15 +104,7 @@ export function TaskDialog() {
   return (
     <Dialog.Root open={isOpen} onOpenChange={closeDialog}>
       <Dialog.Portal>
-        <Dialog.Content
-          className="p-0 focus:outline-none sm:p-0"
-          onOpenAutoFocus={(e) => {
-            e.preventDefault()
-            document
-              .querySelector<HTMLInputElement>('[data-init-focus="true"]')
-              ?.focus()
-          }}
-        >
+        <Dialog.Content className="p-0 sm:p-0">
           <TaskDialogContent
             handleClose={closeDialog}
             isCreate={isCreate}
@@ -169,31 +161,24 @@ function TaskDialogContent({
     }
   })
 
-  const {
-    register,
-    handleSubmit,
-    formState,
-    getValues,
-    setValue,
-    watch,
-    control,
-  } = useForm<FormValues>({
-    resolver: zodResolver(schema),
-    defaultValues: {
-      categoryId: parentTask?.categoryId ?? null,
-      tasks: [
-        {
-          _id: parentTask?.id ?? null,
-          title: parentTask?.title ?? '',
-          details: parentTask?.details ?? '',
-          date: parentTask?.date ? new Date(parentTask.date) : null,
-          time: parentTask?.time ? new Date(parentTask.time) : null,
-          completedAt: parentTask?.completedAt ? new Date() : null,
-        },
-        ...childTask,
-      ],
-    },
-  })
+  const { register, handleSubmit, getValues, setValue, watch, control } =
+    useForm<FormValues>({
+      resolver: zodResolver(schema),
+      defaultValues: {
+        categoryId: parentTask?.categoryId ?? null,
+        tasks: [
+          {
+            _id: parentTask?.id ?? null,
+            title: parentTask?.title ?? '',
+            details: parentTask?.details ?? '',
+            date: parentTask?.date ? new Date(parentTask.date) : null,
+            time: parentTask?.time ? new Date(parentTask.time) : null,
+            completedAt: parentTask?.completedAt ? new Date() : null,
+          },
+          ...childTask,
+        ],
+      },
+    })
 
   const { fields, append, remove } = useFieldArray({
     name: 'tasks',
@@ -335,7 +320,7 @@ function TaskDialogContent({
   return (
     <>
       <Head title={parentTask ? `Edit ${parentTask?.title}` : 'Create Task'} />
-      <div className="container-scroll max-h-[400px] space-y-6 overflow-y-scroll p-6">
+      <div className="container-scroll max-h-[400px] scroll-pb-8 space-y-6 overflow-y-scroll p-6">
         <span>
           <CategoryPicker
             value={watch('categoryId')}
@@ -350,105 +335,105 @@ function TaskDialogContent({
         >
           {fields.map((_, index) => (
             <div className={cn('space-y-2', index !== 0 && 'pl-7')} key={index}>
-              <div>
-                <div className="flex items-center">
-                  <div className="w-7">
-                    <Checkbox
-                      value={!!watch(`tasks.${index}.completedAt`)}
-                      setValue={(value) => {
-                        setValue(
-                          `tasks.${index}.completedAt`,
-                          value ? new Date() : null
-                        )
-                      }}
-                    />
-                  </div>
+              <div className="items-top flex space-x-2">
+                <div className="flex size-6 items-center justify-center">
+                  <Checkbox
+                    value={!!watch(`tasks.${index}.completedAt`)}
+                    setValue={(value) => {
+                      setValue(
+                        `tasks.${index}.completedAt`,
+                        value ? new Date() : null
+                      )
+                    }}
+                  />
+                </div>
 
+                <div className="space-y-2">
                   <input
                     {...register(`tasks.${index}.title`)}
+                    autoComplete="off"
                     id={`tasks.${index}.title`}
                     placeholder="task"
                     className="m-0 w-full border-0 p-0 outline-none focus-visible:ring-0"
-                    autoComplete="off"
                     {...(isCreate && {
-                      'data-init-focus': 'true',
+                      autoFocus: true,
                     })}
                     {...(triggerId === _._id && {
-                      'data-init-focus': 'true',
+                      autoFocus: true,
                     })}
                   />
-                </div>
-              </div>
-              <div className="space-y-2 pl-7">
-                <textarea
-                  {...register(`tasks.${index}.details`)}
-                  placeholder="details"
-                  id={`details.${index}.details`}
-                  className="container-scroll w-full resize-none border-0 p-0 text-gray-600 outline-none focus-visible:ring-0"
-                />
-                <div className="flex flex-wrap gap-x-1.5 gap-y-2">
-                  <SchedulePicker
-                    value={{
-                      date: watch(`tasks.${index}.date`),
-                      time: watch(`tasks.${index}.time`),
-                    }}
-                    setValue={({ date, time }) => {
-                      setValue(`tasks.${index}.date`, date)
-                      setValue(`tasks.${index}.time`, time)
-                    }}
+
+                  <textarea
+                    {...register(`tasks.${index}.details`)}
+                    placeholder="details"
+                    id={`details.${index}.details`}
+                    className="container-scroll w-full resize-none border-0 p-0 text-gray-600 outline-none focus-visible:ring-0"
                   />
 
-                  {index === 0 && (
-                    <Badge.Button
-                      onClick={() => {
-                        append({
-                          _id: null,
-                          title: '',
-                          date: null,
-                          time: null,
-                          details: null,
-                          completedAt: null,
-                        })
+                  <div className="flex flex-wrap gap-x-1.5 gap-y-2">
+                    <SchedulePicker
+                      value={{
+                        date: watch(`tasks.${index}.date`),
+                        time: watch(`tasks.${index}.time`),
                       }}
-                    >
-                      <Badge.Icon>
-                        <PlusIcon />
-                      </Badge.Icon>
-                      <Badge.Label>subtask</Badge.Label>
-                    </Badge.Button>
-                  )}
-
-                  {index === 0 && parentTask && (
-                    <Badge.Button
-                      onClick={() => {
-                        removeParentTask(parentTask.id)
-                        handleClose()
+                      setValue={({ date, time }) => {
+                        setValue(`tasks.${index}.date`, date)
+                        setValue(`tasks.${index}.time`, time)
                       }}
-                    >
-                      <Badge.Icon>
-                        <Trash2Icon />
-                      </Badge.Icon>
-                      <Badge.Label>delete</Badge.Label>
-                    </Badge.Button>
-                  )}
+                    />
 
-                  {index !== 0 && (
-                    <Badge.Button
-                      onClick={() => {
-                        const id = getValues(`tasks.${index}._id`)
-                        if (id) {
-                          setRemovedChildTaskIds((prev) => [...prev, id])
-                        }
+                    {index === 0 && (
+                      <Badge.Button
+                        onClick={() => {
+                          append({
+                            _id: null,
+                            title: '',
+                            date: null,
+                            time: null,
+                            details: null,
+                            completedAt: null,
+                          })
+                        }}
+                      >
+                        <Badge.Icon>
+                          <PlusIcon />
+                        </Badge.Icon>
+                        <Badge.Label>subtask</Badge.Label>
+                      </Badge.Button>
+                    )}
 
-                        remove(index)
-                      }}
-                    >
-                      <Badge.Icon>
-                        <Trash2Icon />
-                      </Badge.Icon>
-                      <Badge.Label>delete</Badge.Label>
-                    </Badge.Button>
-                  )}
+                    {index === 0 && parentTask && (
+                      <Badge.Button
+                        onClick={() => {
+                          removeParentTask(parentTask.id)
+                          handleClose()
+                        }}
+                      >
+                        <Badge.Icon>
+                          <Trash2Icon />
+                        </Badge.Icon>
+                        <Badge.Label>delete</Badge.Label>
+                      </Badge.Button>
+                    )}
+
+                    {index !== 0 && (
+                      <Badge.Button
+                        onClick={() => {
+                          const id = getValues(`tasks.${index}._id`)
+                          if (id) {
+                            setRemovedChildTaskIds((prev) => [...prev, id])
+                          }
+
+                          remove(index)
+                        }}
+                      >
+                        <Badge.Icon>
+                          <Trash2Icon />
+                        </Badge.Icon>
+                        <Badge.Label>delete</Badge.Label>
+                      </Badge.Button>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
@@ -484,7 +469,7 @@ function Checkbox({
           setValue(value)
         }
       }}
-      className="size-4 rounded-full text-gray-600 outline-offset-4 hover:text-gray-950"
+      className="size-3.5 rounded-full text-gray-600 outline-offset-4 hover:text-gray-950"
       name="task status"
     >
       {!value && <CircleIcon />}
@@ -512,7 +497,7 @@ function CategoryPicker({
         <Badge.Button className="max-w-[95%] overflow-hidden">
           <Badge.Icon>
             {!currentCategory && (
-              <InboxIcon className="size-full text-gray-600" />
+              <InboxIcon className="size-full text-gray-600" strokeWidth={2} />
             )}
             {currentCategory && (
               <div
