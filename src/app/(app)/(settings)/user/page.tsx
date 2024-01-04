@@ -6,9 +6,17 @@ import { getUserWithAuth } from '@/data/user'
 
 import { Update } from './edit'
 
-const getUserWithAuthData = unstable_cache(async () => {
-  return await getUserWithAuth()
-}, ['user'])
+export const dynamic = 'force-dynamic'
+
+const getUserWithAuthData = unstable_cache(
+  async () => {
+    return await getUserWithAuth()
+  },
+  ['user-with-auth'],
+  {
+    tags: ['user'],
+  }
+)
 
 export default async function Page() {
   const user = await getUserWithAuthData()

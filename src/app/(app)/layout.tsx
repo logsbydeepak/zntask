@@ -55,9 +55,15 @@ export default async function Layout({
   )
 }
 
-const getUserData = unstable_cache(async () => {
-  return await getUser()
-}, ['user'])
+const getUserData = unstable_cache(
+  async () => {
+    return await getUser()
+  },
+  ['user-data'],
+  {
+    tags: ['user'],
+  }
+)
 
 async function InitData({ children }: { children: React.ReactNode }) {
   const initialData = await getInitialData()
