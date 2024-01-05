@@ -497,18 +497,18 @@ function CategoryPicker({
         <Badge.Button className="max-w-[95%] overflow-hidden">
           <Badge.Icon>
             {!currentCategory && (
-              <InboxIcon className="size-full text-gray-600" strokeWidth={2} />
+              <InboxIcon className="text-gray-600" strokeWidth={2} />
             )}
             {currentCategory && (
               <div
                 className={cn(
-                  'size-2.5 rounded-[4.5px]',
+                  'size-2.5 rounded-full',
                   `bg-${getCategoryColor(currentCategory.indicator)}-600`
                 )}
               />
             )}
           </Badge.Icon>
-          <Badge.Label className="w-full overflow-hidden overflow-ellipsis">
+          <Badge.Label className="overflow-hidden overflow-ellipsis">
             {currentCategory ? currentCategory.title : 'Inbox'}
           </Badge.Label>
         </Badge.Button>

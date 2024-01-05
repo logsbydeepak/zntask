@@ -9,7 +9,7 @@ import {
   isYesterday,
 } from 'date-fns'
 import {
-  CalendarCheckIcon,
+  CalendarClockIcon,
   CalendarIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -119,7 +119,7 @@ const SchedulePopover = React.forwardRef<
     >
       <div className="flex flex-col border-b border-gray-200 px-4 pb-4 pt-2.5">
         <div className="flex items-center">
-          <CalendarCheckIcon className="size-3 text-gray-400" />
+          <CalendarClockIcon className="size-4 text-gray-400" />
           <input
             placeholder="today at 9am"
             autoFocus
