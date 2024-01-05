@@ -1,5 +1,6 @@
 'use server'
 
+import { revalidateTag } from 'next/cache'
 import { redirect } from 'next/navigation'
 import bcrypt from 'bcryptjs'
 import { eq } from 'drizzle-orm'
@@ -94,6 +95,7 @@ export const addGoogleAuthProvider = h.auth
       userId,
       email: data.email,
     })
+    revalidateTag('user')
 
     return r('OK')
   })

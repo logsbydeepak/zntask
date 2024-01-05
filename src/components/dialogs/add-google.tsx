@@ -1,5 +1,4 @@
 import React from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -26,37 +25,13 @@ export function AddGoogleDialog() {
   const isAddGoogleAuthOpen = useAppStore((state) => state.dialog.addGoogleAuth)
   const setIsOpen = useAppStore((state) => state.setDialog)
 
-  const requestRef = React.useRef(false)
   const isOpen =
-    isAddGoogleAuthOpen || typeof window === 'undefined'
-      ? false
-      : !!window.localStorage.getItem('googleCode')
+    isAddGoogleAuthOpen || !!window?.localStorage?.getItem('googleCode')
 
   const handleClose = React.useCallback(() => {
     if (isPending) return
     setIsOpen({ addGoogleAuth: false })
   }, [isPending, setIsOpen])
-
-  const handleAddGoogle = React.useCallback(() => {
-    const code = window.localStorage.getItem('googleCode')
-    if (!code) return
-    window.localStorage.removeItem('googleCode')
-    startTransition(async () => {
-      try {
-        requestRef.current = true
-        await addGoogleAuthProvider({ code })
-        toast.success('google auth added')
-        setIsOpen({ addGoogleAuth: false })
-      } catch (error) {
-      } finally {
-        requestRef.current = false
-      }
-    })
-  }, [setIsOpen])
-
-  React.useEffect(() => {
-    handleAddGoogle()
-  }, [handleAddGoogle])
 
   return (
     <Dialog.Root open={isOpen} onOpenChange={handleClose}>
@@ -92,6 +67,23 @@ function Content({
   } = useForm<FormValues>({
     resolver: zodResolver(zSchema),
   })
+
+  const handleAddGoogle = React.useCallback(() => {
+    const code = window.localStorage.getItem('googleCode')
+    if (!code) return
+    window.localStorage.removeItem('googleCode')
+    startTransition(async () => {
+      try {
+        await addGoogleAuthProvider({ code })
+        toast.success('google auth added')
+        handleClose()
+      } catch (error) {}
+    })
+  }, [handleClose, startTransition])
+
+  React.useEffect(() => {
+    handleAddGoogle()
+  }, [handleAddGoogle])
 
   const onSubmit = (values: FormValues) => {
     startTransition(async () => {

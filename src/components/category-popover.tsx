@@ -38,7 +38,7 @@ export const CategoryPopover = React.forwardRef<
       align="center"
       collisionPadding={10}
     >
-      <Command className="w-full">
+      <Command>
         <div className="flex items-center space-x-2 border-b border-gray-200 py-2.5 pl-3.5 pr-2.5">
           <SearchIcon className="size-3 text-gray-500" />
           <Command.Input
@@ -65,12 +65,7 @@ export const CategoryPopover = React.forwardRef<
               }}
             >
               <CategoryItem.Icon>
-                <div
-                  className={cn(
-                    'size-2.5 rounded-full',
-                    `bg-${getCategoryColor(currentCategory.indicator)}-600`
-                  )}
-                />
+                <CategoryItem.Indicator indicator={currentCategory.indicator} />
               </CategoryItem.Icon>
               <CategoryItem.Title>{currentCategory.title}</CategoryItem.Title>
             </CategoryItem.Container>
@@ -90,7 +85,7 @@ export const CategoryPopover = React.forwardRef<
           </CategoryItem.Container>
 
           <span>
-            <Command.Separator className="mx-2 my-2 border-t border-gray-100" />
+            <Command.Separator className="mx-2 my-1.5 border-t border-gray-100" />
           </span>
 
           {categories.map((i) => (
@@ -102,12 +97,7 @@ export const CategoryPopover = React.forwardRef<
               }}
             >
               <CategoryItem.Icon>
-                <div
-                  className={cn(
-                    'size-2.5 rounded-full',
-                    `bg-${getCategoryColor(i.indicator)}-600`
-                  )}
-                />
+                <CategoryItem.Indicator indicator={i.indicator} />
               </CategoryItem.Icon>
               <CategoryItem.Title>{i.title}</CategoryItem.Title>
             </CategoryItem.Container>
@@ -149,8 +139,24 @@ function CategoryItemTitle({ children }: { children: React.ReactNode }) {
   )
 }
 
+function CategoryItemIndicator({
+  indicator,
+}: {
+  indicator: Category['indicator']
+}) {
+  return (
+    <div
+      className={cn(
+        'size-2.5 rounded-full',
+        `bg-${getCategoryColor(indicator)}-600`
+      )}
+    />
+  )
+}
+
 const CategoryItem = {
   Container: CategoryItemContainer,
   Icon: CategoryItemIcon,
   Title: CategoryItemTitle,
+  Indicator: CategoryItemIndicator,
 }
