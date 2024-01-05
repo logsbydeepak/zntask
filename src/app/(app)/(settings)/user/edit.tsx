@@ -1,7 +1,13 @@
 'use client'
 
 import React from 'react'
-import { BookUserIcon, LockIcon, UserCircle2Icon } from 'lucide-react'
+import {
+  BookUserIcon,
+  KeyIcon,
+  LockIcon,
+  MailIcon,
+  UserCircle2Icon,
+} from 'lucide-react'
 
 import { GoogleIcon } from '@/components/icon/google'
 import * as Badge from '@/components/ui/badge'
@@ -39,15 +45,27 @@ export function Update() {
         </Badge.Icon>
         <Badge.Label>Add google</Badge.Label>
       </Badge.Button>
-      <button onClick={() => setDialog({ removeGoogleAuth: true })}>
-        remove google
-      </button>
-      <button onClick={() => setDialog({ updateEmail: true })}>
-        update email
-      </button>
-      <button onClick={() => setDialog({ removePasswordAuth: true })}>
-        remove credential
-      </button>
+
+      <Badge.Button onClick={() => setDialog({ removeGoogleAuth: true })}>
+        <Badge.Icon>
+          <GoogleIcon />
+        </Badge.Icon>
+        <Badge.Label>Remove google</Badge.Label>
+      </Badge.Button>
+
+      <Badge.Button onClick={() => setDialog({ updateEmail: true })}>
+        <Badge.Icon>
+          <MailIcon />
+        </Badge.Icon>
+        <Badge.Label>Update email</Badge.Label>
+      </Badge.Button>
+
+      <Badge.Button onClick={() => setDialog({ removePasswordAuth: true })}>
+        <Badge.Icon>
+          <LockIcon />
+        </Badge.Icon>
+        <Badge.Label>Remove password</Badge.Label>
+      </Badge.Button>
     </div>
   )
 }
