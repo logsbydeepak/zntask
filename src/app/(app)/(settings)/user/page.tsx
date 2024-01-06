@@ -6,9 +6,7 @@ import * as Layout from '@/app/(app)/app-layout'
 import { Head } from '@/components/head'
 import { getUserWithAuth } from '@/data/user'
 
-import { Update } from './edit'
-
-export const dynamic = 'force-dynamic'
+import { EditEmail, EditName, EditPicture, Update } from './edit'
 
 const getUserWithAuthData = unstable_cache(
   async () => {
@@ -48,32 +46,97 @@ async function UserInformation() {
   const user = await getUserWithAuthData()
 
   return (
-    <div className="pb-8">
-      <table className="border-separate border-spacing-x-2 border-spacing-y-2 text-sm">
-        <tbody className="">
-          <tr>
-            <td>Name</td>
-            <td>{`${user.firstName} ${user.lastName}`}</td>
-          </tr>
-          <tr>
-            <td>Email</td>
-            <td>{user.email}</td>
-          </tr>
-          <tr>
-            <td>Picture</td>
-            <td>{user.profilePicture}</td>
-          </tr>
-          <tr>
-            <td>Google</td>
-            <td>{user.auth.google.toString()}</td>
-          </tr>
-          <tr>
-            <td>Credential</td>
-            <td>{user.auth.credential.toString()}</td>
-          </tr>
-        </tbody>
-      </table>
-      <Update />
+    <div className="space-y-8">
+      <Item.Container>
+        <Item.Wrapper>
+          <Item.Key>Picture</Item.Key>
+          <Item.Content>{user.profilePicture}</Item.Content>
+          <Item.Action>
+            <EditPicture />
+          </Item.Action>
+        </Item.Wrapper>
+
+        <Item.Separator />
+
+        <Item.Wrapper>
+          <Item.Key>Name</Item.Key>
+          <Item.Content>{`${user.firstName} ${user.lastName}`}</Item.Content>
+          <Item.Action>
+            <EditName />
+          </Item.Action>
+        </Item.Wrapper>
+
+        <Item.Separator />
+
+        <Item.Wrapper>
+          <Item.Key>Email</Item.Key>
+          <Item.Content>{user.email}</Item.Content>
+          <Item.Action>
+            <EditEmail />
+          </Item.Action>
+        </Item.Wrapper>
+      </Item.Container>
+
+      <Item.Container>
+        <Item.Wrapper>
+          <Item.Key>Google</Item.Key>
+          <Item.Content>{user.auth.google.toString()}</Item.Content>
+          <Item.Action>
+            <EditName />
+          </Item.Action>
+        </Item.Wrapper>
+
+        <Item.Separator />
+
+        <Item.Wrapper>
+          <Item.Key>Password</Item.Key>
+          <Item.Content>{user.auth.credential.toString()}</Item.Content>
+          <Item.Action>
+            <EditName />
+          </Item.Action>
+        </Item.Wrapper>
+      </Item.Container>
     </div>
   )
+}
+
+function ItemContainer({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="flex flex-col rounded-xl border border-gray-100">
+      {children}
+    </div>
+  )
+}
+
+function ItemWrapper({ children }: { children: React.ReactNode }) {
+  return <div className="flex px-4 py-4 text-sm">{children}</div>
+}
+
+function ItemKey({ children }: { children: React.ReactNode }) {
+  return (
+    <p className="flex w-[20%] items-center text-xs font-medium text-gray-500">
+      {children}{' '}
+    </p>
+  )
+}
+
+function ItemContent({ children }: { children: React.ReactNode }) {
+  return <div className="flex w-full items-center">{children}</div>
+}
+
+function ItemAction({ children }: { children: React.ReactNode }) {
+  return <div className="flex w-[40%] items-center justify-end">{children}</div>
+}
+
+function ItemSeparator() {
+  return <div className="border-b border-gray-100" />
+}
+
+const Item = {
+  Key: ItemKey,
+  Content: ItemContent,
+  Action: ItemAction,
+  Container: ItemContainer,
+  Wrapper: ItemWrapper,
+  Separator: ItemSeparator,
 }

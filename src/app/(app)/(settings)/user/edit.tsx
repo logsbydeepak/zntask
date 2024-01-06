@@ -13,6 +13,36 @@ import { GoogleIcon } from '@/components/icon/google'
 import * as Badge from '@/components/ui/badge'
 import { useAppStore } from '@/store/app'
 
+export function EditName() {
+  const setDialog = useAppStore((state) => state.setDialog)
+
+  return (
+    <Badge.Button onClick={() => setDialog({ updateName: true })}>
+      <Badge.Label>Edit</Badge.Label>
+    </Badge.Button>
+  )
+}
+
+export function EditEmail() {
+  const setDialog = useAppStore((state) => state.setDialog)
+
+  return (
+    <Badge.Button onClick={() => setDialog({ updateEmail: true })}>
+      <Badge.Label>Edit</Badge.Label>
+    </Badge.Button>
+  )
+}
+
+export function EditPicture() {
+  const setDialog = useAppStore((state) => state.setDialog)
+
+  return (
+    <Badge.Button onClick={() => setDialog({ updateProfilePicture: true })}>
+      <Badge.Label>Edit</Badge.Label>
+    </Badge.Button>
+  )
+}
+
 export function Update() {
   const setDialog = useAppStore((state) => state.setDialog)
 
@@ -23,20 +53,6 @@ export function Update() {
           <LockIcon />
         </Badge.Icon>
         <Badge.Label>Reset Password</Badge.Label>
-      </Badge.Button>
-
-      <Badge.Button onClick={() => setDialog({ updateName: true })}>
-        <Badge.Icon>
-          <BookUserIcon />
-        </Badge.Icon>
-        <Badge.Label>Update Name</Badge.Label>
-      </Badge.Button>
-
-      <Badge.Button onClick={() => setDialog({ updateProfilePicture: true })}>
-        <Badge.Icon>
-          <UserCircle2Icon />
-        </Badge.Icon>
-        <Badge.Label>Update profile picture</Badge.Label>
       </Badge.Button>
 
       <Badge.Button onClick={() => setDialog({ addGoogleAuth: true })}>
@@ -51,13 +67,6 @@ export function Update() {
           <GoogleIcon />
         </Badge.Icon>
         <Badge.Label>Remove google</Badge.Label>
-      </Badge.Button>
-
-      <Badge.Button onClick={() => setDialog({ updateEmail: true })}>
-        <Badge.Icon>
-          <MailIcon />
-        </Badge.Icon>
-        <Badge.Label>Update email</Badge.Label>
       </Badge.Button>
 
       <Badge.Button onClick={() => setDialog({ removePasswordAuth: true })}>
