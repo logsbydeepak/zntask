@@ -1,8 +1,10 @@
 import { Suspense } from 'react'
 import { unstable_cache } from 'next/cache'
+import Image from 'next/image'
 import { Loader2Icon, LoaderIcon } from 'lucide-react'
 
 import * as Layout from '@/app/(app)/app-layout'
+import { genInitials } from '@/components/avatar'
 import { Head } from '@/components/head'
 import { getUserWithAuth } from '@/data/user'
 
@@ -50,7 +52,13 @@ async function UserInformation() {
       <Item.Container>
         <Item.Wrapper>
           <Item.Key>Picture</Item.Key>
-          <Item.Content>{user.profilePicture}</Item.Content>
+          <Item.Content>
+            <Picture
+              profilePicture={user.profilePicture}
+              firstName={user.firstName}
+              lastName={user.lastName}
+            />
+          </Item.Content>
           <Item.Action>
             <EditPicture />
           </Item.Action>
@@ -100,6 +108,39 @@ async function UserInformation() {
   )
 }
 
+function Picture({
+  profilePicture,
+  firstName,
+  lastName,
+}: {
+  profilePicture: string | null
+  firstName: string
+  lastName?: string | null
+}) {
+  const initials = genInitials(firstName, lastName)
+
+  return (
+    <div className="flex size-24 items-center justify-center rounded-full border border-gray-100 bg-gray-50">
+      {profilePicture && (
+        <Image
+          src={profilePicture}
+          width={96}
+          height={96}
+          quality={100}
+          alt="avatar"
+          className="size-full rounded-full object-cover"
+        />
+      )}
+
+      {!profilePicture && (
+        <p className="text-4xl font-medium tracking-wider text-gray-600">
+          {initials}
+        </p>
+      )}
+    </div>
+  )
+}
+
 function ItemContainer({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex flex-col rounded-xl border border-gray-100">
@@ -114,7 +155,7 @@ function ItemWrapper({ children }: { children: React.ReactNode }) {
 
 function ItemKey({ children }: { children: React.ReactNode }) {
   return (
-    <p className="flex w-[20%] items-center text-xs font-medium text-gray-500">
+    <p className="flex w-[30%] items-center text-xs font-medium text-gray-500">
       {children}{' '}
     </p>
   )
@@ -125,7 +166,7 @@ function ItemContent({ children }: { children: React.ReactNode }) {
 }
 
 function ItemAction({ children }: { children: React.ReactNode }) {
-  return <div className="flex w-[40%] items-center justify-end">{children}</div>
+  return <div className="flex w-[20%] items-center justify-end">{children}</div>
 }
 
 function ItemSeparator() {
