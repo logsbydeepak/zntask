@@ -43,38 +43,42 @@ export function EditPicture() {
   )
 }
 
-export function Update() {
+export function AddGoogleAuth() {
   const setDialog = useAppStore((state) => state.setDialog)
 
   return (
-    <div className="flex flex-row flex-wrap gap-2">
-      <Badge.Button onClick={() => setDialog({ resetPassword: true })}>
-        <Badge.Icon>
-          <LockIcon />
-        </Badge.Icon>
-        <Badge.Label>Reset Password</Badge.Label>
-      </Badge.Button>
+    <Badge.Button onClick={() => setDialog({ addGoogleAuth: true })}>
+      <Badge.Label>Add</Badge.Label>
+    </Badge.Button>
+  )
+}
 
-      <Badge.Button onClick={() => setDialog({ addGoogleAuth: true })}>
-        <Badge.Icon>
-          <GoogleIcon />
-        </Badge.Icon>
-        <Badge.Label>Add google</Badge.Label>
-      </Badge.Button>
+export function RemoveGoogleAuth() {
+  const setDialog = useAppStore((state) => state.setDialog)
 
-      <Badge.Button onClick={() => setDialog({ removeGoogleAuth: true })}>
-        <Badge.Icon>
-          <GoogleIcon />
-        </Badge.Icon>
-        <Badge.Label>Remove google</Badge.Label>
-      </Badge.Button>
+  return (
+    <Badge.Button onClick={() => setDialog({ removeGoogleAuth: true })}>
+      <Badge.Label>Remove</Badge.Label>
+    </Badge.Button>
+  )
+}
 
-      <Badge.Button onClick={() => setDialog({ removePasswordAuth: true })}>
-        <Badge.Icon>
-          <LockIcon />
-        </Badge.Icon>
-        <Badge.Label>Remove password</Badge.Label>
-      </Badge.Button>
-    </div>
+export function ResetPassword() {
+  const setDialog = useAppStore((state) => state.setDialog)
+
+  return (
+    <Badge.Button onClick={() => setDialog({ resetPassword: true })}>
+      <Badge.Label>Reset</Badge.Label>
+    </Badge.Button>
+  )
+}
+
+export function RemovePasswordAuth() {
+  const setDialog = useAppStore((state) => state.setDialog)
+
+  return (
+    <Badge.Button onClick={() => setDialog({ removePasswordAuth: true })}>
+      <Badge.Label>Remove</Badge.Label>
+    </Badge.Button>
   )
 }

@@ -1,14 +1,22 @@
 import { Suspense } from 'react'
 import { unstable_cache } from 'next/cache'
 import Image from 'next/image'
-import { Loader2Icon, LoaderIcon } from 'lucide-react'
+import { LoaderIcon } from 'lucide-react'
 
 import * as Layout from '@/app/(app)/app-layout'
 import { genInitials } from '@/components/avatar'
 import { Head } from '@/components/head'
 import { getUserWithAuth } from '@/data/user'
 
-import { EditEmail, EditName, EditPicture, Update } from './edit'
+import {
+  AddGoogleAuth,
+  EditEmail,
+  EditName,
+  EditPicture,
+  RemoveGoogleAuth,
+  RemovePasswordAuth,
+  ResetPassword,
+} from './edit'
 
 const getUserWithAuthData = unstable_cache(
   async () => {
@@ -51,7 +59,7 @@ async function UserInformation() {
     <div className="space-y-8">
       <Item.Container>
         <Item.Wrapper>
-          <Item.Key>Picture</Item.Key>
+          <Item.Key>PICTURE</Item.Key>
           <Item.Content>
             <Picture
               profilePicture={user.profilePicture}
@@ -67,7 +75,7 @@ async function UserInformation() {
         <Item.Separator />
 
         <Item.Wrapper>
-          <Item.Key>Name</Item.Key>
+          <Item.Key>NAME</Item.Key>
           <Item.Content>{`${user.firstName} ${user.lastName}`}</Item.Content>
           <Item.Action>
             <EditName />
@@ -77,7 +85,7 @@ async function UserInformation() {
         <Item.Separator />
 
         <Item.Wrapper>
-          <Item.Key>Email</Item.Key>
+          <Item.Key>EMAIL</Item.Key>
           <Item.Content>{user.email}</Item.Content>
           <Item.Action>
             <EditEmail />
@@ -87,20 +95,21 @@ async function UserInformation() {
 
       <Item.Container>
         <Item.Wrapper>
-          <Item.Key>Google</Item.Key>
+          <Item.Key>GOOGLE</Item.Key>
           <Item.Content>{user.auth.google.toString()}</Item.Content>
           <Item.Action>
-            <EditName />
+            {user.auth.google ? <RemoveGoogleAuth /> : <AddGoogleAuth />}
           </Item.Action>
         </Item.Wrapper>
 
         <Item.Separator />
 
         <Item.Wrapper>
-          <Item.Key>Password</Item.Key>
+          <Item.Key>PASSWORD</Item.Key>
           <Item.Content>{user.auth.credential.toString()}</Item.Content>
           <Item.Action>
-            <EditName />
+            {user.auth.credential && <RemovePasswordAuth />}
+            <ResetPassword />
           </Item.Action>
         </Item.Wrapper>
       </Item.Container>
@@ -155,7 +164,7 @@ function ItemWrapper({ children }: { children: React.ReactNode }) {
 
 function ItemKey({ children }: { children: React.ReactNode }) {
   return (
-    <p className="flex w-[30%] items-center text-xs font-medium text-gray-500">
+    <p className="flex w-[30%] items-start text-xs font-medium text-gray-600">
       {children}{' '}
     </p>
   )
@@ -166,7 +175,11 @@ function ItemContent({ children }: { children: React.ReactNode }) {
 }
 
 function ItemAction({ children }: { children: React.ReactNode }) {
-  return <div className="flex w-[20%] items-center justify-end">{children}</div>
+  return (
+    <div className="flex w-[20%] flex-col items-center justify-start space-y-2">
+      {children}
+    </div>
+  )
 }
 
 function ItemSeparator() {
