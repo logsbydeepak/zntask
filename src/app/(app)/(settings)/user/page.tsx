@@ -1,7 +1,7 @@
 import { Suspense } from 'react'
 import { unstable_cache } from 'next/cache'
 import Image from 'next/image'
-import { LoaderIcon } from 'lucide-react'
+import { CheckIcon, LoaderIcon, XIcon } from 'lucide-react'
 
 import * as Layout from '@/app/(app)/app-layout'
 import { genInitials } from '@/components/avatar'
@@ -96,7 +96,9 @@ async function UserInformation() {
       <Item.Container>
         <Item.Wrapper>
           <Item.Key>GOOGLE</Item.Key>
-          <Item.Content>{user.auth.google.toString()}</Item.Content>
+          <Item.Content>
+            {user.auth.google ? <Check /> : <Cross />}
+          </Item.Content>
           <Item.Action>
             {user.auth.google ? <RemoveGoogleAuth /> : <AddGoogleAuth />}
           </Item.Action>
@@ -106,11 +108,16 @@ async function UserInformation() {
 
         <Item.Wrapper>
           <Item.Key>PASSWORD</Item.Key>
-          <Item.Content>{user.auth.credential.toString()}</Item.Content>
+          <Item.Content>
+            {user.auth.credential ? <Check /> : <Cross />}
+          </Item.Content>
           <Item.Action>
             {user.auth.credential && <RemovePasswordAuth />}
-            <ResetPassword />
           </Item.Action>
+        </Item.Wrapper>
+        <Item.Separator />
+        <Item.Wrapper>
+          <ResetPassword />
         </Item.Wrapper>
       </Item.Container>
     </div>
@@ -165,7 +172,7 @@ function ItemWrapper({ children }: { children: React.ReactNode }) {
 function ItemKey({ children }: { children: React.ReactNode }) {
   return (
     <p className="flex w-[30%] items-start text-xs font-medium text-gray-600">
-      {children}{' '}
+      {children}
     </p>
   )
 }
@@ -193,4 +200,28 @@ const Item = {
   Container: ItemContainer,
   Wrapper: ItemWrapper,
   Separator: ItemSeparator,
+}
+
+function Check() {
+  return (
+    <IconContainer>
+      <CheckIcon />
+    </IconContainer>
+  )
+}
+
+function Cross() {
+  return (
+    <IconContainer>
+      <XIcon />
+    </IconContainer>
+  )
+}
+
+function IconContainer({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="flex size-8 items-center justify-center rounded-full border border-gray-100 bg-gray-50">
+      <span className="size-4">{children}</span>
+    </div>
+  )
 }

@@ -1,15 +1,8 @@
 'use client'
 
 import React from 'react'
-import {
-  BookUserIcon,
-  KeyIcon,
-  LockIcon,
-  MailIcon,
-  UserCircle2Icon,
-} from 'lucide-react'
+import { KeyIcon } from 'lucide-react'
 
-import { GoogleIcon } from '@/components/icon/google'
 import * as Badge from '@/components/ui/badge'
 import { useAppStore } from '@/store/app'
 
@@ -68,7 +61,10 @@ export function ResetPassword() {
 
   return (
     <Badge.Button onClick={() => setDialog({ resetPassword: true })}>
-      <Badge.Label>Reset</Badge.Label>
+      <Badge.Icon>
+        <KeyIcon />
+      </Badge.Icon>
+      <Badge.Label>Reset Password</Badge.Label>
     </Badge.Button>
   )
 }
