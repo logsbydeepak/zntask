@@ -92,14 +92,14 @@ function Content({
 
   return (
     <>
-      <Head title="Remove google auth" />
+      <Head title="Remove Google" />
       <Form.Root onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         <div>
           <Dialog.Title className="text text-lg font-medium">
-            Remove Google auth provider
+            Remove Google
           </Dialog.Title>
           <Dialog.Description className="text-xs text-gray-500">
-            Enter your password to add remove auth provider
+            Enter your password to add remove google auth
           </Dialog.Description>
         </div>
         <div>

@@ -7,10 +7,7 @@ import { PasswordVisibilityToggle } from '@/app/(auth)/components'
 import { Button } from '@/components/ui/button'
 import * as Dialog from '@/components/ui/dialog'
 import * as Form from '@/components/ui/form'
-import {
-  removeCredentialAuthProvider,
-  removeGoogleAuthProvider,
-} from '@/data/auth'
+import { removeCredentialAuthProvider } from '@/data/auth'
 import { useAppStore } from '@/store/app'
 import { toast } from '@/store/toast'
 import { zPassword } from '@/utils/zSchema'
@@ -95,14 +92,14 @@ function Content({
 
   return (
     <>
-      <Head title="Remove credential auth" />
+      <Head title="Remove Password" />
       <Form.Root onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         <div>
           <Dialog.Title className="text text-lg font-medium">
-            Remove credential auth provider
+            Remove Password
           </Dialog.Title>
           <Dialog.Description className="text-xs text-gray-500">
-            Enter your password to add remove credential auth provider
+            Enter your password to add remove password auth
           </Dialog.Description>
         </div>
         <div>

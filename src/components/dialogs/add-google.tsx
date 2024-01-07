@@ -108,14 +108,14 @@ function Content({
 
   return (
     <>
-      <Head title="Add google auth" />
+      <Head title="Add Google" />
       <Form.Root onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         <div>
           <Dialog.Title className="text text-lg font-medium">
-            Add Google auth provider
+            Add Google
           </Dialog.Title>
           <Dialog.Description className="text-xs text-gray-500">
-            Enter your password to add google auth provider
+            Enter your password to add google auth
           </Dialog.Description>
         </div>
         <div>
