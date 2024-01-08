@@ -166,24 +166,28 @@ function ItemContainer({ children }: { children: React.ReactNode }) {
 }
 
 function ItemWrapper({ children }: { children: React.ReactNode }) {
-  return <div className="flex px-4 py-4 text-sm">{children}</div>
+  return (
+    <div className="flex flex-wrap gap-8 p-4 text-sm sm:flex-nowrap">
+      {children}
+    </div>
+  )
 }
 
 function ItemKey({ children }: { children: React.ReactNode }) {
   return (
-    <p className="flex w-[30%] items-start text-xs font-medium text-gray-600">
+    <p className="w-full text-xs font-medium text-gray-600 sm:inline-block sm:w-20">
       {children}
     </p>
   )
 }
 
 function ItemContent({ children }: { children: React.ReactNode }) {
-  return <div className="flex w-full items-center">{children}</div>
+  return <div className="truncate">{children}</div>
 }
 
 function ItemAction({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex w-[20%] flex-col items-center justify-start space-y-2">
+    <div className="ml-auto flex items-center justify-center sm:inline-block">
       {children}
     </div>
   )
