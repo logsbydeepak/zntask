@@ -100,14 +100,10 @@ function QuickSection() {
       {item.map((i) => (
         <Item.Root key={i.label} isActive={i.isActive}>
           <Item.Content.Link href={i.href}>
-            <LabelContainer>
-              <Item.Label.Icon>
-                <div className="size-4 text-gray-600 group-data-[active=true]:text-orange-600">
-                  {i.icon}
-                </div>
-              </Item.Label.Icon>
-              <Item.Label.Content>{i.label}</Item.Label.Content>
-            </LabelContainer>
+            <Item.Label.Icon className="text-gray-600 group-data-[active=true]:text-orange-600">
+              {i.icon}
+            </Item.Label.Icon>
+            <Item.Label.Content>{i.label}</Item.Label.Content>
           </Item.Content.Link>
         </Item.Root>
       ))}
@@ -229,28 +225,20 @@ function CategoryItem({
           <ContextMenuTrigger asChild>
             <Item.Content.Link
               href={href}
-              className="justify-between data-[state=open]:border-gray-200 data-[state=open]:bg-gray-50"
+              className="data-[state=open]:border-gray-200 data-[state=open]:bg-gray-50"
             >
-              <Item.Label.Container>
-                <Item.Label.Icon>
-                  <div
-                    className={cn(
-                      'size-2.5 rounded-full',
-                      `bg-${getCategoryColor(category.indicator)}-600`
-                    )}
-                  />
-                </Item.Label.Icon>
-                <Item.Label.Content>{category.title}</Item.Label.Content>
-              </Item.Label.Container>
-              <span className="flex items-center space-x-0.5">
-                <DropdownMenuTrigger asChild>
-                  <button className="flex size-6 items-center justify-center text-gray-400 hover:text-gray-800 data-[state=open]:text-gray-800">
-                    <span className="inline-block h-4 w-4">
-                      <MoreVerticalIcon />
-                    </span>
-                  </button>
-                </DropdownMenuTrigger>
-              </span>
+              <Item.Label.Icon>
+                <span
+                  className={cn(
+                    'size-2.5 rounded-full',
+                    `bg-${getCategoryColor(category.indicator)}-600`
+                  )}
+                />
+              </Item.Label.Icon>
+              <Item.Label.Content>{category.title}</Item.Label.Content>
+              <DropdownMenuTrigger className="ml-auto flex size-6 flex-shrink-0 items-center justify-center text-gray-400 hover:text-gray-800 data-[state=open]:text-gray-800">
+                <MoreVerticalIcon className="size-4" />
+              </DropdownMenuTrigger>
             </Item.Content.Link>
           </ContextMenuTrigger>
           <ContextMenuPortal>
@@ -334,18 +322,16 @@ function ShowMore({
   return (
     <Item.Root>
       <Item.Content.Button onClick={onClick}>
-        <Item.Label.Container>
-          <Item.Label.Icon>
-            {isOpen ? (
-              <ChevronUpIcon className="size-4" />
-            ) : (
-              <ChevronDownIcon className="size-4" />
-            )}
-          </Item.Label.Icon>
-          <Item.Label.Content>
-            {isOpen ? 'Show less' : `Show ${number} more`}
-          </Item.Label.Content>
-        </Item.Label.Container>
+        <Item.Label.Icon>
+          {isOpen ? (
+            <ChevronUpIcon className="size-4" />
+          ) : (
+            <ChevronDownIcon className="size-4" />
+          )}
+        </Item.Label.Icon>
+        <Item.Label.Content>
+          {isOpen ? 'Show less' : `Show ${number} more`}
+        </Item.Label.Content>
       </Item.Content.Button>
     </Item.Root>
   )
@@ -359,12 +345,6 @@ function ItemContainer({ children }: { children: React.ReactNode }) {
   return <div className="space-y-1.5">{children}</div>
 }
 
-function ItemIndicator() {
-  return (
-    <span className="mr-1 h-5 w-1 rounded-br-md rounded-tr-md bg-white group-data-[active=true]:bg-orange-600" />
-  )
-}
-
 function ItemRoot({
   children,
   isActive = false,
@@ -373,14 +353,14 @@ function ItemRoot({
   isActive?: boolean
 }) {
   return (
-    <div className="group flex items-center" data-active={isActive}>
-      <ItemIndicator />
-      <div className="w-full">{children}</div>
+    <div className="group flex h-9 items-center" data-active={isActive}>
+      <span className="mr-1 h-5 w-1 rounded-br-md rounded-tr-md bg-white group-data-[active=true]:bg-orange-600" />
+      {children}
     </div>
   )
 }
 
-const itemContentStyle = tw`flex h-9 w-full items-center rounded-lg border border-transparent px-2 hover:border-gray-200 hover:bg-gray-50 group-data-[active=true]:border-gray-200 group-data-[active=true]:bg-gray-50`
+const itemContentStyle = tw`flex size-full items-center gap-3 overflow-hidden rounded-lg border border-transparent px-2 hover:border-gray-200 hover:bg-gray-50 group-data-[active=true]:border-gray-200 group-data-[active=true]:bg-gray-50`
 
 const ItemContentLink = React.forwardRef<
   React.ElementRef<typeof Link>,
@@ -424,17 +404,19 @@ function LabelContent({ children }: React.ComponentProps<'span'>) {
   )
 }
 
-function LabelIcon({ className, children }: React.ComponentProps<'span'>) {
+function LabelIcon({
+  children,
+  className,
+  ...props
+}: React.ComponentProps<'span'>) {
   return (
-    <div className={cn('flex size-4 items-center justify-center', className)}>
-      {children}
-    </div>
-  )
-}
-
-function LabelContainer({ children }: React.ComponentProps<'span'>) {
-  return (
-    <span className="flex items-center space-x-3 overflow-hidden pr-3">
+    <span
+      {...props}
+      className={cn(
+        'flex size-4 flex-shrink-0 items-center justify-center',
+        className
+      )}
+    >
       {children}
     </span>
   )
@@ -447,7 +429,6 @@ const Item = {
     Button: ItemContentButton,
   },
   Label: {
-    Container: LabelContainer,
     Content: LabelContent,
     Icon: LabelIcon,
   },
