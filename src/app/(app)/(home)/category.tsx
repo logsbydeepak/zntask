@@ -127,9 +127,7 @@ export const CategoryItem = React.forwardRef<
                   )}
                 />
               </div>
-              <p className="overflow-hidden text-ellipsis text-sm">
-                {category.title}
-              </p>
+              <p className="truncate text-sm">{category.title}</p>
             </div>
             <div className="flex items-center space-x-1">
               <DropdownMenuTrigger asChild>

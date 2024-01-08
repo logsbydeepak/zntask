@@ -179,10 +179,8 @@ function UserMenu() {
   return (
     <>
       <div className="px-2 py-2 text-xs font-medium">
-        <p className="overflow-hidden text-ellipsis text-sm">{`${firstName} ${lastName}`}</p>
-        <p className="overflow-hidden text-ellipsis text-xs font-normal text-gray-600">
-          {email}
-        </p>
+        <p className="truncate text-sm">{`${firstName} ${lastName}`}</p>
+        <p className="truncate text-xs font-normal text-gray-600">{email}</p>
       </div>
 
       <DropdownMenuItem onSelect={() => router.push('/user')}>

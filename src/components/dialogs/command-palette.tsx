@@ -416,7 +416,7 @@ function CommandItemIcon({ children }: { children: React.ReactNode }) {
 
 function CommandItemTitle({ children }: { children: React.ReactNode }) {
   return (
-    <p className="overflow-hidden overflow-ellipsis text-sm font-normal text-gray-600 group-data-[selected=true]/item:text-gray-950">
+    <p className="truncate text-sm font-normal text-gray-600 group-data-[selected=true]/item:text-gray-950">
       {children}
     </p>
   )

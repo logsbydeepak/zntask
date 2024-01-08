@@ -101,8 +101,10 @@ function QuickSection() {
         <Item.Root key={i.label} isActive={i.isActive}>
           <Item.Content.Link href={i.href}>
             <LabelContainer>
-              <Item.Label.Icon className="text-gray-600 group-data-[active=true]:text-orange-600">
-                {i.icon}
+              <Item.Label.Icon>
+                <div className="size-4 text-gray-600 group-data-[active=true]:text-orange-600">
+                  {i.icon}
+                </div>
               </Item.Label.Icon>
               <Item.Label.Content>{i.label}</Item.Label.Content>
             </LabelContainer>
@@ -416,7 +418,7 @@ function ItemContentButton({
 
 function LabelContent({ children }: React.ComponentProps<'span'>) {
   return (
-    <span className="inline-block overflow-hidden text-ellipsis whitespace-nowrap text-sm text-gray-600 data-[active=true]:font-medium group-data-[active=true]:text-gray-900">
+    <span className="truncate text-sm text-gray-600 data-[active=true]:font-medium group-data-[active=true]:text-gray-900">
       {children}
     </span>
   )
@@ -424,9 +426,9 @@ function LabelContent({ children }: React.ComponentProps<'span'>) {
 
 function LabelIcon({ className, children }: React.ComponentProps<'span'>) {
   return (
-    <span className={cn('flex size-4 items-center justify-center', className)}>
+    <div className={cn('flex size-4 items-center justify-center', className)}>
       {children}
-    </span>
+    </div>
   )
 }
 

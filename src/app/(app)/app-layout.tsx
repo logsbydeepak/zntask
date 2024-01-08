@@ -8,9 +8,7 @@ import { cn } from '@/utils/style'
 
 export function Title({ children }: { children: React.ReactNode }) {
   return (
-    <h1 className="max-w-[90%] overflow-hidden overflow-ellipsis text-lg font-medium">
-      {children}
-    </h1>
+    <h1 className="max-w-[90%] truncate text-lg font-medium">{children}</h1>
   )
 }
 

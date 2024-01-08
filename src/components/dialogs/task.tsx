@@ -508,7 +508,7 @@ function CategoryPicker({
               />
             )}
           </Badge.Icon>
-          <Badge.Label className="overflow-hidden overflow-ellipsis">
+          <Badge.Label className="truncate">
             {currentCategory ? currentCategory.title : 'Inbox'}
           </Badge.Label>
         </Badge.Button>

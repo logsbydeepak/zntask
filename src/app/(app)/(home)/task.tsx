@@ -340,9 +340,7 @@ const TaskItem = React.forwardRef<
                     setValue={handleOnTaskCheckboxClick}
                   />
                 </div>
-                <p className="w-full overflow-hidden text-ellipsis text-left">
-                  {task.title}
-                </p>
+                <p className="w-full truncate text-left">{task.title}</p>
               </div>
 
               <div>
@@ -364,7 +362,7 @@ const TaskItem = React.forwardRef<
               <div className="ml-[26px] space-y-2">
                 {task.details && (
                   <p
-                    className="overflow-hidden text-ellipsis text-xs text-gray-600"
+                    className="truncate text-xs text-gray-600"
                     onClick={handleOnTaskClick}
                   >
                     {task.details?.split('\n').map((i, index) => (

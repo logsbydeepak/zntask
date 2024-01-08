@@ -97,9 +97,7 @@ function CategoryDialogContent({
     <>
       <Head title={title} />
       <div>
-        <Dialog.Title className="w-[95%] overflow-hidden text-ellipsis whitespace-nowrap">
-          {title}
-        </Dialog.Title>
+        <Dialog.Title className="w-[95%] truncate">{title}</Dialog.Title>
         <Dialog.Description>
           Add a new category to your list.
         </Dialog.Description>

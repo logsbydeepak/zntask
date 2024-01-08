@@ -133,7 +133,7 @@ function CategoryItemIcon({ children }: { children: React.ReactNode }) {
 
 function CategoryItemTitle({ children }: { children: React.ReactNode }) {
   return (
-    <p className="overflow-hidden overflow-ellipsis text-sm text-gray-600 group-data-[selected=true]/item:text-gray-950">
+    <p className="truncate text-sm text-gray-600 group-data-[selected=true]/item:text-gray-950">
       {children}
     </p>
   )
