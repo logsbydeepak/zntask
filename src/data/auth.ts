@@ -51,7 +51,7 @@ export const redirectGoogleAddNew = h.auth
   .fn(async ({ input, userId }) => {
     const user = await db.query.users.findFirst({
       with: {
-        credentialAuth: true,
+        passwordAuth: true,
         googleAuth: true,
       },
       where(fields, operators) {
@@ -60,12 +60,12 @@ export const redirectGoogleAddNew = h.auth
     })
 
     if (!user) throw new UnauthorizedError()
-    if (!user.credentialAuth) return r('INVALID_CREDENTIALS')
+    if (!user.passwordAuth) return r('INVALID_CREDENTIALS')
     if (user.googleAuth) return r('ALREADY_ADDED')
 
     const password = await bcrypt.compare(
       input.password,
-      user.credentialAuth.password
+      user.passwordAuth.password
     )
     if (!password) return r('INVALID_CREDENTIALS')
 
@@ -105,7 +105,7 @@ export const removeGoogleAuthProvider = h.auth
   .fn(async ({ userId, input }) => {
     const user = await db.query.users.findFirst({
       with: {
-        credentialAuth: true,
+        passwordAuth: true,
         googleAuth: true,
       },
       where(fields, operators) {
@@ -113,12 +113,12 @@ export const removeGoogleAuthProvider = h.auth
       },
     })
     if (!user) throw new UnauthorizedError()
-    if (!user.credentialAuth) return r('INVALID_CREDENTIALS')
+    if (!user.passwordAuth) return r('INVALID_CREDENTIALS')
     if (!user.googleAuth) return r('NOT_ADDED')
 
     const password = await bcrypt.compare(
       input.password,
-      user.credentialAuth.password
+      user.passwordAuth.password
     )
     if (!password) return r('INVALID_CREDENTIALS')
 
@@ -134,7 +134,7 @@ export const removeCredentialAuthProvider = h.auth
   .fn(async ({ userId, input }) => {
     const user = await db.query.users.findFirst({
       with: {
-        credentialAuth: true,
+        passwordAuth: true,
         googleAuth: true,
       },
       where(fields, operators) {
@@ -142,18 +142,18 @@ export const removeCredentialAuthProvider = h.auth
       },
     })
     if (!user) throw new UnauthorizedError()
-    if (!user.credentialAuth) return r('INVALID_CREDENTIALS')
+    if (!user.passwordAuth) return r('INVALID_CREDENTIALS')
     if (!user.googleAuth) return r('NOT_ADDED')
 
     const password = await bcrypt.compare(
       input.password,
-      user.credentialAuth.password
+      user.passwordAuth.password
     )
     if (!password) return r('INVALID_CREDENTIALS')
 
     await db
-      .delete(dbSchema.credentialAuth)
-      .where(eq(dbSchema.credentialAuth.id, userId))
+      .delete(dbSchema.passwordAuth)
+      .where(eq(dbSchema.passwordAuth.id, userId))
 
     return r('OK')
   })
@@ -214,7 +214,7 @@ export const loginWithCredentials = h
   .fn(async ({ input }) => {
     const user = await db.query.users.findFirst({
       with: {
-        credentialAuth: true,
+        passwordAuth: true,
         googleAuth: true,
       },
       where(fields, operators) {
@@ -223,11 +223,11 @@ export const loginWithCredentials = h
     })
 
     if (!user) return r('INVALID_CREDENTIALS')
-    if (!user.credentialAuth) return r('INVALID_CREDENTIALS')
+    if (!user.passwordAuth) return r('INVALID_CREDENTIALS')
 
     const password = await bcrypt.compare(
       input.password,
-      user.credentialAuth.password
+      user.passwordAuth.password
     )
     if (!password) return r('INVALID_CREDENTIALS')
 
@@ -255,7 +255,7 @@ export const registerWithCredentials = h
       lastName: input.lastName,
       email: input.email,
     })
-    await db.insert(dbSchema.credentialAuth).values({
+    await db.insert(dbSchema.passwordAuth).values({
       id: ulid(),
       userId: id,
       password: password,
@@ -329,25 +329,25 @@ export const addPassword = h.input(zSchema).fn(async function ({ input }) {
       return operators.eq(fields.id, userId)
     },
     with: {
-      credentialAuth: true,
+      passwordAuth: true,
     },
   })
   if (!user) return r('INVALID_TOKEN')
 
   const password = await bcrypt.hash(input.password, 10)
-  if (!user.credentialAuth) {
-    await db.insert(dbSchema.credentialAuth).values({
+  if (!user.passwordAuth) {
+    await db.insert(dbSchema.passwordAuth).values({
       id: ulid(),
       userId: user.id,
       password,
     })
   } else {
     await db
-      .update(dbSchema.credentialAuth)
+      .update(dbSchema.passwordAuth)
       .set({
         password,
       })
-      .where(eq(dbSchema.credentialAuth.id, user.id))
+      .where(eq(dbSchema.passwordAuth.id, user.id))
   }
 
   return r('OK')

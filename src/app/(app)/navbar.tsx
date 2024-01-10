@@ -66,7 +66,7 @@ export function Navbar() {
             <span className="inline-block sm:hidden">
               <Tooltip.Root>
                 <Tooltip.Trigger asChild>
-                  <Icon onClick={() => setDialog({ createCategory: true })}>
+                  <Icon onClick={() => setDialog({ commandPalette: true })}>
                     <SearchIcon />
                   </Icon>
                 </Tooltip.Trigger>
@@ -267,7 +267,7 @@ function Avatar() {
   const initials = genInitials(firstName, lastName)
 
   return (
-    <div className="flex size-full items-center justify-center rounded-full border border-gray-100 bg-gray-50">
+    <div className="flex size-full items-center justify-center rounded-full border border-gray-200 bg-gray-50">
       {profilePicture && (
         <Image
           src={profilePicture}

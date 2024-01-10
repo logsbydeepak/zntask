@@ -48,7 +48,7 @@ export const getUser = h.auth.fn(async ({ userId }) => {
 export const getUserWithAuth = h.auth.fn(async ({ userId }) => {
   const user = await db.query.users.findFirst({
     with: {
-      credentialAuth: true,
+      passwordAuth: true,
       googleAuth: true,
     },
     where(fields, operators) {
@@ -62,7 +62,7 @@ export const getUserWithAuth = h.auth.fn(async ({ userId }) => {
     google: false,
   }
 
-  if (user.credentialAuth) auth.credential = true
+  if (user.passwordAuth) auth.credential = true
   if (user.googleAuth) auth.google = true
   if (!auth.credential && !auth.google)
     throw new Error('User has no auth methods!')
@@ -132,18 +132,18 @@ export const updateEmail = h.auth
   .fn(async ({ userId, input }) => {
     const user = await db.query.users.findFirst({
       with: {
-        credentialAuth: true,
+        passwordAuth: true,
       },
       where(fields, operators) {
         return operators.eq(fields.id, userId)
       },
     })
     if (!user) throw new UnauthorizedError()
-    if (!user.credentialAuth) return r('INVALID_CREDENTIALS')
+    if (!user.passwordAuth) return r('INVALID_CREDENTIALS')
 
     const password = await bcrypt.compare(
       input.password,
-      user.credentialAuth.password
+      user.passwordAuth.password
     )
     if (!password) return r('INVALID_CREDENTIALS')
 

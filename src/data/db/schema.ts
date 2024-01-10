@@ -42,8 +42,8 @@ export const users = mysqlTable(
   }
 )
 
-export const credentialAuth = mysqlTable(
-  'credential_auth',
+export const passwordAuth = mysqlTable(
+  'password_auth',
   {
     id: id().primaryKey(),
     userId: id('user_id').notNull(),
@@ -113,8 +113,9 @@ export const childTask = mysqlTable(
 )
 
 export const userRelations = relations(users, ({ one, many }) => ({
-  credentialAuth: one(credentialAuth),
+  passwordAuth: one(passwordAuth),
   googleAuth: one(googleAuth),
+
   categories: many(categories),
   parentTasks: many(parentTasks),
   childTasks: many(childTask),
@@ -141,9 +142,9 @@ export const childTaskRelations = relations(childTask, ({ one, many }) => ({
   }),
 }))
 
-export const credentialAuthRelations = relations(credentialAuth, ({ one }) => ({
+export const passwordAuthRelations = relations(passwordAuth, ({ one }) => ({
   user: one(users, {
-    fields: [credentialAuth.userId],
+    fields: [passwordAuth.userId],
     references: [users.id],
   }),
 }))
