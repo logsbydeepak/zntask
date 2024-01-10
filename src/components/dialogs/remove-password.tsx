@@ -20,7 +20,7 @@ const zSchema = z.object({
 
 type FormValues = z.infer<typeof zSchema>
 
-export function RemoveCredentialDialog() {
+export function RemovePasswordDialog() {
   const [isPending, startTransition] = React.useTransition()
   const isOpen = useAppStore((state) => state.dialog.removePasswordAuth)
   const setIsOpen = useAppStore((state) => state.setDialog)

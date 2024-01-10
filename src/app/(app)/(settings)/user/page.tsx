@@ -109,10 +109,10 @@ async function UserInformation() {
         <Item.Wrapper>
           <Item.Key>PASSWORD</Item.Key>
           <Item.Content>
-            {user.auth.credential ? <Check /> : <Cross />}
+            {user.auth.password ? <Check /> : <Cross />}
           </Item.Content>
           <Item.Action>
-            {user.auth.credential && <RemovePasswordAuth />}
+            {user.auth.password && <RemovePasswordAuth />}
           </Item.Action>
         </Item.Wrapper>
         <Item.Separator />

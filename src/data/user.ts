@@ -58,13 +58,13 @@ export const getUserWithAuth = h.auth.fn(async ({ userId }) => {
 
   if (!user) throw new Error('User not found!')
   const auth = {
-    credential: false,
+    password: false,
     google: false,
   }
 
-  if (user.passwordAuth) auth.credential = true
+  if (user.passwordAuth) auth.password = true
   if (user.googleAuth) auth.google = true
-  if (!auth.credential && !auth.google)
+  if (!auth.password && !auth.google)
     throw new Error('User has no auth methods!')
 
   let profilePicture = null
