@@ -61,7 +61,7 @@ async function UserInformation() {
           <Item.Key>PICTURE</Item.Key>
           <Item.Content>
             <Avatar
-              className="size-24"
+              className="size-24 text-4xl"
               profilePicture={user.profilePicture}
               firstName={user.firstName}
               lastName={user.lastName}

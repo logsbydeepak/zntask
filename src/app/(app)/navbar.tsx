@@ -126,6 +126,7 @@ export function Navbar() {
                       firstName={firstName}
                       lastName={lastName}
                       size={32}
+                      className="text-xs"
                     />
                     <span
                       data-active={isAppSyncing}

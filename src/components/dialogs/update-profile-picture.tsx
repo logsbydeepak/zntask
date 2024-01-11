@@ -13,7 +13,7 @@ import type { OurFileRouter } from '@/data/utils/uploadthing'
 import { useAppStore, userAtom } from '@/store/app'
 import { toast } from '@/store/toast'
 
-import { genInitials } from '../avatar'
+import { Avatar, genInitials } from '../avatar'
 import { Head } from '../head'
 
 export const { useUploadThing, uploadFiles } =
@@ -101,26 +101,14 @@ function UpdateProfilePictureDialogContent({
           <Dialog.Title>Profile picture</Dialog.Title>
         </div>
         <div className="flex items-center justify-center space-x-4">
-          <div className="flex size-24 items-center justify-center rounded-full border border-gray-100 bg-gray-50">
-            {preview && (
-              <Image
-                src={preview}
-                onLoad={() => URL.revokeObjectURL(preview)}
-                width={96}
-                height={96}
-                quality={100}
-                alt="avatar"
-                className="size-full rounded-full object-cover"
-              />
-            )}
-
-            {(reset || !user.profilePicture) && !preview && (
-              <p className="text-4xl font-medium tracking-wider text-gray-600">
-                {initials}
-              </p>
-            )}
-          </div>
-
+          <Avatar
+            firstName={user.firstName}
+            lastName={user.lastName}
+            profilePicture={preview}
+            size={96}
+            className="size-24 text-4xl"
+          />
+          
           <fieldset className="flex flex-col space-y-2" disabled={isLoading}>
             <Badge.Button
               onClick={() => {

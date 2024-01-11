@@ -44,7 +44,6 @@ export function Avatar({
           className="size-full rounded-full object-cover"
         />
       )}
-
       {!profilePicture && (
         <p className="text-[75%] font-medium tracking-wider text-gray-600">
           {initials}
