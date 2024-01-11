@@ -42,33 +42,15 @@ export const users = mysqlTable(
   }
 )
 
-export const passwordAuth = mysqlTable(
-  'password_auth',
-  {
-    id: id().primaryKey(),
-    userId: id('user_id').notNull(),
-    password: varchar('password', { length: 256 }).notNull(),
-  },
-  (table) => {
-    return {
-      userIdIdx: index('user_id_idx').on(table.userId),
-    }
-  }
-)
+export const passwordAuth = mysqlTable('password_auth', {
+  id: id().primaryKey(),
+  password: varchar('password', { length: 256 }).notNull(),
+})
 
-export const googleAuth = mysqlTable(
-  'google_auth',
-  {
-    id: id().primaryKey(),
-    userId: id('user_id').notNull(),
-    email: varchar('email', { length: 256 }).notNull(),
-  },
-  (table) => {
-    return {
-      userIdIdx: index('user_id_idx').on(table.userId),
-    }
-  }
-)
+export const googleAuth = mysqlTable('google_auth', {
+  id: id().primaryKey(),
+  email: varchar('email', { length: 256 }).notNull().unique(),
+})
 
 export const categories = mysqlTable(
   'categories',
@@ -144,14 +126,14 @@ export const childTaskRelations = relations(childTask, ({ one, many }) => ({
 
 export const passwordAuthRelations = relations(passwordAuth, ({ one }) => ({
   user: one(users, {
-    fields: [passwordAuth.userId],
+    fields: [passwordAuth.id],
     references: [users.id],
   }),
 }))
 
 export const googleAuthRelations = relations(googleAuth, ({ one }) => ({
   user: one(users, {
-    fields: [googleAuth.userId],
+    fields: [googleAuth.id],
     references: [users.id],
   }),
 }))

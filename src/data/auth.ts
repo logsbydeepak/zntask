@@ -91,8 +91,7 @@ export const addGoogleAuthProvider = h.auth
     if (googleAuthProvider) return r('ALREADY_ADDED')
 
     await db.insert(dbSchema.googleAuth).values({
-      id: ulid(),
-      userId,
+      id: userId,
       email: data.email,
     })
     revalidateTag('user')
@@ -169,7 +168,7 @@ export const loginWithGoogle = h.input(zGoogleCode).fn(async ({ input }) => {
   })
 
   if (!user) return r('INVALID_CREDENTIALS')
-  const token = await generateAuthJWT(user.userId)
+  const token = await generateAuthJWT(user.id)
   setAuthCookie(token)
   redirect('/')
 })
@@ -193,14 +192,13 @@ export const registerWithGoogle = h.input(zGoogleCode).fn(async ({ input }) => {
   const id = ulid()
 
   await db.insert(dbSchema.users).values({
-    id: id,
+    id,
     firstName: data.given_name,
     lastName: data.family_name,
     email: data.email,
   })
   await db.insert(dbSchema.googleAuth).values({
-    id: ulid(),
-    userId: id,
+    id,
     email: data.email,
   })
 
@@ -250,14 +248,13 @@ export const registerWithCredentials = h
     const id = ulid()
 
     await db.insert(dbSchema.users).values({
-      id: id,
+      id,
       firstName: input.firstName,
       lastName: input.lastName,
       email: input.email,
     })
     await db.insert(dbSchema.passwordAuth).values({
-      id: ulid(),
-      userId: id,
+      id,
       password: password,
     })
 
@@ -337,8 +334,7 @@ export const addPassword = h.input(zSchema).fn(async function ({ input }) {
   const password = await bcrypt.hash(input.password, 10)
   if (!user.passwordAuth) {
     await db.insert(dbSchema.passwordAuth).values({
-      id: ulid(),
-      userId: user.id,
+      id: user.id,
       password,
     })
   } else {
