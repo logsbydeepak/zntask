@@ -1,10 +1,9 @@
 import { Suspense } from 'react'
 import { unstable_cache } from 'next/cache'
-import Image from 'next/image'
 import { CheckIcon, LoaderIcon, XIcon } from 'lucide-react'
 
 import * as Layout from '@/app/(app)/app-layout'
-import { genInitials } from '@/components/avatar'
+import { Avatar } from '@/components/avatar'
 import { Head } from '@/components/head'
 import { getUserWithAuth } from '@/data/user'
 
@@ -61,10 +60,12 @@ async function UserInformation() {
         <Item.Wrapper>
           <Item.Key>PICTURE</Item.Key>
           <Item.Content>
-            <Picture
+            <Avatar
+              className="size-24"
               profilePicture={user.profilePicture}
               firstName={user.firstName}
               lastName={user.lastName}
+              size={96}
             />
           </Item.Content>
           <Item.Action>
@@ -76,7 +77,9 @@ async function UserInformation() {
 
         <Item.Wrapper>
           <Item.Key>NAME</Item.Key>
-          <Item.Content>{`${user.firstName} ${user.lastName}`}</Item.Content>
+          <Item.Content>{`${user.firstName} ${
+            user.lastName || ''
+          }`}</Item.Content>
           <Item.Action>
             <EditName />
           </Item.Action>
@@ -120,39 +123,6 @@ async function UserInformation() {
           <ResetPassword />
         </Item.Wrapper>
       </Item.Container>
-    </div>
-  )
-}
-
-function Picture({
-  profilePicture,
-  firstName,
-  lastName,
-}: {
-  profilePicture: string | null
-  firstName: string
-  lastName?: string | null
-}) {
-  const initials = genInitials(firstName, lastName)
-
-  return (
-    <div className="flex size-24 items-center justify-center rounded-full border border-gray-100 bg-gray-50">
-      {profilePicture && (
-        <Image
-          src={profilePicture}
-          width={96}
-          height={96}
-          quality={100}
-          alt="avatar"
-          className="size-full rounded-full object-cover"
-        />
-      )}
-
-      {!profilePicture && (
-        <p className="text-4xl font-medium tracking-wider text-gray-600">
-          {initials}
-        </p>
-      )}
     </div>
   )
 }

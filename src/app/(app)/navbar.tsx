@@ -1,7 +1,6 @@
 'use client'
 
 import React from 'react'
-import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useAtomValue, useSetAtom } from 'jotai'
@@ -19,7 +18,7 @@ import {
 } from 'lucide-react'
 import { useTheme } from 'next-themes'
 
-import { genInitials } from '@/components/avatar'
+import { Avatar } from '@/components/avatar'
 import { LogoIcon } from '@/components/icon/logo'
 import {
   DropdownMenuContent,
@@ -45,6 +44,7 @@ export function Navbar() {
   const setIsSidebarOpen = useSetAtom(isSidebarOpenAtom)
   const isSidebarOpen = useAtomValue(isSidebarOpenAtom)
   const isAppSyncing = useAtomValue(isAppSyncingAtom)
+  const { profilePicture, firstName, lastName } = useAtomValue(userAtom)
 
   return (
     <nav className="fixed z-20 w-full border-b border-gray-200 bg-white bg-opacity-50 backdrop-blur-sm">
@@ -121,7 +121,12 @@ export function Navbar() {
               <Tooltip.Root>
                 <Tooltip.Trigger asChild>
                   <DropdownMenuTrigger className="relative size-8 rounded-full">
-                    <Avatar />
+                    <Avatar
+                      profilePicture={profilePicture}
+                      firstName={firstName}
+                      lastName={lastName}
+                      size={32}
+                    />
                     <span
                       data-active={isAppSyncing}
                       className="absolute bottom-0 right-[1px] hidden size-2 items-center justify-center rounded-full border-[1.5px] border-white bg-white data-[active=true]:flex"
@@ -259,31 +264,5 @@ function SearchXL() {
       </span>
       <span className="mr-10 text-xs text-gray-500">Search</span>
     </button>
-  )
-}
-
-function Avatar() {
-  const { profilePicture, firstName, lastName } = useAtomValue(userAtom)
-  const initials = genInitials(firstName, lastName)
-
-  return (
-    <div className="flex size-full items-center justify-center rounded-full border border-gray-200 bg-gray-50">
-      {profilePicture && (
-        <Image
-          src={profilePicture}
-          alt="avatar"
-          width={32}
-          height={32}
-          quality={100}
-          className="size-full rounded-full object-cover"
-        />
-      )}
-
-      {!profilePicture && (
-        <p className="text-xs font-medium tracking-wider text-gray-600">
-          {initials}
-        </p>
-      )}
-    </div>
   )
 }
