@@ -42,6 +42,7 @@ export function Avatar({
           height={size}
           quality={100}
           className="size-full rounded-full object-cover"
+          priority={false}
         />
       )}
       {!profilePicture && (

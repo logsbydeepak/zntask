@@ -320,21 +320,24 @@ function TaskDialogContent({
   return (
     <>
       <Head title={parentTask ? `Edit ${parentTask?.title}` : 'Create Task'} />
-      <div className="container-scroll max-h-[400px] scroll-pb-8 space-y-6 overflow-y-scroll p-6">
-        <span>
+      <div className="">
+        <div className="p-6">
           <CategoryPicker
             value={watch('categoryId')}
             setValue={(value) => setValue('categoryId', value)}
           />
-        </span>
+        </div>
 
         <Form.Root
-          className="space-y-7"
+          className="container-scroll mb-6 max-h-[200px] snap-y snap-mandatory snap-normal scroll-pb-8 space-y-7 overflow-y-scroll pl-6 sm:max-h-[400px] sm:snap-none"
           onSubmit={handleSubmit(onSubmit)}
           id="task"
         >
           {fields.map((_, index) => (
-            <div className={cn('space-y-2', index !== 0 && 'pl-7')} key={index}>
+            <div
+              className={cn('snap-start space-y-2', index !== 0 && 'pl-7')}
+              key={index}
+            >
               <div className="items-top flex space-x-2">
                 <div className="flex size-6 items-center justify-center">
                   <Checkbox
