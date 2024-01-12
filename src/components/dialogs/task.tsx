@@ -321,11 +321,29 @@ function TaskDialogContent({
     <>
       <Head title={parentTask ? `Edit ${parentTask?.title}` : 'Create Task'} />
       <div className="">
-        <div className="p-6">
+        <div className="flex justify-between space-x-6 p-6">
           <CategoryPicker
             value={watch('categoryId')}
             setValue={(value) => setValue('categoryId', value)}
           />
+
+          <Badge.Button
+            onClick={() => {
+              append({
+                _id: null,
+                title: '',
+                date: null,
+                time: null,
+                details: null,
+                completedAt: null,
+              })
+            }}
+          >
+            <Badge.Icon>
+              <PlusIcon />
+            </Badge.Icon>
+            <Badge.Label>subtask</Badge.Label>
+          </Badge.Button>
         </div>
 
         <Form.Root
@@ -384,26 +402,6 @@ function TaskDialogContent({
                         setValue(`tasks.${index}.time`, time)
                       }}
                     />
-
-                    {index === 0 && (
-                      <Badge.Button
-                        onClick={() => {
-                          append({
-                            _id: null,
-                            title: '',
-                            date: null,
-                            time: null,
-                            details: null,
-                            completedAt: null,
-                          })
-                        }}
-                      >
-                        <Badge.Icon>
-                          <PlusIcon />
-                        </Badge.Icon>
-                        <Badge.Label>subtask</Badge.Label>
-                      </Badge.Button>
-                    )}
 
                     {index === 0 && parentTask && (
                       <Badge.Button
