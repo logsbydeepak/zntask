@@ -33,11 +33,15 @@ const dropContainersAtom = atom<Container[]>([])
 const dragPositionAtom = atom<{ x: number; y: number } | null>(null)
 const overIdAtom = atom<string | null>(null)
 const DNDIdAtom = atom<string | null>(null)
+const dropPlace = atom<'top' | 'bottom' | null>(null)
 const dragContainerAtom = atom<Container | null>(null)
 
 const useGesture = createUseGesture([dragAction])
 
 export function useDrag({ id }: { id: string }) {
+  const ref = React.useRef<HTMLElement | null>(null)
+  const [isDragging, setIsDragging] = React.useState(false)
+
   const [position, setPosition] = React.useState<{
     x: number
     y: number
@@ -46,23 +50,22 @@ export function useDrag({ id }: { id: string }) {
   const DNDId = useAtomValue(DNDIdAtom)
   const [overId, setOverId] = useAtom(overIdAtom)
   const setDragPosition = useSetAtom(dragPositionAtom)
-  const ref = React.useRef<HTMLElement | null>(null)
-  const [dragContainer, setDragContainer] = useAtom(dragContainerAtom)
-  const isDragging = dragContainer?.id === id
+  const setDragContainer = useSetAtom(dragContainerAtom)
 
   const bind = useGesture(
     {
       onDragStart: () => {
         setDragContainer({ id, ref })
+        setIsDragging(true)
       },
-      onDrag: ({ movement: [mx, my], xy }) => {
-        setDragPosition({ x: mx, y: my })
+      onDrag: ({ xy }) => {
+        setDragPosition({ x: xy[0], y: xy[1] })
         setPosition({ x: xy[0], y: xy[1] })
       },
       onDragEnd: () => {
         window.dispatchEvent(
           new CustomEvent(`custom:drop${DNDId}`, {
-            detail: { start: dragContainer?.id, over: overId },
+            detail: { start: id, over: overId },
           })
         )
 
@@ -89,14 +92,14 @@ export function useDrop({ id }: { id: string }) {
   const ref = React.useRef<HTMLElement | null>(null)
   const overId = useAtomValue(overIdAtom)
   const isOver = overId === id
+  const place = useAtomValue(dropPlace)
 
   React.useEffect(() => {
-    setDropContainers((prev) => [...prev, { id, ref, isHovering: false }])
-
-    return () => setDropContainers((prev) => prev.filter((c) => c.id !== id))
+    setDropContainers((prev) => [...prev, { id, ref }])
+    return () => setDropContainers((prev) => prev.filter((i) => i.id !== id))
   }, [id, setDropContainers])
 
-  return { ref, isOver }
+  return { ref, isOver, place }
 }
 
 export function useDNDState() {
@@ -129,15 +132,15 @@ function DNDManager({ onDrop }: { onDrop: OnDropType }) {
 
   const DNDId = useAtomValue(DNDIdAtom)
   const dropContainers = useAtomValue(dropContainersAtom)
-  const dragContainer = useAtomValue(dragContainerAtom)
+  const dragContainerId = useAtomValue(dragContainerAtom)
+
   const dragPosition = useAtomValue(dragPositionAtom)
   const setOverId = useSetAtom(overIdAtom)
+  const setDropPlace = useSetAtom(dropPlace)
 
   const [centerOfDrops, setCenterOfDrops] = React.useState<
     { id: string; center: { x: number; y: number } }[]
   >([])
-
-  const deferredPosition = React.useDeferredValue(dragPosition)
 
   React.useEffect(() => {
     const handleDrop = (e: Event) => {
@@ -153,32 +156,31 @@ function DNDManager({ onDrop }: { onDrop: OnDropType }) {
   }, [DNDId, onDrop])
 
   React.useEffect(() => {
-    if (!dragContainer) return
-    if (!dropContainers.length) return
+    if (!Object.keys(dropContainers).length) return
 
-    if (dragContainer) {
+    if (dragContainerId) {
       const centerOfDrops: { id: string; center: { x: number; y: number } }[] =
         []
 
-      dropContainers.forEach((c) => {
-        const dropRect = c.ref.current?.getBoundingClientRect()
+      dropContainers.forEach((i) => {
+        const dropRect = i.ref.current?.getBoundingClientRect()
         if (!dropRect) return
         const center = centerOfRectangle(dropRect)
-        centerOfDrops.push({ id: c.id, center })
+        centerOfDrops.push({ id: i.id, center })
       })
 
       setCenterOfDrops(centerOfDrops)
     } else {
       setCenterOfDrops([])
     }
-  }, [dragContainer, dropContainers])
+  }, [dragContainerId, dropContainers])
 
   React.useEffect(() => {
-    if (!deferredPosition) return
-    if (!dragContainer) return
+    if (!dragPosition) return
+    if (!dragContainerId) return
     if (!centerOfDrops.length) return
 
-    const dragRect = dragContainer?.ref.current?.getBoundingClientRect()
+    const dragRect = dragContainerId.ref.current?.getBoundingClientRect()
     if (!dragRect) return
     const dragCenter = centerOfRectangle(dragRect)
 
@@ -191,8 +193,22 @@ function DNDManager({ onDrop }: { onDrop: OnDropType }) {
       prev.distance < curr.distance ? prev : curr
     )
 
+    const dropRect = dropContainers
+      .find((i) => i.id === over.id)
+      ?.ref.current?.getBoundingClientRect()
+    if (!dropRect) return
+    const dropCenter = centerOfRectangle(dropRect)
+    const dropPlace = dragCenter.y > dropCenter.y ? 'top' : 'bottom'
+    setDropPlace(dropPlace)
     setOverId(over.id)
-  }, [deferredPosition, setOverId, dragContainer, centerOfDrops])
+  }, [
+    dragPosition,
+    setOverId,
+    dragContainerId,
+    centerOfDrops,
+    dropContainers,
+    setDropPlace,
+  ])
 
   return null
 }

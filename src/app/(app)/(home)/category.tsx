@@ -43,7 +43,7 @@ export function DNDCategoryItem({
     bind,
   } = useDrag({ id: category.id })
 
-  const { ref } = useDrop({ id: category.id })
+  const { ref, place, isOver } = useDrop({ id: category.id })
 
   const style = React.useMemo(() => {
     if (!position) return {}
@@ -71,28 +71,27 @@ export function DNDCategoryItem({
         </div>
       )}
 
-      <div
-        data-active={true}
-        className="absolute -bottom-[5px] left-0 right-0 hidden w-full translate-y-[2px] items-center px-3 data-[active=true]:flex"
-      >
-        <span className="size-1.5 rounded-full border-[1.5px] border-orange-600" />
-        <span className="-ml-[1px] h-[1.5px] w-full rounded-full bg-orange-600" />
-      </div>
+      {isOver && place === 'top' && (
+        <div className="absolute -bottom-[5px] left-0 right-0 flex w-full translate-y-[2px] items-center px-3">
+          <span className="size-1.5 rounded-full border-[1.5px] border-orange-600" />
+          <span className="-ml-[1px] h-[1.5px] w-full rounded-full bg-orange-600" />
+        </div>
+      )}
 
       <CategoryItem
         category={category}
         href={href}
         {...bind()}
         ref={ref as React.Ref<HTMLAnchorElement>}
+        // className={cn(isOver && 'opacity-0')}
       />
 
-      <div
-        className="absolute -top-[5px] left-0 right-0 hidden w-full translate-y-[-2px] items-center px-3 data-[active=true]:flex"
-        data-active={true}
-      >
-        <span className="size-1.5 rounded-full border-[1.5px] border-orange-600" />
-        <span className="-ml-[1px] h-[1.5px] w-full rounded-full bg-orange-600" />
-      </div>
+      {isOver && place === 'bottom' && (
+        <div className="absolute -top-[5px] left-0 right-0 flex w-full translate-y-[-2px] items-center px-3">
+          <span className="size-1.5 rounded-full border-[1.5px] border-orange-600" />
+          <span className="-ml-[1px] h-[1.5px] w-full rounded-full bg-orange-600" />
+        </div>
+      )}
     </div>
   )
 }

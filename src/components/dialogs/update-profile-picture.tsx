@@ -108,7 +108,7 @@ function UpdateProfilePictureDialogContent({
             size={96}
             className="size-24 text-4xl"
           />
-          
+
           <fieldset className="flex flex-col space-y-2" disabled={isLoading}>
             <Badge.Button
               onClick={() => {
