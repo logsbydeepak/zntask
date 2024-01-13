@@ -64,7 +64,6 @@ export function useDrag({ id }: { id: string }) {
   } | null>({ x: 0, y: 0 })
 
   const DNDId = useAtomValue(DNDIdAtom)
-  // const [overId, setOverId] = useAtom(overIdAtom)
   const [dropData, setDropData] = useAtom(dropDataAtom)
   const setDragPosition = useSetAtom(dragPositionAtom)
   const setDragContainer = useSetAtom(dragContainerAtom)
