@@ -1,7 +1,7 @@
 import React from 'react'
 import { createUseGesture, dragAction } from '@use-gesture/react'
 import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai'
-import { useHydrateAtoms } from 'jotai/utils'
+import { atomWithReducer, useHydrateAtoms } from 'jotai/utils'
 import { ulid } from 'ulidx'
 
 import { JotaiProvider } from '@/components/client-providers'
@@ -29,12 +29,76 @@ interface Container {
   ref: React.RefObject<HTMLElement>
 }
 
+export function shallow<T>(objA: T, objB: T) {
+  if (Object.is(objA, objB)) {
+    return true
+  }
+  if (
+    typeof objA !== 'object' ||
+    objA === null ||
+    typeof objB !== 'object' ||
+    objB === null
+  ) {
+    return false
+  }
+
+  if (objA instanceof Map && objB instanceof Map) {
+    if (objA.size !== objB.size) return false
+
+    for (const [key, value] of objA) {
+      if (!Object.is(value, objB.get(key))) {
+        return false
+      }
+    }
+    return true
+  }
+
+  if (objA instanceof Set && objB instanceof Set) {
+    if (objA.size !== objB.size) return false
+
+    for (const value of objA) {
+      if (!objB.has(value)) {
+        return false
+      }
+    }
+    return true
+  }
+
+  const keysA = Object.keys(objA)
+  if (keysA.length !== Object.keys(objB).length) {
+    return false
+  }
+  for (let i = 0; i < keysA.length; i++) {
+    if (
+      !Object.prototype.hasOwnProperty.call(objB, keysA[i] as string) ||
+      !Object.is(objA[keysA[i] as keyof T], objB[keysA[i] as keyof T])
+    ) {
+      return false
+    }
+  }
+  return true
+}
+export function atomWithCompare<Value>(
+  initialValue: Value,
+  areEqual: (prev: Value, next: Value) => boolean
+) {
+  return atomWithReducer(initialValue, (prev: Value, next: Value) => {
+    if (areEqual(prev, next)) {
+      return prev
+    }
+
+    return next
+  })
+}
+
 const dropContainersAtom = atom<Container[]>([])
 const dragPositionAtom = atom<{ x: number; y: number } | null>(null)
-const overIdAtom = atom<string | null>(null)
 const DNDIdAtom = atom<string | null>(null)
-const dropPlace = atom<'top' | 'bottom' | null>(null)
 const dragContainerAtom = atom<Container | null>(null)
+const dropDataAtom = atomWithCompare<{
+  id: string
+  place: 'top' | 'bottom'
+} | null>(null, shallow)
 
 const useGesture = createUseGesture([dragAction])
 
@@ -48,7 +112,8 @@ export function useDrag({ id }: { id: string }) {
   } | null>({ x: 0, y: 0 })
 
   const DNDId = useAtomValue(DNDIdAtom)
-  const [overId, setOverId] = useAtom(overIdAtom)
+  // const [overId, setOverId] = useAtom(overIdAtom)
+  const [dropData, setDropData] = useAtom(dropDataAtom)
   const setDragPosition = useSetAtom(dragPositionAtom)
   const setDragContainer = useSetAtom(dragContainerAtom)
 
@@ -63,9 +128,10 @@ export function useDrag({ id }: { id: string }) {
         setPosition({ x: xy[0], y: xy[1] })
       },
       onDragEnd: () => {
+        if (!dropData) return
         window.dispatchEvent(
           new CustomEvent(`custom:drop${DNDId}`, {
-            detail: { start: id, over: overId },
+            detail: { start: id, over: dropData.id },
           })
         )
 
@@ -73,7 +139,7 @@ export function useDrag({ id }: { id: string }) {
         setDragPosition(null)
 
         setDragContainer(null)
-        setOverId(null)
+        setDropData(null)
       },
     },
     {
@@ -90,9 +156,10 @@ export function useDrag({ id }: { id: string }) {
 export function useDrop({ id }: { id: string }) {
   const setDropContainers = useSetAtom(dropContainersAtom)
   const ref = React.useRef<HTMLElement | null>(null)
-  const overId = useAtomValue(overIdAtom)
-  const isOver = overId === id
-  const place = useAtomValue(dropPlace)
+  const dropData = useAtomValue(dropDataAtom)
+
+  const isOver = dropData?.id === id
+  const place = dropData?.place
 
   React.useEffect(() => {
     setDropContainers((prev) => [...prev, { id, ref }])
@@ -135,8 +202,7 @@ function DNDManager({ onDrop }: { onDrop: OnDropType }) {
   const dragContainerId = useAtomValue(dragContainerAtom)
 
   const dragPosition = useAtomValue(dragPositionAtom)
-  const setOverId = useSetAtom(overIdAtom)
-  const setDropPlace = useSetAtom(dropPlace)
+  const setDropData = useSetAtom(dropDataAtom)
 
   const [centerOfDrops, setCenterOfDrops] = React.useState<
     { id: string; center: { x: number; y: number } }[]
@@ -199,15 +265,13 @@ function DNDManager({ onDrop }: { onDrop: OnDropType }) {
     if (!dropRect) return
     const dropCenter = centerOfRectangle(dropRect)
     const dropPlace = dragCenter.y > dropCenter.y ? 'top' : 'bottom'
-    setDropPlace(dropPlace)
-    setOverId(over.id)
+    setDropData({ id: over.id, place: dropPlace })
   }, [
     dragPosition,
-    setOverId,
     dragContainerId,
     centerOfDrops,
     dropContainers,
-    setDropPlace,
+    setDropData,
   ])
 
   return null

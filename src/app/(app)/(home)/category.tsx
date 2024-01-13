@@ -36,6 +36,7 @@ export function DNDCategoryItem({
   category: Category
   href: string
 }) {
+  console.log(category.id)
   const {
     isDragging,
     ref: dragRef,
