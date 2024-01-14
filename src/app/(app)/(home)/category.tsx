@@ -83,7 +83,6 @@ export function DNDCategoryItem({
         href={href}
         {...bind()}
         ref={ref as React.Ref<HTMLAnchorElement>}
-        // className={cn(isOver && 'opacity-0')}
       />
 
       {isOver && place === 'bottom' && (

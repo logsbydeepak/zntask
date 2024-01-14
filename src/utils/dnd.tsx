@@ -30,7 +30,7 @@ interface Container {
   ref: React.RefObject<HTMLElement>
 }
 
-export function atomWithCompare<Value>(
+function atomWithCompare<Value>(
   initialValue: Value,
   areEqual: (prev: Value, next: Value) => boolean
 ) {
@@ -82,7 +82,7 @@ export function useDrag({ id }: { id: string }) {
         if (!dropData) return
         window.dispatchEvent(
           new CustomEvent(`custom:drop${DNDId}`, {
-            detail: { start: id, over: dropData.id },
+            detail: { start: id, over: dropData.id, position: dropData.place },
           })
         )
 
@@ -119,7 +119,15 @@ export function useDrop({ id }: { id: string }) {
   return { ref, isOver, place }
 }
 
-type OnDropType = ({ start, over }: { start: string; over?: string }) => void
+type OnDropType = ({
+  start,
+  over,
+  position,
+}: {
+  start: string
+  over?: string
+  position?: string
+}) => void
 export function DNDProvider({
   children,
   onDrop,
@@ -135,12 +143,12 @@ export function DNDProvider({
   )
 }
 
-type DNDEvent = CustomEvent<{ start: string; over: string }>
+type DNDEvent = CustomEvent<{ start: string; over: string; position: string }>
 
 function DNDManager({ onDrop }: { onDrop: OnDropType }) {
   useHydrateAtoms([[DNDIdAtom, ulid()]])
-
   const DNDId = useAtomValue(DNDIdAtom)
+
   const dropContainers = useAtomValue(dropContainersAtom)
   const dragContainerId = useAtomValue(dragContainerAtom)
 
@@ -157,6 +165,7 @@ function DNDManager({ onDrop }: { onDrop: OnDropType }) {
       if (!event.detail) return
       if (!event.detail.start) return
       if (!event.detail.over) return
+      if (!event.detail.position) return
       onDrop(event.detail)
     }
 

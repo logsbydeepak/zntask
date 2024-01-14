@@ -11,13 +11,7 @@ import { useCategoryStore } from '@/store/category'
 import { categoryHelper } from '@/utils/category'
 import { DNDProvider } from '@/utils/dnd'
 
-import {
-  BottomDrop,
-  CategoryContainer,
-  CategoryItem,
-  DNDCategoryItem,
-  TopDrop,
-} from '../category'
+import { CategoryContainer, CategoryItem, DNDCategoryItem } from '../category'
 
 export default function Page() {
   const statusParams = useSearchParams().get('status')
@@ -72,7 +66,8 @@ function ActiveTab() {
 
       <CategoryContainer>
         <DNDProvider
-          onDrop={({ start, over }) => {
+          onDrop={({ start, over, position }) => {
+            console.log(start, over, position)
             // if (!start) return
             // if (!over) return
             // if (start === over) return
