@@ -72,7 +72,7 @@ export function DNDCategoryItem({
       )}
 
       {isOver && place === 'top' && (
-        <div className="absolute -bottom-[5px] left-0 right-0 flex w-full translate-y-[2px] items-center px-3">
+        <div className="absolute -top-[5px] left-0 right-0 flex w-full translate-y-[-2px] items-center px-3">
           <span className="size-1.5 rounded-full border-[1.5px] border-orange-600" />
           <span className="-ml-[1px] h-[1.5px] w-full rounded-full bg-orange-600" />
         </div>
@@ -86,7 +86,7 @@ export function DNDCategoryItem({
       />
 
       {isOver && place === 'bottom' && (
-        <div className="absolute -top-[5px] left-0 right-0 flex w-full translate-y-[-2px] items-center px-3">
+        <div className="absolute -bottom-[5px] left-0 right-0 flex w-full translate-y-[2px] items-center px-3">
           <span className="size-1.5 rounded-full border-[1.5px] border-orange-600" />
           <span className="-ml-[1px] h-[1.5px] w-full rounded-full bg-orange-600" />
         </div>

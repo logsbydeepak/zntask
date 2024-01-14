@@ -216,7 +216,7 @@ function DNDManager({ onDrop }: { onDrop: OnDropType }) {
       ?.ref.current?.getBoundingClientRect()
     if (!dropRect) return
     const dropCenter = centerOfRectangle(dropRect)
-    const dropPlace = dragCenter.y > dropCenter.y ? 'top' : 'bottom'
+    const dropPlace = dragCenter.y < dropCenter.y ? 'top' : 'bottom'
     setDropData({ id: over.id, place: dropPlace })
   }, [
     dragPosition,
