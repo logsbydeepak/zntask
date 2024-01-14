@@ -88,7 +88,6 @@ export function useDrag({ id }: { id: string }) {
 
         setPosition(null)
         setDragPosition(null)
-
         setDragContainer(null)
         setDropData(null)
       },
@@ -120,14 +119,7 @@ export function useDrop({ id }: { id: string }) {
   return { ref, isOver, place }
 }
 
-export function useDNDState() {
-  const dragPosition = useAtomValue(dragPositionAtom)
-
-  return { dragPosition }
-}
-
 type OnDropType = ({ start, over }: { start: string; over?: string }) => void
-
 export function DNDProvider({
   children,
   onDrop,
