@@ -28,6 +28,7 @@ function distance(a: { x: number; y: number }, b: { x: number; y: number }) {
 interface Container {
   id: string
   ref: React.RefObject<HTMLElement>
+  data?: { [key: string]: string | undefined }
 }
 
 function atomWithCompare<Value>(
@@ -67,6 +68,7 @@ export function useDrag({ id }: { id: string }) {
   const [dropData, setDropData] = useAtom(dropDataAtom)
   const setDragPosition = useSetAtom(dragPositionAtom)
   const setDragContainer = useSetAtom(dragContainerAtom)
+  const dropContainers = useAtomValue(dropContainersAtom)
 
   const bind = useGesture(
     {
@@ -80,9 +82,16 @@ export function useDrag({ id }: { id: string }) {
       },
       onDragEnd: () => {
         if (!dropData) return
+        const overData = dropContainers.find((i) => i.id === dropData.id)
+
         window.dispatchEvent(
           new CustomEvent(`custom:drop${DNDId}`, {
-            detail: { start: id, over: dropData.id, position: dropData.place },
+            detail: {
+              start: id,
+              over: dropData.id,
+              position: dropData.place,
+              data: overData?.data,
+            },
           })
         )
 
@@ -103,7 +112,13 @@ export function useDrag({ id }: { id: string }) {
   return { position, bind, isDragging, ref }
 }
 
-export function useDrop({ id }: { id: string }) {
+export function useDrop({
+  id,
+  data,
+}: {
+  id: string
+  data?: { [key: string]: string | undefined }
+}) {
   const setDropContainers = useSetAtom(dropContainersAtom)
   const ref = React.useRef<HTMLElement | null>(null)
   const dropData = useAtomValue(dropDataAtom)
@@ -112,9 +127,9 @@ export function useDrop({ id }: { id: string }) {
   const place = dropData?.place
 
   React.useEffect(() => {
-    setDropContainers((prev) => [...prev, { id, ref }])
+    setDropContainers((prev) => [...prev, { id, ref, data }])
     return () => setDropContainers((prev) => prev.filter((i) => i.id !== id))
-  }, [id, setDropContainers])
+  }, [id, setDropContainers, data])
 
   return { ref, isOver, place }
 }
@@ -123,10 +138,12 @@ type OnDropType = ({
   start,
   over,
   position,
+  data,
 }: {
   start: string
   over?: string
   position?: string
+  data?: { [key: string]: string | undefined }
 }) => void
 export function DNDProvider({
   children,
@@ -143,7 +160,12 @@ export function DNDProvider({
   )
 }
 
-type DNDEvent = CustomEvent<{ start: string; over: string; position: string }>
+type DNDEvent = CustomEvent<{
+  start: string
+  over: string
+  position: string
+  data?: { [key: string]: string | undefined }
+}>
 
 function DNDManager({ onDrop }: { onDrop: OnDropType }) {
   useHydrateAtoms([[DNDIdAtom, ulid()]])

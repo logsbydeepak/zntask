@@ -40,11 +40,6 @@ export function DNDCategoryItem({
   topCategoryId?: string
   bottomCategoryId?: string
 }) {
-  console.log({
-    top: topCategoryId,
-    id: category.id,
-    bottom: bottomCategoryId,
-  })
   const {
     isDragging,
     ref: dragRef,
@@ -52,7 +47,14 @@ export function DNDCategoryItem({
     bind,
   } = useDrag({ id: category.id })
 
-  const { ref, place, isOver } = useDrop({ id: category.id })
+  const { ref, place, isOver } = useDrop({
+    id: category.id,
+    data: {
+      top: topCategoryId,
+      id: category.id,
+      bottom: bottomCategoryId,
+    },
+  })
 
   const style = React.useMemo(() => {
     if (!position) return {}

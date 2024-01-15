@@ -66,8 +66,8 @@ function ActiveTab() {
 
       <CategoryContainer>
         <DNDProvider
-          onDrop={({ start, over, position }) => {
-            console.log(start, over, position)
+          onDrop={(data) => {
+            console.log(data)
             // if (!start) return
             // if (!over) return
             // if (start === over) return
