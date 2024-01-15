@@ -129,7 +129,7 @@ export function useDrop({
   React.useEffect(() => {
     setDropContainers((prev) => [...prev, { id, ref, data }])
     return () => setDropContainers((prev) => prev.filter((i) => i.id !== id))
-  }, [id, setDropContainers, data])
+  }, [id, setDropContainers])
 
   return { ref, isOver, place }
 }
