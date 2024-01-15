@@ -32,10 +32,19 @@ import { cn } from '@/utils/style'
 export function DNDCategoryItem({
   category,
   href,
+  topCategoryId,
+  bottomCategoryId,
 }: {
   category: Category
   href: string
+  topCategoryId?: string
+  bottomCategoryId?: string
 }) {
+  console.log({
+    top: topCategoryId,
+    id: category.id,
+    bottom: bottomCategoryId,
+  })
   const {
     isDragging,
     ref: dragRef,

@@ -83,11 +83,13 @@ function ActiveTab() {
             // }
           }}
         >
-          {categories.map((i) => (
+          {categories.map((i, idx) => (
             <DNDCategoryItem
               key={i.id}
               category={i}
               href={`/category/${i.id}`}
+              topCategoryId={categories[idx - 1]?.id}
+              bottomCategoryId={categories[idx + 1]?.id}
             />
           ))}
         </DNDProvider>
