@@ -1,5 +1,8 @@
+'use client'
+
+import React, { createContext } from 'react'
 import { isValid, ulid } from 'ulidx'
-import { create, StateCreator } from 'zustand'
+import { createStore, StateCreator, useStore } from 'zustand'
 import { persist } from 'zustand/middleware'
 
 import { Category, categoryHelper } from '@/utils/category'
@@ -329,6 +332,27 @@ const categoryStore: StateCreator<State & Actions> = (set, get) => ({
   },
 })
 
-export const useCategoryStore = create(
-  persist(categoryStore, { name: 'categories', skipHydration: true })
-)
+const createCategoryStore = () => {
+  return createStore(persist(categoryStore, { name: 'categories' }))
+}
+
+type CategoryStore = ReturnType<typeof createCategoryStore>
+const CategoryContext = createContext<CategoryStore | null>(null)
+
+export function CategoryProvider({ children }: { children: React.ReactNode }) {
+  const store = React.useRef(createCategoryStore()).current
+
+  return (
+    <CategoryContext.Provider value={store}>
+      {children}
+    </CategoryContext.Provider>
+  )
+}
+
+export function useCategoryStore<T>(
+  selector: (state: State & Actions) => T
+): T {
+  const store = React.useContext(CategoryContext)
+  if (!store) throw new Error('Missing BearContext.Provider in the tree')
+  return useStore(store, selector)
+}

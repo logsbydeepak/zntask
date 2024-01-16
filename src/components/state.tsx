@@ -104,7 +104,6 @@ export function InitAppState({
     if (isAppReady) return
 
     resetAppStore()
-    useCategoryStore.persist.rehydrate()
     useTaskStore.persist.rehydrate()
 
     // setNewCategories(categories)
