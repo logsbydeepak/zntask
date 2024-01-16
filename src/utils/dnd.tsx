@@ -119,6 +119,7 @@ export function useDrop({
   id: string
   data?: { [key: string]: string | undefined }
 }) {
+  const dataRef = React.useRef(data)
   const setDropContainers = useSetAtom(dropContainersAtom)
   const ref = React.useRef<HTMLElement | null>(null)
   const dropData = useAtomValue(dropDataAtom)
@@ -127,7 +128,7 @@ export function useDrop({
   const place = dropData?.place
 
   React.useEffect(() => {
-    setDropContainers((prev) => [...prev, { id, ref, data }])
+    setDropContainers((prev) => [...prev, { id, ref, data: dataRef.current }])
     return () => setDropContainers((prev) => prev.filter((i) => i.id !== id))
   }, [id, setDropContainers])
 
