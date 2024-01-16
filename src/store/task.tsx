@@ -1,5 +1,8 @@
-import { ulid } from 'ulidx'
-import { create, StateCreator } from 'zustand'
+'use client'
+
+import React, { createContext } from 'react'
+import { isValid, ulid } from 'ulidx'
+import { create, createStore, StateCreator, useStore } from 'zustand'
 import { persist } from 'zustand/middleware'
 
 import { useActivityStore } from './activity'
@@ -180,6 +183,25 @@ const taskStore: StateCreator<State & Actions> = (set, get) => ({
   },
 })
 
-export const useTaskStore = create(
-  persist(taskStore, { name: 'tasks', skipHydration: true })
-)
+const createTaskStore = () => {
+  return createStore(persist(taskStore, { name: 'tasks' }))
+}
+
+type TaskStore = ReturnType<typeof createTaskStore>
+const CategoryContext = createContext<TaskStore | null>(null)
+
+export function TaskProvider({ children }: { children: React.ReactNode }) {
+  const store = React.useRef(createTaskStore()).current
+
+  return (
+    <CategoryContext.Provider value={store}>
+      {children}
+    </CategoryContext.Provider>
+  )
+}
+
+export function useTaskStore<T>(selector: (state: State & Actions) => T): T {
+  const store = React.useContext(CategoryContext)
+  if (!store) throw new Error('Missing TaskContext.Provider in the tree')
+  return useStore(store, selector)
+}

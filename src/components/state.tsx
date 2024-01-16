@@ -104,8 +104,6 @@ export function InitAppState({
     if (isAppReady) return
 
     resetAppStore()
-    useTaskStore.persist.rehydrate()
-
     // setNewCategories(categories)
     // setNewParentTask(parentTask)
     // setNewChildTask(childTask)

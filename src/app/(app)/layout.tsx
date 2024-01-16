@@ -9,6 +9,7 @@ import { ToastProvider } from '@/components/toast'
 import { getInitialData } from '@/data'
 import { getUser } from '@/data/user'
 import { CategoryProvider } from '@/store/category'
+import { TaskProvider } from '@/store/task'
 import { cn } from '@/utils/style'
 
 import { AppLayout } from './app-layout'
@@ -40,14 +41,16 @@ export default async function Layout({
           <ThemeProvider>
             <Suspense fallback={<SplashScreen />}>
               <CategoryProvider>
-                <InitData>
-                  <Navbar />
-                  <State />
-                  <Sidebar />
-                  <AppLayout>{children}</AppLayout>
-                  <GlobalShortcut />
-                  <Dialogs />
-                </InitData>
+                <TaskProvider>
+                  <InitData>
+                    <Navbar />
+                    <State />
+                    <Sidebar />
+                    <AppLayout>{children}</AppLayout>
+                    <GlobalShortcut />
+                    <Dialogs />
+                  </InitData>
+                </TaskProvider>
               </CategoryProvider>
             </Suspense>
             <ToastProvider />

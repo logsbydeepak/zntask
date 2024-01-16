@@ -353,6 +353,6 @@ export function useCategoryStore<T>(
   selector: (state: State & Actions) => T
 ): T {
   const store = React.useContext(CategoryContext)
-  if (!store) throw new Error('Missing BearContext.Provider in the tree')
+  if (!store) throw new Error('Missing CategoryContext.Provider in the tree')
   return useStore(store, selector)
 }
