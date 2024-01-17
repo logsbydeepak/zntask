@@ -5,8 +5,6 @@ import { ulid } from 'ulidx'
 import { createStore, StateCreator, useStore } from 'zustand'
 import { persist } from 'zustand/middleware'
 
-import { useActivityStore } from './activity'
-
 export interface Task {
   id: string
   title: string
@@ -78,12 +76,6 @@ const taskStore: StateCreator<State & Actions> = (set, get) => ({
       parentTasks: [newParentTask, ...state.parentTasks],
     }))
 
-    useActivityStore.getState().addActivity({
-      type: 'parentTask',
-      action: 'CREATE',
-      taskId: id,
-    })
-
     return { id }
   },
 
@@ -98,12 +90,6 @@ const taskStore: StateCreator<State & Actions> = (set, get) => ({
     set((state) => ({
       childTasks: [...state.childTasks, newChildTask],
     }))
-
-    useActivityStore.getState().addActivity({
-      type: 'childTask',
-      action: 'CREATE',
-      taskId: id,
-    })
   },
 
   editParentTask(parentTask) {
@@ -134,12 +120,6 @@ const taskStore: StateCreator<State & Actions> = (set, get) => ({
         }),
       }))
     }
-
-    useActivityStore.getState().addActivity({
-      type: 'parentTask',
-      action: 'EDIT',
-      taskId: parentTask.id,
-    })
   },
 
   editChildTask(childTask) {
@@ -149,24 +129,12 @@ const taskStore: StateCreator<State & Actions> = (set, get) => ({
         return item
       }),
     }))
-
-    useActivityStore.getState().addActivity({
-      type: 'childTask',
-      action: 'EDIT',
-      taskId: childTask.id,
-    })
   },
 
   removeChildTask(id) {
     set((state) => ({
       childTasks: state.childTasks.filter((item) => item.id !== id),
     }))
-
-    useActivityStore.getState().addActivity({
-      type: 'childTask',
-      action: 'DELETE',
-      taskId: id,
-    })
   },
 
   removeParentTask(id) {
@@ -174,12 +142,6 @@ const taskStore: StateCreator<State & Actions> = (set, get) => ({
       parentTasks: state.parentTasks.filter((item) => item.id !== id),
       childTasks: state.childTasks.filter((item) => item.parentId !== id),
     }))
-
-    useActivityStore.getState().addActivity({
-      type: 'parentTask',
-      action: 'DELETE',
-      taskId: id,
-    })
   },
 })
 

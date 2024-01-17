@@ -7,8 +7,6 @@ import { persist } from 'zustand/middleware'
 
 import { Category, categoryHelper } from '@/utils/category'
 
-import { useActivityStore } from './activity'
-
 const initialState = {
   categories: [] as Category[],
 }
@@ -56,13 +54,6 @@ const categoryStore: StateCreator<State & Actions> = (set, get) => ({
     set((state) => ({
       categories: [...state.categories, newCategory],
     }))
-
-    useActivityStore.getState().addActivity({
-      type: 'category',
-      action: 'CREATE',
-      categoryId: id,
-    })
-
     return newCategory
   },
 
@@ -73,23 +64,11 @@ const categoryStore: StateCreator<State & Actions> = (set, get) => ({
         return item
       }),
     }))
-
-    useActivityStore.getState().addActivity({
-      type: 'category',
-      action: 'EDIT',
-      categoryId: category.id,
-    })
   },
   deleteCategory(category) {
     set((state) => ({
       categories: state.categories.filter((item) => item.id !== category.id),
     }))
-
-    useActivityStore.getState().addActivity({
-      type: 'category',
-      action: 'DELETE',
-      categoryId: category.id,
-    })
   },
 
   getCategory(id) {
@@ -355,4 +334,10 @@ export function useCategoryStore<T>(
   const store = React.useContext(CategoryContext)
   if (!store) throw new Error('Missing CategoryContext.Provider in the tree')
   return useStore(store, selector)
+}
+
+export function useCategoryDirect() {
+  const store = React.useContext(CategoryContext)
+  if (!store) throw new Error('Missing CategoryContext.Provider in the tree')
+  return store
 }
