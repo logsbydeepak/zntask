@@ -96,14 +96,12 @@ export function InitAppState({
   const setNewChildTask = useTaskStore((s) => s.setNewChildTask)
 
   const setUser = useSetAtom(userAtom)
-  const resetAppStore = useAppStore((s) => s.reset)
 
   React.useLayoutEffect(() => {
     setUser(user)
 
     if (isAppReady) return
 
-    resetAppStore()
     // setNewCategories(categories)
     // setNewParentTask(parentTask)
     // setNewChildTask(childTask)
@@ -117,7 +115,6 @@ export function InitAppState({
     setNewCategories,
     setNewParentTask,
     setNewChildTask,
-    resetAppStore,
     isAppReady,
     isScreenSM,
     setIsSidebarOpen,

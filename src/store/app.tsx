@@ -2,7 +2,7 @@
 
 import React, { createContext } from 'react'
 import { atom } from 'jotai'
-import { create, createStore, StateCreator, useStore } from 'zustand'
+import { createStore, StateCreator, useStore } from 'zustand'
 
 import type { RequireOnlyOne } from '@/types'
 import { Category } from '@/utils/category'
@@ -55,7 +55,6 @@ interface Actions {
   >(
     state: T
   ) => void
-  reset: () => void
 }
 
 const appStore: StateCreator<State & Actions> = (set) => ({
@@ -67,9 +66,6 @@ const appStore: StateCreator<State & Actions> = (set) => ({
         ...state,
       },
     }))
-  },
-  reset() {
-    set(initialState)
   },
 })
 
