@@ -1,5 +1,8 @@
+'use client'
+
+import React, { createContext } from 'react'
 import { atom } from 'jotai'
-import { create, StateCreator } from 'zustand'
+import { create, createStore, StateCreator, useStore } from 'zustand'
 
 import type { RequireOnlyOne } from '@/types'
 import { Category } from '@/utils/category'
@@ -70,4 +73,20 @@ const appStore: StateCreator<State & Actions> = (set) => ({
   },
 })
 
-export const useAppStore = create(appStore)
+const createAppStore = () => {
+  return createStore(appStore)
+}
+
+type AppStore = ReturnType<typeof createAppStore>
+const AppContext = createContext<AppStore | null>(null)
+
+export function AppProvider({ children }: { children: React.ReactNode }) {
+  const store = React.useRef(createAppStore()).current
+  return <AppContext.Provider value={store}>{children}</AppContext.Provider>
+}
+
+export function useAppStore<T>(selector: (state: State & Actions) => T): T {
+  const store = React.useContext(AppContext)
+  if (!store) throw new Error('Missing AppContext.Provider in the tree')
+  return useStore(store, selector)
+}

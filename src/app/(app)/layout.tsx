@@ -8,6 +8,7 @@ import { GlobalShortcut, InitAppState, State } from '@/components/state'
 import { ToastProvider } from '@/components/toast'
 import { getInitialData } from '@/data'
 import { getUser } from '@/data/user'
+import { AppProvider } from '@/store/app'
 import { CategoryProvider } from '@/store/category'
 import { TaskProvider } from '@/store/task'
 import { cn } from '@/utils/style'
@@ -37,25 +38,27 @@ export default async function Layout({
           'overflow-x-hidden overflow-y-scroll font-sans text-text'
         )}
       >
-        <JotaiProvider>
-          <ThemeProvider>
-            <Suspense fallback={<SplashScreen />}>
+        <Suspense fallback={<SplashScreen />}>
+          <JotaiProvider>
+            <ThemeProvider>
               <CategoryProvider>
                 <TaskProvider>
-                  <InitData>
-                    <Navbar />
-                    <State />
-                    <Sidebar />
-                    <AppLayout>{children}</AppLayout>
-                    <GlobalShortcut />
-                    <Dialogs />
-                  </InitData>
+                  <AppProvider>
+                    <InitData>
+                      <Navbar />
+                      <State />
+                      <Sidebar />
+                      <AppLayout>{children}</AppLayout>
+                      <GlobalShortcut />
+                      <Dialogs />
+                    </InitData>
+                  </AppProvider>
                 </TaskProvider>
               </CategoryProvider>
-            </Suspense>
-            <ToastProvider />
-          </ThemeProvider>
-        </JotaiProvider>
+              <ToastProvider />
+            </ThemeProvider>
+          </JotaiProvider>
+        </Suspense>
       </body>
     </html>
   )
