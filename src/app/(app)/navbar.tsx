@@ -161,7 +161,7 @@ export function Navbar() {
 function UserMenu() {
   const { theme, setTheme } = useTheme()
   const setDialog = useAppStore((s) => s.setDialog)
-  const { email, firstName, lastName } = useAtomValue(userAtom)
+  const user = useAtomValue(userAtom)
   const router = useRouter()
 
   const themeOptions = [
@@ -182,11 +182,17 @@ function UserMenu() {
     },
   ]
 
+  const name = user.lastName
+    ? `${user.firstName} ${user.lastName}`
+    : user.firstName
+
   return (
     <>
       <div className="px-2 py-2 text-xs font-medium">
-        <p className="truncate text-sm">{`${firstName} ${lastName}`}</p>
-        <p className="truncate text-xs font-normal text-gray-600">{email}</p>
+        <p className="truncate text-sm">{name}</p>
+        <p className="truncate text-xs font-normal text-gray-600">
+          {user.email}
+        </p>
       </div>
 
       <DropdownMenuItem onSelect={() => router.push('/user')}>

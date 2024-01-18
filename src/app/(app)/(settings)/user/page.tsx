@@ -54,6 +54,10 @@ function Loading() {
 async function UserInformation() {
   const user = await getUserWithAuthData()
 
+  const name = user.lastName
+    ? `${user.firstName} ${user.lastName}`
+    : user.firstName
+
   return (
     <div className="space-y-8">
       <Item.Container>
@@ -77,9 +81,7 @@ async function UserInformation() {
 
         <Item.Wrapper>
           <Item.Key>NAME</Item.Key>
-          <Item.Content>{`${user.firstName} ${
-            user.lastName || ''
-          }`}</Item.Content>
+          <Item.Content>{name}</Item.Content>
           <Item.Action>
             <EditName />
           </Item.Action>
