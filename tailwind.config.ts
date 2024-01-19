@@ -1,5 +1,29 @@
 import { type Config } from 'tailwindcss'
 
+const colorNumber = [
+  '1',
+  '2',
+  '3',
+  '4',
+  '5',
+  '6',
+  '7',
+  '8',
+  '9',
+  '10',
+  '11',
+  '12',
+] as const
+type g = (typeof colorNumber)[number]
+
+const newGray = Object.fromEntries(
+  colorNumber.map((n) => [n, `var(--gray-${n})`])
+)
+
+const newOrange = Object.fromEntries(
+  colorNumber.map((n) => [n, `var(--orange-${n})`])
+)
+
 const config: Config = {
   darkMode: 'class',
   content: [
@@ -16,6 +40,8 @@ const config: Config = {
       colors: {
         background: 'hsl(var(--color-background))',
         text: 'hsl(var(--color-text))',
+        newGray,
+        newOrange,
       },
       screens: {
         xs: '355px',

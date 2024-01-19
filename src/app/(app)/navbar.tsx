@@ -50,7 +50,7 @@ export function Navbar() {
     <nav className="fixed z-20 w-full border-b border-gray-200 bg-white bg-opacity-50 backdrop-blur-sm">
       <div className="flex h-14 items-center justify-between px-4 md:px-5">
         <Link href="/" className="flex items-center space-x-2">
-          <span className="flex size-7 items-center justify-center rounded-full bg-orange-600 text-white">
+          <span className="flex size-7 items-center justify-center rounded-full bg-newOrange-9 text-white">
             <span className="h-3 w-3">
               <LogoIcon />
             </span>
