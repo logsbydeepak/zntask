@@ -23,11 +23,6 @@ interface Actions {
   toggleArchive: (category: Category) => void
   toggleFavorite: (category: Category) => void
 
-  reorderCategoryToTop: (id: string) => void
-  reorderCategoryToBottomOf: (from: string, to: string) => void
-  reorderFavoriteCategoryToTop: (id: string) => void
-  reorderFavoriteCategoryToBottomOf: (from: string, to: string) => void
-
   setNewCategories: (categories: Category[]) => void
 }
 
@@ -57,7 +52,7 @@ const categoryStore: StateCreator<State & Actions> = (set, get) => ({
     return newCategory
   },
 
-  editCategory(category) {
+  editCategory: (category) => {
     set((state) => ({
       categories: state.categories.map((item) => {
         if (item.id === category.id) return category
@@ -65,19 +60,19 @@ const categoryStore: StateCreator<State & Actions> = (set, get) => ({
       }),
     }))
   },
-  deleteCategory(category) {
+  deleteCategory: (category) => {
     set((state) => ({
       categories: state.categories.filter((item) => item.id !== category.id),
     }))
   },
 
-  getCategory(id) {
+  getCategory: (id) => {
     if (!id) return
     if (!isValid(id)) return
 
     return get().categories.find((category) => category.id === id)
   },
-  toggleArchive(category) {
+  toggleArchive: (category) => {
     if (categoryHelper.isArchivedCategory(category)) {
       const lastOrderNumber = get().categories.reduce((acc, curr) => {
         if (curr.orderNumber > acc) return curr.orderNumber
@@ -111,7 +106,7 @@ const categoryStore: StateCreator<State & Actions> = (set, get) => ({
     }
   },
 
-  toggleFavorite(category) {
+  toggleFavorite: (category) => {
     if (categoryHelper.isFavoriteCategory(category)) {
       set((state) => ({
         categories: state.categories.map((item) => {
@@ -145,169 +140,8 @@ const categoryStore: StateCreator<State & Actions> = (set, get) => ({
     }
   },
 
-  reorderCategoryToTop(id) {
-    const category = get().categories.find((item) => item.id === id)
-    if (!category) return
-
-    const categories = get().categories
-    const firstOrderNumber = categoryHelper.sortActiveCategories(
-      categoryHelper.getActiveCategories(categories)
-    )[0].orderNumber
-
-    set((state) => ({
-      categories: state.categories.map((item) => {
-        if (item.id === category.id)
-          return {
-            ...item,
-            orderNumber: firstOrderNumber - 1,
-          }
-        return item
-      }),
-    }))
-  },
-
-  reorderCategoryToBottomOf(from, to) {
-    const fromCategory = get().categories.find((item) => item.id === from)
-    if (!fromCategory) return
-
-    const toCategory = get().categories.find((item) => item.id === to)
-    if (!toCategory) return
-
-    if (fromCategory.orderNumber > toCategory.orderNumber) {
-      set((state) => ({
-        categories: state.categories.map((i) => {
-          if (i.id === fromCategory.id) {
-            return {
-              ...i,
-              orderNumber: toCategory.orderNumber + 1,
-            }
-          }
-
-          if (
-            i.orderNumber < fromCategory.orderNumber &&
-            i.orderNumber > toCategory.orderNumber
-          ) {
-            return {
-              ...i,
-              orderNumber: i.orderNumber + 1,
-            }
-          }
-
-          return i
-        }),
-      }))
-    } else {
-      set((state) => ({
-        categories: state.categories.map((i) => {
-          if (i.id === fromCategory.id) {
-            return {
-              ...i,
-              orderNumber: toCategory.orderNumber,
-            }
-          }
-
-          if (
-            i.orderNumber > fromCategory.orderNumber &&
-            i.orderNumber <= toCategory.orderNumber
-          ) {
-            return {
-              ...i,
-              orderNumber: i.orderNumber - 1,
-            }
-          }
-
-          return i
-        }),
-      }))
-    }
-  },
-  reorderFavoriteCategoryToTop(id) {
-    const category = get().categories.find((item) => item.id === id)
-    if (!category) return
-
-    const categories = get().categories
-    const firstOrderNumber = categoryHelper.sortFavoriteCategories(
-      categoryHelper.getFavoriteCategories(categories)
-    )[0].favoriteOrderNumber
-
-    set((state) => ({
-      categories: state.categories.map((item) => {
-        if (item.id === category.id)
-          return {
-            ...item,
-            favoriteOrderNumber: firstOrderNumber - 1,
-          }
-        return item
-      }),
-    }))
-  },
-
-  reorderFavoriteCategoryToBottomOf(from, to) {
-    const favoriteCategories = categoryHelper.getFavoriteCategories(
-      get().categories
-    )
-    const fromCategory = favoriteCategories.find((item) => item.id === from)
-    if (!fromCategory) return
-    const toCategory = favoriteCategories.find((item) => item.id === to)
-    if (!toCategory) return
-
-    if (fromCategory.favoriteOrderNumber > toCategory.favoriteOrderNumber) {
-      set((state) => ({
-        categories: state.categories.map((i) => {
-          if (i.favoriteOrderNumber === null) return i
-
-          if (i.id === fromCategory.id) {
-            return {
-              ...i,
-              favoriteOrderNumber: toCategory.favoriteOrderNumber + 1,
-            }
-          }
-
-          if (
-            i.favoriteOrderNumber < fromCategory.favoriteOrderNumber &&
-            i.favoriteOrderNumber > toCategory.favoriteOrderNumber
-          ) {
-            return {
-              ...i,
-              favoriteOrderNumber: i.favoriteOrderNumber + 1,
-            }
-          }
-
-          return i
-        }),
-      }))
-    } else {
-      set((state) => ({
-        categories: state.categories.map((i) => {
-          if (i.favoriteOrderNumber === null) return i
-
-          if (i.id === fromCategory.id) {
-            return {
-              ...i,
-              favoriteOrderNumber: toCategory.favoriteOrderNumber,
-            }
-          }
-
-          if (
-            i.favoriteOrderNumber > fromCategory.favoriteOrderNumber &&
-            i.favoriteOrderNumber <= toCategory.favoriteOrderNumber
-          ) {
-            return {
-              ...i,
-              favoriteOrderNumber: i.favoriteOrderNumber - 1,
-            }
-          }
-
-          return i
-        }),
-      }))
-    }
-  },
-
-  setNewCategories(categories) {
-    set(() => ({
-      categories,
-    }))
+  setNewCategories: (categories) => {
+    set({ categories })
   },
 })
 
