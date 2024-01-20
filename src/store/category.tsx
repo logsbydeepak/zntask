@@ -26,7 +26,7 @@ interface Actions {
   setNewCategories: (categories: Category[]) => void
 }
 
-const categoryStore: StateCreator<State & Actions> = (set, get) => ({
+const categoryStore: StateCreator<State & Actions> = (set, get, gg) => ({
   ...initialState,
 
   addCategory: (category) => {
@@ -145,18 +145,32 @@ const categoryStore: StateCreator<State & Actions> = (set, get) => ({
   },
 })
 
-const createCategoryStore = () => {
-  return createStore(persist(categoryStore, { name: 'categories' }))
+const createCategoryStore = (initialProps?: Partial<State>) => {
+  return createStore(
+    persist<Actions & State>(
+      (...args) => ({
+        ...initialProps,
+        ...categoryStore(...args),
+      }),
+      { name: 'categories' }
+    )
+  )
 }
 
 type CategoryStore = ReturnType<typeof createCategoryStore>
 const CategoryContext = createContext<CategoryStore | null>(null)
 
-export function CategoryProvider({ children }: { children: React.ReactNode }) {
-  const store = React.useRef(createCategoryStore()).current
+export function CategoryProvider({
+  children,
+  initialProps,
+}: {
+  children: React.ReactNode
+  initialProps?: Partial<State>
+}) {
+  const store = React.useRef(createCategoryStore(initialProps))
 
   return (
-    <CategoryContext.Provider value={store}>
+    <CategoryContext.Provider value={store.current}>
       {children}
     </CategoryContext.Provider>
   )
@@ -168,10 +182,4 @@ export function useCategoryStore<T>(
   const store = React.useContext(CategoryContext)
   if (!store) throw new Error('Missing CategoryContext.Provider in the tree')
   return useStore(store, selector)
-}
-
-export function useCategoryDirect() {
-  const store = React.useContext(CategoryContext)
-  if (!store) throw new Error('Missing CategoryContext.Provider in the tree')
-  return store
 }

@@ -1,6 +1,6 @@
 'use client'
 
-import { Provider } from 'jotai'
+import { createStore, Provider } from 'jotai'
 import { ThemeProvider as Theme } from 'next-themes'
 
 export function JotaiProvider({ children }: { children: React.ReactNode }) {

@@ -4,11 +4,16 @@ import { Inter, JetBrains_Mono } from 'next/font/google'
 
 import { JotaiProvider, ThemeProvider } from '@/components/client-providers'
 import { Dialogs } from '@/components/dialogs'
-import { GlobalShortcut, InitAppState, State } from '@/components/state'
+import {
+  AtomsHydrator,
+  GlobalShortcut,
+  State,
+  SyncAppState,
+} from '@/components/state'
 import { ToastProvider } from '@/components/toast'
 import { getInitialData } from '@/data'
 import { getUser } from '@/data/user'
-import { AppProvider } from '@/store/app'
+import { AppProvider, userAtom } from '@/store/app'
 import { CategoryProvider } from '@/store/category'
 import { TaskProvider } from '@/store/task'
 import { cn } from '@/utils/style'
@@ -41,20 +46,18 @@ export default async function Layout({
         <Suspense fallback={<SplashScreen />}>
           <JotaiProvider>
             <ThemeProvider>
-              <CategoryProvider>
-                <TaskProvider>
-                  <AppProvider>
-                    <InitData>
-                      <Navbar />
-                      <State />
-                      <Sidebar />
-                      <AppLayout>{children}</AppLayout>
-                      <GlobalShortcut />
-                      <Dialogs />
-                    </InitData>
-                  </AppProvider>
-                </TaskProvider>
-              </CategoryProvider>
+              <TaskProvider>
+                <AppProvider>
+                  <InitData>
+                    <Navbar />
+                    <State />
+                    <Sidebar />
+                    <AppLayout>{children}</AppLayout>
+                    <GlobalShortcut />
+                    <Dialogs />
+                  </InitData>
+                </AppProvider>
+              </TaskProvider>
               <ToastProvider />
             </ThemeProvider>
           </JotaiProvider>
@@ -77,15 +80,10 @@ const getUserData = unstable_cache(
 async function InitData({ children }: { children: React.ReactNode }) {
   const initialData = await getInitialData()
   const user = await getUserData()
-
   return (
-    <InitAppState
-      categories={initialData.categories}
-      parentTask={initialData.parentTasks}
-      childTask={initialData.childTasks}
-      user={user}
-    >
-      {children}
-    </InitAppState>
+    <CategoryProvider initialProps={{ categories: initialData.categories }}>
+      <SyncAppState user={user} />
+      <AtomsHydrator atomValues={[[userAtom, user]]}>{children}</AtomsHydrator>
+    </CategoryProvider>
   )
 }

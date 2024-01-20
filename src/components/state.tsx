@@ -1,7 +1,8 @@
 'use client'
 
-import React from 'react'
-import { useAtomValue, useSetAtom } from 'jotai'
+import React, { ReactNode } from 'react'
+import { useSetAtom, WritableAtom } from 'jotai'
+import { useHydrateAtoms } from 'jotai/utils'
 
 import {
   isScreenSMAtom,
@@ -9,9 +10,6 @@ import {
   useAppStore,
   userAtom,
 } from '@/store/app'
-import { useCategoryStore } from '@/store/category'
-import { ChildTask, ParentTask, useTaskStore } from '@/store/task'
-import { CategoryType } from '@/utils/category'
 
 export function GlobalShortcut() {
   const setDialog = useAppStore((s) => s.setDialog)
@@ -68,17 +66,22 @@ export function State() {
   return null
 }
 
-export function InitAppState({
-  categories,
-  parentTask,
-  childTask,
+export function AtomsHydrator({
+  atomValues,
   children,
+}: {
+  atomValues: Iterable<
+    readonly [WritableAtom<unknown, [any], unknown>, unknown]
+  >
+  children: ReactNode
+}) {
+  useHydrateAtoms(new Map(atomValues))
+  return children
+}
+
+export function SyncAppState({
   user,
 }: {
-  categories: CategoryType[]
-  parentTask: ParentTask[]
-  childTask: ChildTask[]
-  children: React.ReactNode
   user: {
     firstName: string
     lastName: string | null
@@ -86,42 +89,11 @@ export function InitAppState({
     profilePicture: string | null
   }
 }) {
-  const [isAppReady, setIsAppReady] = React.useState(false)
-
-  const isScreenSM = useAtomValue(isScreenSMAtom)
-  const setIsSidebarOpen = useSetAtom(isSidebarOpenAtom)
-
-  const setNewCategories = useCategoryStore((s) => s.setNewCategories)
-  const setNewParentTask = useTaskStore((s) => s.setNewParentTask)
-  const setNewChildTask = useTaskStore((s) => s.setNewChildTask)
-
   const setUser = useSetAtom(userAtom)
 
-  React.useLayoutEffect(() => {
+  React.useEffect(() => {
     setUser(user)
+  }, [user, setUser])
 
-    if (isAppReady) return
-
-    // setNewCategories(categories)
-    // setNewParentTask(parentTask)
-    // setNewChildTask(childTask)
-
-    setIsSidebarOpen(window.innerWidth >= 768)
-    setIsAppReady(true)
-  }, [
-    categories,
-    parentTask,
-    childTask,
-    setNewCategories,
-    setNewParentTask,
-    setNewChildTask,
-    isAppReady,
-    isScreenSM,
-    setIsSidebarOpen,
-    user,
-    setUser,
-  ])
-
-  if (!isAppReady) return null
-  return children
+  return null
 }

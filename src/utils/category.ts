@@ -34,7 +34,7 @@ export const zCategory = z.object({
   id: zRequired.refine(isValid, { message: 'Invalid ulid' }),
   title: zRequired,
   indicator: z.enum(categoryIndicatorLabel),
-  orderNumber: z.number(),
+  orderNumber: z.number().nullable(),
   favoriteOrderNumber: z.number().nullable(),
   archivedAt: z.string().nullable(),
 })

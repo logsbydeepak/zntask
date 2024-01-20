@@ -26,7 +26,9 @@ export function AddGoogleDialog() {
   const setIsOpen = useAppStore((state) => state.setDialog)
 
   const isOpen =
-    isAddGoogleAuthOpen || !!window?.localStorage?.getItem('googleCode')
+    isAddGoogleAuthOpen ||
+    (typeof window !== 'undefined' &&
+      !!window?.localStorage?.getItem('googleCode'))
 
   const handleClose = React.useCallback(() => {
     if (isPending) return
