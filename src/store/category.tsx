@@ -32,10 +32,10 @@ const categoryStore: StateCreator<State & Actions> = (set, get, gg) => ({
   addCategory: (category) => {
     const id = ulid()
 
-    const lastOrderNumber = get().categories.reduce((acc, curr) => {
-      if (curr.orderNumber > acc) return curr.orderNumber
-      return acc
-    }, 0)
+    const categories = categoryHelper.sortActiveCategories(
+      categoryHelper.getActiveCategories(get().categories)
+    )
+    const lastOrderNumber = categories[categories.length - 1]?.orderNumber ?? 0
 
     const newCategory: Category = {
       id,
@@ -74,10 +74,11 @@ const categoryStore: StateCreator<State & Actions> = (set, get, gg) => ({
   },
   toggleArchive: (category) => {
     if (categoryHelper.isArchivedCategory(category)) {
-      const lastOrderNumber = get().categories.reduce((acc, curr) => {
-        if (curr.orderNumber > acc) return curr.orderNumber
-        return acc
-      }, 0)
+      const categories = categoryHelper.sortActiveCategories(
+        categoryHelper.getActiveCategories(get().categories)
+      )
+      const lastOrderNumber =
+        categories[categories.length - 1]?.orderNumber ?? 0
 
       set((state) => ({
         categories: state.categories.map((item) => {

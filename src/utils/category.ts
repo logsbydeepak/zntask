@@ -57,6 +57,7 @@ interface FavoriteCategory extends Category {
 
 interface ActiveCategory extends Category {
   archivedAt: null
+  orderNumber: number
 }
 
 interface ArchivedCategory extends Category {
@@ -106,7 +107,11 @@ const sortActiveCategories = (categories: ActiveCategory[]) => {
 }
 
 const sortArchivedCategories = (categories: ArchivedCategory[]) => {
-  return categories.sort((a, b) => a.orderNumber - b.orderNumber)
+  return categories.sort((a, b) => {
+    if (a.archivedAt < b.archivedAt) return -1
+    if (a.archivedAt > b.archivedAt) return 1
+    return 0
+  })
 }
 
 const isFavoriteCategory = (category: Category) => {
