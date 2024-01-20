@@ -42,12 +42,12 @@
     "@use-gesture/react": "^10.3.0",
     "autoprefixer": "10.4.17",
     "bcryptjs": "^2.4.3",
-    "bun-types": "^1.0.23",
-    "chrono-node": "^2.7.4",
+    "bun-types": "^1.0.24",
+    "chrono-node": "^2.7.5",
     "cmdk": "^0.2.0",
     "cspell": "^8.3.2",
     "cva": "1.0.0-beta.1",
-    "date-fns": "^3.2.0",
+    "date-fns": "^3.3.0",
     "drizzle-orm": "^0.29.3",
     "eslint": "8.56.0",
     "eslint-config-next": "14.1.0",
@@ -78,7 +78,7 @@
     "use-debounce": "^10.0.0",
     "validator": "^13.11.0",
     "zod": "^3.22.4",
-    "zustand": "^4.4.7"
+    "zustand": "^4.5.0"
   },
   "devDependencies": {
     "drizzle-kit": "^0.20.13"
