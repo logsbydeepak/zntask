@@ -51,17 +51,21 @@ export const getCategoryColor = (indicator: CategoryIndicatorLabelType) => {
 
 export type Category = z.infer<typeof zCategory>
 
-interface FavoriteCategory extends Category {
+export interface FavoriteCategory extends Category {
   favoriteOrderNumber: number
+  orderNumber: number
+  archivedAt: null
 }
 
-interface ActiveCategory extends Category {
+export interface ActiveCategory extends Category {
   archivedAt: null
   orderNumber: number
 }
 
-interface ArchivedCategory extends Category {
+export interface ArchivedCategory extends Category {
   archivedAt: string
+  orderNumber: null
+  favoriteOrderNumber: null
 }
 
 const getFavoriteCategories = (categories: Category[]) => {
@@ -122,24 +126,62 @@ const isArchivedCategory = (category: Category) => {
   return typeof category.archivedAt === 'string'
 }
 
-const workWithFavoriteCategories = (
-  categories: Category[],
-  callback: (categories: FavoriteCategory[]) => void
-) => {
-  const favoriteCategories = getFavoriteCategories(categories)
-  const returnValue = callback(favoriteCategories)
-  return returnValue
+const makeCategoryArchived = (
+  category: ActiveCategory,
+  archivedAt: string
+): ArchivedCategory => {
+  return {
+    ...category,
+    archivedAt,
+    orderNumber: null,
+    favoriteOrderNumber: null,
+  }
+}
+
+const makeCategoryUnarchive = (
+  category: ArchivedCategory,
+  orderNumber: number
+): ActiveCategory => {
+  return {
+    ...category,
+    archivedAt: null,
+    orderNumber,
+  }
+}
+
+const makeCategoryFavorite = (
+  category: ActiveCategory,
+  favoriteOrderNumber: number
+): FavoriteCategory => {
+  return {
+    ...category,
+    favoriteOrderNumber,
+    orderNumber: favoriteOrderNumber,
+  }
+}
+
+const makeCategoryUnfavorite = (category: FavoriteCategory): ActiveCategory => {
+  return {
+    ...category,
+    favoriteOrderNumber: null,
+  }
 }
 
 export const categoryHelper = {
   getFavoriteCategories,
   getActiveCategories,
   getArchivedCategories,
+
   sortFavoriteCategories,
   sortActiveCategories,
   sortArchivedCategories,
+
   getCategoryColor,
-  workWithFavoriteCategories,
   isFavoriteCategory,
   isArchivedCategory,
+
+  makeCategoryArchived,
+  makeCategoryUnarchive,
+  makeCategoryFavorite,
+  makeCategoryUnfavorite,
 }
