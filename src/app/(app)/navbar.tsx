@@ -31,18 +31,15 @@ import {
   MenuIcon,
 } from '@/components/ui/menu'
 import * as Tooltip from '@/components/ui/tooltip'
-import {
-  isAppSyncingAtom,
-  isSidebarOpenAtom,
-  useAppStore,
-  userAtom,
-} from '@/store/app'
+import { isAppSyncingAtom, useAppStore, userAtom } from '@/store/app'
 import { cn, tw } from '@/utils/style'
 
 export function Navbar() {
   const setDialog = useAppStore((s) => s.setDialog)
-  const setIsSidebarOpen = useSetAtom(isSidebarOpenAtom)
-  const isSidebarOpen = useAtomValue(isSidebarOpenAtom)
+
+  const isSidebarOpen = useAppStore((s) => s.isSidebarOpen)
+  const toggleSidebar = useAppStore((s) => s.toggleSidebar)
+
   const isAppSyncing = useAtomValue(isAppSyncingAtom)
   const { profilePicture, firstName, lastName } = useAtomValue(userAtom)
 
@@ -78,7 +75,7 @@ export function Navbar() {
 
             <Tooltip.Root>
               <Tooltip.Trigger asChild>
-                <Icon onClick={() => setIsSidebarOpen((open) => !open)}>
+                <Icon onClick={() => toggleSidebar()}>
                   {isSidebarOpen ? (
                     <PanelLeftInactiveIcon />
                   ) : (

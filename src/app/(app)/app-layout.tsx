@@ -1,9 +1,8 @@
 'use client'
 
 import React from 'react'
-import { useAtomValue } from 'jotai'
 
-import { isSidebarOpenAtom } from '@/store/app'
+import { useAppStore } from '@/store/app'
 import { cn } from '@/utils/style'
 
 export function Title({ children }: { children: React.ReactNode }) {
@@ -66,7 +65,7 @@ export const Empty = {
 }
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
-  const isSidebarOpen = useAtomValue(isSidebarOpenAtom)
+  const isSidebarOpen = useAppStore((state) => state.isSidebarOpen)
 
   return (
     <main data-sidebar={isSidebarOpen} className="group/sidebar">

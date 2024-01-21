@@ -14,11 +14,7 @@ interface User {
   profilePicture: string | null
 }
 
-export const isAppLoadingAtom = atom(true)
-export const isSidebarOpenAtom = atom(false)
 export const isAppSyncingAtom = atom(false)
-
-export const isScreenSMAtom = atom(false)
 export const userAtom = atom<User>({} as User)
 
 const dialogState = {
@@ -43,6 +39,8 @@ const dialogState = {
 
 const initialState = {
   dialog: dialogState,
+  isSidebarOpen: false,
+  isScreenSM: false,
 }
 
 type State = typeof initialState
@@ -55,10 +53,16 @@ interface Actions {
   >(
     state: T
   ) => void
+  toggleSidebar: () => void
+  setSidebar: (state: boolean) => void
+  setScreenSM: (state: boolean) => void
 }
 
 const appStore: StateCreator<State & Actions> = (set) => ({
   ...initialState,
+  toggleSidebar() {
+    set((state) => ({ isSidebarOpen: !state.isSidebarOpen }))
+  },
   setDialog(state) {
     set(() => ({
       dialog: {
@@ -66,6 +70,12 @@ const appStore: StateCreator<State & Actions> = (set) => ({
         ...state,
       },
     }))
+  },
+  setSidebar(state) {
+    set(() => ({ isSidebarOpen: state }))
+  },
+  setScreenSM(state) {
+    set(() => ({ isScreenSM: state }))
   },
 })
 

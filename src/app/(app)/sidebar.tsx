@@ -26,7 +26,7 @@ import {
   DropdownMenuRoot,
   DropdownMenuTrigger,
 } from '@/components/ui/menu'
-import { isScreenSMAtom, isSidebarOpenAtom } from '@/store/app'
+import { useAppStore } from '@/store/app'
 import { useCategoryStore } from '@/store/category'
 import { Category, categoryHelper, getCategoryColor } from '@/utils/category'
 import { cn, tw } from '@/utils/style'
@@ -34,7 +34,7 @@ import { cn, tw } from '@/utils/style'
 import { CategoryMenuContent } from './(home)/category'
 
 export function Sidebar() {
-  const isSidebarOpen = useAtomValue(isSidebarOpenAtom)
+  const isSidebarOpen = useAppStore((s) => s.isSidebarOpen)
 
   return (
     <aside
@@ -215,7 +215,7 @@ function CategoryItem({
   href: string
   isActive: boolean
 }) {
-  const isScreenSM = useAtomValue(isScreenSMAtom)
+  const isScreenSM = useAppStore((s) => s.isScreenSM)
   const [preventFocus, setPreventFocus] = React.useState(false)
 
   return (
@@ -366,8 +366,8 @@ const ItemContentLink = React.forwardRef<
   React.ElementRef<typeof Link>,
   React.ComponentPropsWithRef<typeof Link>
 >(({ children, className, ...props }, ref) => {
-  const isScreenSM = useAtomValue(isScreenSMAtom)
-  const setIsSidebarOpen = useSetAtom(isSidebarOpenAtom)
+  const isScreenSM = useAppStore((s) => s.isScreenSM)
+  const toggleSidebar = useAppStore((s) => s.toggleSidebar)
 
   return (
     <Link
@@ -375,7 +375,7 @@ const ItemContentLink = React.forwardRef<
       ref={ref}
       className={cn(itemContentStyle, className)}
       onClick={() => {
-        if (isScreenSM) return setIsSidebarOpen(false)
+        if (isScreenSM) return toggleSidebar()
       }}
     >
       {children}

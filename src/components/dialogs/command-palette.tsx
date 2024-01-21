@@ -21,7 +21,7 @@ import {
 import { useShallow } from 'zustand/react/shallow'
 
 import * as Dialog from '@/components/ui/dialog'
-import { isSidebarOpenAtom, useAppStore } from '@/store/app'
+import { useAppStore } from '@/store/app'
 import { useCategoryStore } from '@/store/category'
 import { useTaskStore } from '@/store/task'
 import { categoryHelper, getCategoryColor } from '@/utils/category'
@@ -58,7 +58,8 @@ function CommandPaletteContent({ handleClose }: { handleClose: () => void }) {
 
   const router = useRouter()
   const setDialog = useAppStore((s) => s.setDialog)
-  const setIsSidebarOpen = useSetAtom(isSidebarOpenAtom)
+  const toggleSidebar = useAppStore((s) => s.toggleSidebar)
+
   const activeCategory = useCategoryStore(
     useShallow((s) => categoryHelper.getActiveCategories(s.categories))
   )
@@ -145,9 +146,7 @@ function CommandPaletteContent({ handleClose }: { handleClose: () => void }) {
     {
       label: 'toggle sidebar',
       icon: <SidebarIcon />,
-      onSelect: () => {
-        setIsSidebarOpen((s) => !s)
-      },
+      onSelect: () => toggleSidebar(),
     },
   ]
 

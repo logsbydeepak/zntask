@@ -4,12 +4,7 @@ import React, { ReactNode } from 'react'
 import { useSetAtom, WritableAtom } from 'jotai'
 import { useHydrateAtoms } from 'jotai/utils'
 
-import {
-  isScreenSMAtom,
-  isSidebarOpenAtom,
-  useAppStore,
-  userAtom,
-} from '@/store/app'
+import { useAppStore, userAtom } from '@/store/app'
 
 export function GlobalShortcut() {
   const setDialog = useAppStore((s) => s.setDialog)
@@ -40,8 +35,9 @@ export function GlobalShortcut() {
 }
 
 export function State() {
-  const setIsScreenSM = useSetAtom(isScreenSMAtom)
-  const setIsSidebarOpen = useSetAtom(isSidebarOpenAtom)
+  const setSidebar = useAppStore((s) => s.setSidebar)
+  const setIsScreenSM = useAppStore((s) => s.setScreenSM)
+
   const [screenSize, setScreenSize] = React.useState(() => {
     if (typeof window === 'undefined') return 0
     return window.innerWidth
@@ -50,8 +46,8 @@ export function State() {
 
   React.useEffect(() => {
     setIsScreenSM(differScreenSize <= 768)
-    setIsSidebarOpen(differScreenSize >= 768)
-  }, [differScreenSize, setIsSidebarOpen, setIsScreenSM])
+    setSidebar(differScreenSize >= 768)
+  }, [differScreenSize, setIsScreenSM, setSidebar])
 
   React.useEffect(() => {
     function handleResize() {
