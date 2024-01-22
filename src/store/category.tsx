@@ -26,7 +26,7 @@ interface Actions {
   setNewCategories: (categories: Category[]) => void
 }
 
-const categoryStore: StateCreator<State & Actions> = (set, get, gg) => ({
+const categoryStore: StateCreator<State & Actions> = (set, get) => ({
   ...initialState,
 
   addCategory: (category) => {

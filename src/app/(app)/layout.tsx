@@ -1,11 +1,13 @@
 import React, { Suspense } from 'react'
 import { unstable_cache } from 'next/cache'
+import dynamic from 'next/dynamic'
 import { Inter, JetBrains_Mono } from 'next/font/google'
 
 import { JotaiProvider, ThemeProvider } from '@/components/client-providers'
 import { Dialogs } from '@/components/dialogs'
 import {
   AtomsHydrator,
+  DelayRender,
   GlobalShortcut,
   State,
   SyncAppState,
@@ -48,14 +50,16 @@ export default async function Layout({
             <ThemeProvider>
               <TaskProvider>
                 <AppProvider>
-                  <InitData>
-                    <Navbar />
-                    <State />
-                    <Sidebar />
-                    <AppLayout>{children}</AppLayout>
-                    <GlobalShortcut />
-                    <Dialogs />
-                  </InitData>
+                  <DelayRender>
+                    <InitData>
+                      <Navbar />
+                      <State />
+                      <Sidebar />
+                      <AppLayout>{children}</AppLayout>
+                      <GlobalShortcut />
+                      <Dialogs />
+                    </InitData>
+                  </DelayRender>
                 </AppProvider>
               </TaskProvider>
               <ToastProvider />

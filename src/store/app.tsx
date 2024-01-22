@@ -79,16 +79,34 @@ const appStore: StateCreator<State & Actions> = (set) => ({
   },
 })
 
-const createAppStore = () => {
-  return createStore(appStore)
+const createAppStore = (initialProps?: Partial<State>) => {
+  return createStore<State & Actions>((...args) => ({
+    ...appStore(...args),
+    ...initialProps,
+  }))
 }
 
 type AppStore = ReturnType<typeof createAppStore>
 const AppContext = createContext<AppStore | null>(null)
 
-export function AppProvider({ children }: { children: React.ReactNode }) {
-  const store = React.useRef(createAppStore()).current
-  return <AppContext.Provider value={store}>{children}</AppContext.Provider>
+export function AppProvider({
+  children,
+  initialProps,
+}: {
+  children: React.ReactNode
+
+  initialProps?: Partial<State>
+}) {
+  const store = React.useRef(
+    createAppStore({
+      ...initialProps,
+      isSidebarOpen: typeof window !== 'undefined' && window.innerWidth >= 768,
+      isScreenSM: typeof window !== 'undefined' && window.innerWidth <= 768,
+    })
+  )
+  return (
+    <AppContext.Provider value={store.current}>{children}</AppContext.Provider>
+  )
 }
 
 export function useAppStore<T>(selector: (state: State & Actions) => T): T {

@@ -57,8 +57,6 @@ export function State() {
     return () => window.removeEventListener('resize', handleResize)
   }, [setScreenSize])
 
-  React.useEffect
-
   return null
 }
 
@@ -92,4 +90,16 @@ export function SyncAppState({
   }, [user, setUser])
 
   return null
+}
+
+export const DelayRender = ({ children }: { children: ReactNode }) => {
+  const [isRender, setIsRender] = React.useState(false)
+
+  React.useEffect(() => {
+    setIsRender(true)
+  }, [])
+
+  if (!isRender) return null
+
+  return children
 }
