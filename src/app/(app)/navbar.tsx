@@ -31,7 +31,7 @@ import {
   MenuIcon,
 } from '@/components/ui/menu'
 import * as Tooltip from '@/components/ui/tooltip'
-import { isAppSyncingAtom, useAppStore, userAtom } from '@/store/app'
+import { useAppStore, userAtom } from '@/store/app'
 import { cn, tw } from '@/utils/style'
 
 export function Navbar() {
@@ -40,7 +40,7 @@ export function Navbar() {
   const isSidebarOpen = useAppStore((s) => s.isSidebarOpen)
   const toggleSidebar = useAppStore((s) => s.toggleSidebar)
 
-  const isAppSyncing = useAtomValue(isAppSyncingAtom)
+  const isAppSyncing = useAppStore((s) => s.isAppSyncing)
   const { profilePicture, firstName, lastName } = useAtomValue(userAtom)
 
   return (
