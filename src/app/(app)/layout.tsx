@@ -1,12 +1,10 @@
 import React, { Suspense } from 'react'
 import { unstable_cache } from 'next/cache'
-import dynamic from 'next/dynamic'
 import { Inter, JetBrains_Mono } from 'next/font/google'
 
 import { JotaiProvider, ThemeProvider } from '@/components/client-providers'
 import { Dialogs } from '@/components/dialogs'
 import {
-  AtomsHydrator,
   DelayRender,
   GlobalShortcut,
   State,
@@ -15,7 +13,7 @@ import {
 import { ToastProvider } from '@/components/toast'
 import { getInitialData } from '@/data'
 import { getUser } from '@/data/user'
-import { AppProvider, userAtom } from '@/store/app'
+import { AppProvider } from '@/store/app'
 import { CategoryProvider } from '@/store/category'
 import { TaskProvider } from '@/store/task'
 import { cn } from '@/utils/style'
@@ -46,25 +44,21 @@ export default async function Layout({
         )}
       >
         <Suspense fallback={<SplashScreen />}>
-          <JotaiProvider>
-            <ThemeProvider>
-              <TaskProvider>
-                <AppProvider>
-                  <DelayRender>
-                    <InitData>
-                      <Navbar />
-                      <State />
-                      <Sidebar />
-                      <AppLayout>{children}</AppLayout>
-                      <GlobalShortcut />
-                      <Dialogs />
-                    </InitData>
-                  </DelayRender>
-                </AppProvider>
-              </TaskProvider>
-              <ToastProvider />
-            </ThemeProvider>
-          </JotaiProvider>
+          <ThemeProvider>
+            <TaskProvider>
+              <DelayRender>
+                <InitData>
+                  <Navbar />
+                  <State />
+                  <Sidebar />
+                  <AppLayout>{children}</AppLayout>
+                  <GlobalShortcut />
+                  <Dialogs />
+                </InitData>
+              </DelayRender>
+            </TaskProvider>
+            <ToastProvider />
+          </ThemeProvider>
         </Suspense>
       </body>
     </html>
@@ -86,8 +80,10 @@ async function InitData({ children }: { children: React.ReactNode }) {
   const user = await getUserData()
   return (
     <CategoryProvider initialProps={{ categories: initialData.categories }}>
-      <SyncAppState user={user} />
-      <AtomsHydrator atomValues={[[userAtom, user]]}>{children}</AtomsHydrator>
+      <AppProvider initialProps={{ user: user }}>
+        <SyncAppState user={user} />
+        {children}
+      </AppProvider>
     </CategoryProvider>
   )
 }

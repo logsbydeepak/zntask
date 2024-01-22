@@ -4,7 +4,7 @@ import React, { ReactNode } from 'react'
 import { useSetAtom, WritableAtom } from 'jotai'
 import { useHydrateAtoms } from 'jotai/utils'
 
-import { useAppStore, userAtom } from '@/store/app'
+import { useAppStore } from '@/store/app'
 
 export function GlobalShortcut() {
   const setDialog = useAppStore((s) => s.setDialog)
@@ -83,7 +83,7 @@ export function SyncAppState({
     profilePicture: string | null
   }
 }) {
-  const setUser = useSetAtom(userAtom)
+  const setUser = useAppStore((s) => s.setUser)
 
   React.useEffect(() => {
     setUser(user)

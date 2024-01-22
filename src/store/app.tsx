@@ -14,8 +14,6 @@ interface User {
   profilePicture: string | null
 }
 
-export const userAtom = atom<User>({} as User)
-
 const dialogState = {
   resetPassword: false,
   logout: false,
@@ -41,6 +39,7 @@ const initialState = {
   isSidebarOpen: false,
   isScreenSM: false,
   isAppSyncing: false,
+  user: {} as User,
 }
 
 type State = typeof initialState
@@ -57,10 +56,15 @@ interface Actions {
   setSidebar: (state: boolean) => void
   setScreenSM: (state: boolean) => void
   setAppSyncing: (state: boolean) => void
+  setUser: (state: User) => void
 }
 
 const appStore: StateCreator<State & Actions> = (set) => ({
   ...initialState,
+  setUser(state) {
+    set(() => ({ user: state }))
+  },
+
   setAppSyncing(state) {
     set(() => ({ isAppSyncing: state }))
   },

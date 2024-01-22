@@ -10,7 +10,7 @@ import * as Dialog from '@/components/ui/dialog'
 import * as Form from '@/components/ui/form'
 import { removeProfilePicture, revalidateUser } from '@/data/user'
 import type { OurFileRouter } from '@/data/utils/uploadthing'
-import { useAppStore, userAtom } from '@/store/app'
+import { useAppStore } from '@/store/app'
 import { toast } from '@/store/toast'
 
 import { Avatar, genInitials } from '../avatar'
@@ -53,7 +53,7 @@ function UpdateProfilePictureDialogContent({
   isPending: boolean
   startTransition: React.TransitionStartFunction
 }) {
-  const user = useAtomValue(userAtom)
+  const user = useAppStore((s) => s.user)
 
   const [file, setFile] = React.useState<File | null>(null)
   const [reset, setReset] = React.useState(false)

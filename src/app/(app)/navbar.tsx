@@ -31,7 +31,7 @@ import {
   MenuIcon,
 } from '@/components/ui/menu'
 import * as Tooltip from '@/components/ui/tooltip'
-import { useAppStore, userAtom } from '@/store/app'
+import { useAppStore } from '@/store/app'
 import { cn, tw } from '@/utils/style'
 
 export function Navbar() {
@@ -41,7 +41,7 @@ export function Navbar() {
   const toggleSidebar = useAppStore((s) => s.toggleSidebar)
 
   const isAppSyncing = useAppStore((s) => s.isAppSyncing)
-  const { profilePicture, firstName, lastName } = useAtomValue(userAtom)
+  const user = useAppStore((s) => s.user)
 
   return (
     <nav className="fixed z-20 w-full border-b border-gray-200 bg-white bg-opacity-50 backdrop-blur-sm">
@@ -119,9 +119,9 @@ export function Navbar() {
                 <Tooltip.Trigger asChild>
                   <DropdownMenuTrigger className="relative size-8 rounded-full">
                     <Avatar
-                      profilePicture={profilePicture}
-                      firstName={firstName}
-                      lastName={lastName}
+                      profilePicture={user.profilePicture}
+                      firstName={user.firstName}
+                      lastName={user.lastName}
                       size={32}
                       className="text-xs"
                     />
@@ -158,7 +158,7 @@ export function Navbar() {
 function UserMenu() {
   const { theme, setTheme } = useTheme()
   const setDialog = useAppStore((s) => s.setDialog)
-  const user = useAtomValue(userAtom)
+  const user = useAppStore((s) => s.user)
   const router = useRouter()
 
   const themeOptions = [

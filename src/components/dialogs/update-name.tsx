@@ -9,7 +9,7 @@ import * as Dialog from '@/components/ui/dialog'
 import * as Form from '@/components/ui/form'
 import { updateName } from '@/data/user'
 import { zUpdateName } from '@/data/utils/zSchema'
-import { useAppStore, userAtom } from '@/store/app'
+import { useAppStore } from '@/store/app'
 import { toast } from '@/store/toast'
 
 import { Head } from '../head'
@@ -50,7 +50,8 @@ function UpdateNameDialogContent({
   isPending: boolean
   startTransition: React.TransitionStartFunction
 }) {
-  const user = useAtomValue(userAtom)
+  const user = useAppStore((s) => s.user)
+
   const {
     register,
     formState: { errors },
