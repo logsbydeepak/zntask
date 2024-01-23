@@ -22,8 +22,6 @@ import { useShallow } from 'zustand/react/shallow'
 
 import * as Dialog from '@/components/ui/dialog'
 import { useAppStore } from '@/store/app'
-import { useCategoryStore } from '@/store/category'
-import { useTaskStore } from '@/store/task'
 import { categoryHelper, getCategoryColor } from '@/utils/category'
 import { cn } from '@/utils/style'
 
@@ -60,15 +58,15 @@ function CommandPaletteContent({ handleClose }: { handleClose: () => void }) {
   const setDialog = useAppStore((s) => s.setDialog)
   const toggleSidebar = useAppStore((s) => s.toggleSidebar)
 
-  const activeCategory = useCategoryStore(
-    useShallow((s) => categoryHelper.getActiveCategories(s.categories))
+  const activeCategory = useAppStore((s) =>
+    categoryHelper.getActiveCategories(s.categories)
   )
-  const archiveCategory = useCategoryStore(
-    useShallow((s) => categoryHelper.getArchivedCategories(s.categories))
+  const archiveCategory = useAppStore((s) =>
+    categoryHelper.getArchivedCategories(s.categories)
   )
-  const categories = useCategoryStore(useShallow((s) => s.categories))
-  const parentTask = useTaskStore(useShallow((s) => s.parentTasks))
-  const childTasks = useTaskStore(useShallow((s) => s.childTasks))
+  const categories = useAppStore((s) => s.categories)
+  const parentTask = useAppStore((s) => s.parentTasks)
+  const childTasks = useAppStore((s) => s.childTasks)
 
   const changePage = React.useCallback((page: Page) => {
     setPages((i) => [...i, page])

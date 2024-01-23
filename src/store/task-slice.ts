@@ -1,9 +1,7 @@
-'use client'
-
-import React, { createContext } from 'react'
 import { ulid } from 'ulidx'
-import { createStore, StateCreator, useStore } from 'zustand'
-import { persist } from 'zustand/middleware'
+import { StateCreator } from 'zustand'
+
+import { AppStore } from './app'
 
 export interface Task {
   id: string
@@ -45,7 +43,12 @@ interface Actions {
   setNewChildTask: (childTask: ChildTask[]) => void
 }
 
-const taskStore: StateCreator<State & Actions> = (set, get) => ({
+export type TaskSlice = State & Actions
+
+export const taskSlice: StateCreator<AppStore, [], [], TaskSlice> = (
+  set,
+  get
+) => ({
   ...initialState,
 
   setNewParentTask(parentTask) {
@@ -144,26 +147,3 @@ const taskStore: StateCreator<State & Actions> = (set, get) => ({
     }))
   },
 })
-
-const createTaskStore = () => {
-  return createStore(persist(taskStore, { name: 'tasks' }))
-}
-
-type TaskStore = ReturnType<typeof createTaskStore>
-const CategoryContext = createContext<TaskStore | null>(null)
-
-export function TaskProvider({ children }: { children: React.ReactNode }) {
-  const store = React.useRef(createTaskStore()).current
-
-  return (
-    <CategoryContext.Provider value={store}>
-      {children}
-    </CategoryContext.Provider>
-  )
-}
-
-export function useTaskStore<T>(selector: (state: State & Actions) => T): T {
-  const store = React.useContext(CategoryContext)
-  if (!store) throw new Error('Missing TaskContext.Provider in the tree')
-  return useStore(store, selector)
-}

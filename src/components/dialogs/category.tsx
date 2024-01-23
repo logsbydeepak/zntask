@@ -8,7 +8,6 @@ import { Button } from '@/components/ui/button'
 import * as Dialog from '@/components/ui/dialog'
 import * as Form from '@/components/ui/form'
 import { useAppStore } from '@/store/app'
-import { useCategoryStore } from '@/store/category'
 import {
   Category,
   categoryIndicatorOptions,
@@ -67,8 +66,8 @@ function CategoryDialogContent({
   isCreate: boolean
   isEdit: Category | null
 }) {
-  const addCategory = useCategoryStore((s) => s.addCategory)
-  const editCategory = useCategoryStore((s) => s.editCategory)
+  const addCategory = useAppStore((s) => s.addCategory)
+  const editCategory = useAppStore((s) => s.editCategory)
 
   const {
     register,

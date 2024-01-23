@@ -23,8 +23,7 @@ import * as Dialog from '@/components/ui/dialog'
 import * as Form from '@/components/ui/form'
 import * as Popover from '@/components/ui/popover'
 import { useAppStore } from '@/store/app'
-import { useCategoryStore } from '@/store/category'
-import { ChildTask, ParentTask, useTaskStore } from '@/store/task'
+import { ChildTask, ParentTask } from '@/store/task-slice'
 import { getCategoryColor } from '@/utils/category'
 import { cn } from '@/utils/style'
 
@@ -49,46 +48,40 @@ export function TaskDialog() {
   const isEdit = useAppStore((state) => state.dialog.editTask)
   const setDialog = useAppStore((state) => state.setDialog)
 
-  const task = useTaskStore(
-    useShallow((s) => {
-      if (!isEdit) return { parentTask: undefined, childTasks: [] }
-      const isParentId = 'parentTaskId' in isEdit
-      const isChildId = 'childTaskId' in isEdit
+  const task = useAppStore((s) => {
+    if (!isEdit) return { parentTask: undefined, childTasks: [] }
+    const isParentId = 'parentTaskId' in isEdit
+    const isChildId = 'childTaskId' in isEdit
 
-      if (isParentId) {
-        const parentTask = s.parentTasks.find(
-          (i) => i.id === isEdit.parentTaskId
-        )
+    if (isParentId) {
+      const parentTask = s.parentTasks.find((i) => i.id === isEdit.parentTaskId)
 
-        const childTasks = s.childTasks.filter(
-          (i) => i.parentId === isEdit.parentTaskId
-        )
+      const childTasks = s.childTasks.filter(
+        (i) => i.parentId === isEdit.parentTaskId
+      )
 
-        if (parentTask) {
-          return { parentTask, childTasks: childTasks }
-        }
-
-        return { parentTask: undefined, childTasks: [] }
-      }
-
-      if (isChildId) {
-        const childTask = s.childTasks.find((i) => i.id === isEdit.childTaskId)
-
-        if (!childTask) return { parentTask: undefined, childTasks: [] }
-
-        const parentTask = s.parentTasks.find(
-          (i) => i.id === childTask?.parentId
-        )
-        const childTasks = s.childTasks.filter(
-          (i) => i.parentId === childTask?.parentId
-        )
-
-        return { parentTask, childTasks }
+      if (parentTask) {
+        return { parentTask, childTasks: childTasks }
       }
 
       return { parentTask: undefined, childTasks: [] }
-    })
-  )
+    }
+
+    if (isChildId) {
+      const childTask = s.childTasks.find((i) => i.id === isEdit.childTaskId)
+
+      if (!childTask) return { parentTask: undefined, childTasks: [] }
+
+      const parentTask = s.parentTasks.find((i) => i.id === childTask?.parentId)
+      const childTasks = s.childTasks.filter(
+        (i) => i.parentId === childTask?.parentId
+      )
+
+      return { parentTask, childTasks }
+    }
+
+    return { parentTask: undefined, childTasks: [] }
+  })
 
   const isOpen = isCreate || !!isEdit
 
@@ -140,12 +133,12 @@ function TaskDialogContent({
   childTasks: ChildTask[]
   triggerId?: string
 }) {
-  const addParentTask = useTaskStore((s) => s.addParentTask)
-  const addChildTask = useTaskStore((s) => s.addChildTask)
-  const editParentTask = useTaskStore((s) => s.editParentTask)
-  const editChildTask = useTaskStore((s) => s.editChildTask)
-  const removeChildTask = useTaskStore((s) => s.removeChildTask)
-  const removeParentTask = useTaskStore((s) => s.removeParentTask)
+  const addParentTask = useAppStore((s) => s.addParentTask)
+  const addChildTask = useAppStore((s) => s.addChildTask)
+  const editParentTask = useAppStore((s) => s.editParentTask)
+  const editChildTask = useAppStore((s) => s.editChildTask)
+  const removeChildTask = useAppStore((s) => s.removeChildTask)
+  const removeParentTask = useAppStore((s) => s.removeParentTask)
 
   const [removedChildTaskIds, setRemovedChildTaskIds] = React.useState<
     string[]
@@ -488,7 +481,7 @@ function CategoryPicker({
   value: string | null
   setValue: (id: string | null) => void
 }) {
-  const getCategory = useCategoryStore((state) => state.getCategory)
+  const getCategory = useAppStore((state) => state.getCategory)
   const [isOpen, setIsOpen] = React.useState(false)
   const currentCategory = getCategory(value)
 

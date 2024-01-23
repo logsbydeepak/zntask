@@ -19,7 +19,8 @@
     "chrono",
     "UPLOADTHING",
     "utapi",
-    "utfs"
+    "utfs",
+    "partialize"
   ],
   "ignorePaths": ["bun.lockb"]
 }

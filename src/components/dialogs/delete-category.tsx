@@ -3,7 +3,6 @@ import React from 'react'
 import { Button } from '@/components/ui/button'
 import * as Dialog from '@/components/ui/dialog'
 import { useAppStore } from '@/store/app'
-import { useCategoryStore } from '@/store/category'
 import { Category } from '@/utils/category'
 
 export function DeleteCategoryDialog() {
@@ -32,7 +31,7 @@ function DeleteDialogContent({
   handleClose: () => void
   category: Category
 }) {
-  const deleteCategory = useCategoryStore((s) => s.deleteCategory)
+  const deleteCategory = useAppStore((s) => s.deleteCategory)
 
   const handleClick = () => {
     deleteCategory(category)

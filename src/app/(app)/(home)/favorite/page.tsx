@@ -6,7 +6,7 @@ import { useShallow } from 'zustand/react/shallow'
 
 import * as Layout from '@/app/(app)/app-layout'
 import { Head } from '@/components/head'
-import { useCategoryStore } from '@/store/category'
+import { useAppStore } from '@/store/app'
 import { categoryHelper } from '@/utils/category'
 import { DNDProvider } from '@/utils/dnd'
 
@@ -18,18 +18,10 @@ import {
 } from '../category'
 
 export default function Page() {
-  const favorites = useCategoryStore(
-    useShallow((s) =>
-      categoryHelper.sortFavoriteCategories(
-        categoryHelper.getFavoriteCategories(s.categories)
-      )
+  const favorites = useAppStore((s) =>
+    categoryHelper.sortFavoriteCategories(
+      categoryHelper.getFavoriteCategories(s.categories)
     )
-  )
-  const reorderFavoriteCategoryToTop = useCategoryStore(
-    (i) => i.reorderFavoriteCategoryToTop
-  )
-  const reorderFavoriteCategoryToBottomOf = useCategoryStore(
-    (i) => i.reorderFavoriteCategoryToBottomOf
   )
 
   return (
@@ -58,11 +50,9 @@ export default function Page() {
               if (overId[0] === start) return
 
               if (overId[0] === 'start') {
-                reorderFavoriteCategoryToTop(start)
               }
 
               if (overId[0] === 'bottom') {
-                reorderFavoriteCategoryToBottomOf(start, overId[1])
               }
             }}
           >

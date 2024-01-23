@@ -2,7 +2,7 @@ import React, { Suspense } from 'react'
 import { unstable_cache } from 'next/cache'
 import { Inter, JetBrains_Mono } from 'next/font/google'
 
-import { JotaiProvider, ThemeProvider } from '@/components/client-providers'
+import { ThemeProvider } from '@/components/client-providers'
 import { Dialogs } from '@/components/dialogs'
 import {
   DelayRender,
@@ -14,8 +14,6 @@ import { ToastProvider } from '@/components/toast'
 import { getInitialData } from '@/data'
 import { getUser } from '@/data/user'
 import { AppProvider } from '@/store/app'
-import { CategoryProvider } from '@/store/category'
-import { TaskProvider } from '@/store/task'
 import { cn } from '@/utils/style'
 
 import { AppLayout } from './app-layout'
@@ -45,18 +43,16 @@ export default async function Layout({
       >
         <Suspense fallback={<SplashScreen />}>
           <ThemeProvider>
-            <TaskProvider>
-              <DelayRender>
-                <InitData>
-                  <Navbar />
-                  <State />
-                  <Sidebar />
-                  <AppLayout>{children}</AppLayout>
-                  <GlobalShortcut />
-                  <Dialogs />
-                </InitData>
-              </DelayRender>
-            </TaskProvider>
+            <DelayRender>
+              <InitData>
+                <Navbar />
+                <State />
+                <Sidebar />
+                <AppLayout>{children}</AppLayout>
+                <GlobalShortcut />
+                <Dialogs />
+              </InitData>
+            </DelayRender>
             <ToastProvider />
           </ThemeProvider>
         </Suspense>
@@ -79,11 +75,11 @@ async function InitData({ children }: { children: React.ReactNode }) {
   const initialData = await getInitialData()
   const user = await getUserData()
   return (
-    <CategoryProvider initialProps={{ categories: initialData.categories }}>
-      <AppProvider initialProps={{ user: user }}>
-        <SyncAppState user={user} />
-        {children}
-      </AppProvider>
-    </CategoryProvider>
+    <AppProvider
+      initialProps={{ user: user, categories: initialData.categories }}
+    >
+      <SyncAppState user={user} />
+      {children}
+    </AppProvider>
   )
 }

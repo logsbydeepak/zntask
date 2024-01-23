@@ -5,7 +5,7 @@ import { useShallow } from 'zustand/react/shallow'
 import * as Layout from '@/app/(app)/app-layout'
 import { Head } from '@/components/head'
 import * as Tabs from '@/components/ui/tabs'
-import { useTaskStore } from '@/store/task'
+import { useAppStore } from '@/store/app'
 import { DNDProvider } from '@/utils/dnd'
 
 import { EmptyInbox, TaskContainer } from '../task'
@@ -40,12 +40,10 @@ export default function Page() {
 }
 
 function PlanedTab() {
-  const tasks = useTaskStore(
-    useShallow((s) =>
-      s.parentTasks
-        .filter((i) => !i.categoryId && !!!i.completedAt)
-        .sort((a, b) => (a.orderId > b.orderId ? 1 : -1))
-    )
+  const tasks = useAppStore((s) =>
+    s.parentTasks
+      .filter((i) => !i.categoryId && !!!i.completedAt)
+      .sort((a, b) => (a.orderId > b.orderId ? 1 : -1))
   )
 
   if (tasks.length === 0) return <EmptyInbox />
@@ -61,10 +59,8 @@ function PlanedTab() {
 }
 
 function CompletedTab() {
-  const tasks = useTaskStore(
-    useShallow((s) =>
-      s.parentTasks.filter((i) => !i.categoryId && !!i.completedAt)
-    )
+  const tasks = useAppStore((s) =>
+    s.parentTasks.filter((i) => !i.categoryId && !!i.completedAt)
   )
 
   if (tasks.length === 0) return <EmptyInbox />

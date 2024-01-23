@@ -32,7 +32,7 @@ import {
   MenuIcon,
 } from '@/components/ui/menu'
 import { useAppStore } from '@/store/app'
-import { ChildTask, ParentTask, useTaskStore } from '@/store/task'
+import { ChildTask, ParentTask } from '@/store/task-slice'
 import { useDrag, useDrop } from '@/utils/dnd'
 import { cn } from '@/utils/style'
 
@@ -67,25 +67,23 @@ export function TaskContainer({
 }) {
   const [isCollapsibleOpen, setIsCollapsibleOpen] = React.useState(false)
 
-  const childTask = useTaskStore(
-    useShallow((s) => {
-      const list = s.childTasks.filter((i) => i.parentId === task.id)
+  const childTask = useAppStore((s) => {
+    const list = s.childTasks.filter((i) => i.parentId === task.id)
 
-      const completedList = list
-        .filter((i) => i.completedAt !== null)
-        .sort((a, b) => {
-          if (a.completedAt === null) return 1
-          if (b.completedAt === null) return -1
+    const completedList = list
+      .filter((i) => i.completedAt !== null)
+      .sort((a, b) => {
+        if (a.completedAt === null) return 1
+        if (b.completedAt === null) return -1
 
-          if (a.completedAt < b.completedAt) return -1
-          return 1
-        })
-      const uncompletedList = list
-        .filter((i) => i.completedAt === null)
-        .sort((a, b) => (a.orderId > b.orderId ? 1 : -1))
-      return [...uncompletedList, ...completedList]
-    })
-  )
+        if (a.completedAt < b.completedAt) return -1
+        return 1
+      })
+    const uncompletedList = list
+      .filter((i) => i.completedAt === null)
+      .sort((a, b) => (a.orderId > b.orderId ? 1 : -1))
+    return [...uncompletedList, ...completedList]
+  })
 
   const childTaskToDisplay = childTask.slice(
     0,
@@ -283,8 +281,8 @@ const TaskItem = React.forwardRef<
     task: ParentTask | ChildTask
   }
 >(({ task, className, ...props }, ref) => {
-  const editChildTask = useTaskStore((s) => s.editChildTask)
-  const editParentTask = useTaskStore((s) => s.editParentTask)
+  const editChildTask = useAppStore((s) => s.editChildTask)
+  const editParentTask = useAppStore((s) => s.editParentTask)
   const [preventFocus, setPreventFocus] = React.useState(false)
   const setDialog = useAppStore((s) => s.setDialog)
 
@@ -448,8 +446,8 @@ function TaskMenuContent({
   setPreventFocus: (value: boolean) => void
 }) {
   const setDialog = useAppStore((s) => s.setDialog)
-  const removeParentTask = useTaskStore((s) => s.removeParentTask)
-  const removeChildTask = useTaskStore((s) => s.removeChildTask)
+  const removeParentTask = useAppStore((s) => s.removeParentTask)
+  const removeChildTask = useAppStore((s) => s.removeChildTask)
 
   const menuItem = [
     {
@@ -525,20 +523,3 @@ function Checkbox({
     </CheckboxRoot>
   )
 }
-
-//   return (
-//     <div className="absolute -bottom-[5px] left-0 right-0 flex w-full translate-y-[2px] items-center px-3">
-//       <span className="h-1.5 w-1.5 rounded-full border-[1.5px] border-orange-600" />
-//       <span className="-ml-[1px] h-[1.5px] w-full rounded-full bg-orange-600" />
-//     </div>
-//   )
-// }
-
-// function TopIndicator() {
-//   return (
-//     <div className="absolute -top-[5px] left-0 right-0 flex w-full translate-y-[-2px] items-center px-3">
-//       <span className="h-1.5 w-1.5 rounded-full border-[1.5px] border-orange-600" />
-//       <span className="-ml-[1px] h-[1.5px] w-full rounded-full bg-orange-600" />
-//     </div>
-//   )
-// }

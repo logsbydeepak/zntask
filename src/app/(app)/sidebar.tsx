@@ -27,7 +27,6 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/menu'
 import { useAppStore } from '@/store/app'
-import { useCategoryStore } from '@/store/category'
 import { Category, categoryHelper, getCategoryColor } from '@/utils/category'
 import { cn, tw } from '@/utils/style'
 
@@ -115,11 +114,9 @@ function FavoriteSection() {
   const pathname = usePathname()
   const [isCollapsibleOpen, setIsCollapsibleOpen] = React.useState(false)
 
-  const favorites = useCategoryStore(
-    useShallow((s) =>
-      categoryHelper.sortFavoriteCategories(
-        categoryHelper.getFavoriteCategories(s.categories)
-      )
+  const favorites = useAppStore((s) =>
+    categoryHelper.sortFavoriteCategories(
+      categoryHelper.getFavoriteCategories(s.categories)
     )
   )
 
@@ -162,11 +159,9 @@ function FavoriteSection() {
 function CategorySection() {
   const pathname = usePathname()
   const [isCollapsibleOpen, setIsCollapsibleOpen] = React.useState(false)
-  const categories = useCategoryStore(
-    useShallow((s) =>
-      categoryHelper.sortActiveCategories(
-        categoryHelper.getActiveCategories(s.categories)
-      )
+  const categories = useAppStore((s) =>
+    categoryHelper.sortActiveCategories(
+      categoryHelper.getActiveCategories(s.categories)
     )
   )
 

@@ -1,10 +1,9 @@
 import React from 'react'
 import { Command } from 'cmdk'
 import { FolderIcon, InboxIcon, SearchIcon } from 'lucide-react'
-import { useShallow } from 'zustand/react/shallow'
 
 import * as Popover from '@/components/ui/popover'
-import { useCategoryStore } from '@/store/category'
+import { useAppStore } from '@/store/app'
 import { Category, categoryHelper, getCategoryColor } from '@/utils/category'
 import { cn } from '@/utils/style'
 
@@ -16,12 +15,10 @@ export const CategoryPopover = React.forwardRef<
     currentCategory: Category | undefined
   }
 >(({ setIsOpen, setValue: setParentValue, currentCategory, ...props }, ref) => {
-  const categories = useCategoryStore(
-    useShallow((s) =>
-      categoryHelper
-        .getActiveCategories(s.categories)
-        .filter((i) => i.id !== currentCategory?.id)
-    )
+  const categories = useAppStore((s) =>
+    categoryHelper
+      .getActiveCategories(s.categories)
+      .filter((i) => i.id !== currentCategory?.id)
   )
 
   const setValue = (value: string | null) => {

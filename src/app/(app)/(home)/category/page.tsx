@@ -7,7 +7,7 @@ import { useShallow } from 'zustand/react/shallow'
 import * as Layout from '@/app/(app)/app-layout'
 import { Head } from '@/components/head'
 import * as Tabs from '@/components/ui/tabs'
-import { useCategoryStore } from '@/store/category'
+import { useAppStore } from '@/store/app'
 import { categoryHelper } from '@/utils/category'
 import { DNDProvider } from '@/utils/dnd'
 
@@ -48,16 +48,10 @@ export default function Page() {
 }
 
 function ActiveTab() {
-  const categories = useCategoryStore(
-    useShallow((s) =>
-      categoryHelper.sortActiveCategories(
-        categoryHelper.getActiveCategories(s.categories)
-      )
+  const categories = useAppStore((s) =>
+    categoryHelper.sortActiveCategories(
+      categoryHelper.getActiveCategories(s.categories)
     )
-  )
-  const reorderCategoryToTop = useCategoryStore((s) => s.reorderCategoryToTop)
-  const reorderCategoryToBottomOf = useCategoryStore(
-    (s) => s.reorderCategoryToBottomOf
   )
 
   return (
@@ -99,11 +93,9 @@ function ActiveTab() {
 }
 
 function ArchiveTab() {
-  const categories = useCategoryStore(
-    useShallow((s) =>
-      categoryHelper.sortArchivedCategories(
-        categoryHelper.getArchivedCategories(s.categories)
-      )
+  const categories = useAppStore((s) =>
+    categoryHelper.sortArchivedCategories(
+      categoryHelper.getArchivedCategories(s.categories)
     )
   )
 

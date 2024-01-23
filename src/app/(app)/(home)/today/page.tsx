@@ -9,7 +9,7 @@ import * as Layout from '@/app/(app)/app-layout'
 import { Head } from '@/components/head'
 import * as Tabs from '@/components/ui/tabs'
 import { useAppStore } from '@/store/app'
-import { ParentTask, useTaskStore } from '@/store/task'
+import { ParentTask } from '@/store/task-slice'
 
 export default function Page() {
   return (
@@ -37,10 +37,8 @@ export default function Page() {
 }
 
 function PlanedTab() {
-  const tasks = useTaskStore(
-    useShallow((s) =>
-      s.parentTasks.filter((i) => i.date && isToday(new Date(i.date)))
-    )
+  const tasks = useAppStore((s) =>
+    s.parentTasks.filter((i) => i.date && isToday(new Date(i.date)))
   )
 
   const setDialog = useAppStore((s) => s.setDialog)

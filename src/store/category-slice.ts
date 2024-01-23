@@ -1,11 +1,9 @@
-'use client'
-
-import React, { createContext } from 'react'
 import { isValid, ulid } from 'ulidx'
-import { createStore, StateCreator, useStore } from 'zustand'
-import { persist } from 'zustand/middleware'
+import { StateCreator } from 'zustand'
 
 import { Category, categoryHelper } from '@/utils/category'
+
+import { AppStore } from './app'
 
 const initialState = {
   categories: [] as Category[],
@@ -26,7 +24,12 @@ interface Actions {
   setNewCategories: (categories: Category[]) => void
 }
 
-const categoryStore: StateCreator<State & Actions> = (set, get) => ({
+export type CategorySlice = State & Actions
+
+export const categorySlice: StateCreator<AppStore, [], [], CategorySlice> = (
+  set,
+  get
+) => ({
   ...initialState,
 
   addCategory: (category) => {
@@ -145,42 +148,3 @@ const categoryStore: StateCreator<State & Actions> = (set, get) => ({
     set({ categories })
   },
 })
-
-const createCategoryStore = (initialProps?: Partial<State>) => {
-  return createStore(
-    persist<Actions & State>(
-      (...args) => ({
-        ...initialProps,
-        ...categoryStore(...args),
-      }),
-      { name: 'categories' }
-    )
-  )
-}
-
-type CategoryStore = ReturnType<typeof createCategoryStore>
-const CategoryContext = createContext<CategoryStore | null>(null)
-
-export function CategoryProvider({
-  children,
-  initialProps,
-}: {
-  children: React.ReactNode
-  initialProps?: Partial<State>
-}) {
-  const store = React.useRef(createCategoryStore(initialProps))
-
-  return (
-    <CategoryContext.Provider value={store.current}>
-      {children}
-    </CategoryContext.Provider>
-  )
-}
-
-export function useCategoryStore<T>(
-  selector: (state: State & Actions) => T
-): T {
-  const store = React.useContext(CategoryContext)
-  if (!store) throw new Error('Missing CategoryContext.Provider in the tree')
-  return useStore(store, selector)
-}

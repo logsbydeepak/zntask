@@ -24,7 +24,6 @@ import {
   MenuIcon,
 } from '@/components/ui/menu'
 import { useAppStore } from '@/store/app'
-import { useCategoryStore } from '@/store/category'
 import { Category, getCategoryColor } from '@/utils/category'
 import { useDrag, useDrop } from '@/utils/dnd'
 import { cn } from '@/utils/style'
@@ -196,8 +195,8 @@ export function CategoryMenuContent({
   setPreventFocus: (value: boolean) => void
 }) {
   const setDialog = useAppStore((s) => s.setDialog)
-  const toggleArchive = useCategoryStore((s) => s.toggleArchive)
-  const toggleFavorite = useCategoryStore((s) => s.toggleFavorite)
+  const toggleArchive = useAppStore((s) => s.toggleArchive)
+  const toggleFavorite = useAppStore((s) => s.toggleFavorite)
 
   const isFavorite = !!category.favoriteOrderNumber
   const isArchived = !!category.archivedAt

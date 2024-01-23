@@ -1,110 +1,50 @@
 'use client'
 
 import React, { createContext } from 'react'
-import { atom } from 'jotai'
 import { createStore, StateCreator, useStore } from 'zustand'
+import { persist } from 'zustand/middleware'
+import { useShallow } from 'zustand/react/shallow'
 
-import type { RequireOnlyOne } from '@/types'
-import { Category } from '@/utils/category'
+import { AppSlice, appSlice } from './app-slice'
+import { CategorySlice, categorySlice } from './category-slice'
+import { TaskSlice, taskSlice } from './task-slice'
 
-interface User {
-  firstName: string
-  lastName: string | null
-  email: string
-  profilePicture: string | null
-}
+export type AppStore = AppSlice & CategorySlice & TaskSlice
 
-const dialogState = {
-  resetPassword: false,
-  logout: false,
-  commandPalette: false,
-
-  updateName: false,
-  updateProfilePicture: false,
-  updateEmail: false,
-
-  createCategory: false,
-  editCategory: null as null | Category,
-  deleteCategory: null as null | Category,
-  createTask: false,
-  editTask: null as null | { parentTaskId: string } | { childTaskId: string },
-
-  addGoogleAuth: false,
-  removeGoogleAuth: false,
-  removePasswordAuth: false,
-}
-
-const initialState = {
-  dialog: dialogState,
-  isSidebarOpen: false,
-  isScreenSM: false,
-  isAppSyncing: false,
-  user: {} as User,
-}
-
-type State = typeof initialState
-
-interface Actions {
-  setDialog: <
-    T extends RequireOnlyOne<{
-      [key in keyof typeof dialogState]: (typeof dialogState)[key]
-    }>,
-  >(
-    state: T
-  ) => void
-  toggleSidebar: () => void
-  setSidebar: (state: boolean) => void
-  setScreenSM: (state: boolean) => void
-  setAppSyncing: (state: boolean) => void
-  setUser: (state: User) => void
-}
-
-const appStore: StateCreator<State & Actions> = (set) => ({
-  ...initialState,
-  setUser(state) {
-    set(() => ({ user: state }))
-  },
-
-  setAppSyncing(state) {
-    set(() => ({ isAppSyncing: state }))
-  },
-
-  toggleSidebar() {
-    set((state) => ({ isSidebarOpen: !state.isSidebarOpen }))
-  },
-  setDialog(state) {
-    set(() => ({
-      dialog: {
-        ...dialogState,
-        ...state,
-      },
-    }))
-  },
-  setSidebar(state) {
-    set(() => ({ isSidebarOpen: state }))
-  },
-  setScreenSM(state) {
-    set(() => ({ isScreenSM: state }))
-  },
+const appStore: StateCreator<AppStore> = (...args) => ({
+  ...appSlice(...args),
+  ...categorySlice(...args),
+  ...taskSlice(...args),
 })
 
-const createAppStore = (initialProps?: Partial<State>) => {
-  return createStore<State & Actions>((...args) => ({
-    ...appStore(...args),
-    ...initialProps,
-  }))
+const createAppStore = (initialProps?: Partial<AppStore>) => {
+  return createStore<AppStore>()(
+    persist(
+      (...args) => ({
+        ...appStore(...args),
+        ...initialProps,
+      }),
+      {
+        name: 'app-store',
+        partialize: (s) => ({
+          categories: s.categories,
+          parentTasks: s.parentTasks,
+          childTasks: s.childTasks,
+        }),
+      }
+    )
+  )
 }
 
-type AppStore = ReturnType<typeof createAppStore>
-const AppContext = createContext<AppStore | null>(null)
+type CreateAppStoreType = ReturnType<typeof createAppStore>
+const AppContext = createContext<CreateAppStoreType | null>(null)
 
 export function AppProvider({
   children,
   initialProps,
 }: {
   children: React.ReactNode
-
-  initialProps?: Partial<State>
+  initialProps?: Partial<AppStore>
 }) {
   const store = React.useRef(
     createAppStore({
@@ -118,8 +58,8 @@ export function AppProvider({
   )
 }
 
-export function useAppStore<T>(selector: (state: State & Actions) => T): T {
+export function useAppStore<T>(selector: (state: AppStore) => T): T {
   const store = React.useContext(AppContext)
   if (!store) throw new Error('Missing AppContext.Provider in the tree')
-  return useStore(store, selector)
+  return useStore(store, useShallow(selector))
 }

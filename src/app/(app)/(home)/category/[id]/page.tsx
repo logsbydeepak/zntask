@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { CheckCheckIcon, MoreVerticalIcon } from 'lucide-react'
+import { MoreVerticalIcon } from 'lucide-react'
 import { useShallow } from 'zustand/react/shallow'
 
 import * as Layout from '@/app/(app)/app-layout'
@@ -14,16 +14,14 @@ import {
 } from '@/components/ui/menu'
 import * as Tabs from '@/components/ui/tabs'
 import { useAppStore } from '@/store/app'
-import { useCategoryStore } from '@/store/category'
-import { useTaskStore } from '@/store/task'
 
 import { CategoryMenuContent } from '../../category'
 import { EmptyTaskCategory, TaskContainer } from '../../task'
 
 export default function Page({ params }: { params: { id?: string } }) {
   const [preventFocus, setPreventFocus] = React.useState(false)
-  const category = useCategoryStore(
-    useShallow((s) => s.categories.find((c) => c.id === params.id))
+  const category = useAppStore((s) =>
+    s.categories.find((c) => c.id === params.id)
   )
 
   if (!category || !params.id) {
@@ -84,9 +82,11 @@ export default function Page({ params }: { params: { id?: string } }) {
 }
 
 function PlanedTab({ categoryId }: { categoryId: string }) {
-  const tasks = useTaskStore(
+  const tasks = useAppStore(
     useShallow((s) =>
-      s.parentTasks.filter((i) => i.categoryId === categoryId && !i.isCompleted)
+      s.parentTasks.filter(
+        (i) => i.categoryId === categoryId && !!!i.completedAt
+      )
     )
   )
 
@@ -101,10 +101,8 @@ function PlanedTab({ categoryId }: { categoryId: string }) {
 }
 
 function CompletedTab({ categoryId }: { categoryId: string }) {
-  const tasks = useTaskStore(
-    useShallow((s) =>
-      s.parentTasks.filter((i) => i.categoryId === categoryId && i.isCompleted)
-    )
+  const tasks = useAppStore((s) =>
+    s.parentTasks.filter((i) => i.categoryId === categoryId && i.details)
   )
 
   if (tasks.length === 0) return <EmptyTaskCategory />
