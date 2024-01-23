@@ -3,7 +3,6 @@
 import React from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useAtomValue, useSetAtom } from 'jotai'
 import {
   CheckCircleIcon,
   FolderPlusIcon,

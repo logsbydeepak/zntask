@@ -1,7 +1,6 @@
 import React from 'react'
 import { useRouter } from 'next/navigation'
 import { Command } from 'cmdk'
-import { useSetAtom } from 'jotai'
 import {
   ArchiveIcon,
   CalendarClockIcon,

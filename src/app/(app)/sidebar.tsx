@@ -3,7 +3,6 @@
 import React from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useAtomValue, useSetAtom } from 'jotai'
 import {
   CalendarIcon,
   ChevronDownIcon,
@@ -14,7 +13,6 @@ import {
   InboxIcon,
   MoreVerticalIcon,
 } from 'lucide-react'
-import { useShallow } from 'zustand/react/shallow'
 
 import {
   ContextMenuContent,

@@ -3,7 +3,6 @@
 import React from 'react'
 import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { atom, useAtom } from 'jotai'
 import { useForm } from 'react-hook-form'
 import { useDebounce } from 'use-debounce'
 import { z } from 'zod'
@@ -31,8 +30,6 @@ const schema = z
 
 type FormValues = z.infer<typeof schema>
 
-const isLoadingAtom = atom(false)
-
 export function Form({ token }: { token: string }) {
   const router = useRouter()
 
@@ -42,7 +39,7 @@ export function Form({ token }: { token: string }) {
   } | null>(null)
 
   const [isPending, startTransition] = React.useTransition()
-  const [isLoading, setIsLoading] = useAtom(isLoadingAtom)
+  const [isLoading, setIsLoading] = React.useState(false)
   const [isPasswordVisible, setIsPasswordVisible] = React.useState(false)
 
   const {

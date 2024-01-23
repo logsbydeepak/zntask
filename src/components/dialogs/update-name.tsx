@@ -1,6 +1,5 @@
 import React from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useAtom, useAtomValue } from 'jotai'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 

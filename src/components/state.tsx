@@ -1,8 +1,6 @@
 'use client'
 
 import React, { ReactNode } from 'react'
-import { useSetAtom, WritableAtom } from 'jotai'
-import { useHydrateAtoms } from 'jotai/utils'
 
 import { useAppStore } from '@/store/app'
 
@@ -58,19 +56,6 @@ export function State() {
   }, [setScreenSize])
 
   return null
-}
-
-export function AtomsHydrator({
-  atomValues,
-  children,
-}: {
-  atomValues: Iterable<
-    readonly [WritableAtom<unknown, [any], unknown>, unknown]
-  >
-  children: ReactNode
-}) {
-  useHydrateAtoms(new Map(atomValues))
-  return children
 }
 
 export function SyncAppState({

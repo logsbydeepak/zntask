@@ -1,7 +1,6 @@
 import React from 'react'
 import Image from 'next/image'
 import { generateReactHelpers } from '@uploadthing/react/hooks'
-import { useAtomValue } from 'jotai'
 import { Trash2Icon, UploadIcon } from 'lucide-react'
 
 import * as Badge from '@/components/ui/badge'
