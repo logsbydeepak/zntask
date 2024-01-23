@@ -1,11 +1,8 @@
-import React from 'react'
+import React, { createContext } from 'react'
 import { createUseGesture, dragAction } from '@use-gesture/react'
-import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai'
-import { atomWithReducer, useHydrateAtoms } from 'jotai/utils'
 import { ulid } from 'ulidx'
-import { shallow } from 'zustand/shallow'
-
-import { JotaiProvider } from '@/components/client-providers'
+import { createStore, StateCreator, useStore } from 'zustand'
+import { useShallow } from 'zustand/react/shallow'
 
 interface Rec {
   left: number
@@ -31,27 +28,80 @@ interface Container {
   data?: { [key: string]: string | undefined }
 }
 
-function atomWithCompare<Value>(
-  initialValue: Value,
-  areEqual: (prev: Value, next: Value) => boolean
-) {
-  return atomWithReducer(initialValue, (prev: Value, next: Value) => {
-    if (areEqual(prev, next)) {
-      return prev
-    }
-
-    return next
-  })
+const initialState = {
+  dropContainers: [] as Container[],
+  dragPosition: null as { x: number; y: number } | null,
+  DNDId: null as string | null,
+  dragContainer: null as Container | null,
+  dropData: null as {
+    id: string
+    place: 'top' | 'bottom'
+  } | null,
 }
 
-const dropContainersAtom = atom<Container[]>([])
-const dragPositionAtom = atom<{ x: number; y: number } | null>(null)
-const DNDIdAtom = atom<string | null>(null)
-const dragContainerAtom = atom<Container | null>(null)
-const dropDataAtom = atomWithCompare<{
-  id: string
-  place: 'top' | 'bottom'
-} | null>(null, shallow)
+type State = typeof initialState
+interface Actions {
+  setDragPosition: (position: { x: number; y: number } | null) => void
+  setDropData: (data: { id: string; place: 'top' | 'bottom' } | null) => void
+  setDragContainer: (container: Container | null) => void
+  setDropContainers: (containers: Container) => void
+  removeDropContainers: (id: string) => void
+}
+
+type CategoryDndStore = State & Actions
+const categoryDnDStore: StateCreator<State & Actions> = (set, get) => ({
+  ...initialState,
+  setDragPosition: (position) => set({ dragPosition: position }),
+  setDropData: (data) => set({ dropData: data }),
+  setDragContainer: (container) => set({ dragContainer: container }),
+  setDropContainers: (containers) =>
+    set((s) => ({ dropContainers: [...s.dropContainers, containers] })),
+  removeDropContainers: (id) =>
+    set((s) => ({
+      dropContainers: s.dropContainers.filter((i) => i.id !== id),
+    })),
+})
+
+const createCategoryDnDStore = (initialProps?: Partial<CategoryDndStore>) => {
+  return createStore<State & Actions>()((...args) => ({
+    ...categoryDnDStore(...args),
+    ...initialProps,
+  }))
+}
+
+type CreateCategoryDnDStoreType = ReturnType<typeof createCategoryDnDStore>
+const Context = createContext<CreateCategoryDnDStoreType | null>(null)
+
+export function DNDProvider({
+  children,
+  initialProps,
+  onDrop,
+}: {
+  children: React.ReactNode
+  initialProps?: Partial<CategoryDndStore>
+  onDrop: OnDropType
+}) {
+  const store = React.useRef(
+    createCategoryDnDStore({
+      ...initialProps,
+      DNDId: ulid(),
+    })
+  )
+  return (
+    <Context.Provider value={store.current}>
+      <DNDManager onDrop={onDrop} />
+      {children}
+    </Context.Provider>
+  )
+}
+
+function useCategoryDnD<T>(selector: (state: CategoryDndStore) => T) {
+  const store = React.useContext(Context)
+  if (!store) {
+    throw new Error('useCategoryDnD must be used within a CategoryDnDProvider')
+  }
+  return useStore(store, useShallow(selector))
+}
 
 const useGesture = createUseGesture([dragAction])
 
@@ -64,11 +114,12 @@ export function useDrag({ id }: { id: string }) {
     y: number
   } | null>({ x: 0, y: 0 })
 
-  const DNDId = useAtomValue(DNDIdAtom)
-  const [dropData, setDropData] = useAtom(dropDataAtom)
-  const setDragPosition = useSetAtom(dragPositionAtom)
-  const setDragContainer = useSetAtom(dragContainerAtom)
-  const dropContainers = useAtomValue(dropContainersAtom)
+  const DNDId = useCategoryDnD((state) => state.DNDId)
+  const dropData = useCategoryDnD((s) => s.dropData)
+  const setDropData = useCategoryDnD((s) => s.setDropData)
+  const setDragPosition = useCategoryDnD((s) => s.setDragPosition)
+  const setDragContainer = useCategoryDnD((s) => s.setDragContainer)
+  const dropContainers = useCategoryDnD((s) => s.dropContainers)
 
   const bind = useGesture(
     {
@@ -120,17 +171,19 @@ export function useDrop({
   data?: { [key: string]: string | undefined }
 }) {
   const dataRef = React.useRef(data)
-  const setDropContainers = useSetAtom(dropContainersAtom)
   const ref = React.useRef<HTMLElement | null>(null)
-  const dropData = useAtomValue(dropDataAtom)
+
+  const setDropContainers = useCategoryDnD((s) => s.setDropContainers)
+  const removeDropContainers = useCategoryDnD((s) => s.removeDropContainers)
+  const dropData = useCategoryDnD((s) => s.dropData)
 
   const isOver = dropData?.id === id
   const place = dropData?.place
 
   React.useEffect(() => {
-    setDropContainers((prev) => [...prev, { id, ref, data: dataRef.current }])
-    return () => setDropContainers((prev) => prev.filter((i) => i.id !== id))
-  }, [id, setDropContainers])
+    setDropContainers({ id, ref, data: dataRef.current })
+    return () => removeDropContainers(id)
+  }, [id, setDropContainers, removeDropContainers])
 
   return { ref, isOver, place }
 }
@@ -146,20 +199,6 @@ type OnDropType = ({
   position?: string
   data?: { [key: string]: string | undefined }
 }) => void
-export function DNDProvider({
-  children,
-  onDrop,
-}: {
-  children: React.ReactNode
-  onDrop: OnDropType
-}) {
-  return (
-    <JotaiProvider>
-      <DNDManager onDrop={onDrop} />
-      {children}
-    </JotaiProvider>
-  )
-}
 
 type DNDEvent = CustomEvent<{
   start: string
@@ -169,14 +208,13 @@ type DNDEvent = CustomEvent<{
 }>
 
 function DNDManager({ onDrop }: { onDrop: OnDropType }) {
-  useHydrateAtoms([[DNDIdAtom, ulid()]])
-  const DNDId = useAtomValue(DNDIdAtom)
+  const DNDId = useCategoryDnD((s) => s.DNDId)
 
-  const dropContainers = useAtomValue(dropContainersAtom)
-  const dragContainerId = useAtomValue(dragContainerAtom)
+  const dropContainers = useCategoryDnD((s) => s.dropContainers)
+  const dragContainerId = useCategoryDnD((s) => s.dragContainer)
 
-  const dragPosition = useAtomValue(dragPositionAtom)
-  const setDropData = useSetAtom(dropDataAtom)
+  const dragPosition = useCategoryDnD((s) => s.dragPosition)
+  const setDropData = useCategoryDnD((s) => s.setDropData)
 
   const [centerOfDrops, setCenterOfDrops] = React.useState<
     { id: string; center: { x: number; y: number } }[]

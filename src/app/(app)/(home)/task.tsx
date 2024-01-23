@@ -14,7 +14,6 @@ import {
   Trash2Icon,
 } from 'lucide-react'
 import { ulid } from 'ulidx'
-import { useShallow } from 'zustand/react/shallow'
 
 import * as Layout from '@/app/(app)/app-layout'
 import { SchedulePicker } from '@/components/schedule'
@@ -33,7 +32,7 @@ import {
 } from '@/components/ui/menu'
 import { useAppStore } from '@/store/app'
 import { ChildTask, ParentTask } from '@/store/task-slice'
-import { useDrag, useDrop } from '@/utils/dnd'
+import { useDrag, useDrop } from '@/utils/category-dnd'
 import { cn } from '@/utils/style'
 
 export function EmptyInbox() {

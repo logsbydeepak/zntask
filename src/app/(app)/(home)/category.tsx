@@ -25,7 +25,7 @@ import {
 } from '@/components/ui/menu'
 import { useAppStore } from '@/store/app'
 import { Category, getCategoryColor } from '@/utils/category'
-import { useDrag, useDrop } from '@/utils/dnd'
+import { useDrag, useDrop } from '@/utils/category-dnd'
 import { cn } from '@/utils/style'
 
 export function DNDCategoryItem({

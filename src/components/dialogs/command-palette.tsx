@@ -18,7 +18,6 @@ import {
   SearchIcon,
   SidebarIcon,
 } from 'lucide-react'
-import { useShallow } from 'zustand/react/shallow'
 
 import * as Dialog from '@/components/ui/dialog'
 import { useAppStore } from '@/store/app'
