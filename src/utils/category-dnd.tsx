@@ -170,7 +170,6 @@ export function useDrop({
   id: string
   data?: { [key: string]: string | undefined }
 }) {
-  const dataRef = React.useRef(data)
   const ref = React.useRef<HTMLElement | null>(null)
 
   const setDropContainers = useCategoryDnD((s) => s.setDropContainers)
@@ -181,7 +180,7 @@ export function useDrop({
   const place = dropData?.place
 
   React.useEffect(() => {
-    setDropContainers({ id, ref, data: dataRef.current })
+    setDropContainers({ id, ref, data })
     return () => removeDropContainers(id)
   }, [id, setDropContainers, removeDropContainers])
 

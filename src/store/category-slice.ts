@@ -22,6 +22,16 @@ interface Actions {
   toggleFavorite: (category: Category) => void
 
   setNewCategories: (categories: Category[]) => void
+
+  reorderCategories: (data: {
+    position: 'top' | 'bottom'
+    start: string
+    over: string
+    data: {
+      bottom?: string
+      top?: string
+    }
+  }) => void
 }
 
 export type CategorySlice = State & Actions
@@ -31,6 +41,41 @@ export const categorySlice: StateCreator<AppStore, [], [], CategorySlice> = (
   get
 ) => ({
   ...initialState,
+
+  reorderCategories: (data) => {
+    const startCategory = get().categories.find(
+      (category) => category.id === data.start
+    )
+    if (!startCategory) return
+    const overCategory = get().categories.find(
+      (category) => category.id === data.over
+    )
+    if (!overCategory) return
+    if (overCategory.orderNumber === null) return
+
+    const topId = data?.data?.top
+    const bottomId = data?.data?.bottom
+
+    if (typeof topId === 'string' && typeof bottomId === 'string') {
+      const topCategory = get().categories.find(
+        (category) => category.id === data.data.top
+      )
+
+      const bottomCategory = get().categories.find(
+        (category) => category.id === data.data.bottom
+      )
+
+      return
+    }
+
+    if (typeof topId === 'string' && typeof bottomId === 'undefined') {
+      return
+    }
+
+    if (typeof topId === 'undefined' && typeof bottomId === 'string') {
+      return
+    }
+  },
 
   addCategory: (category) => {
     const id = ulid()

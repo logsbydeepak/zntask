@@ -1,5 +1,6 @@
 'use client'
 
+import { removeRequestMeta } from 'next/dist/server/request-meta'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { FolderIcon } from 'lucide-react'
 
@@ -52,6 +53,7 @@ function ActiveTab() {
       categoryHelper.getActiveCategories(s.categories)
     )
   )
+  const reorderCategories = useAppStore((s) => s.reorderCategories)
 
   return (
     <>
@@ -60,20 +62,22 @@ function ActiveTab() {
       <CategoryContainer>
         <DNDProvider
           onDrop={(data) => {
-            console.log(data)
-            // if (!start) return
-            // if (!over) return
-            // if (start === over) return
-            // const overId = over.split(':')
-            // if (overId[0] === start) return
-            //
-            // if (overId[0] === 'start') {
-            //   reorderCategoryToTop(start)
-            // }
-            //
-            // if (overId[0] === 'bottom') {
-            //   reorderCategoryToBottomOf(start, overId[1])
-            // }
+            if (!data.start) return
+            if (!data.over) return
+            if (!data.position) return
+            if (!data.data) return
+            if (data.position !== 'top' && data.position !== 'bottom') return
+            if (data.start === data.over) return
+
+            reorderCategories({
+              start: data.start,
+              over: data.over,
+              position: data.position,
+              data: {
+                top: data.data.top,
+                bottom: data.data.bottom,
+              },
+            })
           }}
         >
           {categories.map((i, idx) => (
