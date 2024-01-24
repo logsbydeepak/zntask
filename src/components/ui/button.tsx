@@ -13,6 +13,8 @@ export const buttonStyle = cva({
       secondary:
         'border-gray-200 bg-white text-gray-600 focus-visible:ring-gray-900 disabled:border-gray-200 disabled:bg-gray-50 disabled:text-gray-700',
       destructive: 'bg-red-600 focus-visible:ring-red-600',
+      ghost:
+        'rounded-md px-1.5 py-1 text-xs font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-950',
     },
   },
   defaultVariants: {
@@ -37,19 +39,3 @@ export const Button = React.forwardRef<
   </button>
 ))
 Button.displayName = 'Button'
-
-export const ActionButton = React.forwardRef<
-  HTMLButtonElement,
-  React.ComponentPropsWithoutRef<'button'>
->(({ children, ...props }, ref) => {
-  return (
-    <button
-      {...props}
-      ref={ref}
-      className="group flex items-center space-x-2 rounded-md px-1.5 py-1 text-xs font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-950"
-    >
-      {children}
-    </button>
-  )
-})
-ActionButton.displayName = 'ActionButton'

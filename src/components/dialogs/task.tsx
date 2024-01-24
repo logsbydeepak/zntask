@@ -27,7 +27,7 @@ import { ChildTask, ParentTask } from '@/store/task-slice'
 import { getCategoryColor } from '@/utils/category'
 import { cn } from '@/utils/style'
 
-import { ActionButton } from '../ui/button'
+import { Button } from '../ui/button'
 
 const schema = z.object({
   categoryId: z.string().nullable(),
@@ -437,12 +437,12 @@ function TaskDialogContent({
 
       <fieldset className="flex justify-between space-x-4 border-t border-gray-100 px-5 py-2">
         <Dialog.Close asChild>
-          <ActionButton>Cancel</ActionButton>
+          <Button intent="ghost">Cancel</Button>
         </Dialog.Close>
 
-        <ActionButton type="submit" form="task">
+        <Button type="submit" form="task" intent="ghost">
           Save
-        </ActionButton>
+        </Button>
       </fieldset>
     </>
   )
