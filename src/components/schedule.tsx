@@ -39,7 +39,7 @@ export function SchedulePicker({
           <Badge.Icon>
             <CalendarIcon />
           </Badge.Icon>
-          <Badge.Label>{date ? showDate(date) : 'select'}</Badge.Label>
+          <span>{date ? showDate(date) : 'select'}</span>
 
           {time && (
             <div>
@@ -52,7 +52,7 @@ export function SchedulePicker({
               <Badge.Icon>
                 <HourglassIcon />
               </Badge.Icon>
-              <Badge.Label>{time && showTime(time)}</Badge.Label>
+              <span>{time && showTime(time)}</span>
             </>
           )}
         </Badge.Button>
@@ -156,9 +156,7 @@ const SchedulePopover = React.forwardRef<
               <Badge.Icon>
                 <CalendarIcon />
               </Badge.Icon>
-              <Badge.Label>
-                {format(actionDate ?? new Date(), 'MMM d')}
-              </Badge.Label>
+              <span>{format(actionDate ?? new Date(), 'MMM d')}</span>
             </Badge.Button>
           )}
           {actionTime && (
@@ -172,9 +170,7 @@ const SchedulePopover = React.forwardRef<
               <Badge.Icon>
                 <HourglassIcon />
               </Badge.Icon>
-              <Badge.Label>
-                {format(actionTime ?? new Date(), 'h:mm a')}
-              </Badge.Label>
+              <span>{format(actionTime ?? new Date(), 'h:mm a')}</span>
             </Badge.Button>
           )}
 
@@ -187,7 +183,7 @@ const SchedulePopover = React.forwardRef<
             <Badge.Icon>
               <CalendarIcon />
             </Badge.Icon>
-            <Badge.Label>today</Badge.Label>
+            <span>today</span>
           </Badge.Button>
 
           <Badge.Button
@@ -199,7 +195,7 @@ const SchedulePopover = React.forwardRef<
             <Badge.Icon>
               <CalendarIcon />
             </Badge.Icon>
-            <Badge.Label>tomorrow</Badge.Label>
+            <span>tomorrow</span>
           </Badge.Button>
 
           {date && (
@@ -212,7 +208,7 @@ const SchedulePopover = React.forwardRef<
               <Badge.Icon>
                 <XCircleIcon />
               </Badge.Icon>
-              <Badge.Label>clear date</Badge.Label>
+              <span>clear date</span>
             </Badge.Button>
           )}
 
@@ -226,7 +222,7 @@ const SchedulePopover = React.forwardRef<
               <Badge.Icon>
                 <XCircleIcon />
               </Badge.Icon>
-              <Badge.Label>clear time</Badge.Label>
+              <span>clear time</span>
             </Badge.Button>
           )}
         </div>

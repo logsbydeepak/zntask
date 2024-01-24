@@ -335,7 +335,7 @@ function TaskDialogContent({
             <Badge.Icon>
               <PlusIcon />
             </Badge.Icon>
-            <Badge.Label>subtask</Badge.Label>
+            <span>subtask</span>
           </Badge.Button>
         </div>
 
@@ -406,7 +406,7 @@ function TaskDialogContent({
                         <Badge.Icon>
                           <Trash2Icon />
                         </Badge.Icon>
-                        <Badge.Label>delete</Badge.Label>
+                        <span>delete</span>
                       </Badge.Button>
                     )}
 
@@ -424,7 +424,7 @@ function TaskDialogContent({
                         <Badge.Icon>
                           <Trash2Icon />
                         </Badge.Icon>
-                        <Badge.Label>delete</Badge.Label>
+                        <span>delete</span>
                       </Badge.Button>
                     )}
                   </div>
@@ -502,9 +502,9 @@ function CategoryPicker({
               />
             )}
           </Badge.Icon>
-          <Badge.Label className="truncate">
+          <span className="truncate">
             {currentCategory ? currentCategory.title : 'Inbox'}
-          </Badge.Label>
+          </span>
         </Badge.Button>
       </Popover.Trigger>
       {isOpen && (

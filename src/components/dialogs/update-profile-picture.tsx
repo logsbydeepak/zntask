@@ -128,7 +128,7 @@ function UpdateProfilePictureDialogContent({
               <Badge.Icon>
                 <UploadIcon />
               </Badge.Icon>
-              <Badge.Label>Pick new</Badge.Label>
+              <span>Pick new</span>
             </Badge.Button>
 
             <Badge.Button
@@ -141,7 +141,7 @@ function UpdateProfilePictureDialogContent({
               <Badge.Icon>
                 <Trash2Icon />
               </Badge.Icon>
-              <Badge.Label>Remove</Badge.Label>
+              <span>Remove</span>
             </Badge.Button>
           </fieldset>
         </div>

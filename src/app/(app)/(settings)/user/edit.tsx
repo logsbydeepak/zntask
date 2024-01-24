@@ -11,7 +11,7 @@ export function EditName() {
 
   return (
     <Badge.Button onClick={() => setDialog({ updateName: true })}>
-      <Badge.Label>Edit</Badge.Label>
+      Edit
     </Badge.Button>
   )
 }
@@ -21,7 +21,7 @@ export function EditEmail() {
 
   return (
     <Badge.Button onClick={() => setDialog({ updateEmail: true })}>
-      <Badge.Label>Edit</Badge.Label>
+      Edit
     </Badge.Button>
   )
 }
@@ -31,7 +31,7 @@ export function EditPicture() {
 
   return (
     <Badge.Button onClick={() => setDialog({ updateProfilePicture: true })}>
-      <Badge.Label>Edit</Badge.Label>
+      Edit
     </Badge.Button>
   )
 }
@@ -41,7 +41,7 @@ export function AddGoogleAuth() {
 
   return (
     <Badge.Button onClick={() => setDialog({ addGoogleAuth: true })}>
-      <Badge.Label>Add</Badge.Label>
+      Add
     </Badge.Button>
   )
 }
@@ -51,7 +51,7 @@ export function RemoveGoogleAuth() {
 
   return (
     <Badge.Button onClick={() => setDialog({ removeGoogleAuth: true })}>
-      <Badge.Label>Remove</Badge.Label>
+      Remove
     </Badge.Button>
   )
 }
@@ -64,7 +64,7 @@ export function ResetPassword() {
       <Badge.Icon>
         <KeyIcon />
       </Badge.Icon>
-      <Badge.Label>Reset Password</Badge.Label>
+      <span>Reset Password</span>
     </Badge.Button>
   )
 }
@@ -74,7 +74,7 @@ export function RemovePasswordAuth() {
 
   return (
     <Badge.Button onClick={() => setDialog({ removePasswordAuth: true })}>
-      <Badge.Label>Remove</Badge.Label>
+      <span>Remove</span>
     </Badge.Button>
   )
 }

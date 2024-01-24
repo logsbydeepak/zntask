@@ -14,7 +14,7 @@ export const Button = React.forwardRef<
       data-loading={isLoading}
       type="button"
       className={cn(
-        'group mr-2 inline-flex items-center space-x-1 rounded-full border border-gray-200 px-3 py-1 text-gray-600 hover:bg-gray-50 hover:text-gray-950 data-[state=open]:bg-gray-50 data-[state=open]:text-gray-950',
+        'group mr-2 inline-flex items-center space-x-1 rounded-full border border-gray-200 px-3 py-1 text-xs font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-950 data-[state=open]:bg-gray-50 data-[state=open]:text-gray-950',
         className
       )}
     />
@@ -25,22 +25,7 @@ Button.displayName = 'Badge.Button'
 export function Icon({ children }: { children: React.ReactNode }) {
   return (
     <span className="grid size-3 flex-shrink-0 place-content-center">
-      <span className="block group-data-[loading=true]:hidden">{children}</span>
-      <span className="hidden group-data-[loading=true]:block">
-        <LoaderIcon className="animate-spin" />
-      </span>
+      {children}
     </span>
-  )
-}
-
-export function Label({
-  children,
-  className,
-}: {
-  children: React.ReactNode
-  className?: string
-}) {
-  return (
-    <span className={cn('text-xs font-medium', className)}>{children}</span>
   )
 }
