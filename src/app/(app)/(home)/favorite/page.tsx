@@ -8,7 +8,7 @@ import * as Layout from '@/app/(app)/app-layout'
 import { Head } from '@/components/head'
 import { useAppStore } from '@/store/app'
 import { categoryHelper } from '@/utils/category'
-import { DNDProvider } from '@/utils/dnd'
+import { DNDProvider } from '@/utils/category-dnd'
 
 import {
   BottomDrop,

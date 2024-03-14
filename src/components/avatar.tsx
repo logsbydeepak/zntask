@@ -46,7 +46,7 @@ export function Avatar({
         />
       )}
       {!profilePicture && (
-        <p className="text-[75%] font-medium tracking-wider text-gray-600">
+        <p className="text-[95%] font-medium tracking-wider text-gray-600">
           {initials}
         </p>
       )}

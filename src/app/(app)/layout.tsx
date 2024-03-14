@@ -1,9 +1,11 @@
 import React, { Suspense } from 'react'
 import { unstable_cache } from 'next/cache'
 import { Inter, JetBrains_Mono } from 'next/font/google'
+import { LoaderIcon } from 'lucide-react'
 
 import { ThemeProvider } from '@/components/client-providers'
 import { Dialogs } from '@/components/dialogs'
+import { LogoIcon } from '@/components/icon/logo'
 import {
   DelayRender,
   GlobalShortcut,
@@ -19,7 +21,6 @@ import { cn } from '@/utils/style'
 import { AppLayout } from './app-layout'
 import { Navbar } from './navbar'
 import { Sidebar } from './sidebar'
-import { SplashScreen } from './splash-screen'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 const jetBrainsMono = JetBrains_Mono({
@@ -38,10 +39,10 @@ export default async function Layout({
         className={cn(
           inter.variable,
           jetBrainsMono.variable,
-          'overflow-x-hidden overflow-y-scroll font-sans text-text'
+          'overflow-y-scroll font-sans text-text'
         )}
       >
-        <Suspense fallback={<SplashScreen />}>
+        <Suspense fallback={<Loading />}>
           <ThemeProvider>
             <DelayRender>
               <InitData>
@@ -81,5 +82,18 @@ async function InitData({ children }: { children: React.ReactNode }) {
       <SyncAppState user={user} />
       {children}
     </AppProvider>
+  )
+}
+
+function Loading() {
+  return (
+    <div className="flex h-[calc(100vh-50px)] flex-col items-center justify-center space-y-2">
+      <span className="flex size-10 items-center justify-center rounded-full bg-orange-600 text-white">
+        <LogoIcon className="size-4" />
+      </span>
+      <span className="h-5 w-5">
+        <LoaderIcon className="size-full animate-spin text-gray-600" />
+      </span>
+    </div>
   )
 }

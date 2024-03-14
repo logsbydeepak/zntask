@@ -14,7 +14,7 @@ export const buttonStyle = cva({
         'border-gray-200 bg-white text-gray-600 focus-visible:ring-gray-900 disabled:border-gray-200 disabled:bg-gray-50 disabled:text-gray-700',
       destructive: 'bg-red-600 focus-visible:ring-red-600',
       ghost:
-        'rounded-md px-1.5 py-1 text-xs font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-950',
+        'rounded-md px-1.5 py-1 text-xs font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-950 focus-visible:ring-gray-900 focus-visible:ring-offset-0',
     },
   },
   defaultVariants: {
