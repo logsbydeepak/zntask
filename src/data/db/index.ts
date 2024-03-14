@@ -1,13 +1,11 @@
-import { connect } from '@planetscale/database'
-import { drizzle } from 'drizzle-orm/planetscale-serverless'
+import { drizzle } from 'drizzle-orm/postgres-js'
+import postgres from 'postgres'
 
 import { env } from '@/env.mjs'
 
 import * as schema from './schema'
 
-const connection = connect({
-  url: env.DATABASE_URL,
-})
+const client = postgres(env.DATABASE_URL)
 
-export const db = drizzle(connection, { schema })
+export const db = drizzle(client, { schema })
 export const dbSchema = schema

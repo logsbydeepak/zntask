@@ -1,11 +1,5 @@
-import { InferSelectModel, relations } from 'drizzle-orm'
-import {
-  boolean,
-  index,
-  int,
-  mysqlTable,
-  varchar,
-} from 'drizzle-orm/mysql-core'
+import { relations } from 'drizzle-orm'
+import { index, integer, pgTable, varchar } from 'drizzle-orm/pg-core'
 
 import {
   categoryDefaultIndicatorOption,
@@ -26,7 +20,7 @@ const tasks = {
   categoryId: id('category_id'),
 }
 
-export const users = mysqlTable(
+export const users = pgTable(
   'users',
   {
     id: id().primaryKey(),
@@ -42,17 +36,17 @@ export const users = mysqlTable(
   }
 )
 
-export const passwordAuth = mysqlTable('password_auth', {
+export const passwordAuth = pgTable('password_auth', {
   id: id().primaryKey(),
   password: varchar('password', { length: 256 }).notNull(),
 })
 
-export const googleAuth = mysqlTable('google_auth', {
+export const googleAuth = pgTable('google_auth', {
   id: id().primaryKey(),
   email: varchar('email', { length: 256 }).notNull().unique(),
 })
 
-export const categories = mysqlTable(
+export const categories = pgTable(
   'categories',
   {
     userId: id('user_id').notNull(),
@@ -64,24 +58,24 @@ export const categories = mysqlTable(
     })
       .default(categoryDefaultIndicatorOption.label)
       .notNull(),
-    orderNumber: int('order_number'),
-    favoriteOrderNumber: int('favorite_order_number'),
+    orderNumber: integer('order_number'),
+    favoriteOrderNumber: integer('favorite_order_number'),
     archivedAt: varchar('archived_at', { length: 30 }),
   },
   (table) => {
     return {
-      userIdIdx: index('user_id_idx').on(table.userId),
+      userIdIdx: index('categories_user_id_idx').on(table.userId),
     }
   }
 )
 
-export const parentTasks = mysqlTable('parent_tasks', tasks, (table) => {
+export const parentTasks = pgTable('parent_tasks', tasks, (table) => {
   return {
-    userIdIdx: index('user_id_idx').on(table.userId),
+    userIdIdx: index('parent_tasks_user_id_idx').on(table.userId),
   }
 })
 
-export const childTask = mysqlTable(
+export const childTask = pgTable(
   'child_tasks',
   {
     ...tasks,
@@ -89,7 +83,7 @@ export const childTask = mysqlTable(
   },
   (table) => {
     return {
-      userIdIdx: index('user_id_idx').on(table.userId),
+      userIdIdx: index('child_tasks_user_id_idx').on(table.userId),
     }
   }
 )

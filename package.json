@@ -11,14 +11,13 @@
     "cspell": "cspell ** --gitignore --cache",
     "fix": "run-s format cspell lint",
     "db:gen": "drizzle-kit generate:mysql",
-    "db:push": "drizzle-kit push:mysql",
+    "db:push": "drizzle-kit push:pg",
     "db:gen:push": "run-s db:gen db:push",
     "tw:gen": "bun tw-safelist.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
     "@ianvs/prettier-plugin-sort-imports": "^4.2.0",
-    "@planetscale/database": "^1.16.0",
     "@radix-ui/react-checkbox": "^1.0.4",
     "@radix-ui/react-context-menu": "^2.1.5",
     "@radix-ui/react-dialog": "^1.0.5",

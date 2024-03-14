@@ -1,12 +1,10 @@
 'use client'
 
-import { useShallow } from 'zustand/react/shallow'
-
 import * as Layout from '@/app/(app)/app-layout'
 import { Head } from '@/components/head'
 import * as Tabs from '@/components/ui/tabs'
 import { useAppStore } from '@/store/app'
-import { DNDProvider } from '@/utils/dnd'
+import { DNDProvider } from '@/utils/category-dnd'
 
 import { EmptyInbox, TaskContainer } from '../task'
 
