@@ -51,7 +51,7 @@ function EmptyContainer({
 }
 
 function EmptyIcon({ children }: { children: React.ReactNode }) {
-  return <div className="h-5 w-5">{children}</div>
+  return <div className="size-5">{children}</div>
 }
 
 function EmptyLabel({ children }: { children: React.ReactNode }) {

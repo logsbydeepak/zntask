@@ -82,9 +82,9 @@ export function DNDCategoryItem({
       )}
 
       {isOver && place === 'top' && (
-        <div className="absolute -top-[5px] left-0 right-0 flex w-full translate-y-[-2px] items-center px-3">
+        <div className="absolute inset-x-0 top-[-5px] flex w-full translate-y-[-2px] items-center px-3">
           <span className="size-1.5 rounded-full border-[1.5px] border-orange-600" />
-          <span className="-ml-[1px] h-[1.5px] w-full rounded-full bg-orange-600" />
+          <span className="-ml-px h-[1.5px] w-full rounded-full bg-orange-600" />
         </div>
       )}
 
@@ -96,9 +96,9 @@ export function DNDCategoryItem({
       />
 
       {isOver && place === 'bottom' && (
-        <div className="absolute -bottom-[5px] left-0 right-0 flex w-full translate-y-[2px] items-center px-3">
+        <div className="absolute inset-x-0 bottom-[-5px] flex w-full translate-y-[2px] items-center px-3">
           <span className="size-1.5 rounded-full border-[1.5px] border-orange-600" />
-          <span className="-ml-[1px] h-[1.5px] w-full rounded-full bg-orange-600" />
+          <span className="-ml-px h-[1.5px] w-full rounded-full bg-orange-600" />
         </div>
       )}
     </div>
@@ -143,7 +143,7 @@ export const CategoryItem = React.forwardRef<
                   className="flex size-6 items-center justify-center text-gray-400 hover:text-gray-800 data-[state=open]:text-gray-800"
                   onClick={(e) => e.preventDefault()}
                 >
-                  <span className="inline-block h-4 w-4">
+                  <span className="inline-block size-4">
                     <MoreVerticalIcon />
                   </span>
                 </button>
@@ -275,18 +275,18 @@ export function TopDrop({ id }: { id: string }) {
 
 function BottomIndicator() {
   return (
-    <div className="absolute -bottom-[5px] left-0 right-0 flex w-full translate-y-[2px] items-center px-3">
+    <div className="absolute inset-x-0 bottom-[-5px] flex w-full translate-y-[2px] items-center px-3">
       <span className="size-1.5 rounded-full border-[1.5px] border-orange-600" />
-      <span className="-ml-[1px] h-[1.5px] w-full rounded-full bg-orange-600" />
+      <span className="-ml-px h-[1.5px] w-full rounded-full bg-orange-600" />
     </div>
   )
 }
 
 function TopIndicator() {
   return (
-    <div className="absolute -top-[5px] left-0 right-0 flex w-full translate-y-[-2px] items-center px-3">
+    <div className="absolute inset-x-0 top-[-5px] flex w-full translate-y-[-2px] items-center px-3">
       <span className="size-1.5 rounded-full border-[1.5px] border-orange-600" />
-      <span className="-ml-[1px] h-[1.5px] w-full rounded-full bg-orange-600" />
+      <span className="-ml-px h-[1.5px] w-full rounded-full bg-orange-600" />
     </div>
   )
 }

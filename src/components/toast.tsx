@@ -89,7 +89,7 @@ function Icon({
         className
       )}
     >
-      <div className="h-2.5 w-2.5">{children}</div>
+      <div className="size-2.5">{children}</div>
     </div>
   )
 }

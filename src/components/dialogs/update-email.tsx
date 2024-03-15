@@ -99,7 +99,7 @@ function Content({
       <Head title="Update email" />
       <Form.Root onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         <div>
-          <Dialog.Title className="text text-lg font-medium">
+          <Dialog.Title className="text-lg font-medium">
             Update email
           </Dialog.Title>
           <Dialog.Description className="text-xs text-gray-500">

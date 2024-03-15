@@ -229,7 +229,7 @@ function CategoryItem({
                 />
               </Item.Label.Icon>
               <Item.Label.Content>{category.title}</Item.Label.Content>
-              <DropdownMenuTrigger className="ml-auto flex size-6 flex-shrink-0 items-center justify-center text-gray-400 hover:text-gray-800 data-[state=open]:text-gray-800">
+              <DropdownMenuTrigger className="ml-auto flex size-6 shrink-0 items-center justify-center text-gray-400 hover:text-gray-800 data-[state=open]:text-gray-800">
                 <MoreVerticalIcon className="size-4" />
               </DropdownMenuTrigger>
             </Item.Content.Link>
@@ -347,7 +347,7 @@ function ItemRoot({
 }) {
   return (
     <div className="group flex h-9 items-center" data-active={isActive}>
-      <span className="mr-1 h-5 w-1 rounded-br-md rounded-tr-md bg-white group-data-[active=true]:bg-orange-600" />
+      <span className="mr-1 h-5 w-1 rounded-r-md bg-white group-data-[active=true]:bg-orange-600" />
       {children}
     </div>
   )

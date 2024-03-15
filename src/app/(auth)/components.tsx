@@ -24,7 +24,7 @@ export function Logo() {
 }
 
 export function Title({ children }: { children: React.ReactNode }) {
-  return <h1 className="text text-center text-xl font-medium">{children}</h1>
+  return <h1 className="text-center text-xl font-medium">{children}</h1>
 }
 
 export function SubTitle({ children }: { children: React.ReactNode }) {
@@ -69,7 +69,7 @@ function BadgeButton({
   )
 }
 function BadgeButtonIcon({ children }: { children: React.ReactNode }) {
-  return <span className="h-2 w-2">{children}</span>
+  return <span className="size-2">{children}</span>
 }
 
 export function ResetPassword({ onClick }: { onClick: () => void }) {
@@ -171,7 +171,7 @@ export function PasswordChecklistItem({
 }) {
   return (
     <div className="inline-flex items-center space-x-1 text-xs text-gray-500">
-      <span className="inline-block h-2 w-2">
+      <span className="inline-block size-2">
         {isValid ? (
           <CheckIcon strokeWidth={3} />
         ) : (

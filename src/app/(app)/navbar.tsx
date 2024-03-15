@@ -43,11 +43,11 @@ export function Navbar() {
   const user = useAppStore((s) => s.user)
 
   return (
-    <nav className="fixed z-20 w-full border-b border-gray-200 bg-white bg-opacity-50 backdrop-blur-sm">
+    <nav className="fixed z-20 w-full border-b border-gray-200 bg-white/50 backdrop-blur-sm">
       <div className="flex h-14 items-center justify-between px-4 md:px-5">
         <Link href="/" className="flex items-center space-x-2">
           <span className="flex size-7 items-center justify-center rounded-full bg-newOrange-9 text-white">
-            <span className="h-3 w-3">
+            <span className="size-3">
               <LogoIcon />
             </span>
           </span>
@@ -89,7 +89,7 @@ export function Navbar() {
               </Tooltip.Portal>
             </Tooltip.Root>
 
-            <span className="my-1.5 w-[1px] bg-gray-200" />
+            <span className="my-1.5 w-px bg-gray-200" />
 
             <Tooltip.Root>
               <Tooltip.Trigger asChild>
@@ -126,7 +126,7 @@ export function Navbar() {
                     />
                     <span
                       data-active={isAppSyncing}
-                      className="absolute bottom-0 right-[1px] hidden size-2 items-center justify-center rounded-full border-[1.5px] border-white bg-white data-[active=true]:flex"
+                      className="absolute bottom-0 right-px hidden size-2 items-center justify-center rounded-full border-[1.5px] border-white bg-white data-[active=true]:flex"
                     >
                       <span className="size-full animate-pulse rounded-full bg-orange-500" />
                     </span>
@@ -184,7 +184,7 @@ function UserMenu() {
 
   return (
     <>
-      <div className="px-2 py-2 text-xs font-medium">
+      <div className="p-2 text-xs font-medium">
         <p className="truncate text-sm">{name}</p>
         <p className="truncate text-xs font-normal text-gray-600">
           {user.email}
@@ -199,7 +199,7 @@ function UserMenu() {
       </DropdownMenuItem>
 
       <DropdownMenuRadioGroup
-        className="flex justify-between px-4 py-4"
+        className="flex justify-between p-4"
         value={theme}
         onValueChange={(value) => {
           if (['light', 'dark', 'system'].includes(value)) {

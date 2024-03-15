@@ -199,7 +199,7 @@ function CommandPaletteContent({ handleClose }: { handleClose: () => void }) {
           }
         }}
       >
-        <div className="flex items-center border-b border-gray-200 px-3 py-3">
+        <div className="flex items-center border-b border-gray-200 p-3">
           <SearchIcon className="size-3 text-gray-400" />
           <Command.Input
             value={search}
@@ -211,8 +211,8 @@ function CommandPaletteContent({ handleClose }: { handleClose: () => void }) {
         </div>
         <Command.List className="[&>[cmdk-list-sizer]]:ml-2 [&>[cmdk-list-sizer]]:h-60 [&>[cmdk-list-sizer]]:space-y-2 [&>[cmdk-list-sizer]]:overflow-y-scroll [&>[cmdk-list-sizer]]:py-2 [&>[cmdk-list-sizer]]:pr-1">
           <Command.Empty className="flex h-[calc(100%-5%)] items-center justify-center">
-            <div className="flex flex-col items-center justify-center space-y-1 rounded-md border px-4 py-4 shadow-sm">
-              <span className="inline-block h-5 w-5">
+            <div className="flex flex-col items-center justify-center space-y-1 rounded-md border p-4 shadow-sm">
+              <span className="inline-block size-5">
                 <SearchIcon />
               </span>
               <p className="text-xs text-gray-600">not result</p>

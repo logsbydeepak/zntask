@@ -349,7 +349,7 @@ function TaskDialogContent({
               className={cn('snap-start space-y-2', index !== 0 && 'pl-7')}
               key={index}
             >
-              <div className="items-top flex space-x-2">
+              <div className="flex space-x-2">
                 <div className="flex size-6 items-center justify-center">
                   <Checkbox
                     value={!!watch(`tasks.${index}.completedAt`)}

@@ -50,7 +50,7 @@ export const Error = React.forwardRef<
         ref={ref}
         className="inline-flex items-center rounded-full bg-red-50 px-2 py-0.5 text-xs font-medium text-red-700"
       >
-        <span className="mr-1 h-2 w-2">
+        <span className="mr-1 size-2">
           <XCircleIcon strokeWidth={3} />
         </span>
         {children}

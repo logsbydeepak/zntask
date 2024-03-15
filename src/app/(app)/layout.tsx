@@ -91,7 +91,7 @@ function Loading() {
       <span className="flex size-10 items-center justify-center rounded-full bg-orange-600 text-white">
         <LogoIcon className="size-4" />
       </span>
-      <span className="h-5 w-5">
+      <span className="size-5">
         <LoaderIcon className="size-full animate-spin text-gray-600" />
       </span>
     </div>

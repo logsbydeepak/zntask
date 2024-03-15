@@ -104,7 +104,7 @@ function ResetPasswordDialogContent({
       <Head title="Reset Password" />
       <Form.Root onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         <div>
-          <Dialog.Title className="text text-lg font-medium">
+          <Dialog.Title className="text-lg font-medium">
             Reset Password
           </Dialog.Title>
           <Dialog.Description className="text-xs text-gray-500">

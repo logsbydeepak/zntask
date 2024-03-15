@@ -24,7 +24,7 @@ Button.displayName = 'Badge.Button'
 
 export function Icon({ children }: { children: React.ReactNode }) {
   return (
-    <span className="grid size-3 flex-shrink-0 place-content-center">
+    <span className="grid size-3 shrink-0 place-content-center">
       {children}
     </span>
   )

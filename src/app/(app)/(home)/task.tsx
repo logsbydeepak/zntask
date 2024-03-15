@@ -224,7 +224,7 @@ function BottomIndicator({ className }: { className?: string }) {
       )}
     >
       <span className="size-1.5 rounded-full border-[1.5px] border-orange-600" />
-      <span className="-ml-[1px] h-[1.5px] w-full rounded-full bg-orange-600" />
+      <span className="-ml-px h-[1.5px] w-full rounded-full bg-orange-600" />
     </div>
   )
 }
@@ -238,7 +238,7 @@ function TopIndicator({ className }: { className?: string }) {
       )}
     >
       <span className="size-1.5 rounded-full border-[1.5px] border-orange-600" />
-      <span className="-ml-[1px] h-[1.5px] w-full rounded-full bg-orange-600" />
+      <span className="-ml-px h-[1.5px] w-full rounded-full bg-orange-600" />
     </div>
   )
 }
@@ -348,7 +348,7 @@ const TaskItem = React.forwardRef<
                       e.stopPropagation()
                     }}
                   >
-                    <span className="inline-block h-4 w-4">
+                    <span className="inline-block size-4">
                       <MoreVerticalIcon />
                     </span>
                   </button>
