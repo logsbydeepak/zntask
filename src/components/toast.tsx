@@ -32,7 +32,7 @@ function Item({ toast }: { toast: Toast }) {
   return (
     <ToastPrimitive.Root
       onOpenChange={() => removeToast(toast.id)}
-      className="ToastRoot relative rounded-lg border border-gray-100 bg-white shadow-md shadow-gray-950/5"
+      className="ToastRoot relative rounded-lg border border-gray-100 bg-newGray-1 shadow-md shadow-gray-950/5"
     >
       <div className="flex items-center space-x-2 p-4">
         <div>

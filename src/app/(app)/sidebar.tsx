@@ -37,7 +37,7 @@ export function Sidebar() {
     <aside
       data-sidebar={isSidebarOpen}
       className={cn(
-        'invisible fixed bottom-0 top-14 z-10 w-full -translate-x-full overflow-y-scroll bg-white pr-1 data-[sidebar=true]:visible data-[sidebar=true]:translate-x-0 md:w-56',
+        'invisible fixed bottom-0 top-14 z-10 w-full -translate-x-full overflow-y-scroll bg-newGray-1 pr-1 data-[sidebar=true]:visible data-[sidebar=true]:translate-x-0 md:w-56',
         'transition-all duration-150 ease-in-out'
       )}
     >
@@ -347,7 +347,7 @@ function ItemRoot({
 }) {
   return (
     <div className="group flex h-9 items-center" data-active={isActive}>
-      <span className="mr-1 h-5 w-1 rounded-r-md bg-white group-data-[active=true]:bg-orange-600" />
+      <span className="mr-1 h-5 w-1 rounded-r-md bg-newGray-1 group-data-[active=true]:bg-orange-600" />
       {children}
     </div>
   )

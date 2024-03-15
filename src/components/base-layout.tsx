@@ -9,7 +9,7 @@ export function BaseLayout({ children }: { children: React.ReactNode }) {
       <body
         className={cn(
           inter.variable,
-          `overflow-x-hidden font-sans text-sm text-text`
+          `overflow-x-hidden font-sans text-sm text-newGray-12`
         )}
       >
         {children}

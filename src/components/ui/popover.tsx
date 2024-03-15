@@ -16,7 +16,7 @@ export const Content = React.forwardRef<
     {...props}
     className={cn(
       'bg-popover text-popover-foreground z-50 w-72 rounded-lg border p-2',
-      'bg-white outline-none drop-shadow-sm',
+      'bg-newGray-1 outline-none drop-shadow-sm',
       'data-[state=open]:animate-in data-[state=closed]:animate-out',
       'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
       'data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95',

@@ -65,6 +65,10 @@
     --orange-12: #ffe0c2;
   }
 
+  input {
+    @apply bg-transparent !important;
+  }
+
   *:focus-visible {
     @apply outline-gray-950;
   }

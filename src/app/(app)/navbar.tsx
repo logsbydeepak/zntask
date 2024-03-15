@@ -43,10 +43,10 @@ export function Navbar() {
   const user = useAppStore((s) => s.user)
 
   return (
-    <nav className="fixed z-20 w-full border-b border-gray-200 bg-white/50 backdrop-blur-sm">
+    <nav className="fixed z-20 w-full border-b border-newGray-3 bg-newGray-1 backdrop-blur-sm">
       <div className="flex h-14 items-center justify-between px-4 md:px-5">
         <Link href="/" className="flex items-center space-x-2">
-          <span className="flex size-7 items-center justify-center rounded-full bg-newOrange-9 text-white">
+          <span className="flex size-7 items-center justify-center rounded-full bg-newOrange-9 text-[#ffffff]">
             <span className="size-3">
               <LogoIcon />
             </span>
@@ -89,7 +89,7 @@ export function Navbar() {
               </Tooltip.Portal>
             </Tooltip.Root>
 
-            <span className="my-1.5 w-px bg-gray-200" />
+            <span className="my-1.5 w-px bg-newGray-3" />
 
             <Tooltip.Root>
               <Tooltip.Trigger asChild>
@@ -126,9 +126,9 @@ export function Navbar() {
                     />
                     <span
                       data-active={isAppSyncing}
-                      className="absolute bottom-0 right-px hidden size-2 items-center justify-center rounded-full border-[1.5px] border-white bg-white data-[active=true]:flex"
+                      className="absolute bottom-0 right-px hidden size-2 items-center justify-center rounded-full border-[1.5px] border-newGray-1 bg-newGray-1 data-[active=true]:flex"
                     >
-                      <span className="size-full animate-pulse rounded-full bg-orange-500" />
+                      <span className="size-full animate-pulse rounded-full bg-newOrange-9" />
                     </span>
                   </DropdownMenuTrigger>
                 </Tooltip.Trigger>
@@ -242,7 +242,7 @@ function UserMenu() {
   )
 }
 
-const iconStyle = tw`flex items-center justify-center rounded-lg border border-gray-200 bg-gray-50 text-gray-500 hover:border-gray-300 hover:bg-gray-100 hover:text-gray-950`
+const iconStyle = tw`flex items-center justify-center rounded-lg border border-newGray-5 bg-newGray-2 text-newGray-11 hover:border-newGray-6 active:bg-newGray-4 active:border-newGray-7 hover:bg-newGray-3 hover:text-newGray-12`
 
 const Icon = React.forwardRef<
   React.ElementRef<'button'>,
@@ -265,7 +265,7 @@ function SearchXL() {
       <span className="flex size-8 items-center justify-center">
         <SearchIcon className="size-3.5" />
       </span>
-      <span className="mr-10 text-xs text-gray-500">Search</span>
+      <span className="mr-10 text-xs text-newGray-11">Search</span>
     </button>
   )
 }
