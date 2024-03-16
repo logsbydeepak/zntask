@@ -16,15 +16,15 @@ const colorNumber = [
 ] as const
 
 const newGray = Object.fromEntries(
-  colorNumber.map((n) => [n, `var(--gray-${n})`])
+  colorNumber.map((n) => [n, `hsl(var(--gray-${n}))`])
 )
 
 const newOrange = Object.fromEntries(
-  colorNumber.map((n) => [n, `var(--orange-${n})`])
+  colorNumber.map((n) => [n, `hsl(var(--orange-${n}))`])
 )
 
 const newRed = Object.fromEntries(
-  colorNumber.map((n) => [n, `var(--red-${n})`])
+  colorNumber.map((n) => [n, `hsl(var(--red-${n}))`])
 )
 
 const config: Config = {
@@ -51,7 +51,6 @@ const config: Config = {
         xs: '355px',
       },
       backgroundImage: {
-        'auth-layout-square': 'url(/square.svg)',
         'auth-layout-gradient': 'var(--auth-layout-gradient)',
       },
     },

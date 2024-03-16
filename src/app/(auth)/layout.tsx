@@ -18,11 +18,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       >
         <ThemeProvider>
           <div className="absolute inset-0 hidden *:absolute *:inset-0 md:block">
-            <div className="bg-auth-layout-gradient opacity-20" />
-            <div className="bg-auth-layout-square" />
-            <div className="bg-gradient-to-t from-gray-50/80 to-gray-100/50" />
+            {/* <div className="bg-auth-layout-gradient opacity-20" /> */}
+            <div className="auth-layout-square" />
+            <div className="bg-gradient-to-t from-newGray-1/70 to-newGray-3/20" />
           </div>
-          <div className="flex flex-col items-center space-y-6 border-gray-100 p-6 sm:p-8 md:my-[180px]  md:w-[500px] md:rounded-xl md:border md:border-gray-200 md:bg-newGray-1 md:p-10 md:drop-shadow-md">
+          <div className="flex flex-col items-center space-y-6 border-newGray-4 p-6 sm:p-8 md:my-[180px]  md:w-[500px] md:rounded-xl md:border md:border-newGray-4 md:bg-newGray-1 md:p-10 md:drop-shadow-md">
             {children}
             <Theme />
           </div>

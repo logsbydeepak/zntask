@@ -88,11 +88,11 @@ async function InitData({ children }: { children: React.ReactNode }) {
 function Loading() {
   return (
     <div className="flex h-[calc(100vh-50px)] flex-col items-center justify-center space-y-2">
-      <span className="flex size-10 items-center justify-center rounded-full bg-orange-600 text-white">
+      <span className="flex size-10 items-center justify-center rounded-full bg-newOrange-9 text-[#ffffff]">
         <LogoIcon className="size-4" />
       </span>
       <span className="size-5">
-        <LoaderIcon className="size-full animate-spin text-gray-600" />
+        <LoaderIcon className="size-full animate-spin text-newGray-11" />
       </span>
     </div>
   )

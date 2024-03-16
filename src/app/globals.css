@@ -4,90 +4,99 @@
 
 @layer base {
   :root {
-    --color-background: 0, 0%, 100%;
-    --color-text: 0, 0%, 11%;
+    --color-background: 0 0% 100%;
+    --color-text: 0 0% 11%;
 
-    --gray-1: #fcfcfc;
-    --gray-2: #f9f9f9;
-    --gray-3: #f0f0f0;
-    --gray-4: #e8e8e8;
-    --gray-5: #e0e0e0;
-    --gray-6: #d9d9d9;
-    --gray-7: #cecece;
-    --gray-8: #bbbbbb;
-    --gray-9: #8d8d8d;
-    --gray-10: #838383;
-    --gray-11: #646464;
-    --gray-12: #202020;
+    --gray-1: 0 0% 99%;
+    --gray-2: 0 0% 98;
+    --gray-3: 0 0% 94%;
+    --gray-4: 0 0% 91%;
+    --gray-5: 0 0% 88%;
+    --gray-6: 0 0% 85%;
+    --gray-7: 0 0% 81%;
+    --gray-8: 0 0% 73%;
+    --gray-9: 0 0% 55%;
+    --gray-10: 0 0% 51%;
+    --gray-11: 0 0% 39%;
+    --gray-12: 0 0% 13%;
 
-    --orange-1: #fefcfb;
-    --orange-2: #fff7ed;
-    --orange-3: #ffefd6;
-    --orange-4: #ffdfb5;
-    --orange-5: #ffd19a;
-    --orange-6: #ffc182;
-    --orange-7: #f5ae73;
-    --orange-8: #ec9455;
-    --orange-9: #f76b15;
-    --orange-10: #ef5f00;
-    --orange-11: #cc4e00;
-    --orange-12: #582d1d;
+    --orange-1: 20 60% 99%;
+    --orange-2: 33 100% 96%;
+    --orange-3: 37 100% 92%;
+    --orange-4: 34 100% 85%;
+    --orange-5: 33 100% 80%;
+    --orange-6: 30 100% 75%;
+    --orange-7: 27 87% 71%;
+    --orange-8: 25 80% 63%;
+    --orange-9: 23 93% 53%;
+    --orange-10: 24 100% 47%;
+    --orange-11: 23 100% 40%;
+    --orange-12: 16 50% 23%;
 
-    --red-1: #fffcfc;
-    --red-2: #fff7f7;
-    --red-3: #feebec;
-    --red-4: #ffdbdc;
-    --red-5: #ffcdce;
-    --red-6: #fdbdbe;
-    --red-7: #f4a9aa;
-    --red-8: #eb8e90;
-    --red-9: #e5484d;
-    --red-10: #dc3e42;
-    --red-11: #ce2c31;
-    --red-12: #641723;
+    --red-1: 0 100% 99%;
+    --red-2: 0 100% 98%;
+    --red-3: 357 90% 96%;
+    --red-4: 358 100% 93%;
+    --red-5: 359 100% 90%;
+    --red-6: 359 94% 87%;
+    --red-7: 359 77% 81%;
+    --red-8: 359 70% 74%;
+    --red-9: 358 75% 59%;
+    --red-10: 358 69% 55%;
+    --red-11: 358 65% 49%;
+    --red-12: 351 63% 24%;
   }
 
   .dark {
-    --color-background: 0, 0%, 11%;
-    --color-text: 220, 14%, 96%;
+    --color-background: 0 0% 11%;
+    --color-text: 220 14% 96%;
 
-    --gray-1: #111111;
-    --gray-2: #191919;
-    --gray-3: #222222;
-    --gray-4: #2a2a2a;
-    --gray-5: #313131;
-    --gray-6: #3a3a3a;
-    --gray-7: #484848;
-    --gray-8: #606060;
-    --gray-9: #6e6e6e;
-    --gray-10: #7b7b7b;
-    --gray-11: #b4b4b4;
-    --gray-12: #eeeeee;
+    --gray-1: 0 0% 7%;
+    --gray-2: 0 0% 10%;
+    --gray-3: 0 0% 13%;
+    --gray-4: 0 0% 16%;
+    --gray-5: 0 0% 19%;
+    --gray-6: 0 0% 23%;
+    --gray-7: 0 0% 28%;
+    --gray-8: 0 0% 38%;
+    --gray-9: 0 0% 43%;
+    --gray-10: 0 0% 48%;
+    --gray-11: 0 0% 71%;
+    --gray-12: 0 0% 93%;
 
-    --orange-1: #17120e;
-    --orange-2: #1e160f;
-    --orange-3: #331e0b;
-    --orange-4: #462100;
-    --orange-5: #562800;
-    --orange-6: #66350c;
-    --orange-7: #7e451d;
-    --orange-8: #a35829;
-    --orange-9: #f76b15;
-    --orange-10: #ff801f;
-    --orange-11: #ffa057;
-    --orange-12: #ffe0c2;
+    --orange-1: 27 24% 7%;
+    --orange-2: 28 33% 9%;
+    --orange-3: 29 65% 12%;
+    --orange-4: 28 100% 14%;
+    --orange-5: 28 100% 17%;
+    --orange-6: 27 79% 22%;
+    --orange-7: 25 63% 30%;
+    --orange-8: 23 60% 40%;
+    --orange-9: 23 93% 53%;
+    --orange-10: 26 100% 56%;
+    --orange-11: 26 100% 67%;
+    --orange-12: 30 100% 88%;
 
-    --red-2: #201314;
-    --red-3: #3b1219;
-    --red-4: #500f1c;
-    --red-5: #611623;
-    --red-6: #72232d;
-    --red-7: #8c333a;
-    --red-8: #b54548;
-    --red-9: #e5484d;
-    --red-10: #ec5d5e;
-    --red-11: #ff9592;
-    --red-12: #ffd1d9;
+    --red-1: 0 19% 8%;
+    --red-2: 355 25% 10%;
+    --red-3: 350 53% 15%;
+    --red-4: 348 68% 19%;
+    --red-5: 350 63% 23%;
+    --red-6: 352 53% 29%;
+    --red-7: 355 47% 37%;
+    --red-8: 358 45% 49%;
+    --red-9: 358 75% 59%;
+    --red-10: 360 79% 65%;
+    --red-11: 2 100% 79%;
+    --red-12: 350 100% 91%;
+  }
+
+  .dark .auth-layout-square {
+    background-image: url('../../public/dark-square.svg');
+  }
+
+  .auth-layout-square {
+    background-image: url('../../public/light-square.svg');
   }
 
   input,
