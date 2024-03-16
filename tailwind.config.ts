@@ -14,7 +14,6 @@ const colorNumber = [
   '11',
   '12',
 ] as const
-type g = (typeof colorNumber)[number]
 
 const newGray = Object.fromEntries(
   colorNumber.map((n) => [n, `var(--gray-${n})`])
@@ -22,6 +21,10 @@ const newGray = Object.fromEntries(
 
 const newOrange = Object.fromEntries(
   colorNumber.map((n) => [n, `var(--orange-${n})`])
+)
+
+const newRed = Object.fromEntries(
+  colorNumber.map((n) => [n, `var(--red-${n})`])
 )
 
 const config: Config = {
@@ -42,6 +45,7 @@ const config: Config = {
         text: 'hsl(var(--color-text))',
         newGray,
         newOrange,
+        newRed,
       },
       screens: {
         xs: '355px',

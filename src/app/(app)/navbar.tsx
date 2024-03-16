@@ -186,7 +186,7 @@ function UserMenu() {
     <>
       <div className="p-2 text-xs font-medium">
         <p className="truncate text-sm">{name}</p>
-        <p className="truncate text-xs font-normal text-gray-600">
+        <p className="truncate text-xs font-normal text-newGray-11">
           {user.email}
         </p>
       </div>
@@ -215,10 +215,10 @@ function UserMenu() {
                 className={cn(
                   iconStyle,
                   'size-8 cursor-pointer outline-none',
-                  'data-[highlighted]:text-gray-950 data-[state=checked]:text-white',
-                  'data-[highlighted]:bg-gray-100 data-[state=checked]:bg-orange-600',
-                  'data-[highlighted]:ring-2 data-[highlighted]:ring-gray-200',
-                  'data-[state=checked]:border-orange-700 data-[state=checked]:ring-orange-200'
+                  'data-[highlighted]:text-newGray-12 data-[state=checked]:text-newGray-1',
+                  'data-[highlighted]:bg-newGray-3 data-[state=checked]:bg-newOrange-10',
+                  'data-[highlighted]:ring-2 data-[highlighted]:ring-newGray-3',
+                  'data-[state=checked]:border-newOrange-8 data-[state=checked]:ring-newOrange-3'
                 )}
               >
                 <span className="size-3.5">{i.icon}</span>

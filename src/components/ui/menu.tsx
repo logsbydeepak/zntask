@@ -40,9 +40,9 @@ const menuItemStyle = cva({
   base: 'group/item flex items-center space-x-3 rounded-md bg-newGray-1 px-4 py-2 text-xs font-medium focus:outline-none data-[highlighted]:cursor-pointer',
   variants: {
     intent: {
-      neutral: 'text-gray-950 data-[highlighted]:bg-gray-100',
+      neutral: 'text-newGray-12 data-[highlighted]:bg-newGray-3',
       destructive:
-        'data-[highlighted]:bg-red-50 data-[highlighted]:text-red-700',
+        'data-[highlighted]:bg-newRed-3 data-[highlighted]:text-newRed-11',
     },
   },
   defaultVariants: {
@@ -53,12 +53,12 @@ const menuItemStyle = cva({
 type MenuItemStyleProps = React.ComponentPropsWithoutRef<typeof menuItemStyle>
 
 const menuIconStyle = cva({
-  base: 'size-4 text-gray-600',
+  base: 'size-4 text-newGray-11',
   variants: {
     intent: {
-      neutral: 'text-gray-600',
+      neutral: 'text-newGray-11',
       destructive:
-        'group-data-[highlighted]/item:group-data-[intent=destructive]/item:text-red-700',
+        'group-data-[highlighted]/item:group-data-[intent=destructive]/item:text-newRed-11',
     },
   },
   defaultVariants: {

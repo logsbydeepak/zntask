@@ -32,6 +32,19 @@
     --orange-10: #ef5f00;
     --orange-11: #cc4e00;
     --orange-12: #582d1d;
+
+    --red-1: #fffcfc;
+    --red-2: #fff7f7;
+    --red-3: #feebec;
+    --red-4: #ffdbdc;
+    --red-5: #ffcdce;
+    --red-6: #fdbdbe;
+    --red-7: #f4a9aa;
+    --red-8: #eb8e90;
+    --red-9: #e5484d;
+    --red-10: #dc3e42;
+    --red-11: #ce2c31;
+    --red-12: #641723;
   }
 
   .dark {
@@ -63,6 +76,18 @@
     --orange-10: #ff801f;
     --orange-11: #ffa057;
     --orange-12: #ffe0c2;
+
+    --red-2: #201314;
+    --red-3: #3b1219;
+    --red-4: #500f1c;
+    --red-5: #611623;
+    --red-6: #72232d;
+    --red-7: #8c333a;
+    --red-8: #b54548;
+    --red-9: #e5484d;
+    --red-10: #ec5d5e;
+    --red-11: #ff9592;
+    --red-12: #ffd1d9;
   }
 
   input {
