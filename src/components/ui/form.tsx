@@ -16,8 +16,8 @@ Root.displayName = 'Form.Root'
 
 export const formInputStyle = cva({
   base: [
-    'mb-2 mt-0.5 w-full rounded-md border border-gray-200 px-3 py-1  disabled:text-gray-500',
-    'placeholder:text-sm placeholder:text-gray-400 focus-visible:border-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-600',
+    'mb-2 mt-0.5 w-full rounded-md border border-newGray-4 px-3 py-1  disabled:text-newGray-9',
+    'placeholder:text-sm placeholder:text-newGray-11 focus-visible:border-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-newOrange-9',
   ],
 })
 
@@ -48,7 +48,7 @@ export const Error = React.forwardRef<
       <p
         {...props}
         ref={ref}
-        className="inline-flex items-center rounded-full bg-red-50 px-2 py-0.5 text-xs font-medium text-red-700"
+        className="inline-flex items-center rounded-full bg-newRed-2 px-2 py-0.5 text-xs font-medium text-newRed-11"
       >
         <span className="mr-1 size-2">
           <XCircleIcon strokeWidth={3} />

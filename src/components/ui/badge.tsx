@@ -14,7 +14,7 @@ export const Button = React.forwardRef<
       data-loading={isLoading}
       type="button"
       className={cn(
-        'group mr-2 inline-flex items-center space-x-1 rounded-full border border-gray-200 px-3 py-1 text-xs font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-950 data-[state=open]:bg-gray-50 data-[state=open]:text-gray-950',
+        'group mr-2 inline-flex items-center space-x-1 rounded-full border border-newGray-4 px-3 py-1 text-xs font-medium text-newGray-11 hover:bg-newGray-2 hover:text-newGray-12 data-[state=open]:bg-newGray-2 data-[state=open]:text-newGray-12',
         className
       )}
     />

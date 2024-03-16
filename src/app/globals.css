@@ -90,12 +90,13 @@
     --red-12: #ffd1d9;
   }
 
-  input {
+  input,
+  textarea {
     @apply bg-transparent !important;
   }
 
   *:focus-visible {
-    @apply outline-gray-950;
+    @apply outline-newGray-12;
   }
 
   nav,

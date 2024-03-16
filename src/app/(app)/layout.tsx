@@ -39,7 +39,7 @@ export default async function Layout({
         className={cn(
           inter.variable,
           jetBrainsMono.variable,
-          'overflow-y-scroll font-sans text-newGray-12'
+          'overflow-y-scroll font-sans text-newGray-12 bg-newGray-1'
         )}
       >
         <Suspense fallback={<Loading />}>

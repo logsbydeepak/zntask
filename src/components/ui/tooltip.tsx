@@ -16,7 +16,7 @@ export const Content = React.forwardRef<
     {...props}
     ref={ref}
     className={cn(
-      'z-50 rounded-lg border border-newGray-5 bg-newGray-1 px-2 py-1 text-xs',
+      'z-50 rounded-lg border border-newGray-5 bg-newGray-3 px-2 py-1 text-xs',
       'font-medium text-newGray-11 drop-shadow-sm animate-in fade-in-0 zoom-in-95',
       'data-[state=closed]:animate-out data-[state=closed]:fade-out-0',
       'data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2',

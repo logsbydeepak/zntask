@@ -27,7 +27,7 @@ export const Content = React.forwardRef<
     {...props}
     ref={ref}
     className={cn(
-      'fixed bottom-0 z-50 w-full rounded-t-xl border bg-background p-6 drop-shadow-xl duration-1000',
+      'fixed bottom-0 z-50 w-full rounded-t-xl border p-6 drop-shadow-xl duration-1000 bg-newGray-1 border-newGray-4',
       'sm:bottom-auto sm:left-[50%] sm:top-[50%] sm:w-[420px] sm:translate-x-[-50%] sm:translate-y-[-50%] sm:rounded-lg sm:drop-shadow-sm',
       'data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95',
       'data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95',
@@ -48,7 +48,7 @@ export const Title = React.forwardRef<
   <Dialog.Title
     {...props}
     ref={ref}
-    className={cn('text-lg font-medium text-gray-900', className)}
+    className={cn('text-lg font-medium text-newGray-12', className)}
   >
     {children}
   </Dialog.Title>
@@ -62,7 +62,7 @@ export const Description = React.forwardRef<
   <Dialog.Description
     {...props}
     ref={ref}
-    className={cn('text-sm text-gray-500', className)}
+    className={cn('text-sm text-newGray-11', className)}
   >
     {children}
   </Dialog.Description>
