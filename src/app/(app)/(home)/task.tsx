@@ -219,7 +219,7 @@ function BottomIndicator({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        'absolute -bottom-[5px] left-0 right-0 flex w-full translate-y-[2px] items-center px-3',
+        'absolute inset-x-0 bottom-[-5px] flex w-full translate-y-[2px] items-center px-3',
         className
       )}
     >
@@ -233,7 +233,7 @@ function TopIndicator({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        'absolute -top-[5px] left-0 right-0 flex w-full translate-y-[-2px] items-center px-3',
+        'absolute inset-x-0 top-[-5px] flex w-full translate-y-[-2px] items-center px-3',
         className
       )}
     >

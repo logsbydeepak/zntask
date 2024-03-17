@@ -276,7 +276,7 @@ function CommandPaletteContent({ handleClose }: { handleClose: () => void }) {
                     <div
                       className={cn(
                         'size-2.5 rounded-[4px]',
-                        `bg-${getCategoryColor(i.indicator)}-600`
+                        getCategoryColor(i.indicator, 'bg')
                       )}
                     />
                   </CommandItem.Icon>
@@ -302,7 +302,7 @@ function CommandPaletteContent({ handleClose }: { handleClose: () => void }) {
                     <div
                       className={cn(
                         'size-2.5 rounded-[4px]',
-                        `bg-${getCategoryColor(i.indicator)}-600`
+                        getCategoryColor(i.indicator, 'bg')
                       )}
                     />
                   </CommandItem.Icon>
@@ -328,7 +328,7 @@ function CommandPaletteContent({ handleClose }: { handleClose: () => void }) {
                     <div
                       className={cn(
                         'size-2.5 rounded-[4px]',
-                        `bg-${getCategoryColor(i.indicator)}-600`
+                        getCategoryColor(i.indicator, 'bg')
                       )}
                     />
                   </CommandItem.Icon>

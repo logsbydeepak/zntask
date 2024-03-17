@@ -70,7 +70,7 @@ export function DNDCategoryItem({
           ref={dragRef as any}
           className={cn(
             'fixed left-0 top-0 z-50 hidden -translate-x-1/2 -translate-y-full rounded-full shadow-sm drop-shadow-sm',
-            `bg-${getCategoryColor(category.indicator)}-600`,
+            getCategoryColor(category.indicator, 'bg'),
             isDragging && 'z-50 block'
           )}
           style={style}
@@ -131,7 +131,7 @@ export const CategoryItem = React.forwardRef<
                 <div
                   className={cn(
                     'size-2.5 rounded-full',
-                    `bg-${getCategoryColor(category.indicator)}-600`
+                    getCategoryColor(category.indicator, 'bg')
                   )}
                 />
               </div>

@@ -495,7 +495,7 @@ function CategoryPicker({
               <div
                 className={cn(
                   'size-2.5 rounded-full',
-                  `bg-${getCategoryColor(currentCategory.indicator)}-600`
+                  getCategoryColor(currentCategory.indicator, 'bg')
                 )}
               />
             )}

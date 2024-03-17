@@ -41,12 +41,18 @@ export const zCategory = z.object({
 
 export type CategoryType = z.infer<typeof zCategory>
 
-export const getCategoryColor = (indicator: CategoryIndicatorLabelType) => {
+export const getCategoryColor = (
+  indicator: CategoryIndicatorLabelType,
+  type: 'bg' | 'hover:ring' | 'bg hover:ring'
+) => {
   const color = categoryIndicatorOptions.find(
     (option) => option.label === indicator
   )?.color
   if (!color) throw new Error('Invalid category indicator')
-  return color
+
+  if (type === 'bg') return `bg-${color}-100`
+  if (type === 'hover:ring') return `hover:ring-${color}-500`
+  return `bg-${color}-100 hover:ring-${color}-500`
 }
 
 export type Category = z.infer<typeof zCategory>

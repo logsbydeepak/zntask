@@ -11,6 +11,7 @@ import { useAppStore } from '@/store/app'
 import {
   Category,
   categoryIndicatorOptions,
+  getCategoryColor,
   zCategoryIndicator,
 } from '@/utils/category'
 import { cn } from '@/utils/style'
@@ -128,7 +129,7 @@ function CategoryDialogContent({
                   className={cn(
                     'flex size-[18px] items-center justify-center rounded-full',
                     'cursor-pointer hover:ring-2 focus-visible:outline-offset-[3px]',
-                    `bg-${option.color}-600 hover:ring-${option.color}-300`
+                    getCategoryColor(option.label, 'bg hover:ring')
                   )}
                 >
                   <RadioGroup.Indicator className="size-2 rounded-full bg-newGray-1 animate-in zoom-in" />

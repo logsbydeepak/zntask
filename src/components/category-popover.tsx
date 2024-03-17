@@ -143,10 +143,7 @@ function CategoryItemIndicator({
 }) {
   return (
     <div
-      className={cn(
-        'size-2.5 rounded-full',
-        `bg-${getCategoryColor(indicator)}-600`
-      )}
+      className={cn('size-2.5 rounded-full', getCategoryColor(indicator, 'bg'))}
     />
   )
 }

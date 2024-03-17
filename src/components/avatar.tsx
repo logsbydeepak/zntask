@@ -30,7 +30,7 @@ export function Avatar({
   return (
     <div
       className={cn(
-        'flex size-full items-center justify-center rounded-full border border-newGray-5 hover:border-newGray-6 bg-newGray-2 hover:bg-newGray-3',
+        'flex size-full items-center justify-center rounded-full border border-newGray-5 bg-newGray-2 hover:border-newGray-6 hover:bg-newGray-3',
         className
       )}
     >

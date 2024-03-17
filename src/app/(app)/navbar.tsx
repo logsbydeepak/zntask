@@ -242,7 +242,9 @@ function UserMenu() {
   )
 }
 
-const iconStyle = tw`flex items-center justify-center rounded-lg border border-newGray-5 bg-newGray-2 text-newGray-11 hover:border-newGray-6 active:bg-newGray-4 active:border-newGray-7 hover:bg-newGray-3 hover:text-newGray-12`
+const iconStyle = tw(
+  'flex items-center justify-center rounded-lg border border-newGray-5 bg-newGray-2 text-newGray-11 hover:border-newGray-6 hover:bg-newGray-3 hover:text-newGray-12 active:border-newGray-7 active:bg-newGray-4'
+)
 
 const Icon = React.forwardRef<
   React.ElementRef<'button'>,

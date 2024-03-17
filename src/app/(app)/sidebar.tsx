@@ -3,6 +3,7 @@
 import React from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { cva } from 'cva'
 import {
   CalendarIcon,
   ChevronDownIcon,
@@ -224,7 +225,7 @@ function CategoryItem({
                 <span
                   className={cn(
                     'size-2.5 rounded-full',
-                    `bg-${getCategoryColor(category.indicator)}-600`
+                    getCategoryColor(category.indicator, 'bg')
                   )}
                 />
               </Item.Label.Icon>
@@ -355,7 +356,9 @@ function ItemRoot({
   )
 }
 
-const itemContentStyle = tw`flex size-full items-center gap-3 overflow-hidden rounded-lg border border-transparent px-2 hover:border-newGray-5 hover:bg-newGray-2 group-data-[active=true]:border-newGray-4 group-data-[active=true]:bg-newGray-2`
+const itemContentStyle = tw(
+  'flex size-full items-center gap-3 overflow-hidden rounded-lg border border-transparent px-2 hover:border-newGray-5 hover:bg-newGray-2 group-data-[active=true]:border-newGray-4 group-data-[active=true]:bg-newGray-2'
+)
 
 const ItemContentLink = React.forwardRef<
   React.ElementRef<typeof Link>,
@@ -408,7 +411,7 @@ function LabelIcon({
     <span
       {...props}
       className={cn(
-        'flex size-4 flex-shrink-0 items-center justify-center',
+        'flex size-4 shrink-0 items-center justify-center',
         className
       )}
     >

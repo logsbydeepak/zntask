@@ -5,5 +5,10 @@
       "files": ["*.ts", "*.tsx", "*.js"],
       "parser": "@typescript-eslint/parser"
     }
-  ]
+  ],
+  "settings": {
+    "tailwindcss": {
+      "callees": ["cn", "tw", "cva"]
+    }
+  }
 }
