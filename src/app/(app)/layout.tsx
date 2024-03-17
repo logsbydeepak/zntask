@@ -1,9 +1,7 @@
 import React, { Suspense } from 'react'
 import { unstable_cache } from 'next/cache'
-import { Inter, JetBrains_Mono } from 'next/font/google'
 import { LoaderIcon } from 'lucide-react'
 
-import { ThemeProvider } from '@/components/client-providers'
 import { Dialogs } from '@/components/dialogs'
 import { LogoIcon } from '@/components/icon/logo'
 import {
@@ -16,17 +14,10 @@ import { ToastProvider } from '@/components/toast'
 import { getInitialData } from '@/data'
 import { getUser } from '@/data/user'
 import { AppProvider } from '@/store/app'
-import { cn } from '@/utils/style'
 
 import { AppLayout } from './app-layout'
 import { Navbar } from './navbar'
 import { Sidebar } from './sidebar'
-
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
-const jetBrainsMono = JetBrains_Mono({
-  subsets: ['latin'],
-  variable: '--font-jetBrains',
-})
 
 export default async function Layout({
   children,
@@ -34,31 +25,19 @@ export default async function Layout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body
-        className={cn(
-          inter.variable,
-          jetBrainsMono.variable,
-          'overflow-y-scroll font-sans text-newGray-12 bg-newGray-1'
-        )}
-      >
-        <Suspense fallback={<Loading />}>
-          <ThemeProvider>
-            <DelayRender>
-              <InitData>
-                <Navbar />
-                <State />
-                <Sidebar />
-                <AppLayout>{children}</AppLayout>
-                <GlobalShortcut />
-                <Dialogs />
-              </InitData>
-            </DelayRender>
-            <ToastProvider />
-          </ThemeProvider>
-        </Suspense>
-      </body>
-    </html>
+    <Suspense fallback={<Loading />}>
+      <DelayRender>
+        <InitData>
+          <Navbar />
+          <State />
+          <Sidebar />
+          <AppLayout>{children}</AppLayout>
+          <GlobalShortcut />
+          <Dialogs />
+        </InitData>
+      </DelayRender>
+      <ToastProvider />
+    </Suspense>
   )
 }
 

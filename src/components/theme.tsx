@@ -3,12 +3,16 @@
 import React from 'react'
 import * as RadioGroup from '@radix-ui/react-radio-group'
 import { MonitorIcon, MoonIcon, SunIcon } from 'lucide-react'
-import { useTheme } from 'next-themes'
+import { ThemeProvider as Theme, useTheme } from 'next-themes'
 
 import * as Tooltip from '@/components/ui/tooltip'
 import { cn } from '@/utils/style'
 
-export function Theme() {
+export function ThemeProvider({ children }: { children: React.ReactNode }) {
+  return <Theme attribute="class">{children}</Theme>
+}
+
+export function ThemeSwitch() {
   const { theme: themeProvider, setTheme: setThemeProvider } = useTheme()
   const [theme, setCurrentTheme] = React.useState<string>('')
 

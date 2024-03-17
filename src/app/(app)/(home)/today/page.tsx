@@ -1,9 +1,9 @@
 'use client'
 
 import React from 'react'
+import Link from 'next/link'
 import { isToday } from 'date-fns'
 import { CalendarClockIcon } from 'lucide-react'
-import { useShallow } from 'zustand/react/shallow'
 
 import * as Layout from '@/app/(app)/app-layout'
 import { Head } from '@/components/head'
