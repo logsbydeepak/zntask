@@ -1,5 +1,7 @@
 import { type Config } from 'tailwindcss'
 
+import { categoryIndicatorOptions } from './src/utils/category'
+
 const colorNumber = [
   '1',
   '2',
@@ -27,13 +29,15 @@ const newRed = Object.fromEntries(
   colorNumber.map((n) => [n, `hsl(var(--red-${n}))`])
 )
 
+const safelist: string[] = []
+categoryIndicatorOptions.forEach((item) => {
+  const color = item.color
+  safelist.push(`bg-${color}-600`, `hover:ring-${color}-300`)
+})
+
 const config: Config = {
   darkMode: 'class',
-  content: [
-    './src/app/**/*.tsx',
-    './src/components/**/*.tsx',
-    './tw-safelist.txt',
-  ],
+  content: ['./src/app/**/*.tsx', './src/components/**/*.tsx'],
   theme: {
     extend: {
       fontFamily: {
@@ -55,6 +59,7 @@ const config: Config = {
       },
     },
   },
+  safelist,
   plugins: [require('@tailwindcss/forms'), require('tailwindcss-animate')],
 }
 export default config

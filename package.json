@@ -13,8 +13,7 @@
     "fix": "run-s format cspell lint:fix",
     "db:gen": "drizzle-kit generate:mysql",
     "db:push": "drizzle-kit push:pg",
-    "db:gen:push": "run-s db:gen db:push",
-    "tw:gen": "bun tw-safelist.ts"
+    "db:gen:push": "run-s db:gen db:push"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
