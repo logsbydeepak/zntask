@@ -13,7 +13,7 @@ export const categoryIndicatorOptions = [
   { label: 'red', color: 'red' },
   { label: 'blue', color: 'blue' },
   { label: 'green', color: 'green' },
-  { label: 'yellow', color: 'yellow' },
+  { label: 'amber', color: 'amber' },
   { label: 'pink', color: 'pink' },
   { label: 'lime', color: 'lime' },
   { label: 'cyan', color: 'cyan' },
@@ -49,10 +49,11 @@ export const getCategoryColor = (
     (option) => option.label === indicator
   )?.color
   if (!color) throw new Error('Invalid category indicator')
+  const newColor = `new${color.charAt(0).toUpperCase()}${color.slice(1)}`
 
-  if (type === 'bg') return `bg-${color}-600`
-  if (type === 'hover:ring') return `hover:ring-${color}-600`
-  return `bg-${color}-600 hover:ring-${color}-600`
+  if (type === 'bg') return `bg-${newColor}-9`
+  if (type === 'hover:ring') return `hover:ring-${newColor}-6`
+  return `bg-${newColor}-9 hover:ring-${newColor}-6`
 }
 
 export type Category = z.infer<typeof zCategory>

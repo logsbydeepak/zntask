@@ -29,10 +29,43 @@ const newRed = Object.fromEntries(
   colorNumber.map((n) => [n, `hsl(var(--red-${n}))`])
 )
 
+const newBlue = Object.fromEntries(
+  colorNumber.map((n) => [n, `hsl(var(--blue-${n}))`])
+)
+
+const newGreen = Object.fromEntries(
+  colorNumber.map((n) => [n, `hsl(var(--green-${n}))`])
+)
+
+const newLime = Object.fromEntries(
+  colorNumber.map((n) => [n, `hsl(var(--lime-${n}))`])
+)
+
+const newPink = Object.fromEntries(
+  colorNumber.map((n) => [n, `hsl(var(--pink-${n}))`])
+)
+
+const newViolet = Object.fromEntries(
+  colorNumber.map((n) => [n, `hsl(var(--violet-${n}))`])
+)
+
+const newIndigo = Object.fromEntries(
+  colorNumber.map((n) => [n, `hsl(var(--indigo-${n}))`])
+)
+
+const newCyan = Object.fromEntries(
+  colorNumber.map((n) => [n, `hsl(var(--cyan-${n}))`])
+)
+
+const newAmber = Object.fromEntries(
+  colorNumber.map((n) => [n, `hsl(var(--amber-${n}))`])
+)
+
 const safelist: string[] = []
 categoryIndicatorOptions.forEach((item) => {
   const color = item.color
-  safelist.push(`bg-${color}-600`, `hover:ring-${color}-300`)
+  const newColor = `new${color.charAt(0).toUpperCase()}${color.slice(1)}`
+  safelist.push(`bg-${newColor}-9`, `hover:ring-${newColor}-6`)
 })
 
 const config: Config = {
@@ -50,6 +83,14 @@ const config: Config = {
         newGray,
         newOrange,
         newRed,
+        newBlue,
+        newGreen,
+        newLime,
+        newPink,
+        newViolet,
+        newIndigo,
+        newCyan,
+        newAmber,
       },
       screens: {
         xs: '355px',
