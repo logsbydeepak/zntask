@@ -15,51 +15,33 @@ const colorNumber = [
   '10',
   '11',
   '12',
-] as const
+]
 
-const newGray = Object.fromEntries(
-  colorNumber.map((n) => [n, `hsl(var(--gray-${n}))`])
-)
+const colorName = [
+  'gray',
+  'orange',
+  'red',
+  'blue',
+  'green',
+  'lime',
+  'pink',
+  'violet',
+  'indigo',
+  'cyan',
+  'amber',
+]
 
-const newOrange = Object.fromEntries(
-  colorNumber.map((n) => [n, `hsl(var(--orange-${n}))`])
-)
+const newColor: { [key: string]: { [key: string]: string } } = {}
 
-const newRed = Object.fromEntries(
-  colorNumber.map((n) => [n, `hsl(var(--red-${n}))`])
-)
+colorName.forEach((color) => {
+  const colorList: { [key: string]: string } = {}
 
-const newBlue = Object.fromEntries(
-  colorNumber.map((n) => [n, `hsl(var(--blue-${n}))`])
-)
+  colorNumber.forEach((n) => {
+    colorList[n] = `hsl(var(--${color}-${n}))`
+  })
 
-const newGreen = Object.fromEntries(
-  colorNumber.map((n) => [n, `hsl(var(--green-${n}))`])
-)
-
-const newLime = Object.fromEntries(
-  colorNumber.map((n) => [n, `hsl(var(--lime-${n}))`])
-)
-
-const newPink = Object.fromEntries(
-  colorNumber.map((n) => [n, `hsl(var(--pink-${n}))`])
-)
-
-const newViolet = Object.fromEntries(
-  colorNumber.map((n) => [n, `hsl(var(--violet-${n}))`])
-)
-
-const newIndigo = Object.fromEntries(
-  colorNumber.map((n) => [n, `hsl(var(--indigo-${n}))`])
-)
-
-const newCyan = Object.fromEntries(
-  colorNumber.map((n) => [n, `hsl(var(--cyan-${n}))`])
-)
-
-const newAmber = Object.fromEntries(
-  colorNumber.map((n) => [n, `hsl(var(--amber-${n}))`])
-)
+  newColor[`new${color.charAt(0).toUpperCase()}${color.slice(1)}`] = colorList
+})
 
 const safelist: string[] = []
 categoryIndicatorOptions.forEach((item) => {
@@ -78,19 +60,7 @@ const config: Config = {
         sans: ['var(--font-inter)'],
       },
       colors: {
-        background: 'hsl(var(--color-background))',
-        text: 'hsl(var(--color-text))',
-        newGray,
-        newOrange,
-        newRed,
-        newBlue,
-        newGreen,
-        newLime,
-        newPink,
-        newViolet,
-        newIndigo,
-        newCyan,
-        newAmber,
+        ...newColor,
       },
       screens: {
         xs: '355px',

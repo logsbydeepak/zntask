@@ -3,10 +3,113 @@
 @tailwind utilities;
 
 @layer base {
-  :root {
-    --color-background: 0 0% 100%;
-    --color-text: 0 0% 11%;
+  .dark .auth-layout-square {
+    background-image: url('../../public/dark-square.svg');
+  }
 
+  .auth-layout-square {
+    background-image: url('../../public/light-square.svg');
+  }
+
+  input,
+  textarea {
+    @apply bg-transparent !important;
+  }
+
+  *:focus-visible {
+    @apply outline-newGray-12;
+  }
+
+  nav,
+  aside {
+    padding-right: var(--removed-body-scroll-bar-size) !important;
+  }
+
+  @media only screen and (min-width: 768px) {
+    aside {
+      padding-right: 0 !important;
+    }
+  }
+
+  aside::-webkit-scrollbar,
+  .container-scroll::-webkit-scrollbar,
+  [cmdk-list-sizer]::-webkit-scrollbar {
+    @apply w-3;
+  }
+
+  aside:hover::-webkit-scrollbar-thumb,
+  .container-scroll:hover::-webkit-scrollbar-thumb,
+  [cmdk-list-sizer]:hover::-webkit-scrollbar-thumb {
+    @apply rounded-full border-[3px] border-solid border-white bg-gray-300;
+  }
+
+  aside::-webkit-scrollbar-thumb:hover,
+  .container-scroll::-webkit-scrollbar-thumb:hover,
+  [cmdk-list-sizer]::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-400;
+  }
+
+  svg {
+    @apply size-full;
+  }
+
+  [cmdk-list-sizer] {
+    scroll-padding-block-start: 10px;
+    scroll-padding-block-end: 10px;
+  }
+
+  .ToastRoot[data-swipe='move'] {
+    transform: translateX(var(--radix-toast-swipe-move-x));
+  }
+  .ToastRoot[data-swipe='cancel'] {
+    transform: translateX(0);
+    transition: transform 200ms ease-out;
+  }
+  .ToastRoot[data-swipe='end'] {
+    animation: slideRight 100ms ease-out;
+  }
+}
+
+:root {
+  --auth-layout-gradient: radial-gradient(
+      at 48% 8%,
+      hsla(55, 90%, 66%, 1) 0,
+      hsla(55, 90%, 66%, 0) 50%
+    ),
+    radial-gradient(
+      at 87% 84%,
+      hsla(258, 85%, 50%, 1) 0,
+      hsla(258, 85%, 50%, 0) 50%
+    ),
+    radial-gradient(
+      at 49% 74%,
+      hsla(224, 86%, 53%, 1) 0,
+      hsla(224, 86%, 53%, 0) 50%
+    ),
+    radial-gradient(
+      at 12% 5%,
+      hsla(83, 89%, 52%, 1) 0,
+      hsla(83, 89%, 52%, 0) 50%
+    ),
+    radial-gradient(
+      at 40% 61%,
+      hsla(55, 94%, 50%, 1) 0,
+      hsla(55, 94%, 50%, 0) 50%
+    ),
+    radial-gradient(
+      at 67% 86%,
+      hsla(342, 86%, 68%, 1) 0,
+      hsla(342, 86%, 68%, 0) 50%
+    ),
+    radial-gradient(
+      at 94% 22%,
+      hsla(180, 90%, 50%, 1) 0,
+      hsla(180, 90%, 50%, 0) 50%
+    );
+}
+
+@layer base {
+  :root {
     --gray-1: 0 0% 99%;
     --gray-2: 0 0% 98;
     --gray-3: 0 0% 94%;
@@ -152,9 +255,6 @@
   }
 
   .dark {
-    --color-background: 0 0% 11%;
-    --color-text: 220 14% 96%;
-
     --gray-1: 0 0% 7%;
     --gray-2: 0 0% 10%;
     --gray-3: 0 0% 13%;
@@ -298,108 +398,4 @@
     --amber-11: 46, 100%, 54%;
     --amber-12: 41, 100%, 85%;
   }
-
-  .dark .auth-layout-square {
-    background-image: url('../../public/dark-square.svg');
-  }
-
-  .auth-layout-square {
-    background-image: url('../../public/light-square.svg');
-  }
-
-  input,
-  textarea {
-    @apply bg-transparent !important;
-  }
-
-  *:focus-visible {
-    @apply outline-newGray-12;
-  }
-
-  nav,
-  aside {
-    padding-right: var(--removed-body-scroll-bar-size) !important;
-  }
-
-  @media only screen and (min-width: 768px) {
-    aside {
-      padding-right: 0 !important;
-    }
-  }
-
-  aside::-webkit-scrollbar,
-  .container-scroll::-webkit-scrollbar,
-  [cmdk-list-sizer]::-webkit-scrollbar {
-    @apply w-3;
-  }
-
-  aside:hover::-webkit-scrollbar-thumb,
-  .container-scroll:hover::-webkit-scrollbar-thumb,
-  [cmdk-list-sizer]:hover::-webkit-scrollbar-thumb {
-    @apply rounded-full border-[3px] border-solid border-white bg-gray-300;
-  }
-
-  aside::-webkit-scrollbar-thumb:hover,
-  .container-scroll::-webkit-scrollbar-thumb:hover,
-  [cmdk-list-sizer]::-webkit-scrollbar-thumb:hover {
-    @apply bg-gray-400;
-  }
-
-  svg {
-    @apply size-full;
-  }
-
-  [cmdk-list-sizer] {
-    scroll-padding-block-start: 10px;
-    scroll-padding-block-end: 10px;
-  }
-
-  .ToastRoot[data-swipe='move'] {
-    transform: translateX(var(--radix-toast-swipe-move-x));
-  }
-  .ToastRoot[data-swipe='cancel'] {
-    transform: translateX(0);
-    transition: transform 200ms ease-out;
-  }
-  .ToastRoot[data-swipe='end'] {
-    animation: slideRight 100ms ease-out;
-  }
-}
-
-:root {
-  --auth-layout-gradient: radial-gradient(
-      at 48% 8%,
-      hsla(55, 90%, 66%, 1) 0,
-      hsla(55, 90%, 66%, 0) 50%
-    ),
-    radial-gradient(
-      at 87% 84%,
-      hsla(258, 85%, 50%, 1) 0,
-      hsla(258, 85%, 50%, 0) 50%
-    ),
-    radial-gradient(
-      at 49% 74%,
-      hsla(224, 86%, 53%, 1) 0,
-      hsla(224, 86%, 53%, 0) 50%
-    ),
-    radial-gradient(
-      at 12% 5%,
-      hsla(83, 89%, 52%, 1) 0,
-      hsla(83, 89%, 52%, 0) 50%
-    ),
-    radial-gradient(
-      at 40% 61%,
-      hsla(55, 94%, 50%, 1) 0,
-      hsla(55, 94%, 50%, 0) 50%
-    ),
-    radial-gradient(
-      at 67% 86%,
-      hsla(342, 86%, 68%, 1) 0,
-      hsla(342, 86%, 68%, 0) 50%
-    ),
-    radial-gradient(
-      at 94% 22%,
-      hsla(180, 90%, 50%, 1) 0,
-      hsla(180, 90%, 50%, 0) 50%
-    );
 }
