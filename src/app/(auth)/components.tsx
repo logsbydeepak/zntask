@@ -15,7 +15,7 @@ import { Button } from '@/components/ui/button'
 export function Logo() {
   return (
     <Link
-      className="mb-2 flex size-10 items-center justify-center rounded-full bg-newOrange-9 p-3 text-[#ffffff]"
+      className="mb-2 flex size-10 items-center justify-center rounded-full bg-newOrange-9 p-3 text-white"
       href="/"
     >
       <LogoIcon className="size-4" />
@@ -32,7 +32,7 @@ export function SubTitle({ children }: { children: React.ReactNode }) {
 }
 
 export function Separator() {
-  return <div className="w-full border-b border-dashed border-gray-200" />
+  return <div className="w-full border-b border-dashed border-newGray-4" />
 }
 
 export function ContinueWithGoogle({

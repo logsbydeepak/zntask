@@ -50,9 +50,9 @@ export const getCategoryColor = (
   )?.color
   if (!color) throw new Error('Invalid category indicator')
 
-  if (type === 'bg') return `bg-${color}-100`
-  if (type === 'hover:ring') return `hover:ring-${color}-500`
-  return `bg-${color}-100 hover:ring-${color}-500`
+  if (type === 'bg') return `bg-${color}-600`
+  if (type === 'hover:ring') return `hover:ring-${color}-600`
+  return `bg-${color}-600 hover:ring-${color}-600`
 }
 
 export type Category = z.infer<typeof zCategory>

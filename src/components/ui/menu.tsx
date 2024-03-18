@@ -40,9 +40,10 @@ const menuItemStyle = cva({
   base: 'group/item flex items-center space-x-3 rounded-md bg-newGray-1 px-4 py-2 text-xs font-medium focus:outline-none data-[highlighted]:cursor-pointer',
   variants: {
     intent: {
-      neutral: 'text-newGray-12 data-[highlighted]:bg-newGray-3',
+      neutral:
+        'text-newGray-11 data-[highlighted]:bg-newGray-3 data-[highlighted]:text-newGray-12',
       destructive:
-        'data-[highlighted]:bg-newRed-3 data-[highlighted]:text-newRed-11',
+        'text-newGray-11 data-[highlighted]:bg-newRed-3 data-[highlighted]:text-newRed-11',
     },
   },
   defaultVariants: {
@@ -56,7 +57,7 @@ const menuIconStyle = cva({
   base: 'size-4 text-newGray-11',
   variants: {
     intent: {
-      neutral: 'text-newGray-11',
+      neutral: 'text-newGray-11 data-[highlighted]:text-newGray-12',
       destructive:
         'group-data-[highlighted]/item:group-data-[intent=destructive]/item:text-newRed-11',
     },

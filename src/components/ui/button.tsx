@@ -9,7 +9,7 @@ export const buttonStyle = cva({
   variants: {
     intent: {
       primary:
-        'bg-newOrange-9 text-[#ffffff] focus-visible:ring-newOrange-6 disabled:border-gray-200 disabled:bg-gray-50 disabled:text-gray-700',
+        'bg-newOrange-9 text-white focus-visible:ring-newOrange-6 disabled:border-gray-200 disabled:bg-gray-50 disabled:text-gray-700',
       secondary:
         'border-newGray-3 bg-newGray-1 text-newGray-11 focus-visible:ring-newGray-6 disabled:border-gray-200 disabled:bg-gray-50 disabled:text-gray-700',
       destructive: 'bg-red-600 focus-visible:ring-red-600',
