@@ -130,7 +130,7 @@ export function TaskContainer({
             <div>
               <button
                 onClick={() => setIsCollapsibleOpen((open) => !open)}
-                className="ml-9 rounded-full border border-gray-200 px-3 py-1 text-xs text-gray-600 hover:bg-gray-50"
+                className="ml-9 rounded-full border border-gray-3 px-3 py-1 text-xs text-gray-11 hover:bg-gray-3"
               >
                 {isCollapsibleOpen
                   ? 'show less'
@@ -223,8 +223,8 @@ function BottomIndicator({ className }: { className?: string }) {
         className
       )}
     >
-      <span className="size-1.5 rounded-full border-[1.5px] border-orange-600" />
-      <span className="-ml-px h-[1.5px] w-full rounded-full bg-orange-600" />
+      <span className="size-1.5 rounded-full border-[1.5px] border-orange-9" />
+      <span className="-ml-px h-[1.5px] w-full rounded-full bg-orange-9" />
     </div>
   )
 }
@@ -237,8 +237,8 @@ function TopIndicator({ className }: { className?: string }) {
         className
       )}
     >
-      <span className="size-1.5 rounded-full border-[1.5px] border-orange-600" />
-      <span className="-ml-px h-[1.5px] w-full rounded-full bg-orange-600" />
+      <span className="size-1.5 rounded-full border-[1.5px] border-orange-9" />
+      <span className="-ml-px h-[1.5px] w-full rounded-full bg-orange-9" />
     </div>
   )
 }
@@ -259,7 +259,7 @@ function DNDTaskItem({ task }: { task: ParentTask | ChildTask }) {
       {isDragging && (
         <div
           className={cn(
-            'fixed left-0 top-0 z-50 hidden -translate-x-1/2 -translate-y-full rounded-full bg-orange-600 shadow-sm drop-shadow-sm',
+            'fixed left-0 top-0 z-50 hidden -translate-x-1/2 -translate-y-full rounded-full bg-orange-9 shadow-sm drop-shadow-sm',
             isDragging && 'z-50 block'
           )}
           style={style}
@@ -322,7 +322,7 @@ const TaskItem = React.forwardRef<
             {...props}
             ref={ref}
             className={cn(
-              'flex w-full cursor-pointer touch-none flex-col space-y-1 rounded-lg border border-transparent px-3 py-2 text-sm hover:border-gray-200 hover:bg-gray-50 data-[state=open]:border-gray-200 data-[state=open]:bg-gray-50',
+              'flex w-full cursor-pointer touch-none flex-col space-y-1 rounded-lg border border-transparent px-3 py-2 text-sm hover:border-gray-3 hover:bg-gray-2 data-[state=open]:border-gray-3 data-[state=open]:bg-gray-2',
               className
             )}
             onClick={(e) => {
@@ -343,7 +343,7 @@ const TaskItem = React.forwardRef<
               <div>
                 <DropdownMenuTrigger asChild>
                   <button
-                    className="flex size-6 items-center justify-center text-gray-400 hover:text-gray-800 data-[state=open]:text-gray-800"
+                    className="flex size-6 items-center justify-center text-gray-10 hover:text-gray-11 data-[state=open]:text-gray-11"
                     onClick={(e) => {
                       e.stopPropagation()
                     }}
@@ -359,7 +359,7 @@ const TaskItem = React.forwardRef<
               <div className="ml-[26px] space-y-2">
                 {task.details && (
                   <p
-                    className="truncate text-xs text-gray-600"
+                    className="truncate text-xs text-gray-11"
                     onClick={handleOnTaskClick}
                   >
                     {task.details?.split('\n').map((i, index) => (
@@ -512,7 +512,7 @@ function Checkbox({
           setValue(value)
         }
       }}
-      className="size-3.5 rounded-full text-gray-600 outline-offset-4 hover:text-gray-950"
+      className="size-3.5 rounded-full text-gray-11 outline-offset-4 hover:text-gray-12"
       name="task status"
     >
       {!value && <CircleIcon />}

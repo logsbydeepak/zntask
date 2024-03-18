@@ -15,7 +15,7 @@ export const List = React.forwardRef<
       ref={ref}
       {...props}
       className={cn(
-        'inline-flex space-x-2 rounded-lg bg-newGray-3 p-1.5',
+        'inline-flex space-x-2 rounded-lg bg-gray-3 p-1.5',
         className
       )}
     />
@@ -30,7 +30,7 @@ export const Trigger = React.forwardRef<
   <TabsPrimitives.Trigger
     {...props}
     ref={ref}
-    className="rounded-md px-3 py-1 text-xs text-newGray-11 hover:text-newGray-12 aria-[selected=true]:bg-newGray-1 aria-[selected=true]:text-newGray-12 aria-[selected=true]:shadow-sm aria-[selected=true]:drop-shadow-sm"
+    className="rounded-md px-3 py-1 text-xs text-gray-11 hover:text-gray-12 aria-[selected=true]:bg-gray-1 aria-[selected=true]:text-gray-12 aria-[selected=true]:shadow-sm aria-[selected=true]:drop-shadow-sm"
   />
 ))
 

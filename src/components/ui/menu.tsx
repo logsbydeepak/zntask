@@ -30,20 +30,20 @@ export const DropdownMenuRadioGroup = DropdownMenuRadioGroupPrimitives
 export const DropdownMenuRadioItem = DropdownMenuRadioItemPrimitives
 
 const menuContentStyle = cn(
-  'z-40 rounded-xl border border-newGray-5 bg-newGray-1 p-1 drop-shadow-sm animate-in fade-in-80',
+  'z-40 rounded-xl border border-gray-5 bg-gray-1 p-1 drop-shadow-sm animate-in fade-in-80',
   'data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95',
   'data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95',
   'data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2'
 )
 
 const menuItemStyle = cva({
-  base: 'group/item flex items-center space-x-3 rounded-md bg-newGray-1 px-4 py-2 text-xs font-medium focus:outline-none data-[highlighted]:cursor-pointer',
+  base: 'group/item flex items-center space-x-3 rounded-md bg-gray-1 px-4 py-2 text-xs font-medium focus:outline-none data-[highlighted]:cursor-pointer',
   variants: {
     intent: {
       neutral:
-        'text-newGray-11 data-[highlighted]:bg-newGray-3 data-[highlighted]:text-newGray-12',
+        'text-gray-11 data-[highlighted]:bg-gray-3 data-[highlighted]:text-gray-12',
       destructive:
-        'text-newGray-11 data-[highlighted]:bg-newRed-3 data-[highlighted]:text-newRed-11',
+        'text-gray-11 data-[highlighted]:bg-red-3 data-[highlighted]:text-red-11',
     },
   },
   defaultVariants: {
@@ -54,12 +54,12 @@ const menuItemStyle = cva({
 type MenuItemStyleProps = React.ComponentPropsWithoutRef<typeof menuItemStyle>
 
 const menuIconStyle = cva({
-  base: 'size-4 text-newGray-11',
+  base: 'size-4 text-gray-11',
   variants: {
     intent: {
-      neutral: 'text-newGray-11 data-[highlighted]:text-newGray-12',
+      neutral: 'text-gray-11 data-[highlighted]:text-gray-12',
       destructive:
-        'group-data-[highlighted]/item:group-data-[intent=destructive]/item:text-newRed-11',
+        'group-data-[highlighted]/item:group-data-[intent=destructive]/item:text-red-11',
     },
   },
   defaultVariants: {

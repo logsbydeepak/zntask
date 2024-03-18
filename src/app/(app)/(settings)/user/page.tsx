@@ -46,7 +46,7 @@ export default async function Page() {
 function Loading() {
   return (
     <div className="flex h-[calc(100vh-200px)] flex-col items-center justify-center">
-      <LoaderIcon className="size-6 animate-spin text-gray-400" />
+      <LoaderIcon className="size-6 animate-spin text-gray-10" />
     </div>
   )
 }
@@ -131,7 +131,7 @@ async function UserInformation() {
 
 function ItemContainer({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex flex-col rounded-xl border border-newGray-3">
+    <div className="flex flex-col rounded-xl border border-gray-3">
       {children}
     </div>
   )
@@ -147,7 +147,7 @@ function ItemWrapper({ children }: { children: React.ReactNode }) {
 
 function ItemKey({ children }: { children: React.ReactNode }) {
   return (
-    <p className="w-full text-xs font-medium text-newGray-10 sm:inline-block sm:w-20">
+    <p className="w-full text-xs font-medium text-gray-10 sm:inline-block sm:w-20">
       {children}
     </p>
   )
@@ -166,7 +166,7 @@ function ItemAction({ children }: { children: React.ReactNode }) {
 }
 
 function ItemSeparator() {
-  return <div className="border-b border-newGray-3" />
+  return <div className="border-b border-gray-3" />
 }
 
 const Item = {
@@ -196,7 +196,7 @@ function Cross() {
 
 function IconContainer({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex size-8 items-center justify-center rounded-full border border-newGray-3 bg-newGray-2">
+    <div className="flex size-8 items-center justify-center rounded-full border border-gray-3 bg-gray-2">
       <span className="size-4">{children}</span>
     </div>
   )

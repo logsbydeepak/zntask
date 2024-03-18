@@ -99,10 +99,8 @@ function Content({
       <Head title="Update email" />
       <Form.Root onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         <div>
-          <Dialog.Title className="text-lg font-medium">
-            Update email
-          </Dialog.Title>
-          <Dialog.Description className="text-xs text-gray-500">
+          <Dialog.Title>Update email</Dialog.Title>
+          <Dialog.Description>
             Enter your new email and password to update your email
           </Dialog.Description>
         </div>

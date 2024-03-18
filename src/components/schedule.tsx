@@ -43,7 +43,7 @@ export function SchedulePicker({
 
           {time && (
             <div>
-              <div className="mx-1 h-2 border-l border-gray-200" />
+              <div className="mx-1 h-2 border-l border-gray-3" />
             </div>
           )}
 
@@ -117,13 +117,13 @@ const SchedulePopover = React.forwardRef<
       autoFocus={true}
       collisionPadding={10}
     >
-      <div className="flex flex-col border-b border-gray-200 px-4 pb-4 pt-2.5">
+      <div className="flex flex-col border-b border-gray-3 px-4 pb-4 pt-2.5">
         <div className="flex items-center">
-          <CalendarClockIcon className="size-4 text-gray-400" />
+          <CalendarClockIcon className="size-4 text-gray-10" />
           <input
             placeholder="today at 9am"
             autoFocus
-            className="ml-2 h-5 w-full border-none p-0 outline-none placeholder:text-gray-400 focus:ring-0"
+            className="ml-2 h-5 w-full border-none p-0 outline-none placeholder:text-gray-10 focus:ring-0"
             value={inputValue}
             autoComplete="off"
             onChange={(e) => setInputValue(e.target.value)}
@@ -268,14 +268,14 @@ function Calendar({
         nav_button_next: 'absolute right-1',
         nav_button_previous: 'absolute left-1',
         nav_button:
-          'size-7 bg-transparent p-0 hover:text-gray-950 text-gray-600 flex justify-center items-center rounded-md',
+          'size-7 bg-transparent p-0 hover:text-gray-12 text-gray-11 flex justify-center items-center rounded-md',
 
-        head_cell: 'font-normal text-gray-400 text-xs pb-1',
-        day_today: 'text-orange-600 font-medium aria-[]:text-white',
-        day: 'size-7 rounded-full border border-transparent hover:border-gray-200 hover:bg-gray-100 m-0.5 text-xs aria-[selected=true]:font-medium',
+        head_cell: 'font-normal text-gray-10 text-xs pb-1',
+        day_today: 'text-orange-9 font-medium aria-[]:text-white',
+        day: 'size-7 rounded-full border border-transparent hover:border-gray-3 hover:bg-gray-2 m-0.5 text-xs aria-[selected=true]:font-medium',
         day_selected:
-          'bg-orange-600 text-white hover:bg-orange-600 hover:border-orange-600',
-        day_outside: 'text-gray-400',
+          'bg-orange-9 text-white hover:bg-orange-9 hover:border-orange-9',
+        day_outside: 'text-gray-10',
         table: 'w-full',
       }}
       components={{

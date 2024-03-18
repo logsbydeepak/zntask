@@ -38,7 +38,7 @@ export function Sidebar() {
     <aside
       data-sidebar={isSidebarOpen}
       className={cn(
-        'invisible fixed bottom-0 top-14 z-10 w-full -translate-x-full overflow-y-scroll bg-newGray-1 pr-1 data-[sidebar=true]:visible data-[sidebar=true]:translate-x-0 md:w-56',
+        'invisible fixed bottom-0 top-14 z-10 w-full -translate-x-full overflow-y-scroll bg-gray-1 pr-1 data-[sidebar=true]:visible data-[sidebar=true]:translate-x-0 md:w-56',
         'transition-all duration-150 ease-in-out'
       )}
     >
@@ -98,7 +98,7 @@ function QuickSection() {
       {item.map((i) => (
         <Item.Root key={i.label} isActive={i.isActive}>
           <Item.Content.Link href={i.href}>
-            <Item.Label.Icon className="text-newGray-11 group-data-[active=true]:text-newOrange-9">
+            <Item.Label.Icon className="text-gray-11 group-data-[active=true]:text-orange-9">
               {i.icon}
             </Item.Label.Icon>
             <Item.Label.Content>{i.label}</Item.Label.Content>
@@ -219,7 +219,7 @@ function CategoryItem({
           <ContextMenuTrigger asChild>
             <Item.Content.Link
               href={href}
-              className="data-[state=open]:border-newGray-4 data-[state=open]:bg-newGray-2"
+              className="data-[state=open]:border-gray-4 data-[state=open]:bg-gray-2"
             >
               <Item.Label.Icon>
                 <span
@@ -230,7 +230,7 @@ function CategoryItem({
                 />
               </Item.Label.Icon>
               <Item.Label.Content>{category.title}</Item.Label.Content>
-              <DropdownMenuTrigger className="ml-auto flex size-6 shrink-0 items-center justify-center text-newGray-7 hover:text-newGray-9 data-[state=open]:text-newGray-10">
+              <DropdownMenuTrigger className="ml-auto flex size-6 shrink-0 items-center justify-center text-gray-7 hover:text-gray-9 data-[state=open]:text-gray-10">
                 <MoreVerticalIcon className="size-4" />
               </DropdownMenuTrigger>
             </Item.Content.Link>
@@ -289,7 +289,7 @@ function EmptyCategory() {
 function EmptyContainer({ children }: { children: React.ReactNode }) {
   return (
     <div className="pl-3">
-      <div className="flex w-full items-center justify-center space-x-2 rounded-md border border-newGray-5 bg-newGray-2 py-10 md:py-5">
+      <div className="flex w-full items-center justify-center space-x-2 rounded-md border border-gray-5 bg-gray-2 py-10 md:py-5">
         {children}
       </div>
     </div>
@@ -297,11 +297,11 @@ function EmptyContainer({ children }: { children: React.ReactNode }) {
 }
 
 function EmptyLabel({ children }: { children: React.ReactNode }) {
-  return <p className="text-xs text-newGray-11">{children}</p>
+  return <p className="text-xs text-gray-11">{children}</p>
 }
 
 function EmptyIcon({ children }: { children: React.ReactNode }) {
-  return <div className="size-4 text-newGray-11">{children}</div>
+  return <div className="size-4 text-gray-11">{children}</div>
 }
 
 function ShowMore({
@@ -332,9 +332,7 @@ function ShowMore({
 }
 
 function Title({ children }: { children: React.ReactNode }) {
-  return (
-    <h4 className="pl-3 text-xs font-medium text-newGray-10">{children}</h4>
-  )
+  return <h4 className="pl-3 text-xs font-medium text-gray-10">{children}</h4>
 }
 
 function ItemContainer({ children }: { children: React.ReactNode }) {
@@ -350,14 +348,14 @@ function ItemRoot({
 }) {
   return (
     <div className="group flex h-9 items-center" data-active={isActive}>
-      <span className="mr-1 h-5 w-1 rounded-r-md bg-newGray-1 group-data-[active=true]:bg-newOrange-9" />
+      <span className="mr-1 h-5 w-1 rounded-r-md bg-gray-1 group-data-[active=true]:bg-orange-9" />
       {children}
     </div>
   )
 }
 
 const itemContentStyle = tw(
-  'flex size-full items-center gap-3 overflow-hidden rounded-lg border border-transparent px-2 hover:border-newGray-5 hover:bg-newGray-2 group-data-[active=true]:border-newGray-4 group-data-[active=true]:bg-newGray-2'
+  'flex size-full items-center gap-3 overflow-hidden rounded-lg border border-transparent px-2 hover:border-gray-5 hover:bg-gray-2 group-data-[active=true]:border-gray-4 group-data-[active=true]:bg-gray-2'
 )
 
 const ItemContentLink = React.forwardRef<
@@ -396,7 +394,7 @@ function ItemContentButton({
 
 function LabelContent({ children }: React.ComponentProps<'span'>) {
   return (
-    <span className="truncate text-sm text-newGray-11 data-[active=true]:font-medium group-data-[active=true]:text-newGray-12">
+    <span className="truncate text-sm text-gray-11 data-[active=true]:font-medium group-data-[active=true]:text-gray-12">
       {children}
     </span>
   )

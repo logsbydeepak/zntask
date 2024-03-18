@@ -43,10 +43,10 @@ export function Navbar() {
   const user = useAppStore((s) => s.user)
 
   return (
-    <nav className="fixed z-20 w-full border-b border-newGray-3 bg-newGray-1 backdrop-blur-sm">
+    <nav className="fixed z-20 w-full border-b border-gray-3 bg-gray-1 backdrop-blur-sm">
       <div className="flex h-14 items-center justify-between px-4 md:px-5">
         <Link href="/" className="flex items-center space-x-2">
-          <span className="flex size-7 items-center justify-center rounded-full bg-newOrange-9 text-white">
+          <span className="flex size-7 items-center justify-center rounded-full bg-orange-9 text-white">
             <span className="size-3">
               <LogoIcon />
             </span>
@@ -89,7 +89,7 @@ export function Navbar() {
               </Tooltip.Portal>
             </Tooltip.Root>
 
-            <span className="my-1.5 w-px bg-newGray-3" />
+            <span className="my-1.5 w-px bg-gray-3" />
 
             <Tooltip.Root>
               <Tooltip.Trigger asChild>
@@ -126,9 +126,9 @@ export function Navbar() {
                     />
                     <span
                       data-active={isAppSyncing}
-                      className="absolute bottom-0 right-px hidden size-2 items-center justify-center rounded-full border-[1.5px] border-newGray-1 bg-newGray-1 data-[active=true]:flex"
+                      className="absolute bottom-0 right-px hidden size-2 items-center justify-center rounded-full border-[1.5px] border-gray-1 bg-gray-1 data-[active=true]:flex"
                     >
-                      <span className="size-full animate-pulse rounded-full bg-newOrange-9" />
+                      <span className="size-full animate-pulse rounded-full bg-orange-9" />
                     </span>
                   </DropdownMenuTrigger>
                 </Tooltip.Trigger>
@@ -186,7 +186,7 @@ function UserMenu() {
     <>
       <div className="p-2 text-xs font-medium">
         <p className="truncate text-sm">{name}</p>
-        <p className="truncate text-xs font-normal text-newGray-11">
+        <p className="truncate text-xs font-normal text-gray-11">
           {user.email}
         </p>
       </div>
@@ -215,10 +215,10 @@ function UserMenu() {
                 className={cn(
                   iconStyle,
                   'size-8 cursor-pointer outline-none',
-                  'data-[highlighted]:text-newGray-12 data-[state=checked]:text-newGray-1',
-                  'data-[highlighted]:bg-newGray-3 data-[state=checked]:bg-newOrange-10',
-                  'data-[highlighted]:ring-2 data-[highlighted]:ring-newGray-3',
-                  'data-[state=checked]:border-newOrange-8 data-[state=checked]:ring-newOrange-3'
+                  'data-[highlighted]:text-gray-12 data-[state=checked]:text-gray-1',
+                  'data-[highlighted]:bg-gray-3 data-[state=checked]:bg-orange-10',
+                  'data-[highlighted]:ring-2 data-[highlighted]:ring-gray-3',
+                  'data-[state=checked]:border-orange-8 data-[state=checked]:ring-orange-3'
                 )}
               >
                 <span className="size-3.5">{i.icon}</span>
@@ -243,7 +243,7 @@ function UserMenu() {
 }
 
 const iconStyle = tw(
-  'flex items-center justify-center rounded-lg border border-newGray-5 bg-newGray-2 text-newGray-11 hover:border-newGray-6 hover:bg-newGray-3 hover:text-newGray-12 active:border-newGray-7 active:bg-newGray-4'
+  'flex items-center justify-center rounded-lg border border-gray-5 bg-gray-2 text-gray-11 hover:border-gray-6 hover:bg-gray-3 hover:text-gray-12 active:border-gray-7 active:bg-gray-4'
 )
 
 const Icon = React.forwardRef<
@@ -267,7 +267,7 @@ function SearchXL() {
       <span className="flex size-8 items-center justify-center">
         <SearchIcon className="size-3.5" />
       </span>
-      <span className="mr-10 text-xs text-newGray-11">Search</span>
+      <span className="mr-10 text-xs text-gray-11">Search</span>
     </button>
   )
 }

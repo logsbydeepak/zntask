@@ -83,8 +83,8 @@ export function DNDCategoryItem({
 
       {isOver && place === 'top' && (
         <div className="absolute inset-x-0 top-[-5px] flex w-full translate-y-[-2px] items-center px-3">
-          <span className="size-1.5 rounded-full border-[1.5px] border-orange-600" />
-          <span className="-ml-px h-[1.5px] w-full rounded-full bg-orange-600" />
+          <span className="size-1.5 rounded-full border-[1.5px] border-orange-9" />
+          <span className="-ml-px h-[1.5px] w-full rounded-full bg-orange-9" />
         </div>
       )}
 
@@ -97,8 +97,8 @@ export function DNDCategoryItem({
 
       {isOver && place === 'bottom' && (
         <div className="absolute inset-x-0 bottom-[-5px] flex w-full translate-y-[2px] items-center px-3">
-          <span className="size-1.5 rounded-full border-[1.5px] border-orange-600" />
-          <span className="-ml-px h-[1.5px] w-full rounded-full bg-orange-600" />
+          <span className="size-1.5 rounded-full border-[1.5px] border-orange-9" />
+          <span className="-ml-px h-[1.5px] w-full rounded-full bg-orange-9" />
         </div>
       )}
     </div>
@@ -122,7 +122,7 @@ export const CategoryItem = React.forwardRef<
             ref={ref}
             href={href}
             className={cn(
-              'relative flex touch-none items-center justify-between rounded-lg border border-transparent px-4 py-2 hover:border-gray-200 hover:bg-gray-50 data-[state=open]:border-gray-200 data-[state=open]:bg-gray-50',
+              'relative flex touch-none items-center justify-between rounded-lg border border-transparent px-4 py-2 hover:border-gray-3 hover:bg-gray-2 data-[state=open]:border-gray-3 data-[state=open]:bg-gray-2',
               className
             )}
           >
@@ -140,7 +140,7 @@ export const CategoryItem = React.forwardRef<
             <div className="flex items-center space-x-1">
               <DropdownMenuTrigger asChild>
                 <button
-                  className="flex size-6 items-center justify-center text-gray-400 hover:text-gray-800 data-[state=open]:text-gray-800"
+                  className="flex size-6 items-center justify-center text-gray-10 hover:text-gray-11 data-[state=open]:text-gray-11"
                   onClick={(e) => e.preventDefault()}
                 >
                   <span className="inline-block size-4">
@@ -276,8 +276,8 @@ export function TopDrop({ id }: { id: string }) {
 function BottomIndicator() {
   return (
     <div className="absolute inset-x-0 bottom-[-5px] flex w-full translate-y-[2px] items-center px-3">
-      <span className="size-1.5 rounded-full border-[1.5px] border-orange-600" />
-      <span className="-ml-px h-[1.5px] w-full rounded-full bg-orange-600" />
+      <span className="size-1.5 rounded-full border-[1.5px] border-orange-9" />
+      <span className="-ml-px h-[1.5px] w-full rounded-full bg-orange-9" />
     </div>
   )
 }
@@ -285,8 +285,8 @@ function BottomIndicator() {
 function TopIndicator() {
   return (
     <div className="absolute inset-x-0 top-[-5px] flex w-full translate-y-[-2px] items-center px-3">
-      <span className="size-1.5 rounded-full border-[1.5px] border-orange-600" />
-      <span className="-ml-px h-[1.5px] w-full rounded-full bg-orange-600" />
+      <span className="size-1.5 rounded-full border-[1.5px] border-orange-9" />
+      <span className="-ml-px h-[1.5px] w-full rounded-full bg-orange-9" />
     </div>
   )
 }

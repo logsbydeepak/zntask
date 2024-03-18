@@ -1,4 +1,5 @@
 import { type Config } from 'tailwindcss'
+import colors from 'tailwindcss/colors'
 
 import { categoryIndicatorOptions } from './src/utils/category'
 
@@ -40,27 +41,29 @@ colorName.forEach((color) => {
     colorList[n] = `hsl(var(--${color}-${n}))`
   })
 
-  newColor[`new${color.charAt(0).toUpperCase()}${color.slice(1)}`] = colorList
+  newColor[color] = colorList
 })
 
 const safelist: string[] = []
 categoryIndicatorOptions.forEach((item) => {
   const color = item.color
-  const newColor = `new${color.charAt(0).toUpperCase()}${color.slice(1)}`
-  safelist.push(`bg-${newColor}-9`, `hover:ring-${newColor}-6`)
+  safelist.push(`bg-${color}-9`, `hover:ring-${color}-6`)
 })
 
 const config: Config = {
   darkMode: 'class',
   content: ['./src/app/**/*.tsx', './src/components/**/*.tsx'],
   theme: {
+    colors: {
+      white: colors.white,
+      transparent: colors.transparent,
+      ...newColor,
+    },
+
     extend: {
       fontFamily: {
         mono: ['var(--font-jetBrains)'],
         sans: ['var(--font-inter)'],
-      },
-      colors: {
-        ...newColor,
       },
       screens: {
         xs: '355px',

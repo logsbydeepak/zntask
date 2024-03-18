@@ -132,7 +132,7 @@ function CategoryDialogContent({
                     getCategoryColor(option.label, 'bg hover:ring')
                   )}
                 >
-                  <RadioGroup.Indicator className="size-2 rounded-full bg-newGray-1 animate-in zoom-in" />
+                  <RadioGroup.Indicator className="size-2 rounded-full bg-gray-1 animate-in zoom-in" />
                 </RadioGroup.Item>
               ))}
             </RadioGroup.Root>

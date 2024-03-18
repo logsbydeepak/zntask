@@ -32,29 +32,29 @@ function Item({ toast }: { toast: Toast }) {
   return (
     <ToastPrimitive.Root
       onOpenChange={() => removeToast(toast.id)}
-      className="ToastRoot relative rounded-lg border border-gray-100 bg-newGray-1 shadow-md shadow-gray-950/5"
+      className="ToastRoot relative rounded-lg border border-gray-3 bg-gray-1 shadow-md shadow-gray-12/5"
     >
       <div className="flex items-center space-x-2 p-4">
         <div>
           {isError && (
-            <Icon className="bg-red-700">
+            <Icon className="bg-red-7">
               <ExclamationIcon />
             </Icon>
           )}
 
           {isSuccess && (
-            <Icon className="bg-green-800">
+            <Icon className="bg-green-8">
               <CheckIcon strokeWidth={3} />
             </Icon>
           )}
         </div>
 
-        <ToastPrimitive.Description className="text-[13px] font-medium text-gray-700">
+        <ToastPrimitive.Description className="text-[13px] font-medium text-gray-11">
           {toast.message}
         </ToastPrimitive.Description>
       </div>
 
-      <ToastPrimitive.Close className="absolute right-1.5 top-1.5 text-gray-500 hover:text-gray-950">
+      <ToastPrimitive.Close className="absolute right-1.5 top-1.5 text-gray-10 hover:text-gray-12">
         <XIcon className="size-3.5" />
       </ToastPrimitive.Close>
     </ToastPrimitive.Root>
@@ -67,7 +67,7 @@ const Button = React.forwardRef<
 >(({ children, ...props }, ref) => (
   <button
     ref={ref}
-    className="size-full px-6 hover:bg-gray-50 hover:text-gray-950"
+    className="size-full px-6 hover:bg-gray-2 hover:text-gray-12"
     {...props}
   >
     {children}

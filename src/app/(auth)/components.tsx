@@ -15,7 +15,7 @@ import { Button } from '@/components/ui/button'
 export function Logo() {
   return (
     <Link
-      className="mb-2 flex size-10 items-center justify-center rounded-full bg-newOrange-9 p-3 text-white"
+      className="mb-2 flex size-10 items-center justify-center rounded-full bg-orange-9 p-3 text-white"
       href="/"
     >
       <LogoIcon className="size-4" />
@@ -28,11 +28,11 @@ export function Title({ children }: { children: React.ReactNode }) {
 }
 
 export function SubTitle({ children }: { children: React.ReactNode }) {
-  return <p className="text-center text-sm text-newGray-11">{children}</p>
+  return <p className="text-center text-sm text-gray-11">{children}</p>
 }
 
 export function Separator() {
-  return <div className="w-full border-b border-dashed border-newGray-4" />
+  return <div className="w-full border-b border-dashed border-gray-4" />
 }
 
 export function ContinueWithGoogle({
@@ -62,7 +62,7 @@ function BadgeButton({
   return (
     <button
       {...props}
-      className="inline-flex items-center space-x-1 rounded-full bg-newGray-2 px-3 py-0.5 text-xs font-medium text-newGray-11 ring-offset-newGray-1 hover:text-newGray-12 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-newOrange-9 focus-visible:ring-offset-1"
+      className="inline-flex items-center space-x-1 rounded-full bg-gray-2 px-3 py-0.5 text-xs font-medium text-gray-11 ring-offset-gray-1 hover:text-gray-12 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-9 focus-visible:ring-offset-1"
     >
       {children}
     </button>
@@ -105,7 +105,7 @@ export function PasswordVisibilityToggle({
 }
 
 function AccountQuestionContainer({ children }: { children: React.ReactNode }) {
-  return <div className="text-sm text-newGray-11">{children}</div>
+  return <div className="text-sm text-gray-11">{children}</div>
 }
 
 function AccountQuestionTitle({ children }: { children: React.ReactNode }) {
@@ -126,7 +126,7 @@ function AccountQuestionAction({
       {...props}
       aria-disabled={disabled}
       href={disabled ? '#' : href}
-      className="font-medium text-newGray-11 hover:text-newOrange-9 hover:underline aria-[disabled=true]:cursor-not-allowed aria-[disabled=true]:text-newGray-9"
+      className="font-medium text-gray-11 hover:text-orange-9 hover:underline aria-[disabled=true]:cursor-not-allowed aria-[disabled=true]:text-gray-9"
     >
       {children}
     </Link>
@@ -170,7 +170,7 @@ export function PasswordChecklistItem({
   isValid: boolean
 }) {
   return (
-    <div className="inline-flex items-center space-x-1 text-xs text-newGray-10">
+    <div className="inline-flex items-center space-x-1 text-xs text-gray-10">
       <span className="inline-block size-2">
         {isValid ? (
           <CheckIcon strokeWidth={3} />

@@ -368,7 +368,7 @@ function TaskDialogContent({
                     autoComplete="off"
                     id={`tasks.${index}.title`}
                     placeholder="task"
-                    className="m-0 w-full border-0 p-0 outline-none placeholder:text-newGray-11 focus-visible:ring-0"
+                    className="m-0 w-full border-0 p-0 outline-none placeholder:text-gray-11 focus-visible:ring-0"
                     {...(isCreate && {
                       autoFocus: true,
                     })}
@@ -381,7 +381,7 @@ function TaskDialogContent({
                     {...register(`tasks.${index}.details`)}
                     placeholder="details"
                     id={`details.${index}.details`}
-                    className="container-scroll w-full resize-none border-0 p-0 text-newGray-11 outline-none placeholder:text-newGray-11 focus-visible:ring-0"
+                    className="container-scroll w-full resize-none border-0 p-0 text-gray-11 outline-none placeholder:text-gray-11 focus-visible:ring-0"
                   />
 
                   <div className="flex flex-wrap gap-x-1.5 gap-y-2">
@@ -435,7 +435,7 @@ function TaskDialogContent({
         </Form.Root>
       </div>
 
-      <fieldset className="flex justify-between space-x-4 border-t border-newGray-3 px-5 py-2">
+      <fieldset className="flex justify-between space-x-4 border-t border-gray-3 px-5 py-2">
         <Dialog.Close asChild>
           <Button intent="ghost">Cancel</Button>
         </Dialog.Close>
@@ -463,7 +463,7 @@ function Checkbox({
           setValue(value)
         }
       }}
-      className="size-3.5 rounded-full text-newGray-11 outline-offset-4 hover:text-newGray-12"
+      className="size-3.5 rounded-full text-gray-11 outline-offset-4 hover:text-gray-12"
       name="task status"
     >
       {!value && <CircleIcon />}

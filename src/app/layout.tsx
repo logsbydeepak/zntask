@@ -29,7 +29,7 @@ export default function RootLayout({
         className={cn(
           inter.variable,
           jetBrainsMono.variable,
-          'overflow-y-scroll bg-newGray-1 font-sans text-newGray-12'
+          'overflow-y-scroll bg-gray-1 font-sans text-gray-12'
         )}
       >
         <ThemeProvider>{children}</ThemeProvider>

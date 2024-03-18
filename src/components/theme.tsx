@@ -47,7 +47,7 @@ export function ThemeSwitch() {
       <RadioGroup.Root
         value={theme}
         onValueChange={setTheme}
-        className="flex space-x-1 self-center rounded-full border border-newGray-4 p-1"
+        className="flex space-x-1 self-center rounded-full border border-gray-4 p-1"
       >
         {themeOptions.map((i) => (
           <Tooltip.Root key={i.value}>
@@ -55,9 +55,9 @@ export function ThemeSwitch() {
               <RadioGroup.Item
                 value={i.value}
                 className={cn(
-                  'flex size-5 items-center justify-center rounded-full text-newGray-11',
-                  'outline-2 outline-offset-[3px] outline-newGray-12 hover:text-newGray-12',
-                  'focus-visible:outline aria-[checked=true]:bg-newGray-12 aria-[checked=true]:text-newGray-1'
+                  'flex size-5 items-center justify-center rounded-full text-gray-11',
+                  'outline-2 outline-offset-[3px] outline-gray-12 hover:text-gray-12',
+                  'focus-visible:outline aria-[checked=true]:bg-gray-12 aria-[checked=true]:text-gray-1'
                 )}
               >
                 <div className="size-3">{i.icon}</div>

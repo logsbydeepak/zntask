@@ -199,14 +199,14 @@ function CommandPaletteContent({ handleClose }: { handleClose: () => void }) {
           }
         }}
       >
-        <div className="flex items-center border-b border-gray-200 p-3">
-          <SearchIcon className="size-3 text-gray-400" />
+        <div className="flex items-center border-b border-gray-3 p-3">
+          <SearchIcon className="size-3 text-gray-10" />
           <Command.Input
             value={search}
             placeholder="search"
             onValueChange={setSearch}
             autoFocus
-            className="ml-2 h-5 w-full border-none p-0 outline-none placeholder:text-gray-400 focus:ring-0"
+            className="ml-2 h-5 w-full border-none p-0 outline-none placeholder:text-gray-10 focus:ring-0"
           />
         </div>
         <Command.List className="[&>[cmdk-list-sizer]]:ml-2 [&>[cmdk-list-sizer]]:h-60 [&>[cmdk-list-sizer]]:space-y-2 [&>[cmdk-list-sizer]]:overflow-y-scroll [&>[cmdk-list-sizer]]:py-2 [&>[cmdk-list-sizer]]:pr-1">
@@ -215,7 +215,7 @@ function CommandPaletteContent({ handleClose }: { handleClose: () => void }) {
               <span className="inline-block size-5">
                 <SearchIcon />
               </span>
-              <p className="text-xs text-gray-600">not result</p>
+              <p className="text-xs text-gray-11">not result</p>
             </div>
           </Command.Empty>
           {!page && (
@@ -381,7 +381,7 @@ const CommandItemContainer = React.forwardRef<
     <Command.Item
       ref={ref}
       {...props}
-      className="group/item my-0.5 flex cursor-pointer items-center rounded-lg border border-transparent px-3 py-2 data-[selected=true]:border-gray-950/5 data-[selected=true]:bg-gray-100/50"
+      className="group/item my-0.5 flex cursor-pointer items-center rounded-lg border border-transparent px-3 py-2 data-[selected=true]:border-gray-12/5 data-[selected=true]:bg-gray-3/50"
     />
   )
 })
@@ -395,7 +395,7 @@ const CommandItemGroup = React.forwardRef<
     <Command.Group
       ref={ref}
       {...props}
-      className="space-y-1 text-xs font-medium text-gray-400 [&>[cmdk-group-heading]]:px-2"
+      className="space-y-1 text-xs font-medium text-gray-10 [&>[cmdk-group-heading]]:px-2"
     />
   )
 })
@@ -403,7 +403,7 @@ CommandItemGroup.displayName = Command.Group.displayName
 
 function CommandItemIcon({ children }: { children: React.ReactNode }) {
   return (
-    <div className="mr-2 flex size-4 items-center justify-center border border-transparent text-gray-600 group-data-[selected=true]/item:text-gray-950">
+    <div className="mr-2 flex size-4 items-center justify-center border border-transparent text-gray-11 group-data-[selected=true]/item:text-gray-12">
       {children}
     </div>
   )
@@ -411,7 +411,7 @@ function CommandItemIcon({ children }: { children: React.ReactNode }) {
 
 function CommandItemTitle({ children }: { children: React.ReactNode }) {
   return (
-    <p className="truncate text-sm font-normal text-gray-600 group-data-[selected=true]/item:text-gray-950">
+    <p className="truncate text-sm font-normal text-gray-11 group-data-[selected=true]/item:text-gray-12">
       {children}
     </p>
   )
