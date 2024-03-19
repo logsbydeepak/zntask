@@ -29,7 +29,12 @@ import {
   DropdownMenuTrigger,
   MenuIcon,
 } from '@/components/ui/menu'
-import * as Tooltip from '@/components/ui/tooltip'
+import {
+  TooltipContent,
+  TooltipProvider,
+  TooltipRoot,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
 import { useAppStore } from '@/store/app'
 import { cn, tw } from '@/utils/style'
 
@@ -53,27 +58,25 @@ export function Navbar() {
           </span>
           <span className="hidden text-sm font-medium xs:block">zntask</span>
         </Link>
-        <Tooltip.Provider>
+        <TooltipProvider>
           <div className="flex space-x-2.5">
             <span className="hidden sm:inline-block">
               <SearchXL />
             </span>
 
             <span className="inline-block sm:hidden">
-              <Tooltip.Root>
-                <Tooltip.Trigger asChild>
+              <TooltipRoot>
+                <TooltipTrigger asChild>
                   <Icon onClick={() => setDialog({ commandPalette: true })}>
                     <SearchIcon />
                   </Icon>
-                </Tooltip.Trigger>
-                <Tooltip.Portal>
-                  <Tooltip.Content sideOffset={8}>search</Tooltip.Content>
-                </Tooltip.Portal>
-              </Tooltip.Root>
+                </TooltipTrigger>
+                <TooltipContent sideOffset={8}>search</TooltipContent>
+              </TooltipRoot>
             </span>
 
-            <Tooltip.Root>
-              <Tooltip.Trigger asChild>
+            <TooltipRoot>
+              <TooltipTrigger asChild>
                 <Icon onClick={() => toggleSidebar()}>
                   {isSidebarOpen ? (
                     <PanelLeftInactiveIcon />
@@ -81,41 +84,35 @@ export function Navbar() {
                     <PanelLeftIcon />
                   )}
                 </Icon>
-              </Tooltip.Trigger>
-              <Tooltip.Portal>
-                <Tooltip.Content sideOffset={8}>
-                  {isSidebarOpen ? 'close sidebar' : 'open sidebar'}
-                </Tooltip.Content>
-              </Tooltip.Portal>
-            </Tooltip.Root>
+              </TooltipTrigger>
+              <TooltipContent sideOffset={8}>
+                {isSidebarOpen ? 'close sidebar' : 'open sidebar'}
+              </TooltipContent>
+            </TooltipRoot>
 
             <span className="my-1.5 w-px bg-gray-3" />
 
-            <Tooltip.Root>
-              <Tooltip.Trigger asChild>
+            <TooltipRoot>
+              <TooltipTrigger asChild>
                 <Icon onClick={() => setDialog({ createCategory: true })}>
                   <FolderPlusIcon />
                 </Icon>
-              </Tooltip.Trigger>
-              <Tooltip.Portal>
-                <Tooltip.Content sideOffset={8}>new category</Tooltip.Content>
-              </Tooltip.Portal>
-            </Tooltip.Root>
+              </TooltipTrigger>
+              <TooltipContent sideOffset={8}>new category</TooltipContent>
+            </TooltipRoot>
 
-            <Tooltip.Root>
-              <Tooltip.Trigger asChild>
+            <TooltipRoot>
+              <TooltipTrigger asChild>
                 <Icon onClick={() => setDialog({ createTask: true })}>
                   <CheckCircleIcon />
                 </Icon>
-              </Tooltip.Trigger>
-              <Tooltip.Portal>
-                <Tooltip.Content sideOffset={8}>new task</Tooltip.Content>
-              </Tooltip.Portal>
-            </Tooltip.Root>
+              </TooltipTrigger>
+              <TooltipContent sideOffset={8}>new task</TooltipContent>
+            </TooltipRoot>
 
             <DropdownMenuRoot>
-              <Tooltip.Root>
-                <Tooltip.Trigger asChild>
+              <TooltipRoot>
+                <TooltipTrigger asChild>
                   <DropdownMenuTrigger className="relative size-8 rounded-full">
                     <Avatar
                       profilePicture={user.profilePicture}
@@ -131,11 +128,9 @@ export function Navbar() {
                       <span className="size-full animate-pulse rounded-full bg-orange-9" />
                     </span>
                   </DropdownMenuTrigger>
-                </Tooltip.Trigger>
-                <Tooltip.Portal>
-                  <Tooltip.Content sideOffset={8}>user</Tooltip.Content>
-                </Tooltip.Portal>
-              </Tooltip.Root>
+                </TooltipTrigger>
+                <TooltipContent sideOffset={8}>user</TooltipContent>
+              </TooltipRoot>
 
               <DropdownMenuPortal>
                 <DropdownMenuContent
@@ -148,7 +143,7 @@ export function Navbar() {
               </DropdownMenuPortal>
             </DropdownMenuRoot>
           </div>
-        </Tooltip.Provider>
+        </TooltipProvider>
       </div>
     </nav>
   )
@@ -208,8 +203,8 @@ function UserMenu() {
         }}
       >
         {themeOptions.map((i) => (
-          <Tooltip.Root key={i.value}>
-            <Tooltip.Trigger asChild>
+          <TooltipRoot key={i.value}>
+            <TooltipTrigger asChild>
               <DropdownMenuRadioItem
                 value={i.value}
                 className={cn(
@@ -223,9 +218,9 @@ function UserMenu() {
               >
                 <span className="size-3.5">{i.icon}</span>
               </DropdownMenuRadioItem>
-            </Tooltip.Trigger>
-            <Tooltip.Content sideOffset={8}>{i.label}</Tooltip.Content>
-          </Tooltip.Root>
+            </TooltipTrigger>
+            <TooltipContent sideOffset={8}>{i.label}</TooltipContent>
+          </TooltipRoot>
         ))}
       </DropdownMenuRadioGroup>
 

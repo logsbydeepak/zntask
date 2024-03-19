@@ -5,8 +5,14 @@ import * as RadioGroup from '@radix-ui/react-radio-group'
 import { MonitorIcon, MoonIcon, SunIcon } from 'lucide-react'
 import { ThemeProvider as Theme, useTheme } from 'next-themes'
 
-import * as Tooltip from '@/components/ui/tooltip'
 import { cn } from '@/utils/style'
+
+import {
+  TooltipContent,
+  TooltipProvider,
+  TooltipRoot,
+  TooltipTrigger,
+} from './ui/tooltip'
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   return <Theme attribute="class">{children}</Theme>
@@ -43,15 +49,15 @@ export function ThemeSwitch() {
   ]
 
   return (
-    <Tooltip.Provider>
+    <TooltipProvider>
       <RadioGroup.Root
         value={theme}
         onValueChange={setTheme}
         className="flex space-x-1 self-center rounded-full border border-gray-4 p-1"
       >
         {themeOptions.map((i) => (
-          <Tooltip.Root key={i.value}>
-            <Tooltip.Trigger asChild>
+          <TooltipRoot key={i.value}>
+            <TooltipTrigger asChild>
               <RadioGroup.Item
                 value={i.value}
                 className={cn(
@@ -62,11 +68,11 @@ export function ThemeSwitch() {
               >
                 <div className="size-3">{i.icon}</div>
               </RadioGroup.Item>
-            </Tooltip.Trigger>
-            <Tooltip.Content sideOffset={8}>{i.label}</Tooltip.Content>
-          </Tooltip.Root>
+            </TooltipTrigger>
+            <TooltipContent sideOffset={8}>{i.label}</TooltipContent>
+          </TooltipRoot>
         ))}
       </RadioGroup.Root>
-    </Tooltip.Provider>
+    </TooltipProvider>
   )
 }
