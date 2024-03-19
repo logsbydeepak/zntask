@@ -6,7 +6,12 @@ import { FolderIcon } from 'lucide-react'
 
 import * as Layout from '@/app/(app)/app-layout'
 import { Head } from '@/components/head'
-import * as Tabs from '@/components/ui/tabs'
+import {
+  TabsContent,
+  TabsList,
+  TabsRoot,
+  TabsTrigger,
+} from '@/components/ui/tabs'
 import { useAppStore } from '@/store/app'
 import { categoryHelper } from '@/utils/category'
 import { DNDProvider } from '@/utils/category-dnd'
@@ -27,21 +32,21 @@ export default function Page() {
         </div>
       </Layout.Header>
       <Layout.Content>
-        <Tabs.Root
+        <TabsRoot
           value={activeTab}
           onValueChange={(value) => router.push(`/category?status=${value}`)}
         >
-          <Tabs.List className="mb-4">
-            <Tabs.Trigger value="active">Active</Tabs.Trigger>
-            <Tabs.Trigger value="archive">Archive</Tabs.Trigger>
-          </Tabs.List>
-          <Tabs.Content value="active">
+          <TabsList className="mb-4">
+            <TabsTrigger value="active">Active</TabsTrigger>
+            <TabsTrigger value="archive">Archive</TabsTrigger>
+          </TabsList>
+          <TabsContent value="active">
             <ActiveTab />
-          </Tabs.Content>
-          <Tabs.Content value="archive">
+          </TabsContent>
+          <TabsContent value="archive">
             <ArchiveTab />
-          </Tabs.Content>
-        </Tabs.Root>
+          </TabsContent>
+        </TabsRoot>
       </Layout.Content>
     </Layout.Root>
   )

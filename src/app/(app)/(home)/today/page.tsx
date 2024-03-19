@@ -7,7 +7,12 @@ import { CalendarClockIcon } from 'lucide-react'
 
 import * as Layout from '@/app/(app)/app-layout'
 import { Head } from '@/components/head'
-import * as Tabs from '@/components/ui/tabs'
+import {
+  TabsContent,
+  TabsList,
+  TabsRoot,
+  TabsTrigger,
+} from '@/components/ui/tabs'
 import { useAppStore } from '@/store/app'
 import { ParentTask } from '@/store/task-slice'
 
@@ -19,18 +24,18 @@ export default function Page() {
         <Head title="Today" />
       </Layout.Header>
       <Layout.Content>
-        <Tabs.Root defaultValue="planed">
-          <Tabs.List>
-            <Tabs.Trigger value="planed">Planed</Tabs.Trigger>
-            <Tabs.Trigger value="completed">Completed</Tabs.Trigger>
-          </Tabs.List>
-          <Tabs.Content value="planed">
+        <TabsRoot defaultValue="planed">
+          <TabsList>
+            <TabsTrigger value="planed">Planed</TabsTrigger>
+            <TabsTrigger value="completed">Completed</TabsTrigger>
+          </TabsList>
+          <TabsContent value="planed">
             <PlanedTab />
-          </Tabs.Content>
-          <Tabs.Content value="completed">
+          </TabsContent>
+          <TabsContent value="completed">
             <CompletedTab />
-          </Tabs.Content>
-        </Tabs.Root>
+          </TabsContent>
+        </TabsRoot>
       </Layout.Content>
     </Layout.Root>
   )
