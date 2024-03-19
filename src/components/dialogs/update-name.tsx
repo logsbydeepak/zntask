@@ -4,7 +4,13 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 import { Button } from '@/components/ui/button'
-import * as Dialog from '@/components/ui/dialog'
+import {
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogRoot,
+  DialogTitle,
+} from '@/components/ui/dialog'
 import * as Form from '@/components/ui/form'
 import { updateName } from '@/data/user'
 import { zUpdateName } from '@/data/utils/zSchema'
@@ -26,17 +32,15 @@ export function UpdateNameDialog() {
   }
 
   return (
-    <Dialog.Root open={isOpen} onOpenChange={handleClose}>
-      <Dialog.Portal>
-        <Dialog.Content>
-          <UpdateNameDialogContent
-            handleClose={handleClose}
-            isPending={isPending}
-            startTransition={startTransition}
-          />
-        </Dialog.Content>
-      </Dialog.Portal>
-    </Dialog.Root>
+    <DialogRoot open={isOpen} onOpenChange={handleClose}>
+      <DialogContent>
+        <UpdateNameDialogContent
+          handleClose={handleClose}
+          isPending={isPending}
+          startTransition={startTransition}
+        />
+      </DialogContent>
+    </DialogRoot>
   )
 }
 
@@ -84,8 +88,8 @@ function UpdateNameDialogContent({
       <Head title="Update name" />
       <Form.Root onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         <div>
-          <Dialog.Title>Name</Dialog.Title>
-          <Dialog.Description>Enter your new name</Dialog.Description>
+          <DialogTitle>Name</DialogTitle>
+          <DialogDescription>Enter your new name</DialogDescription>
         </div>
 
         <div className="flex space-x-4">
@@ -111,11 +115,11 @@ function UpdateNameDialogContent({
         </div>
 
         <fieldset className="flex space-x-4" disabled={isPending}>
-          <Dialog.Close asChild>
+          <DialogClose asChild>
             <Button intent="secondary" className="w-full">
               Cancel
             </Button>
-          </Dialog.Close>
+          </DialogClose>
           <Button className="w-full" isLoading={isPending}>
             Submit
           </Button>

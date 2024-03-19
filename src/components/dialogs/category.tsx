@@ -5,7 +5,13 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 import { Button } from '@/components/ui/button'
-import * as Dialog from '@/components/ui/dialog'
+import {
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogRoot,
+  DialogTitle,
+} from '@/components/ui/dialog'
 import * as Form from '@/components/ui/form'
 import { useAppStore } from '@/store/app'
 import {
@@ -43,17 +49,15 @@ export function CategoryDialog() {
   }
 
   return (
-    <Dialog.Root open={isOpen} onOpenChange={handleClose}>
-      <Dialog.Portal>
-        <Dialog.Content className="space-y-4">
-          <CategoryDialogContent
-            handleClose={handleClose}
-            isEdit={isEdit}
-            isCreate={isCreate}
-          />
-        </Dialog.Content>
-      </Dialog.Portal>
-    </Dialog.Root>
+    <DialogRoot open={isOpen} onOpenChange={handleClose}>
+      <DialogContent className="space-y-4">
+        <CategoryDialogContent
+          handleClose={handleClose}
+          isEdit={isEdit}
+          isCreate={isCreate}
+        />
+      </DialogContent>
+    </DialogRoot>
   )
 }
 
@@ -97,10 +101,8 @@ function CategoryDialogContent({
     <>
       <Head title={title} />
       <div>
-        <Dialog.Title className="w-[95%] truncate">{title}</Dialog.Title>
-        <Dialog.Description>
-          Add a new category to your list.
-        </Dialog.Description>
+        <DialogTitle className="w-[95%] truncate">{title}</DialogTitle>
+        <DialogDescription>Add a new category to your list.</DialogDescription>
       </div>
 
       <Form.Root className="space-y-7" onSubmit={handleSubmit(onSubmit)}>
@@ -128,11 +130,11 @@ function CategoryDialogContent({
                   id={option.label}
                   className={cn(
                     'flex size-[18px] items-center justify-center rounded-full',
-                    'cursor-pointer hover:ring-2 focus-visible:outline-offset-[3px]',
+                    'cursor-pointer bg-gradient-to-b from-white/10 to-black/20 hover:ring-2 focus-visible:outline-offset-[3px]',
                     getCategoryColor(option.label, 'bg hover:ring')
                   )}
                 >
-                  <RadioGroup.Indicator className="size-2 rounded-full bg-gray-1 animate-in zoom-in" />
+                  <RadioGroup.Indicator className="size-2 rounded-full bg-white animate-in zoom-in" />
                 </RadioGroup.Item>
               ))}
             </RadioGroup.Root>
@@ -140,11 +142,11 @@ function CategoryDialogContent({
         </div>
 
         <fieldset className="flex space-x-4">
-          <Dialog.Close asChild>
+          <DialogClose asChild>
             <Button intent="secondary" className="w-full">
               Cancel
             </Button>
-          </Dialog.Close>
+          </DialogClose>
           <Button className="w-full" type="submit">
             Save
           </Button>

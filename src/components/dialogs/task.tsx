@@ -19,7 +19,13 @@ import { CategoryPopover } from '@/components/category-popover'
 import { Head } from '@/components/head'
 import { SchedulePicker } from '@/components/schedule'
 import * as Badge from '@/components/ui/badge'
-import * as Dialog from '@/components/ui/dialog'
+import {
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogRoot,
+  DialogTitle,
+} from '@/components/ui/dialog'
 import * as Form from '@/components/ui/form'
 import * as Popover from '@/components/ui/popover'
 import { useAppStore } from '@/store/app'
@@ -95,27 +101,25 @@ export function TaskDialog() {
   }
 
   return (
-    <Dialog.Root open={isOpen} onOpenChange={closeDialog}>
-      <Dialog.Portal>
-        <Dialog.Content className="p-0 sm:p-0">
-          <TaskDialogContent
-            handleClose={closeDialog}
-            isCreate={isCreate}
-            parentTask={task.parentTask}
-            childTasks={task.childTasks}
-            triggerId={
-              isEdit
-                ? 'parentTaskId' in isEdit
-                  ? isEdit.parentTaskId
-                  : 'childTaskId' in isEdit
-                    ? isEdit.childTaskId
-                    : undefined
-                : undefined
-            }
-          />
-        </Dialog.Content>
-      </Dialog.Portal>
-    </Dialog.Root>
+    <DialogRoot open={isOpen} onOpenChange={closeDialog}>
+      <DialogContent className="p-0 sm:p-0">
+        <TaskDialogContent
+          handleClose={closeDialog}
+          isCreate={isCreate}
+          parentTask={task.parentTask}
+          childTasks={task.childTasks}
+          triggerId={
+            isEdit
+              ? 'parentTaskId' in isEdit
+                ? isEdit.parentTaskId
+                : 'childTaskId' in isEdit
+                  ? isEdit.childTaskId
+                  : undefined
+              : undefined
+          }
+        />
+      </DialogContent>
+    </DialogRoot>
   )
 }
 
@@ -436,9 +440,9 @@ function TaskDialogContent({
       </div>
 
       <fieldset className="flex justify-between space-x-4 border-t border-gray-3 px-5 py-2">
-        <Dialog.Close asChild>
+        <DialogClose asChild>
           <Button intent="ghost">Cancel</Button>
-        </Dialog.Close>
+        </DialogClose>
 
         <Button type="submit" form="task" intent="ghost">
           Save

@@ -46,7 +46,7 @@ export function Navbar() {
     <nav className="fixed z-20 w-full border-b border-gray-3 bg-gray-1 backdrop-blur-sm">
       <div className="flex h-14 items-center justify-between px-4 md:px-5">
         <Link href="/" className="flex items-center space-x-2">
-          <span className="flex size-7 items-center justify-center rounded-full bg-orange-9 text-white">
+          <span className="flex size-7 items-center justify-center rounded-full bg-orange-9 bg-gradient-to-b from-white/5 to-black/10 text-white">
             <span className="size-3">
               <LogoIcon />
             </span>

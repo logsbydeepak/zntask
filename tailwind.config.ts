@@ -56,6 +56,7 @@ const config: Config = {
   theme: {
     colors: {
       white: colors.white,
+      black: colors.black,
       transparent: colors.transparent,
       ...newColor,
     },

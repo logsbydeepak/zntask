@@ -15,17 +15,21 @@ export const Root = React.forwardRef<
 Root.displayName = 'Form.Root'
 
 export const formInputStyle = cva({
-  base: [
-    'mb-2 mt-0.5 w-full rounded-md border border-gray-4 px-3 py-1  disabled:text-gray-9',
-    'placeholder:text-sm placeholder:text-gray-11 focus-visible:border-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-9',
-  ],
+  base: [],
 })
 
 export const Input = React.forwardRef<
   HTMLInputElement,
   React.InputHTMLAttributes<HTMLInputElement>
 >(({ className, ...props }, ref) => (
-  <input ref={ref} {...props} className={cn(formInputStyle(), className)} />
+  <input
+    ref={ref}
+    {...props}
+    className={cn(
+      'mb-2 mt-0.5 w-full rounded-md border border-gray-4 px-3 py-1 ring-offset-4 ring-offset-black placeholder:text-sm placeholder:text-gray-11 focus-visible:border-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-9 disabled:text-gray-9',
+      className
+    )}
+  />
 ))
 Input.displayName = 'Form.Input'
 

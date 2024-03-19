@@ -5,7 +5,13 @@ import { Trash2Icon, UploadIcon } from 'lucide-react'
 
 import * as Badge from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import * as Dialog from '@/components/ui/dialog'
+import {
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogRoot,
+  DialogTitle,
+} from '@/components/ui/dialog'
 import * as Form from '@/components/ui/form'
 import { removeProfilePicture, revalidateUser } from '@/data/user'
 import type { OurFileRouter } from '@/data/utils/uploadthing'
@@ -29,17 +35,15 @@ export function UpdateProfilePictureDialog() {
   }
 
   return (
-    <Dialog.Root open={isOpen} onOpenChange={handleClose}>
-      <Dialog.Portal>
-        <Dialog.Content>
-          <UpdateProfilePictureDialogContent
-            handleClose={handleClose}
-            isPending={isPending}
-            startTransition={startTransition}
-          />
-        </Dialog.Content>
-      </Dialog.Portal>
-    </Dialog.Root>
+    <DialogRoot open={isOpen} onOpenChange={handleClose}>
+      <DialogContent>
+        <UpdateProfilePictureDialogContent
+          handleClose={handleClose}
+          isPending={isPending}
+          startTransition={startTransition}
+        />
+      </DialogContent>
+    </DialogRoot>
   )
 }
 
@@ -97,7 +101,7 @@ function UpdateProfilePictureDialogContent({
       <Head title="Update profile picture" />
       <Form.Root onSubmit={onSubmit} className="space-y-5">
         <div>
-          <Dialog.Title>Profile picture</Dialog.Title>
+          <DialogTitle>Profile picture</DialogTitle>
         </div>
         <div className="flex items-center justify-center space-x-4">
           <Avatar
@@ -147,11 +151,11 @@ function UpdateProfilePictureDialogContent({
         </div>
 
         <fieldset className="flex space-x-4" disabled={isLoading}>
-          <Dialog.Close asChild>
+          <DialogClose asChild>
             <Button intent="secondary" className="w-full">
               Cancel
             </Button>
-          </Dialog.Close>
+          </DialogClose>
           <Button className="w-full" isLoading={isLoading}>
             Submit
           </Button>

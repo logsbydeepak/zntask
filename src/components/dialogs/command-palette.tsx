@@ -18,7 +18,7 @@ import {
   SidebarIcon,
 } from 'lucide-react'
 
-import * as Dialog from '@/components/ui/dialog'
+import { DialogContent, DialogRoot } from '@/components/ui/dialog'
 import { useAppStore } from '@/store/app'
 import { categoryHelper, getCategoryColor } from '@/utils/category'
 import { cn } from '@/utils/style'
@@ -32,13 +32,11 @@ export function CommandPaletteDialog() {
   }
 
   return (
-    <Dialog.Root open={isOpen} onOpenChange={handleClose}>
-      <Dialog.Portal>
-        <Dialog.Content className="p-0 sm:p-0">
-          <CommandPaletteContent handleClose={handleClose} />
-        </Dialog.Content>
-      </Dialog.Portal>
-    </Dialog.Root>
+    <DialogRoot open={isOpen} onOpenChange={handleClose}>
+      <DialogContent className="p-0 sm:p-0">
+        <CommandPaletteContent handleClose={handleClose} />
+      </DialogContent>
+    </DialogRoot>
   )
 }
 

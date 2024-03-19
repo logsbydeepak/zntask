@@ -1,7 +1,13 @@
 import React from 'react'
 
 import { Button } from '@/components/ui/button'
-import * as Dialog from '@/components/ui/dialog'
+import {
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogRoot,
+  DialogTitle,
+} from '@/components/ui/dialog'
 import { useAppStore } from '@/store/app'
 import { Category } from '@/utils/category'
 
@@ -14,13 +20,11 @@ export function DeleteCategoryDialog() {
 
   if (!category) return null
   return (
-    <Dialog.Root open={isOpen} onOpenChange={closeDialog}>
-      <Dialog.Portal>
-        <Dialog.Content className="space-y-4 text-center">
-          <DeleteDialogContent handleClose={closeDialog} category={category} />
-        </Dialog.Content>
-      </Dialog.Portal>
-    </Dialog.Root>
+    <DialogRoot open={isOpen} onOpenChange={closeDialog}>
+      <DialogContent className="space-y-4 text-center">
+        <DeleteDialogContent handleClose={closeDialog} category={category} />
+      </DialogContent>
+    </DialogRoot>
   )
 }
 
@@ -41,19 +45,19 @@ function DeleteDialogContent({
   return (
     <>
       <div>
-        <Dialog.Title>Delete Category</Dialog.Title>
-        <Dialog.Description>
+        <DialogTitle>Delete Category</DialogTitle>
+        <DialogDescription>
           Are you sure you want to delete{' '}
           <span className="font-medium italic">{category.title} </span>?
-        </Dialog.Description>
+        </DialogDescription>
       </div>
 
       <fieldset className="flex space-x-4">
-        <Dialog.Close asChild>
+        <DialogClose asChild>
           <Button intent="secondary" className="w-full">
             Cancel
           </Button>
-        </Dialog.Close>
+        </DialogClose>
         <Button className="w-full" onClick={handleClick} intent="destructive">
           Delete
         </Button>

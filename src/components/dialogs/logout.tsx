@@ -1,6 +1,12 @@
 import React from 'react'
 
-import * as Dialog from '@/components/ui/dialog'
+import {
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogRoot,
+  DialogTitle,
+} from '@/components/ui/dialog'
 import { logout } from '@/data/user'
 import { useAppStore } from '@/store/app'
 import { toast } from '@/store/toast'
@@ -18,17 +24,15 @@ export function LogoutDialog() {
   }
 
   return (
-    <Dialog.Root open={isOpen} onOpenChange={closeDialog}>
-      <Dialog.Portal>
-        <Dialog.Content className="space-y-4 text-center">
-          <LogoutDialogContent
-            handleClose={closeDialog}
-            isPending={isPending}
-            startTransition={startTransition}
-          />
-        </Dialog.Content>
-      </Dialog.Portal>
-    </Dialog.Root>
+    <DialogRoot open={isOpen} onOpenChange={closeDialog}>
+      <DialogContent className="space-y-4 text-center">
+        <LogoutDialogContent
+          handleClose={closeDialog}
+          isPending={isPending}
+          startTransition={startTransition}
+        />
+      </DialogContent>
+    </DialogRoot>
   )
 }
 
@@ -53,18 +57,16 @@ function LogoutDialogContent({
   return (
     <>
       <div>
-        <Dialog.Title>Logout</Dialog.Title>
-        <Dialog.Description>
-          Are you sure you want to logout?
-        </Dialog.Description>
+        <DialogTitle>Logout</DialogTitle>
+        <DialogDescription>Are you sure you want to logout?</DialogDescription>
       </div>
 
       <fieldset className="flex space-x-4" disabled={isPending}>
-        <Dialog.Close asChild>
+        <DialogClose asChild>
           <Button intent="secondary" className="w-full">
             Cancel
           </Button>
-        </Dialog.Close>
+        </DialogClose>
         <Button className="w-full" isLoading={isPending} onClick={handleLogout}>
           Submit
         </Button>
