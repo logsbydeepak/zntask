@@ -26,7 +26,13 @@ import {
   DialogRoot,
   DialogTitle,
 } from '@/components/ui/dialog'
-import * as Form from '@/components/ui/form'
+import {
+  FormError,
+  FormFieldset,
+  FormInput,
+  FormLabel,
+  FormRoot,
+} from '@/components/ui/form'
 import * as Popover from '@/components/ui/popover'
 import { useAppStore } from '@/store/app'
 import { ChildTask, ParentTask } from '@/store/task-slice'
@@ -343,7 +349,7 @@ function TaskDialogContent({
           </Badge.Button>
         </div>
 
-        <Form.Root
+        <FormRoot
           className="container-scroll mb-6 max-h-[200px] snap-y snap-mandatory snap-normal scroll-pb-8 space-y-7 overflow-y-scroll pl-6 sm:max-h-[400px] sm:snap-none"
           onSubmit={handleSubmit(onSubmit)}
           id="task"
@@ -436,7 +442,7 @@ function TaskDialogContent({
               </div>
             </div>
           ))}
-        </Form.Root>
+        </FormRoot>
       </div>
 
       <fieldset className="flex justify-between space-x-4 border-t border-gray-3 px-5 py-2">

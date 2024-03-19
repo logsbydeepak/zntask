@@ -12,7 +12,13 @@ import {
   DialogRoot,
   DialogTitle,
 } from '@/components/ui/dialog'
-import * as Form from '@/components/ui/form'
+import {
+  FormError,
+  FormFieldset,
+  FormInput,
+  FormLabel,
+  FormRoot,
+} from '@/components/ui/form'
 import { updateEmail } from '@/data/user'
 import { useAppStore } from '@/store/app'
 import { toast } from '@/store/toast'
@@ -101,7 +107,7 @@ function Content({
   return (
     <>
       <Head title="Update email" />
-      <Form.Root onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+      <FormRoot onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         <div>
           <DialogTitle>Update email</DialogTitle>
           <DialogDescription>
@@ -109,18 +115,18 @@ function Content({
           </DialogDescription>
         </div>
         <div>
-          <Form.Label htmlFor="email">Email</Form.Label>
-          <Form.Input
+          <FormLabel htmlFor="email">Email</FormLabel>
+          <FormInput
             id="email"
             {...register('email')}
             placeholder="abc@domain.com"
             autoFocus
           />
-          <Form.Error>{errors.email?.message}</Form.Error>
+          <FormError>{errors.email?.message}</FormError>
         </div>
         <div>
-          <Form.Label htmlFor="password">Password</Form.Label>
-          <Form.Input
+          <FormLabel htmlFor="password">Password</FormLabel>
+          <FormInput
             id="password"
             {...register('password')}
             placeholder="********"
@@ -128,7 +134,7 @@ function Content({
           />
           <div className="flex flex-wrap justify-between gap-y-2">
             <div className="mr-4">
-              <Form.Error>{errors.password?.message}</Form.Error>
+              <FormError>{errors.password?.message}</FormError>
             </div>
             <div className="space-x-2">
               <PasswordVisibilityToggle
@@ -149,7 +155,7 @@ function Content({
             Redirect
           </Button>
         </fieldset>
-      </Form.Root>
+      </FormRoot>
     </>
   )
 }

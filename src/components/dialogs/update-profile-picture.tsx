@@ -12,7 +12,13 @@ import {
   DialogRoot,
   DialogTitle,
 } from '@/components/ui/dialog'
-import * as Form from '@/components/ui/form'
+import {
+  FormError,
+  FormFieldset,
+  FormInput,
+  FormLabel,
+  FormRoot,
+} from '@/components/ui/form'
 import { removeProfilePicture, revalidateUser } from '@/data/user'
 import type { OurFileRouter } from '@/data/utils/uploadthing'
 import { useAppStore } from '@/store/app'
@@ -99,7 +105,7 @@ function UpdateProfilePictureDialogContent({
   return (
     <>
       <Head title="Update profile picture" />
-      <Form.Root onSubmit={onSubmit} className="space-y-5">
+      <FormRoot onSubmit={onSubmit} className="space-y-5">
         <div>
           <DialogTitle>Profile picture</DialogTitle>
         </div>
@@ -160,7 +166,7 @@ function UpdateProfilePictureDialogContent({
             Submit
           </Button>
         </fieldset>
-      </Form.Root>
+      </FormRoot>
     </>
   )
 }

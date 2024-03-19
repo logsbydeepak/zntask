@@ -14,7 +14,13 @@ import {
 } from '@/app/(auth)/components'
 import { Alert, AlertStyleProps } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
-import * as FormPrimitive from '@/components/ui/form'
+import {
+  FormError,
+  FormFieldset,
+  FormInput,
+  FormLabel,
+  FormRoot,
+} from '@/components/ui/form'
 import { addPassword } from '@/data/auth'
 import { zPassword, zRequired } from '@/utils/zSchema'
 
@@ -116,16 +122,11 @@ export function Form({ token }: { token: string }) {
           {alertMessage.message}
         </Alert>
       )}
-      <FormPrimitive.Root
-        onSubmit={handleSubmit(onSubmit)}
-        id="add_password_form"
-      >
-        <FormPrimitive.Fieldset disabled={isLoading} className="space-y-2.5">
+      <FormRoot onSubmit={handleSubmit(onSubmit)} id="add_password_form">
+        <FormFieldset disabled={isLoading} className="space-y-2.5">
           <div>
-            <FormPrimitive.Label htmlFor="password">
-              Password
-            </FormPrimitive.Label>
-            <FormPrimitive.Input
+            <FormLabel htmlFor="password">Password</FormLabel>
+            <FormInput
               id="password"
               {...register('password')}
               autoFocus
@@ -136,9 +137,7 @@ export function Form({ token }: { token: string }) {
             <div className="space-y-2.5">
               <div className="flex flex-wrap justify-between gap-y-2">
                 <div className="mr-4">
-                  <FormPrimitive.Error>
-                    {errors.password?.message}
-                  </FormPrimitive.Error>
+                  <FormError>{errors.password?.message}</FormError>
                 </div>
                 <PasswordVisibilityToggle
                   isVisible={isPasswordVisible}
@@ -160,21 +159,17 @@ export function Form({ token }: { token: string }) {
           </div>
 
           <div>
-            <FormPrimitive.Label htmlFor="confirmPassword">
-              Confirm Password
-            </FormPrimitive.Label>
-            <FormPrimitive.Input
+            <FormLabel htmlFor="confirmPassword">Confirm Password</FormLabel>
+            <FormInput
               id="confirmPassword"
               {...register('confirmPassword')}
               placeholder="strong password"
               type={isPasswordVisible ? 'text' : 'password'}
             />
-            <FormPrimitive.Error>
-              {errors.confirmPassword?.message}
-            </FormPrimitive.Error>
+            <FormError>{errors.confirmPassword?.message}</FormError>
           </div>
-        </FormPrimitive.Fieldset>
-      </FormPrimitive.Root>
+        </FormFieldset>
+      </FormRoot>
       <Button className="w-full" isLoading={isPending} form="add_password_form">
         Add Password
       </Button>

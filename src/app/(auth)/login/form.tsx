@@ -15,7 +15,13 @@ import {
 import { ResetPasswordDialog } from '@/components/dialogs/reset-password'
 import { Alert } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
-import * as FormPrimitive from '@/components/ui/form'
+import {
+  FormError,
+  FormFieldset,
+  FormInput,
+  FormLabel,
+  FormRoot,
+} from '@/components/ui/form'
 import {
   loginWithCredentials,
   loginWithGoogle,
@@ -127,28 +133,26 @@ export function Form() {
         </fieldset>
       </div>
       <Separator />
-      <FormPrimitive.Root
+      <FormRoot
         onSubmit={handleSubmit(handleLoginWithCredentials)}
         id="login_credentials_form"
       >
-        <FormPrimitive.Fieldset disabled={isLoading} className="space-y-2.5">
+        <FormFieldset disabled={isLoading} className="space-y-2.5">
           <div>
-            <FormPrimitive.Label htmlFor="email">Email</FormPrimitive.Label>
-            <FormPrimitive.Input
+            <FormLabel htmlFor="email">Email</FormLabel>
+            <FormInput
               id="email"
               autoFocus
               {...register('email')}
               placeholder="abc@domain.com"
             />
-            <FormPrimitive.Error>{errors.email?.message}</FormPrimitive.Error>
+            <FormError>{errors.email?.message}</FormError>
           </div>
 
           <div>
-            <FormPrimitive.Label htmlFor="password">
-              Password
-            </FormPrimitive.Label>
+            <FormLabel htmlFor="password">Password</FormLabel>
 
-            <FormPrimitive.Input
+            <FormInput
               id="password"
               {...register('password')}
               placeholder="********"
@@ -156,9 +160,7 @@ export function Form() {
             />
             <div className="flex flex-wrap justify-between gap-y-2">
               <div className="mr-4">
-                <FormPrimitive.Error>
-                  {errors.password?.message}
-                </FormPrimitive.Error>
+                <FormError>{errors.password?.message}</FormError>
               </div>
               <div className="space-x-2">
                 <PasswordVisibilityToggle
@@ -171,8 +173,8 @@ export function Form() {
               </div>
             </div>
           </div>
-        </FormPrimitive.Fieldset>
-      </FormPrimitive.Root>
+        </FormFieldset>
+      </FormRoot>
       <Button
         className="w-full"
         isLoading={isCredentialPending}

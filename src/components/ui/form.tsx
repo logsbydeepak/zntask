@@ -1,10 +1,9 @@
 import React, { FieldsetHTMLAttributes } from 'react'
-import { cva } from 'cva'
 import { XCircleIcon } from 'lucide-react'
 
 import { cn } from '@/utils/style'
 
-export const Root = React.forwardRef<
+const FormRoot = React.forwardRef<
   HTMLFormElement,
   React.FormHTMLAttributes<HTMLFormElement>
 >(({ children, className, ...props }, ref) => (
@@ -12,13 +11,9 @@ export const Root = React.forwardRef<
     {children}
   </form>
 ))
-Root.displayName = 'Form.Root'
+FormRoot.displayName = 'FormRoot'
 
-export const formInputStyle = cva({
-  base: [],
-})
-
-export const Input = React.forwardRef<
+const FormInput = React.forwardRef<
   HTMLInputElement,
   React.InputHTMLAttributes<HTMLInputElement>
 >(({ className, ...props }, ref) => (
@@ -31,9 +26,9 @@ export const Input = React.forwardRef<
     )}
   />
 ))
-Input.displayName = 'Form.Input'
+FormInput.displayName = 'FormInput'
 
-export const Label = React.forwardRef<
+const FormLabel = React.forwardRef<
   HTMLLabelElement,
   React.LabelHTMLAttributes<HTMLLabelElement>
 >(({ children, ...props }, ref) => (
@@ -41,9 +36,9 @@ export const Label = React.forwardRef<
     {children}
   </label>
 ))
-Label.displayName = 'Form.Label'
+FormLabel.displayName = 'FormLabel'
 
-export const Error = React.forwardRef<
+const FormError = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLAttributes<HTMLParagraphElement>
 >(({ children, ...props }, ref) => (
@@ -62,11 +57,13 @@ export const Error = React.forwardRef<
     )}
   </>
 ))
-Error.displayName = 'Form.Error'
+FormError.displayName = 'FormError'
 
-export function Fieldset({
+function FormFieldset({
   children,
   ...props
 }: FieldsetHTMLAttributes<HTMLFieldSetElement>) {
   return <fieldset {...props}>{children}</fieldset>
 }
+
+export { FormRoot, FormInput, FormLabel, FormError, FormFieldset }

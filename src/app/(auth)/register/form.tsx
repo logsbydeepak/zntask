@@ -16,7 +16,13 @@ import {
 } from '@/app/(auth)/components'
 import { Alert } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
-import * as FormPrimitive from '@/components/ui/form'
+import {
+  FormError,
+  FormFieldset,
+  FormInput,
+  FormLabel,
+  FormRoot,
+} from '@/components/ui/form'
 import {
   redirectGoogleRegister,
   registerWithCredentials,
@@ -133,32 +139,26 @@ export function Form() {
       </div>
 
       <Separator />
-      <FormPrimitive.Root
+      <FormRoot
         onSubmit={handleSubmit(handleRegisterWithCredentials)}
         id="register_credentials_form"
       >
-        <FormPrimitive.Fieldset disabled={isLoading} className="space-y-2.5">
+        <FormFieldset disabled={isLoading} className="space-y-2.5">
           <div className="flex space-x-4">
             <div className="w-1/2">
-              <FormPrimitive.Label htmlFor="firstName">
-                First Name
-              </FormPrimitive.Label>
-              <FormPrimitive.Input
+              <FormLabel htmlFor="firstName">First Name</FormLabel>
+              <FormInput
                 autoFocus
                 id="firstName"
                 {...register('firstName')}
                 placeholder="Haven"
               />
-              <FormPrimitive.Error>
-                {errors.firstName?.message}
-              </FormPrimitive.Error>
+              <FormError>{errors.firstName?.message}</FormError>
             </div>
 
             <div className="w-1/2">
-              <FormPrimitive.Label htmlFor="lastName">
-                Last Name
-              </FormPrimitive.Label>
-              <FormPrimitive.Input
+              <FormLabel htmlFor="lastName">Last Name</FormLabel>
+              <FormInput
                 id="lastName"
                 {...register('lastName')}
                 placeholder="Thompson"
@@ -167,23 +167,19 @@ export function Form() {
           </div>
 
           <div>
-            <FormPrimitive.Label htmlFor="email">Email</FormPrimitive.Label>
-            <FormPrimitive.Input
+            <FormLabel htmlFor="email">Email</FormLabel>
+            <FormInput
               id="email"
               {...register('email')}
               placeholder="abc@domain.com"
             />
 
-            {errors.email && (
-              <FormPrimitive.Error>{errors.email?.message}</FormPrimitive.Error>
-            )}
+            {errors.email && <FormError>{errors.email?.message}</FormError>}
           </div>
 
           <div>
-            <FormPrimitive.Label htmlFor="password">
-              Password
-            </FormPrimitive.Label>
-            <FormPrimitive.Input
+            <FormLabel htmlFor="password">Password</FormLabel>
+            <FormInput
               id="password"
               {...register('password')}
               placeholder="strong password"
@@ -193,9 +189,7 @@ export function Form() {
             <div className="space-y-2.5">
               <div className="flex flex-wrap justify-between gap-y-2">
                 <div className="mr-4">
-                  <FormPrimitive.Error>
-                    {errors.password?.message}
-                  </FormPrimitive.Error>
+                  <FormError>{errors.password?.message}</FormError>
                 </div>
                 <PasswordVisibilityToggle
                   isVisible={isPasswordVisible}
@@ -217,21 +211,17 @@ export function Form() {
           </div>
 
           <div>
-            <FormPrimitive.Label htmlFor="confirmPassword">
-              Confirm Password
-            </FormPrimitive.Label>
-            <FormPrimitive.Input
+            <FormLabel htmlFor="confirmPassword">Confirm Password</FormLabel>
+            <FormInput
               id="confirmPassword"
               {...register('confirmPassword')}
               placeholder="strong password"
               type={isPasswordVisible ? 'text' : 'password'}
             />
-            <FormPrimitive.Error>
-              {errors.confirmPassword?.message}
-            </FormPrimitive.Error>
+            <FormError>{errors.confirmPassword?.message}</FormError>
           </div>
-        </FormPrimitive.Fieldset>
-      </FormPrimitive.Root>
+        </FormFieldset>
+      </FormRoot>
       <Button
         className="w-full"
         isLoading={isCredentialPending}

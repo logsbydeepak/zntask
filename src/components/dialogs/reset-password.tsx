@@ -11,7 +11,13 @@ import {
   DialogRoot,
   DialogTitle,
 } from '@/components/ui/dialog'
-import * as Form from '@/components/ui/form'
+import {
+  FormError,
+  FormFieldset,
+  FormInput,
+  FormLabel,
+  FormRoot,
+} from '@/components/ui/form'
 import { resetPassword } from '@/data/auth'
 import { zResetPassword } from '@/data/utils/zSchema'
 
@@ -106,7 +112,7 @@ function ResetPasswordDialogContent({
   return (
     <>
       <Head title="Reset Password" />
-      <Form.Root onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+      <FormRoot onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         <div>
           <DialogTitle>Reset Password</DialogTitle>
           <DialogDescription>
@@ -117,14 +123,14 @@ function ResetPasswordDialogContent({
           <Alert intent={alertMessage.intent}>{alertMessage.message}</Alert>
         )}
         <div>
-          <Form.Label htmlFor="email">Email</Form.Label>
-          <Form.Input
+          <FormLabel htmlFor="email">Email</FormLabel>
+          <FormInput
             id="email"
             {...register('email')}
             placeholder="abc@domain.com"
             autoFocus
           />
-          <Form.Error>{errors.email?.message}</Form.Error>
+          <FormError>{errors.email?.message}</FormError>
         </div>
 
         <fieldset className="flex space-x-4" disabled={isPending}>
@@ -137,7 +143,7 @@ function ResetPasswordDialogContent({
             Submit
           </Button>
         </fieldset>
-      </Form.Root>
+      </FormRoot>
     </>
   )
 }

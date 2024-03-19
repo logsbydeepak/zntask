@@ -11,7 +11,13 @@ import {
   DialogRoot,
   DialogTitle,
 } from '@/components/ui/dialog'
-import * as Form from '@/components/ui/form'
+import {
+  FormError,
+  FormFieldset,
+  FormInput,
+  FormLabel,
+  FormRoot,
+} from '@/components/ui/form'
 import { updateName } from '@/data/user'
 import { zUpdateName } from '@/data/utils/zSchema'
 import { useAppStore } from '@/store/app'
@@ -86,7 +92,7 @@ function UpdateNameDialogContent({
   return (
     <>
       <Head title="Update name" />
-      <Form.Root onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+      <FormRoot onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         <div>
           <DialogTitle>Name</DialogTitle>
           <DialogDescription>Enter your new name</DialogDescription>
@@ -94,19 +100,19 @@ function UpdateNameDialogContent({
 
         <div className="flex space-x-4">
           <div>
-            <Form.Label htmlFor="firstName">First Name</Form.Label>
-            <Form.Input
+            <FormLabel htmlFor="firstName">First Name</FormLabel>
+            <FormInput
               autoFocus
               id="firstName"
               {...register('firstName')}
               placeholder="Haven"
             />
-            <Form.Error>{errors.firstName?.message}</Form.Error>
+            <FormError>{errors.firstName?.message}</FormError>
           </div>
 
           <div>
-            <Form.Label htmlFor="lastName">Last Name</Form.Label>
-            <Form.Input
+            <FormLabel htmlFor="lastName">Last Name</FormLabel>
+            <FormInput
               id="lastName"
               {...register('lastName')}
               placeholder="Thompson"
@@ -124,7 +130,7 @@ function UpdateNameDialogContent({
             Submit
           </Button>
         </fieldset>
-      </Form.Root>
+      </FormRoot>
     </>
   )
 }

@@ -12,7 +12,13 @@ import {
   DialogRoot,
   DialogTitle,
 } from '@/components/ui/dialog'
-import * as Form from '@/components/ui/form'
+import {
+  FormError,
+  FormFieldset,
+  FormInput,
+  FormLabel,
+  FormRoot,
+} from '@/components/ui/form'
 import { removeCredentialAuthProvider } from '@/data/auth'
 import { useAppStore } from '@/store/app'
 import { toast } from '@/store/toast'
@@ -97,7 +103,7 @@ function Content({
   return (
     <>
       <Head title="Remove Password" />
-      <Form.Root onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+      <FormRoot onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         <div>
           <DialogTitle>Remove Password</DialogTitle>
           <DialogDescription>
@@ -105,8 +111,8 @@ function Content({
           </DialogDescription>
         </div>
         <div>
-          <Form.Label htmlFor="password">Password</Form.Label>
-          <Form.Input
+          <FormLabel htmlFor="password">Password</FormLabel>
+          <FormInput
             id="password"
             {...register('password')}
             placeholder="********"
@@ -115,7 +121,7 @@ function Content({
           />
           <div className="flex flex-wrap justify-between gap-y-2">
             <div className="mr-4">
-              <Form.Error>{errors.password?.message}</Form.Error>
+              <FormError>{errors.password?.message}</FormError>
             </div>
             <div className="space-x-2">
               <PasswordVisibilityToggle
@@ -136,7 +142,7 @@ function Content({
             Remove
           </Button>
         </fieldset>
-      </Form.Root>
+      </FormRoot>
     </>
   )
 }

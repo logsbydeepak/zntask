@@ -12,7 +12,13 @@ import {
   DialogRoot,
   DialogTitle,
 } from '@/components/ui/dialog'
-import * as Form from '@/components/ui/form'
+import {
+  FormError,
+  FormFieldset,
+  FormInput,
+  FormLabel,
+  FormRoot,
+} from '@/components/ui/form'
 import { useAppStore } from '@/store/app'
 import {
   Category,
@@ -105,16 +111,16 @@ function CategoryDialogContent({
         <DialogDescription>Add a new category to your list.</DialogDescription>
       </div>
 
-      <Form.Root className="space-y-7" onSubmit={handleSubmit(onSubmit)}>
+      <FormRoot className="space-y-7" onSubmit={handleSubmit(onSubmit)}>
         <div className="space-y-2">
           <div>
-            <Form.Label htmlFor="title">Title</Form.Label>
-            <Form.Input {...register('title')} id="title" autoFocus />
-            <Form.Error>{errors.title?.message}</Form.Error>
+            <FormLabel htmlFor="title">Title</FormLabel>
+            <FormInput {...register('title')} id="title" autoFocus />
+            <FormError>{errors.title?.message}</FormError>
           </div>
 
           <div className="space-y-2">
-            <Form.Label htmlFor="indicator">Indicator</Form.Label>
+            <FormLabel htmlFor="indicator">Indicator</FormLabel>
             <RadioGroup.Root
               className="flex justify-between"
               defaultValue={getValues('indicator')}
@@ -151,7 +157,7 @@ function CategoryDialogContent({
             Save
           </Button>
         </fieldset>
-      </Form.Root>
+      </FormRoot>
     </>
   )
 }
