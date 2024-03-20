@@ -13,33 +13,19 @@ import {
 } from 'lucide-react'
 import { useFieldArray, useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { useShallow } from 'zustand/react/shallow'
 
 import { CategoryPopover } from '@/components/category-popover'
 import { Head } from '@/components/head'
 import { SchedulePicker } from '@/components/schedule'
 import * as Badge from '@/components/ui/badge'
-import {
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogRoot,
-  DialogTitle,
-} from '@/components/ui/dialog'
-import {
-  FormError,
-  FormFieldset,
-  FormInput,
-  FormLabel,
-  FormRoot,
-} from '@/components/ui/form'
-import * as Popover from '@/components/ui/popover'
+import { Button } from '@/components/ui/button'
+import { DialogClose, DialogContent, DialogRoot } from '@/components/ui/dialog'
+import { FormRoot } from '@/components/ui/form'
+import { PopoverRoot, PopoverTrigger } from '@/components/ui/popover'
 import { useAppStore } from '@/store/app'
 import { ChildTask, ParentTask } from '@/store/task-slice'
 import { getCategoryColor } from '@/utils/category'
 import { cn } from '@/utils/style'
-
-import { Button } from '../ui/button'
 
 const schema = z.object({
   categoryId: z.string().nullable(),
@@ -496,8 +482,8 @@ function CategoryPicker({
   const currentCategory = getCategory(value)
 
   return (
-    <Popover.Root open={isOpen} onOpenChange={setIsOpen}>
-      <Popover.Trigger asChild>
+    <PopoverRoot open={isOpen} onOpenChange={setIsOpen}>
+      <PopoverTrigger asChild>
         <Badge.Button className="max-w-[95%] overflow-hidden">
           <Badge.Icon>
             {!currentCategory && <InboxIcon strokeWidth={2} />}
@@ -514,7 +500,7 @@ function CategoryPicker({
             {currentCategory ? currentCategory.title : 'Inbox'}
           </span>
         </Badge.Button>
-      </Popover.Trigger>
+      </PopoverTrigger>
       {isOpen && (
         <CategoryPopover
           setValue={setValue}
@@ -522,6 +508,6 @@ function CategoryPicker({
           setIsOpen={setIsOpen}
         />
       )}
-    </Popover.Root>
+    </PopoverRoot>
   )
 }

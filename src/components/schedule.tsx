@@ -20,7 +20,8 @@ import { DayPicker } from 'react-day-picker'
 import { useDebounce } from 'use-debounce'
 
 import * as Badge from '@/components/ui/badge'
-import * as Popover from '@/components/ui/popover'
+
+import { PopoverContent, PopoverRoot, PopoverTrigger } from './ui/popover'
 
 export function SchedulePicker({
   value,
@@ -33,8 +34,8 @@ export function SchedulePicker({
   const [isOpen, setIsOpen] = React.useState(false)
 
   return (
-    <Popover.Root open={isOpen} onOpenChange={setIsOpen}>
-      <Popover.Trigger asChild>
+    <PopoverRoot open={isOpen} onOpenChange={setIsOpen}>
+      <PopoverTrigger asChild>
         <Badge.Button>
           <Badge.Icon>
             <CalendarIcon />
@@ -56,23 +57,21 @@ export function SchedulePicker({
             </>
           )}
         </Badge.Button>
-      </Popover.Trigger>
-      <Popover.Portal>
-        {isOpen && (
-          <SchedulePopover
-            setIsOpen={setIsOpen}
-            value={value}
-            setValue={setValue}
-          />
-        )}
-      </Popover.Portal>
-    </Popover.Root>
+      </PopoverTrigger>
+      {isOpen && (
+        <SchedulePopover
+          setIsOpen={setIsOpen}
+          value={value}
+          setValue={setValue}
+        />
+      )}
+    </PopoverRoot>
   )
 }
 
 const SchedulePopover = React.forwardRef<
-  React.ElementRef<typeof Popover.Content>,
-  React.ComponentProps<typeof Popover.Content> & {
+  React.ElementRef<typeof PopoverContent>,
+  React.ComponentProps<typeof PopoverContent> & {
     setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
     value: { date: Date | null; time: Date | null }
     setValue: ({ date, time }: { date: Date | null; time: Date | null }) => void
@@ -107,7 +106,7 @@ const SchedulePopover = React.forwardRef<
   }
 
   return (
-    <Popover.Content
+    <PopoverContent
       {...props}
       ref={ref}
       align="center"
@@ -238,7 +237,7 @@ const SchedulePopover = React.forwardRef<
           }}
         />
       </div>
-    </Popover.Content>
+    </PopoverContent>
   )
 })
 

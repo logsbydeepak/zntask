@@ -2,14 +2,15 @@ import React from 'react'
 import { Command } from 'cmdk'
 import { FolderIcon, InboxIcon, SearchIcon } from 'lucide-react'
 
-import * as Popover from '@/components/ui/popover'
 import { useAppStore } from '@/store/app'
 import { Category, categoryHelper, getCategoryColor } from '@/utils/category'
 import { cn } from '@/utils/style'
 
+import { PopoverContent } from './ui/popover'
+
 export const CategoryPopover = React.forwardRef<
-  React.ElementRef<typeof Popover.Content>,
-  React.ComponentProps<typeof Popover.Content> & {
+  React.ElementRef<typeof PopoverContent>,
+  React.ComponentProps<typeof PopoverContent> & {
     setValue: (value: string | null) => void
     setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
     currentCategory: Category | undefined
@@ -27,7 +28,7 @@ export const CategoryPopover = React.forwardRef<
   }
 
   return (
-    <Popover.Content
+    <PopoverContent
       {...props}
       ref={ref}
       className="w-60 p-0"
@@ -101,7 +102,7 @@ export const CategoryPopover = React.forwardRef<
           ))}
         </Command.List>
       </Command>
-    </Popover.Content>
+    </PopoverContent>
   )
 })
 CategoryPopover.displayName = 'CategoryPopover'
