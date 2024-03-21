@@ -15,6 +15,7 @@ import {
   MoreVerticalIcon,
 } from 'lucide-react'
 
+import { CategoryMenuContent } from '@/components/category-menu-content'
 import {
   ContextMenuContent,
   ContextMenuPortal,
@@ -28,8 +29,6 @@ import {
 import { useAppStore } from '@/store/app'
 import { Category, categoryHelper, getCategoryColor } from '@/utils/category'
 import { cn, tw } from '@/utils/style'
-
-import { CategoryMenuContent } from './(home)/category'
 
 export function Sidebar() {
   const isSidebarOpen = useAppStore((s) => s.isSidebarOpen)

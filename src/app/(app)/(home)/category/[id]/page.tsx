@@ -5,6 +5,7 @@ import { MoreVerticalIcon } from 'lucide-react'
 import { useShallow } from 'zustand/react/shallow'
 
 import * as Layout from '@/app/(app)/app-layout'
+import { CategoryMenuContent } from '@/components/category-menu-content'
 import { Head } from '@/components/head'
 import {
   DropdownMenuContent,
@@ -20,7 +21,6 @@ import {
 } from '@/components/ui/tabs'
 import { useAppStore } from '@/store/app'
 
-import { CategoryMenuContent } from '../../category'
 import { EmptyTaskCategory, TaskContainer } from '../../task'
 
 export default function Page({ params }: { params: { id?: string } }) {

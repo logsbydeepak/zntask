@@ -1,29 +1,18 @@
 import React from 'react'
 import Link from 'next/link'
-import {
-  ArchiveRestoreIcon,
-  CircleIcon,
-  EditIcon,
-  HeartIcon,
-  HeartOffIcon,
-  MoreVerticalIcon,
-  Trash2Icon,
-} from 'lucide-react'
+import { MoreVerticalIcon } from 'lucide-react'
 
+import { CategoryMenuContent } from '@/components/category-menu-content'
 import {
   ContextMenuContent,
-  ContextMenuItem,
   ContextMenuPortal,
   ContextMenuRoot,
   ContextMenuTrigger,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuPortal,
   DropdownMenuRoot,
   DropdownMenuTrigger,
-  MenuIcon,
 } from '@/components/ui/menu'
-import { useAppStore } from '@/store/app'
 import { Category, getCategoryColor } from '@/utils/category'
 import { useDrag, useDrop } from '@/utils/category-dnd'
 import { cn } from '@/utils/style'
@@ -169,67 +158,6 @@ CategoryItem.displayName = 'CategoryItem'
 
 export function CategoryContainer({ children }: { children: React.ReactNode }) {
   return <div className="space-y-2">{children}</div>
-}
-
-export function CategoryMenuContent({
-  category,
-  type,
-}: {
-  category: Category
-  type: 'context' | 'dropdown'
-}) {
-  const setDialog = useAppStore((s) => s.setDialog)
-  const toggleArchive = useAppStore((s) => s.toggleArchive)
-  const toggleFavorite = useAppStore((s) => s.toggleFavorite)
-
-  const isFavorite = !!category.favoriteOrderNumber
-  const isArchived = !!category.archivedAt
-
-  const menuItem = [
-    {
-      label: 'Edit',
-      onSelect: () => setDialog({ editCategory: category }),
-      icon: <EditIcon />,
-    },
-
-    {
-      label: !!isFavorite ? 'Unfavorite' : 'Favorite',
-      onSelect: () => toggleFavorite(category),
-      icon: !!isFavorite ? <HeartOffIcon /> : <HeartIcon />,
-    },
-
-    {
-      label: isArchived ? 'Unarchive' : 'Archive',
-      onSelect: () => toggleArchive(category),
-      icon: isArchived ? <ArchiveRestoreIcon /> : <ArchiveRestoreIcon />,
-    },
-    {
-      label: 'Delete',
-      onSelect: () => setDialog({ deleteCategory: category }),
-      icon: <Trash2Icon />,
-      intent: 'destructive' as const,
-    },
-  ]
-
-  if (isArchived) {
-    menuItem.splice(1, 1)
-  }
-
-  if (type === 'context') {
-    return menuItem.map((i) => (
-      <ContextMenuItem key={i.label} onSelect={i.onSelect} intent={i.intent}>
-        <MenuIcon intent={i.intent}>{i.icon}</MenuIcon>
-        <span>{i.label}</span>
-      </ContextMenuItem>
-    ))
-  }
-
-  return menuItem.map((i) => (
-    <DropdownMenuItem key={i.label} onSelect={i.onSelect} intent={i.intent}>
-      <MenuIcon intent={i.intent}>{i.icon}</MenuIcon>
-      <span>{i.label}</span>
-    </DropdownMenuItem>
-  ))
 }
 
 export function BottomDrop({ id }: { id: string }) {
