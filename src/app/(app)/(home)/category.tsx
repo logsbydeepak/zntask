@@ -112,7 +112,6 @@ export const CategoryItem = React.forwardRef<
     href: string
   }
 >(({ category, href, className, ...props }, ref) => {
-  const [preventFocus, setPreventFocus] = React.useState(false)
   return (
     <ContextMenuRoot>
       <DropdownMenuRoot>
@@ -153,26 +152,13 @@ export const CategoryItem = React.forwardRef<
         </ContextMenuTrigger>
 
         <ContextMenuPortal>
-          <ContextMenuContent
-            onCloseAutoFocus={(e) => preventFocus && e.preventDefault()}
-          >
-            <CategoryMenuContent
-              category={category}
-              type="context"
-              setPreventFocus={setPreventFocus}
-            />
+          <ContextMenuContent>
+            <CategoryMenuContent category={category} type="context" />
           </ContextMenuContent>
         </ContextMenuPortal>
         <DropdownMenuPortal>
-          <DropdownMenuContent
-            align="end"
-            onCloseAutoFocus={(e) => preventFocus && e.preventDefault()}
-          >
-            <CategoryMenuContent
-              category={category}
-              type="dropdown"
-              setPreventFocus={setPreventFocus}
-            />
+          <DropdownMenuContent align="end">
+            <CategoryMenuContent category={category} type="dropdown" />
           </DropdownMenuContent>
         </DropdownMenuPortal>
       </DropdownMenuRoot>
@@ -188,11 +174,9 @@ export function CategoryContainer({ children }: { children: React.ReactNode }) {
 export function CategoryMenuContent({
   category,
   type,
-  setPreventFocus,
 }: {
   category: Category
   type: 'context' | 'dropdown'
-  setPreventFocus: (value: boolean) => void
 }) {
   const setDialog = useAppStore((s) => s.setDialog)
   const toggleArchive = useAppStore((s) => s.toggleArchive)
@@ -204,10 +188,7 @@ export function CategoryMenuContent({
   const menuItem = [
     {
       label: 'Edit',
-      onSelect: () => {
-        setPreventFocus(true)
-        setDialog({ editCategory: category })
-      },
+      onSelect: () => setDialog({ editCategory: category }),
       icon: <EditIcon />,
     },
 

@@ -282,7 +282,6 @@ const TaskItem = React.forwardRef<
 >(({ task, className, ...props }, ref) => {
   const editChildTask = useAppStore((s) => s.editChildTask)
   const editParentTask = useAppStore((s) => s.editParentTask)
-  const [preventFocus, setPreventFocus] = React.useState(false)
   const setDialog = useAppStore((s) => s.setDialog)
 
   const handleOnTaskCheckboxClick = React.useCallback(
@@ -406,26 +405,13 @@ const TaskItem = React.forwardRef<
         </ContextMenuTrigger>
 
         <ContextMenuPortal>
-          <ContextMenuContent
-            onCloseAutoFocus={(e) => preventFocus && e.preventDefault()}
-          >
-            <TaskMenuContent
-              task={task}
-              type="context"
-              setPreventFocus={setPreventFocus}
-            />
+          <ContextMenuContent>
+            <TaskMenuContent task={task} type="context" />
           </ContextMenuContent>
         </ContextMenuPortal>
         <DropdownMenuPortal>
-          <DropdownMenuContent
-            align="end"
-            onCloseAutoFocus={(e) => preventFocus && e.preventDefault()}
-          >
-            <TaskMenuContent
-              task={task}
-              type="dropdown"
-              setPreventFocus={setPreventFocus}
-            />
+          <DropdownMenuContent align="end">
+            <TaskMenuContent task={task} type="dropdown" />
           </DropdownMenuContent>
         </DropdownMenuPortal>
       </DropdownMenuRoot>
@@ -438,11 +424,9 @@ TaskItem.displayName = 'TaskItem'
 function TaskMenuContent({
   task,
   type,
-  setPreventFocus,
 }: {
   task: ParentTask | ChildTask
   type: 'context' | 'dropdown'
-  setPreventFocus: (value: boolean) => void
 }) {
   const setDialog = useAppStore((s) => s.setDialog)
   const removeParentTask = useAppStore((s) => s.removeParentTask)
@@ -454,12 +438,10 @@ function TaskMenuContent({
       icon: <EditIcon />,
       onSelect: () => {
         if ('categoryId' in task) {
-          setPreventFocus(true)
           setDialog({ editTask: { parentTaskId: task.id } })
         }
 
         if ('parentId' in task) {
-          setPreventFocus(true)
           setDialog({ editTask: { childTaskId: task.id } })
         }
       },

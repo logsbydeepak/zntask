@@ -211,7 +211,6 @@ function CategoryItem({
   isActive: boolean
 }) {
   const isScreenSM = useAppStore((s) => s.isScreenSM)
-  const [preventFocus, setPreventFocus] = React.useState(false)
 
   return (
     <Item.Root isActive={isActive}>
@@ -237,26 +236,13 @@ function CategoryItem({
             </Item.Content.Link>
           </ContextMenuTrigger>
           <ContextMenuPortal>
-            <ContextMenuContent
-              onCloseAutoFocus={(e) => preventFocus && e.preventDefault()}
-            >
-              <CategoryMenuContent
-                category={category}
-                type="context"
-                setPreventFocus={setPreventFocus}
-              />
+            <ContextMenuContent>
+              <CategoryMenuContent category={category} type="context" />
             </ContextMenuContent>
           </ContextMenuPortal>
           <DropdownMenuPortal>
-            <DropdownMenuContent
-              align={isScreenSM ? 'end' : 'start'}
-              onCloseAutoFocus={(e) => preventFocus && e.preventDefault()}
-            >
-              <CategoryMenuContent
-                category={category}
-                type="dropdown"
-                setPreventFocus={setPreventFocus}
-              />
+            <DropdownMenuContent align={isScreenSM ? 'end' : 'start'}>
+              <CategoryMenuContent category={category} type="dropdown" />
             </DropdownMenuContent>
           </DropdownMenuPortal>
         </DropdownMenuRoot>

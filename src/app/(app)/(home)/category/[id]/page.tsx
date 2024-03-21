@@ -24,7 +24,6 @@ import { CategoryMenuContent } from '../../category'
 import { EmptyTaskCategory, TaskContainer } from '../../task'
 
 export default function Page({ params }: { params: { id?: string } }) {
-  const [preventFocus, setPreventFocus] = React.useState(false)
   const category = useAppStore((s) =>
     s.categories.find((c) => c.id === params.id)
   )
@@ -50,15 +49,8 @@ export default function Page({ params }: { params: { id?: string } }) {
             </DropdownMenuTrigger>
 
             <DropdownMenuPortal>
-              <DropdownMenuContent
-                align={'end'}
-                onCloseAutoFocus={(e) => preventFocus && e.preventDefault()}
-              >
-                <CategoryMenuContent
-                  category={category}
-                  type="dropdown"
-                  setPreventFocus={setPreventFocus}
-                />
+              <DropdownMenuContent align={'end'}>
+                <CategoryMenuContent category={category} type="dropdown" />
               </DropdownMenuContent>
             </DropdownMenuPortal>
           </DropdownMenuRoot>
