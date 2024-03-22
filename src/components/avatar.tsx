@@ -30,7 +30,7 @@ export function Avatar({
   return (
     <div
       className={cn(
-        'flex size-full items-center justify-center rounded-full border border-gray-5 bg-gray-2 hover:border-gray-6 hover:bg-gray-3',
+        'group flex size-full select-none items-center justify-center rounded-full border border-gray-5 bg-gray-1 bg-gradient-to-t from-gray-4 to-gray-2/10 shadow-inner shadow-gray-3 hover:border-gray-6 hover:bg-gray-2',
         className
       )}
     >
@@ -46,7 +46,7 @@ export function Avatar({
         />
       )}
       {!profilePicture && (
-        <p className="text-[95%] font-medium tracking-wider text-gray-11 hover:text-gray-12">
+        <p className="text-[95%] font-semibold tracking-wider text-gray-11 group-hover:text-gray-12">
           {initials}
         </p>
       )}
