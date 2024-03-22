@@ -2,7 +2,7 @@
 
 import React from 'react'
 import * as RadioGroup from '@radix-ui/react-radio-group'
-import { MonitorIcon, MoonIcon, SunIcon } from 'lucide-react'
+import { MonitorIcon, MoonIcon, MoonStarIcon, SunIcon } from 'lucide-react'
 import { ThemeProvider as Theme, useTheme } from 'next-themes'
 
 import { cn } from '@/utils/style'
@@ -32,17 +32,17 @@ export function ThemeSwitch() {
 
   const themeOptions = [
     {
-      icon: <SunIcon />,
+      Icon: SunIcon,
       label: 'light theme',
       value: 'light',
     },
     {
-      icon: <MoonIcon />,
+      Icon: MoonStarIcon,
       label: 'dark theme',
       value: 'dark',
     },
     {
-      icon: <MonitorIcon />,
+      Icon: MonitorIcon,
       label: 'system theme',
       value: 'system',
     },
@@ -55,18 +55,18 @@ export function ThemeSwitch() {
         onValueChange={setTheme}
         className="flex space-x-1 self-center rounded-full border border-gray-4 p-1"
       >
-        {themeOptions.map((i) => (
+        {themeOptions.map(({ Icon, ...i }) => (
           <TooltipRoot key={i.value}>
             <TooltipTrigger asChild>
               <RadioGroup.Item
                 value={i.value}
                 className={cn(
-                  'flex size-5 items-center justify-center rounded-full text-gray-11',
-                  'outline-2 outline-offset-[3px] outline-gray-12 hover:text-gray-12',
+                  'rounded-full text-gray-11',
+                  'outline-2 outline-offset-2 outline-gray-12 hover:text-gray-12',
                   'focus-visible:outline aria-[checked=true]:bg-gray-12 aria-[checked=true]:text-gray-1'
                 )}
               >
-                <div className="size-3">{i.icon}</div>
+                <Icon className="size-6 p-1" />
               </RadioGroup.Item>
             </TooltipTrigger>
             <TooltipContent sideOffset={8}>{i.label}</TooltipContent>

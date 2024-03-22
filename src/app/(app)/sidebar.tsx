@@ -62,7 +62,7 @@ function QuickSection() {
 
   const item = [
     {
-      icon: <CalendarIcon />,
+      Icon: CalendarIcon,
       label: 'today',
       href: '/today',
       isActive: pathname.startsWith('/today') || pathname === '/',
@@ -70,36 +70,36 @@ function QuickSection() {
     {
       label: 'inbox',
       href: '/inbox',
-      icon: <InboxIcon />,
+      Icon: InboxIcon,
       isActive: pathname.startsWith('/inbox'),
     },
     {
       label: 'upcoming',
       href: '/upcoming',
-      icon: <GanttChartIcon />,
+      Icon: GanttChartIcon,
       isActive: pathname.startsWith('/upcoming'),
     },
     {
       label: 'favorite',
       href: '/favorite',
-      icon: <HeartIcon />,
+      Icon: HeartIcon,
       isActive: pathname === '/favorite',
     },
     {
       label: 'category',
       href: '/category',
-      icon: <FolderIcon />,
+      Icon: FolderIcon,
       isActive: pathname === '/category',
     },
   ]
 
   return (
     <ItemContainer>
-      {item.map((i) => (
+      {item.map(({ Icon, ...i }) => (
         <Item.Root key={i.label} isActive={i.isActive}>
           <Item.Content.Link href={i.href}>
-            <Item.Label.Icon className="text-gray-11 group-data-[active=true]:text-orange-9">
-              {i.icon}
+            <Item.Label.Icon>
+              <Icon className="text-gray-11 group-data-[active=true]:text-orange-9" />
             </Item.Label.Icon>
             <Item.Label.Content>{i.label}</Item.Label.Content>
           </Item.Content.Link>

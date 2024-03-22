@@ -157,17 +157,17 @@ function UserMenu() {
 
   const themeOptions = [
     {
-      icon: <SunIcon />,
+      Icon: SunIcon,
       label: 'light theme',
       value: 'light',
     },
     {
-      icon: <MoonStarIcon />,
+      Icon: MoonStarIcon,
       label: 'dark theme',
       value: 'dark',
     },
     {
-      icon: <MonitorIcon />,
+      Icon: MonitorIcon,
       label: 'system theme',
       value: 'system',
     },
@@ -202,7 +202,7 @@ function UserMenu() {
           }
         }}
       >
-        {themeOptions.map((i) => (
+        {themeOptions.map(({ Icon, ...i }) => (
           <TooltipRoot key={i.value}>
             <TooltipTrigger asChild>
               <DropdownMenuRadioItem
@@ -216,7 +216,7 @@ function UserMenu() {
                   'data-[state=checked]:border-orange-8 data-[state=checked]:ring-orange-3'
                 )}
               >
-                <span className="size-3.5">{i.icon}</span>
+                <Icon className="size-3.5" />
               </DropdownMenuRadioItem>
             </TooltipTrigger>
             <TooltipContent sideOffset={8}>{i.label}</TooltipContent>
