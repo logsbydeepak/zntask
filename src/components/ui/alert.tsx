@@ -9,8 +9,8 @@ const alertStyle = cva({
   base: 'flex w-full items-center space-x-2 rounded-lg px-4 py-2 text-xs font-medium',
   variants: {
     intent: {
-      success: 'bg-green-6 text-green-11',
-      destructive: 'bg-red-6 text-red-11',
+      success: 'bg-green-3 text-green-11',
+      destructive: 'bg-red-3 text-red-11',
     },
     align: {
       right: 'justify-start',
@@ -34,13 +34,13 @@ export function Alert({
     <div className={cn(alertStyle({ intent, align }))}>
       <div className="*:fle*:items-center *:justify-center *:rounded-full *:p-0.5">
         {intent === 'destructive' && (
-          <div className="bg-red-7">
-            <ExclamationIcon className="size-2.5 text-white" />
+          <div className="bg-red-11">
+            <ExclamationIcon className="size-2.5 text-red-1" />
           </div>
         )}
         {intent === 'success' && (
-          <div className="bg-green-7">
-            <CheckIcon className="size-2.5 text-white" />
+          <div className="bg-green-11">
+            <CheckIcon className="size-2.5 text-green-1" />
           </div>
         )}
       </div>
