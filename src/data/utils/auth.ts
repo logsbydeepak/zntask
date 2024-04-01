@@ -2,7 +2,7 @@ import { cookies } from 'next/headers'
 import * as jose from 'jose'
 import ms from 'ms'
 
-import { env } from '@/env.mjs'
+import { env } from '@/env'
 
 const secret = jose.base64url.decode(env.JWT_SECRET)
 const maxAge = ms('30 days')

@@ -2,7 +2,7 @@ import { google } from 'googleapis'
 import * as jose from 'jose'
 import { z } from 'zod'
 
-import { env } from '@/env.mjs'
+import { env } from '@/env'
 import { zEmail, zRequired } from '@/utils/zSchema'
 
 import { r } from './handler'

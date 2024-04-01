@@ -8,7 +8,7 @@ import ms from 'ms'
 import { ulid } from 'ulidx'
 import { z } from 'zod'
 
-import { env } from '@/env.mjs'
+import { env } from '@/env'
 import { zPassword, zRequired } from '@/utils/zSchema'
 
 import { db, dbSchema } from './db'

@@ -2,7 +2,7 @@ import { cookies } from 'next/headers'
 import { NextRequest, NextResponse } from 'next/server'
 import * as jose from 'jose'
 
-import { env } from '@/env.mjs'
+import { env } from '@/env'
 
 import { redis } from './data/utils/config'
 import { r } from './data/utils/handler'

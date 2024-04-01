@@ -1,9 +1,7 @@
-// @ts-check
-
 import { createEnv } from '@t3-oss/env-nextjs'
 import { z } from 'zod'
 
-const zRequired = z.string().nonempty({ message: 'required' }).trim()
+const zRequired = z.string().min(1, { message: 'required' }).trim()
 
 export const env = createEnv({
   server: {

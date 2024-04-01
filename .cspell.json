@@ -20,7 +20,8 @@
     "UPLOADTHING",
     "utapi",
     "utfs",
-    "partialize"
+    "partialize",
+    "jiti"
   ],
   "ignorePaths": ["bun.lockb"]
 }
