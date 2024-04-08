@@ -40,13 +40,13 @@
   aside:hover::-webkit-scrollbar-thumb,
   .container-scroll:hover::-webkit-scrollbar-thumb,
   [cmdk-list-sizer]:hover::-webkit-scrollbar-thumb {
-    @apply rounded-full border-[3px] border-solid border-white bg-gray-4;
+    @apply rounded-full border-[3px] border-solid border-gray-1 bg-gray-5;
   }
 
   aside::-webkit-scrollbar-thumb:hover,
   .container-scroll::-webkit-scrollbar-thumb:hover,
   [cmdk-list-sizer]::-webkit-scrollbar-thumb:hover {
-    @apply bg-gray-3;
+    @apply bg-gray-4;
   }
 
   svg {

@@ -49,7 +49,7 @@ const FormError = React.forwardRef<
         ref={ref}
         className="inline-flex items-center rounded-full bg-red-2 px-2 py-0.5 text-xs font-medium text-red-11"
       >
-        <span className="mr-1 size-2">
+        <span className="mr-1 size-2.5">
           <XCircleIcon strokeWidth={3} />
         </span>
         {children}
