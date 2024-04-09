@@ -13,7 +13,7 @@ import {
   Separator,
 } from '@/app/(auth)/components'
 import { ResetPasswordDialog } from '@/components/dialogs/reset-password'
-import { Alert } from '@/components/ui/alert'
+import { Alert, useAlert } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import {
   FormError,
@@ -32,6 +32,8 @@ import { zLoginWithCredentials } from '@/data/utils/zSchema'
 type FormValues = z.infer<typeof zLoginWithCredentials>
 
 export function Form() {
+  const { alert, setAlert } = useAlert()
+
   const [isResetPasswordDialogOpen, setIsResetPasswordDialogOpen] =
     React.useState(false)
   const [isPasswordVisible, setIsPasswordVisible] = React.useState(false)
@@ -40,7 +42,6 @@ export function Form() {
     if (typeof window === 'undefined') return false
     return !!window.localStorage.getItem('googleCode')
   })
-  const [alertMessage, setAlertMessage] = React.useState('')
 
   const [isCredentialPending, startLoginWithCredentials] = React.useTransition()
   const [isGooglePending, startLoginWithGoogle] = React.useTransition()
@@ -48,7 +49,6 @@ export function Form() {
   const {
     register,
     handleSubmit,
-    setError,
     formState: { errors },
   } = useForm<FormValues>({
     resolver: zodResolver(zLoginWithCredentials),
@@ -56,9 +56,12 @@ export function Form() {
 
   const isLoading = isCredentialPending || isGooglePending || isGoogleLoading
 
-  const defaultError = () => {
-    setAlertMessage('Something went wrong!')
-  }
+  const defaultError = React.useCallback(() => {
+    setAlert({
+      type: 'destructive',
+      message: 'Something went wrong!',
+    })
+  }, [setAlert])
 
   const handleGoogleCode = React.useCallback(() => {
     const code = window.localStorage.getItem('googleCode')
@@ -70,13 +73,16 @@ export function Form() {
         const resCode = res?.code
 
         if (resCode === 'INVALID_CREDENTIALS') {
-          setAlertMessage('User not found')
+          setAlert({
+            type: 'destructive',
+            message: 'Invalid credentials',
+          })
         }
       } catch (error) {
         defaultError()
       }
     })
-  }, [])
+  }, [setAlert, defaultError])
 
   const handleLoginWithCredentials = (values: FormValues) => {
     if (isLoading) return
@@ -86,7 +92,10 @@ export function Form() {
         const resCode = res?.code
 
         if (resCode === 'INVALID_CREDENTIALS') {
-          setAlertMessage('Invalid credentials')
+          setAlert({
+            type: 'destructive',
+            message: 'Invalid credentials',
+          })
         }
       } catch (error) {
         defaultError()
@@ -110,12 +119,8 @@ export function Form() {
   }, [handleGoogleCode])
 
   React.useEffect(() => {
-    if (isLoading) setAlertMessage('')
-  }, [isLoading])
-
-  React.useEffect(() => {
-    if (errors) setAlertMessage('')
-  }, [errors])
+    if (isLoading) setAlert('close')
+  }, [isLoading, setAlert])
 
   React.useEffect(() => {
     setIsGoogleLoading(isGooglePending)
@@ -123,7 +128,7 @@ export function Form() {
 
   return (
     <>
-      {alertMessage && <Alert align="center">{alertMessage}</Alert>}
+      <Alert {...alert} align="center" />
       <div className="w-full space-y-3">
         <fieldset disabled={isLoading}>
           <ContinueWithGoogle

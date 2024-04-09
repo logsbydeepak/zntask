@@ -14,7 +14,7 @@ import {
   PasswordVisibilityToggle,
   Separator,
 } from '@/app/(auth)/components'
-import { Alert } from '@/components/ui/alert'
+import { Alert, useAlert } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import {
   FormError,
@@ -33,7 +33,8 @@ import { zRegisterWithCredentials } from '@/data/utils/zSchema'
 type FormValues = z.infer<typeof zRegisterWithCredentials>
 
 export function Form() {
-  const [alertMessage, setAlertMessage] = React.useState('')
+  const { alert, setAlert } = useAlert()
+
   const [isPasswordVisible, setIsPasswordVisible] = React.useState(false)
   const [isGoogleLoading, setIsGoogleLoading] = React.useState(() => {
     if (typeof window === 'undefined') return false
@@ -58,9 +59,12 @@ export function Form() {
 
   const [watchPassword] = useDebounce(watch('password') ?? '', 500)
 
-  const defaultError = () => {
-    setAlertMessage('Something went wrong!')
-  }
+  const defaultError = React.useCallback(() => {
+    setAlert({
+      type: 'destructive',
+      message: 'Something went wrong!',
+    })
+  }, [setAlert])
 
   const handleGoogleCode = React.useCallback(() => {
     const code = window.localStorage.getItem('googleCode')
@@ -72,16 +76,22 @@ export function Form() {
         const resCode = res?.code
 
         if (resCode === 'INVALID_CREDENTIALS') {
-          setAlertMessage('User not found')
+          setAlert({
+            type: 'destructive',
+            message: 'User not found',
+          })
         }
         if (resCode === 'EMAIL_ALREADY_EXISTS') {
-          setAlertMessage('Email already exists')
+          setAlert({
+            type: 'destructive',
+            message: 'Email already exists',
+          })
         }
       } catch (error) {
         defaultError()
       }
     })
-  }, [])
+  }, [setAlert, defaultError])
 
   const handleRegisterWithCredentials = (values: FormValues) => {
     startRegisterWithCredentials(async () => {
@@ -115,20 +125,16 @@ export function Form() {
   }, [handleGoogleCode])
 
   React.useEffect(() => {
-    if (isLoading) setAlertMessage('')
-  }, [isLoading])
+    if (isLoading) setAlert('close')
+  }, [isLoading, setAlert])
 
   React.useEffect(() => {
     setIsGoogleLoading(isGooglePending)
   }, [isGooglePending])
 
-  React.useEffect(() => {
-    if (errors) setAlertMessage('')
-  }, [errors])
-
   return (
     <>
-      {alertMessage && <Alert align="center">{alertMessage}</Alert>}
+      <Alert align="center" {...alert} />
       <div className="w-full space-y-3">
         <fieldset disabled={isLoading}>
           <ContinueWithGoogle

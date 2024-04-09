@@ -12,7 +12,7 @@ import {
   PasswordChecklistItem,
   PasswordVisibilityToggle,
 } from '@/app/(auth)/components'
-import { Alert, AlertStyleProps } from '@/components/ui/alert'
+import { Alert, useAlert } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import {
   FormError,
@@ -39,10 +39,7 @@ type FormValues = z.infer<typeof schema>
 export function Form({ token }: { token: string }) {
   const router = useRouter()
 
-  const [alertMessage, setAlertMessage] = React.useState<{
-    message: string
-    intent: AlertStyleProps['intent']
-  } | null>(null)
+  const { setAlert, alert } = useAlert()
 
   const [isPending, startTransition] = React.useTransition()
   const [isLoading, setIsLoading] = React.useState(false)
@@ -64,9 +61,9 @@ export function Form({ token }: { token: string }) {
   }, [isPending, setIsLoading])
 
   const defaultError = () => {
-    setAlertMessage({
+    setAlert({
+      type: 'destructive',
       message: 'Something went wrong!',
-      intent: 'destructive',
     })
   }
 
@@ -78,26 +75,28 @@ export function Form({ token }: { token: string }) {
 
         switch (res?.code) {
           case 'OK':
-            setAlertMessage({
+            setAlert({
+              type: 'success',
               message: 'Password added successfully',
-              intent: 'success',
             })
 
             router.push('/login')
             break
 
           case 'INVALID_TOKEN':
-            setAlertMessage({
+            setAlert({
+              type: 'destructive',
               message: 'invalid token',
-              intent: 'destructive',
             })
+
             break
 
           case 'TOKEN_EXPIRED':
-            setAlertMessage({
+            setAlert({
+              type: 'destructive',
               message: 'token expired',
-              intent: 'destructive',
             })
+
             break
         }
       } catch (error) {
@@ -107,21 +106,12 @@ export function Form({ token }: { token: string }) {
   }
 
   React.useEffect(() => {
-    if (isLoading) setAlertMessage(null)
-  }, [isLoading])
-
-  React.useEffect(() => {
-    console.log(errors)
-    if (errors) setAlertMessage(null)
-  }, [errors])
+    if (isLoading) setAlert('close')
+  }, [isLoading, setAlert])
 
   return (
     <>
-      {alertMessage && (
-        <Alert align="center" intent={alertMessage.intent}>
-          {alertMessage.message}
-        </Alert>
-      )}
+      <Alert align="center" {...alert} />
       <FormRoot onSubmit={handleSubmit(onSubmit)} id="add_password_form">
         <FormFieldset disabled={isLoading} className="space-y-2.5">
           <div>

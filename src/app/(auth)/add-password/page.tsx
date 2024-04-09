@@ -3,7 +3,6 @@ import { redirect } from 'next/navigation'
 import { z } from 'zod'
 
 import { Logo, SubTitle, Title } from '@/app/(auth)/components'
-import { ExclamationIcon } from '@/components/icon/exclamation'
 import { Alert } from '@/components/ui/alert'
 import { checkToken } from '@/data/utils'
 import { zRequired } from '@/utils/zSchema'
@@ -51,7 +50,7 @@ export default async function Page({
       {isTokenValid ? (
         <Form token={validate.data.token} />
       ) : (
-        <Alert align="center">{message()}</Alert>
+        <Alert align="center" message={message()} type="destructive" isOpen />
       )}
     </>
   )
