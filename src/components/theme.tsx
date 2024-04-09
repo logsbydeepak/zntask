@@ -2,7 +2,7 @@
 
 import React from 'react'
 import * as RadioGroup from '@radix-ui/react-radio-group'
-import { MonitorIcon, MoonIcon, MoonStarIcon, SunIcon } from 'lucide-react'
+import { MonitorIcon, MoonStarIcon, SunIcon } from 'lucide-react'
 import { ThemeProvider as Theme, useTheme } from 'next-themes'
 
 import { cn } from '@/utils/style'
@@ -66,7 +66,7 @@ export function ThemeSwitch() {
                   'focus-visible:outline aria-[checked=true]:bg-gray-12 aria-[checked=true]:text-gray-1'
                 )}
               >
-                <Icon className="size-6 p-1" />
+                <Icon className="size-5 p-1" />
               </RadioGroup.Item>
             </TooltipTrigger>
             <TooltipContent sideOffset={8}>{i.label}</TooltipContent>

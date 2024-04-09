@@ -1,6 +1,7 @@
 import Link from 'next/link'
 
 import { LogoIcon } from '@/components/icon/logo'
+import { ThemeSwitch } from '@/components/theme'
 import { buttonStyle } from '@/components/ui/button'
 import { cn } from '@/utils/style'
 
@@ -31,6 +32,7 @@ export default function Home() {
             Login
           </Link>
         </div>
+        <ThemeSwitch />
       </div>
     </div>
   )
