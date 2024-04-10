@@ -1,4 +1,4 @@
-import { Inter, JetBrains_Mono } from 'next/font/google'
+import { GeistSans } from 'geist/font/sans'
 
 import { cn } from '@/utils/style'
 
@@ -12,12 +12,6 @@ export const metadata: Metadata = {
   title: 'zntask',
 }
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
-const jetBrainsMono = JetBrains_Mono({
-  subsets: ['latin'],
-  variable: '--font-jetBrains',
-})
-
 export default function RootLayout({
   children,
 }: {
@@ -27,8 +21,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body
         className={cn(
-          inter.variable,
-          jetBrainsMono.variable,
+          GeistSans.className,
           'overflow-y-scroll bg-gray-1 font-sans text-gray-12'
         )}
       >

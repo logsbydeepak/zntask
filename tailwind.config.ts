@@ -63,8 +63,7 @@ const config: Config = {
 
     extend: {
       fontFamily: {
-        mono: ['var(--font-jetBrains)'],
-        sans: ['var(--font-inter)'],
+        sans: ['var(--font-geist-sans)'],
       },
       screens: {
         xs: '355px',
