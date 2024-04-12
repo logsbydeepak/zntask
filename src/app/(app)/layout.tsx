@@ -1,5 +1,4 @@
 import React, { Suspense } from 'react'
-import { unstable_cache } from 'next/cache'
 import { LoaderIcon } from 'lucide-react'
 
 import { Dialogs } from '@/components/dialogs'
