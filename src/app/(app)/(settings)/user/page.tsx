@@ -17,16 +17,6 @@ import {
   ResetPassword,
 } from './edit'
 
-const getUserWithAuthData = unstable_cache(
-  async () => {
-    return await getUserWithAuth()
-  },
-  ['user-with-auth'],
-  {
-    tags: ['user'],
-  }
-)
-
 export default async function Page() {
   return (
     <Layout.Root>
@@ -52,7 +42,7 @@ function Loading() {
 }
 
 async function UserInformation() {
-  const user = await getUserWithAuthData()
+  const user = await getUserWithAuth()
 
   const name = user.lastName
     ? `${user.firstName} ${user.lastName}`

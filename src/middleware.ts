@@ -15,20 +15,6 @@ export async function middleware(req: NextRequest) {
     const isAuth = authData.code === 'OK'
 
     const { pathname } = req.nextUrl
-
-    if (pathname.startsWith('/logout')) {
-      const authCookie = req.cookies.get('auth')?.value
-      const authParam = req.nextUrl.searchParams.get('auth')
-
-      if (authCookie !== authParam) {
-        return null
-      }
-
-      const response = NextResponse.next()
-      response.cookies.delete('auth')
-      return response
-    }
-
     const isIndexPage = pathname === '/'
 
     const isAuthPage =
@@ -90,7 +76,6 @@ export const config = {
 
     '/login/:path*',
     '/register/:path*',
-    '/logout/:path*',
 
     '/today/:path*',
     '/inbox/:path*',

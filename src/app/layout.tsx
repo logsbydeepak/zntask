@@ -21,7 +21,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body
         className={cn(
-          GeistSans.className,
+          GeistSans.variable,
           'overflow-y-scroll bg-gray-1 font-sans text-gray-12'
         )}
       >

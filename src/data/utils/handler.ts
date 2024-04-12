@@ -1,5 +1,4 @@
 import { isRedirectError } from 'next/dist/client/components/redirect'
-import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { z } from 'zod'
 
@@ -100,15 +99,12 @@ export const h = Object.freeze({
 
 function handleError(error: unknown): never {
   if (error instanceof UnauthorizedError) {
-    const authCookie = cookies().get('auth')?.value
-    redirect(`/logout?auth=${authCookie}`)
+    redirect(`/`)
   }
 
   if (isRedirectError(error)) {
     throw error
   }
-
-  console.log(error)
 
   throw new Error('Something went wrong!')
 }

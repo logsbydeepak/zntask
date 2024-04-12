@@ -1,4 +1,4 @@
-import { cookies } from 'next/headers'
+import { cookies, headers } from 'next/headers'
 import * as jose from 'jose'
 import ms from 'ms'
 
@@ -58,6 +58,7 @@ export async function isAuth() {
   try {
     const userId = cookies().get('middlewareData-auth-userId')?.value
     const token = cookies().get('middlewareData-auth-token')?.value
+
     if (!token) throw new Error("Token doesn't exist!")
     if (!userId) throw new Error("UserId doesn't exist!")
 
