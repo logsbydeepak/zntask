@@ -180,13 +180,15 @@ export function Form() {
           </div>
         </FormFieldset>
       </FormRoot>
-      <Button
-        className="w-full"
-        isLoading={isCredentialPending}
-        form="login_credentials_form"
-      >
-        Login
-      </Button>
+      <fieldset className="w-full" disabled={isLoading}>
+        <Button
+          className="w-full"
+          isLoading={isCredentialPending}
+          form="login_credentials_form"
+        >
+          Login
+        </Button>
+      </fieldset>
       <AccountQuestion.Container>
         <AccountQuestion.Title>
           Already have an account?{' '}
