@@ -20,7 +20,7 @@ export const addCategory = h.auth
 export const editCategory = h.auth
   .input(zCategory)
   .fn(async ({ input, userId }) => {
-    const dbRes = await db
+    const [dbRes] = await db
       .update(dbSchema.categories)
       .set(input)
       .where(
@@ -29,9 +29,10 @@ export const editCategory = h.auth
           eq(dbSchema.categories.userId, userId)
         )
       )
+      .returning({ id: dbSchema.categories.id })
 
-    if (dbRes.rowsAffected === 0) {
-      return r('NOT_FOUND', { id: input.id })
+    if (!dbRes) {
+      return r('NOT_FOUND')
     }
 
     return r('OK', { input })
@@ -43,7 +44,7 @@ const zDeleteCategory = z.object({
 export const deleteCategory = h.auth
   .input(zDeleteCategory)
   .fn(async ({ input, userId }) => {
-    const categoryDeleteRes = await db
+    const [categoryDeleteRes] = await db
       .delete(dbSchema.categories)
       .where(
         and(
@@ -51,8 +52,9 @@ export const deleteCategory = h.auth
           eq(dbSchema.categories.userId, userId)
         )
       )
+      .returning({ id: dbSchema.categories.id })
 
-    if (categoryDeleteRes.rowsAffected === 0) {
+    if (!categoryDeleteRes) {
       return r('NOT_FOUND')
     }
 

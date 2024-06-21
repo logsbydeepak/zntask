@@ -1,6 +1,5 @@
 'use client'
 
-import { removeRequestMeta } from 'next/dist/server/request-meta'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { FolderIcon } from 'lucide-react'
 
@@ -14,9 +13,8 @@ import {
 } from '@/components/ui/tabs'
 import { useAppStore } from '@/store/app'
 import { categoryHelper } from '@/utils/category'
-import { DNDProvider } from '@/utils/category-dnd'
 
-import { CategoryContainer, CategoryItem, DNDCategoryItem } from '../category'
+import { CategoryContainer, CategoryItem } from '../category'
 
 export default function Page() {
   const statusParams = useSearchParams().get('status')
@@ -58,43 +56,15 @@ function ActiveTab() {
       categoryHelper.getActiveCategories(s.categories)
     )
   )
-  const reorderCategories = useAppStore((s) => s.reorderCategories)
 
   return (
     <>
       {categories.length === 0 && <EmptyLayout />}
 
       <CategoryContainer>
-        <DNDProvider
-          onDrop={(data) => {
-            if (!data.start) return
-            if (!data.over) return
-            if (!data.position) return
-            if (!data.data) return
-            if (data.position !== 'top' && data.position !== 'bottom') return
-            if (data.start === data.over) return
-
-            reorderCategories({
-              start: data.start,
-              over: data.over,
-              position: data.position,
-              data: {
-                top: data.data.top,
-                bottom: data.data.bottom,
-              },
-            })
-          }}
-        >
-          {categories.map((i, idx) => (
-            <DNDCategoryItem
-              key={i.id}
-              category={i}
-              href={`/category/${i.id}`}
-              topCategoryId={categories[idx - 1]?.id}
-              bottomCategoryId={categories[idx + 1]?.id}
-            />
-          ))}
-        </DNDProvider>
+        {categories.map((i) => (
+          <CategoryItem href={i.id} key={i.id} category={i} />
+        ))}
       </CategoryContainer>
     </>
   )

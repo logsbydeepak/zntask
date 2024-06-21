@@ -9,9 +9,8 @@ import {
   TabsTrigger,
 } from '@/components/ui/tabs'
 import { useAppStore } from '@/store/app'
-import { DNDProvider } from '@/utils/category-dnd'
 
-import { EmptyInbox, TaskContainer } from '../task'
+import { EmptyInbox, TaskContainer, TaskItem } from '../task'
 
 export default function Page() {
   return (
@@ -51,13 +50,11 @@ function PlanedTab() {
 
   if (tasks.length === 0) return <EmptyInbox />
   return (
-    <div className="space-y-2">
-      <DNDProvider onDrop={() => {}}>
-        {tasks.map((i, idx) => (
-          <TaskContainer key={i.id} task={i} index={idx} />
-        ))}
-      </DNDProvider>
-    </div>
+    <TaskContainer>
+      {tasks.map((i) => (
+        <TaskItem key={i.id} task={i} />
+      ))}
+    </TaskContainer>
   )
 }
 
@@ -69,10 +66,10 @@ function CompletedTab() {
   if (tasks.length === 0) return <EmptyInbox />
 
   return (
-    <div className="space-y-2 ">
-      {tasks.map((i, idx) => (
-        <TaskContainer key={i.id} task={i} index={idx} />
+    <TaskContainer>
+      {tasks.map((i) => (
+        <TaskItem key={i.id} task={i} />
       ))}
-    </div>
+    </TaskContainer>
   )
 }

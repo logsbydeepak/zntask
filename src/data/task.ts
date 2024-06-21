@@ -90,7 +90,7 @@ export const editParentTask = h.auth
 
       await db
         .update(dbSchema.childTask)
-        .set({ isCompleted: true })
+        .set({ completedAt: new Date().toString() })
         .where(eq(dbSchema.childTask.parentId, input.id))
     } else {
       await db

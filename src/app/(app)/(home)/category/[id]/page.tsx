@@ -21,7 +21,7 @@ import {
 } from '@/components/ui/tabs'
 import { useAppStore } from '@/store/app'
 
-import { EmptyTaskCategory, TaskContainer } from '../../task'
+import { EmptyTaskCategory, TaskContainer, TaskItem } from '../../task'
 
 export default function Page({ params }: { params: { id?: string } }) {
   const category = useAppStore((s) =>
@@ -90,9 +90,11 @@ function PlanedTab({ categoryId }: { categoryId: string }) {
   if (tasks.length === 0) return <EmptyTaskCategory />
   return (
     <div className="space-y-1">
-      {tasks.map((i) => (
-        <TaskContainer key={i.id} task={i} />
-      ))}
+      <TaskContainer>
+        {tasks.map((i) => (
+          <TaskItem key={i.id} task={i} />
+        ))}
+      </TaskContainer>
     </div>
   )
 }
@@ -106,9 +108,11 @@ function CompletedTab({ categoryId }: { categoryId: string }) {
 
   return (
     <div className="space-y-1">
-      {tasks.map((i) => (
-        <TaskContainer key={i.id} task={i} />
-      ))}
+      <TaskContainer>
+        {tasks.map((i) => (
+          <TaskItem key={i.id} task={i} />
+        ))}
+      </TaskContainer>
     </div>
   )
 }

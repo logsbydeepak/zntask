@@ -11,18 +11,12 @@ import {
   DialogRoot,
   DialogTitle,
 } from '@/components/ui/dialog'
-import {
-  FormError,
-  FormFieldset,
-  FormInput,
-  FormLabel,
-  FormRoot,
-} from '@/components/ui/form'
+import { FormError, FormInput, FormLabel, FormRoot } from '@/components/ui/form'
 import { resetPassword } from '@/data/auth'
 import { zResetPassword } from '@/data/utils/zSchema'
 
 import { Head } from '../head'
-import { Alert, AlertStyleProps } from '../ui/alert'
+import { Alert, useAlert } from '../ui/alert'
 
 type FormValues = z.infer<typeof zResetPassword>
 
@@ -62,10 +56,8 @@ function ResetPasswordDialogContent({
   isPending: boolean
   startTransition: React.TransitionStartFunction
 }) {
-  const [alertMessage, setAlertMessage] = React.useState<{
-    message: string
-    intent: AlertStyleProps['intent']
-  } | null>(null)
+  const { alert, setAlert } = useAlert()
+
   const {
     register,
     formState: { errors },
@@ -80,15 +72,16 @@ function ResetPasswordDialogContent({
       const res = await resetPassword(values)
       switch (res.code) {
         case 'OK':
-          setAlertMessage({
+          setAlert({
             message: 'Check your email for reset link',
-            intent: 'success',
+            type: 'success',
           })
+          break
 
         case 'EMAIL_ALREADY_SENT':
-          setAlertMessage({
+          setAlert({
             message: 'Email already sent',
-            intent: 'success',
+            type: 'success',
           })
           break
 
@@ -106,8 +99,8 @@ function ResetPasswordDialogContent({
   }
 
   React.useEffect(() => {
-    if (errors) setAlertMessage(null)
-  }, [errors])
+    if (errors) setAlert('close')
+  }, [setAlert, errors])
 
   return (
     <>
@@ -119,9 +112,7 @@ function ResetPasswordDialogContent({
             Enter your email to reset password
           </DialogDescription>
         </div>
-        {alertMessage && (
-          <Alert intent={alertMessage.intent}>{alertMessage.message}</Alert>
-        )}
+        <Alert {...alert} align="right" />
         <div>
           <FormLabel htmlFor="email">Email</FormLabel>
           <FormInput

@@ -34,7 +34,11 @@ export const getUser = h.auth.fn(async ({ userId }) => {
   let profilePicture = null
   if (user.profilePicture) {
     const res = await utapi.getFileUrls(user.profilePicture)
-    profilePicture = res[0].url
+    if (!res) {
+      profilePicture = null
+    }
+
+    profilePicture = res.data[0].url
   }
 
   return r('OK', {
@@ -70,7 +74,7 @@ export const getUserWithAuth = h.auth.fn(async ({ userId }) => {
   let profilePicture = null
   if (user.profilePicture) {
     const res = await utapi.getFileUrls(user.profilePicture)
-    profilePicture = res[0].url
+    profilePicture = res.data[0].url
   }
 
   return r('OK', {
