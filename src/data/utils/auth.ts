@@ -1,4 +1,4 @@
-import { cookies, headers } from 'next/headers'
+import { cookies } from 'next/headers'
 import * as jose from 'jose'
 import ms from 'ms'
 
