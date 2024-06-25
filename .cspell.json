@@ -21,7 +21,8 @@
     "utapi",
     "utfs",
     "partialize",
-    "jiti"
+    "jiti",
+    "knip"
   ],
   "ignorePaths": ["bun.lockb"]
 }

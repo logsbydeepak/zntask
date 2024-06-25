@@ -21,7 +21,7 @@ export const categoryIndicatorOptions = [
   { label: 'indigo', color: 'indigo' },
 ] as const
 
-export type CategoryIndicatorLabelType =
+type CategoryIndicatorLabelType =
   (typeof categoryIndicatorOptions)[number]['label']
 
 export const categoryIndicatorLabel = categoryIndicatorOptions.map(
@@ -30,7 +30,7 @@ export const categoryIndicatorLabel = categoryIndicatorOptions.map(
 
 export const zCategoryIndicator = z.enum(categoryIndicatorLabel)
 
-export const zCategory = z.object({
+const zCategory = z.object({
   id: zRequired.refine(isValid, { message: 'Invalid ulid' }),
   title: zRequired,
   indicator: z.enum(categoryIndicatorLabel),
@@ -38,8 +38,6 @@ export const zCategory = z.object({
   favoriteOrderNumber: z.number().nullable(),
   archivedAt: z.string().nullable(),
 })
-
-export type CategoryType = z.infer<typeof zCategory>
 
 export const getCategoryColor = (
   indicator: CategoryIndicatorLabelType,
@@ -57,18 +55,18 @@ export const getCategoryColor = (
 
 export type Category = z.infer<typeof zCategory>
 
-export interface FavoriteCategory extends Category {
+interface FavoriteCategory extends Category {
   favoriteOrderNumber: number
   orderNumber: number
   archivedAt: null
 }
 
-export interface ActiveCategory extends Category {
+interface ActiveCategory extends Category {
   archivedAt: null
   orderNumber: number
 }
 
-export interface ArchivedCategory extends Category {
+interface ArchivedCategory extends Category {
   archivedAt: string
   orderNumber: null
   favoriteOrderNumber: null

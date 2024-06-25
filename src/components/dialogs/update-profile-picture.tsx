@@ -8,17 +8,10 @@ import { Button } from '@/components/ui/button'
 import {
   DialogClose,
   DialogContent,
-  DialogDescription,
   DialogRoot,
   DialogTitle,
 } from '@/components/ui/dialog'
-import {
-  FormError,
-  FormFieldset,
-  FormInput,
-  FormLabel,
-  FormRoot,
-} from '@/components/ui/form'
+import { FormRoot } from '@/components/ui/form'
 import { removeProfilePicture, revalidateUser } from '@/data/user'
 import type { OurFileRouter } from '@/data/utils/uploadthing'
 import { useAppStore } from '@/store/app'
@@ -27,8 +20,7 @@ import { toast } from '@/store/toast'
 import { Avatar, genInitials } from '../avatar'
 import { Head } from '../head'
 
-export const { useUploadThing, uploadFiles } =
-  generateReactHelpers<OurFileRouter>()
+const { useUploadThing } = generateReactHelpers<OurFileRouter>()
 
 export function UpdateProfilePictureDialog() {
   const [isPending, startTransition] = React.useTransition()

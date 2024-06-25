@@ -3,7 +3,7 @@ import { StateCreator } from 'zustand'
 
 import { AppStore } from './app'
 
-export interface Task {
+interface Task {
   id: string
   title: string
   orderId: string
