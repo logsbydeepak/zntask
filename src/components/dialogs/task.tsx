@@ -4,6 +4,8 @@ import {
   CheckboxIndicator,
   Root as CheckboxRoot,
 } from '@radix-ui/react-checkbox'
+import { DialogTitle } from '@radix-ui/react-dialog'
+import * as VisuallyHidden from '@radix-ui/react-visually-hidden'
 import {
   CheckCircleIcon,
   CircleIcon,
@@ -19,7 +21,12 @@ import { Head } from '@/components/head'
 import { SchedulePicker } from '@/components/schedule'
 import * as Badge from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { DialogClose, DialogContent, DialogRoot } from '@/components/ui/dialog'
+import {
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogRoot,
+} from '@/components/ui/dialog'
 import { FormRoot } from '@/components/ui/form'
 import { PopoverRoot, PopoverTrigger } from '@/components/ui/popover'
 import { useAppStore } from '@/store/app'
@@ -306,9 +313,16 @@ function TaskDialogContent({
     return () => document.removeEventListener('keydown', handleKeyDown)
   }, [handleSubmit, onSubmit])
 
+  const title = parentTask ? `Edit ${parentTask?.title}` : 'Create Task'
+  const description = parentTask ? 'Edit task' : 'Create Task'
+
   return (
     <>
-      <Head title={parentTask ? `Edit ${parentTask?.title}` : 'Create Task'} />
+      <VisuallyHidden.Root>
+        <DialogTitle>{title}</DialogTitle>
+        <DialogDescription>{description}</DialogDescription>
+      </VisuallyHidden.Root>
+      <Head title={title} />
       <div className="">
         <div className="flex justify-between space-x-6 p-6">
           <CategoryPicker

@@ -106,5 +106,6 @@ function handleError(error: unknown): never {
     throw error
   }
 
+  console.error(error)
   throw new Error('Something went wrong!')
 }

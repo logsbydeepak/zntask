@@ -1,5 +1,6 @@
 import React from 'react'
 import { useRouter } from 'next/navigation'
+import * as VisuallyHidden from '@radix-ui/react-visually-hidden'
 import { Command } from 'cmdk'
 import {
   ArchiveIcon,
@@ -18,7 +19,12 @@ import {
   SidebarIcon,
 } from 'lucide-react'
 
-import { DialogContent, DialogRoot } from '@/components/ui/dialog'
+import {
+  DialogContent,
+  DialogDescription,
+  DialogRoot,
+  DialogTitle,
+} from '@/components/ui/dialog'
 import { useAppStore } from '@/store/app'
 import { categoryHelper, getCategoryColor } from '@/utils/category'
 import { cn } from '@/utils/style'
@@ -34,6 +40,10 @@ export function CommandPaletteDialog() {
   return (
     <DialogRoot open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="p-0 sm:p-0">
+        <VisuallyHidden.Root>
+          <DialogTitle>Command palette</DialogTitle>
+          <DialogDescription>Command palette</DialogDescription>
+        </VisuallyHidden.Root>
         <CommandPaletteContent handleClose={handleClose} />
       </DialogContent>
     </DialogRoot>
