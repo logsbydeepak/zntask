@@ -1,5 +1,6 @@
-import { ulid } from 'ulidx'
 import { create, type StateCreator } from 'zustand'
+
+import { genID } from '@/shared/id'
 
 export interface Toast {
   id: string
@@ -24,7 +25,7 @@ const toastStore: StateCreator<State & Actions> = (set) => ({
   toasts: [],
   addToast: (toast) =>
     set((state) => ({
-      toasts: [...state.toasts, { ...toast, id: ulid() }],
+      toasts: [...state.toasts, { ...toast, id: genID() }],
     })),
   removeToast: (id) =>
     set((state) => ({

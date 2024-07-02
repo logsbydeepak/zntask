@@ -1,6 +1,6 @@
-import { isValid, ulid } from 'ulidx'
 import { StateCreator } from 'zustand'
 
+import { genID, isValidID } from '@/shared/id'
 import { Category, categoryHelper } from '@/utils/category'
 
 import { AppStore } from './app'
@@ -33,7 +33,7 @@ export const categorySlice: StateCreator<AppStore, [], [], CategorySlice> = (
   ...initialState,
 
   addCategory: (category) => {
-    const id = ulid()
+    const id = genID()
 
     const newCategory: Category = {
       id,
@@ -65,7 +65,7 @@ export const categorySlice: StateCreator<AppStore, [], [], CategorySlice> = (
 
   getCategory: (id) => {
     if (!id) return
-    if (!isValid(id)) return
+    if (!isValidID(id)) return
 
     return get().categories.find((category) => category.id === id)
   },

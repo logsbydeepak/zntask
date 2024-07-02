@@ -139,7 +139,7 @@ export function Form({ token }: { token: string }) {
                 {passwordChecklist.map((i) => (
                   <PasswordChecklistItem
                     key={i.label}
-                    isValid={i.condition(watchPassword)}
+                    isValidID={i.condition(watchPassword)}
                   >
                     {i.label}
                   </PasswordChecklistItem>

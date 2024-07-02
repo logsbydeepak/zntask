@@ -164,15 +164,15 @@ export const passwordChecklist = [
 
 export function PasswordChecklistItem({
   children,
-  isValid,
+  isValidID,
 }: {
   children: React.ReactNode
-  isValid: boolean
+  isValidID: boolean
 }) {
   return (
     <div className="inline-flex items-center space-x-1 text-xs text-gray-10">
       <span className="inline-block size-2">
-        {isValid ? (
+        {isValidID ? (
           <CheckIcon strokeWidth={3} />
         ) : (
           <CircleIcon strokeWidth={3} />

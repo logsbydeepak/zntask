@@ -11,7 +11,6 @@ import {
   InboxIcon,
   MoreVerticalIcon,
 } from 'lucide-react'
-import { ulid } from 'ulidx'
 
 import * as Layout from '@/app/(app)/app-layout'
 import { SchedulePicker } from '@/components/schedule'
@@ -26,6 +25,7 @@ import {
   DropdownMenuRoot,
   DropdownMenuTrigger,
 } from '@/components/ui/menu'
+import { genID } from '@/shared/id'
 import { useAppStore } from '@/store/app'
 import { ChildTask, ParentTask } from '@/store/task-slice'
 import { cn } from '@/utils/style'

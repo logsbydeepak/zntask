@@ -1,6 +1,6 @@
-import { isValid } from 'ulidx'
 import { z } from 'zod'
 
+import { isValidID } from '../shared/id'
 import { zRequired } from './zSchema'
 
 export const categoryDefaultIndicatorOption = {
@@ -31,7 +31,7 @@ export const categoryIndicatorLabel = categoryIndicatorOptions.map(
 export const zCategoryIndicator = z.enum(categoryIndicatorLabel)
 
 const zCategory = z.object({
-  id: zRequired.refine(isValid, { message: 'Invalid ulid' }),
+  id: zRequired.refine(isValidID, { message: 'Invalid genID' }),
   title: zRequired,
   indicator: z.enum(categoryIndicatorLabel),
   favoriteAt: z.string().nullable(),

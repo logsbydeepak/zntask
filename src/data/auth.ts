@@ -5,10 +5,10 @@ import { redirect } from 'next/navigation'
 import bcrypt from 'bcryptjs'
 import { eq } from 'drizzle-orm'
 import ms from 'ms'
-import { ulid } from 'ulidx'
 import { z } from 'zod'
 
 import { env } from '@/env'
+import { genID } from '@/shared/id'
 import { zPassword, zRequired } from '@/utils/zSchema'
 
 import { db, dbSchema } from './db'
@@ -189,7 +189,7 @@ export const registerWithGoogle = h.input(zGoogleCode).fn(async ({ input }) => {
   })
   if (user || googleAuthProvider) return r('EMAIL_ALREADY_EXISTS')
 
-  const id = ulid()
+  const id = genID()
 
   await db.insert(dbSchema.users).values({
     id,
@@ -245,7 +245,7 @@ export const registerWithCredentials = h
     if (isEmailAlreadyExists) return r('EMAIL_ALREADY_EXISTS')
 
     const password = await bcrypt.hash(input.password, 10)
-    const id = ulid()
+    const id = genID()
 
     await db.insert(dbSchema.users).values({
       id,

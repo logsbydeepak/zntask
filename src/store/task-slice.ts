@@ -1,5 +1,6 @@
-import { ulid } from 'ulidx'
 import { StateCreator } from 'zustand'
+
+import { genID } from '@/shared/id'
 
 import { AppStore } from './app'
 
@@ -67,11 +68,11 @@ export const taskSlice: StateCreator<AppStore, [], [], TaskSlice> = (
   },
 
   addParentTask: (parentTask) => {
-    const id = ulid()
+    const id = genID()
 
     const newParentTask: ParentTask = {
       id: id,
-      orderId: ulid(),
+      orderId: genID(),
       ...parentTask,
     }
 
@@ -83,7 +84,7 @@ export const taskSlice: StateCreator<AppStore, [], [], TaskSlice> = (
   },
 
   addChildTask(childTask) {
-    const id = ulid()
+    const id = genID()
 
     const newChildTask: ChildTask = {
       ...childTask,
