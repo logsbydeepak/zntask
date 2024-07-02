@@ -11,9 +11,7 @@
     "format": "prettier --write . --cache",
     "cspell": "cspell ** --gitignore --cache",
     "fix": "run-s format cspell lint:fix",
-    "db:gen": "drizzle-kit generate",
-    "db:push": "drizzle-kit push",
-    "db:gen:push": "bun --env-file .env.local run-s db:gen db:push",
+    "db:push": "bun --env-file .env.local drizzle-kit push",
     "unused": "knip"
   },
   "dependencies": {

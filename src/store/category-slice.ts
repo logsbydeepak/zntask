@@ -22,16 +22,6 @@ interface Actions {
   toggleFavorite: (category: Category) => void
 
   setNewCategories: (categories: Category[]) => void
-
-  reorderCategories: (data: {
-    position: 'top' | 'bottom'
-    start: string
-    over: string
-    data: {
-      bottom?: string
-      top?: string
-    }
-  }) => void
 }
 
 export type CategorySlice = State & Actions
@@ -42,55 +32,14 @@ export const categorySlice: StateCreator<AppStore, [], [], CategorySlice> = (
 ) => ({
   ...initialState,
 
-  reorderCategories: (data) => {
-    const startCategory = get().categories.find(
-      (category) => category.id === data.start
-    )
-    if (!startCategory) return
-    const overCategory = get().categories.find(
-      (category) => category.id === data.over
-    )
-    if (!overCategory) return
-    if (overCategory.orderNumber === null) return
-
-    const topId = data?.data?.top
-    const bottomId = data?.data?.bottom
-
-    if (typeof topId === 'string' && typeof bottomId === 'string') {
-      const topCategory = get().categories.find(
-        (category) => category.id === data.data.top
-      )
-
-      const bottomCategory = get().categories.find(
-        (category) => category.id === data.data.bottom
-      )
-
-      return
-    }
-
-    if (typeof topId === 'string' && typeof bottomId === 'undefined') {
-      return
-    }
-
-    if (typeof topId === 'undefined' && typeof bottomId === 'string') {
-      return
-    }
-  },
-
   addCategory: (category) => {
     const id = ulid()
-
-    const categories = categoryHelper.sortActiveCategories(
-      categoryHelper.getActiveCategories(get().categories)
-    )
-    const lastOrderNumber = categories[categories.length - 1]?.orderNumber ?? 0
 
     const newCategory: Category = {
       id,
       title: category.title,
       indicator: category.indicator,
-      orderNumber: lastOrderNumber + 1,
-      favoriteOrderNumber: null,
+      favoriteAt: null,
       archivedAt: null,
     }
 
@@ -122,19 +71,13 @@ export const categorySlice: StateCreator<AppStore, [], [], CategorySlice> = (
   },
   toggleArchive: (category) => {
     if (categoryHelper.isArchivedCategory(category)) {
-      const categories = categoryHelper.sortActiveCategories(
-        categoryHelper.getActiveCategories(get().categories)
-      )
-      const lastOrderNumber =
-        categories[categories.length - 1]?.orderNumber ?? 0
-
       set((state) => ({
         categories: state.categories.map((item) => {
           if (item.id === category.id)
             return {
               ...item,
+              favoriteAt: null,
               archivedAt: null,
-              orderNumber: lastOrderNumber + 1,
             }
           return item
         }),
@@ -146,8 +89,7 @@ export const categorySlice: StateCreator<AppStore, [], [], CategorySlice> = (
             return {
               ...item,
               archivedAt: new Date().toISOString(),
-              orderNumber: 0,
-              favoriteOrderNumber: null,
+              favoriteAt: null,
             }
           return item
         }),
@@ -162,7 +104,7 @@ export const categorySlice: StateCreator<AppStore, [], [], CategorySlice> = (
           if (item.id === category.id)
             return {
               ...item,
-              favoriteOrderNumber: null,
+              favoriteAt: null,
             }
           return item
         }),
@@ -181,7 +123,7 @@ export const categorySlice: StateCreator<AppStore, [], [], CategorySlice> = (
           if (item.id === category.id)
             return {
               ...item,
-              favoriteOrderNumber: lastOrderNumber + 1,
+              favoriteAt: new Date().toISOString(),
             }
           return item
         }),

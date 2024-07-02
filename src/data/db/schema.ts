@@ -1,5 +1,5 @@
 import { relations } from 'drizzle-orm'
-import { index, integer, pgTable, varchar } from 'drizzle-orm/pg-core'
+import { index, pgTable, varchar } from 'drizzle-orm/pg-core'
 
 import {
   categoryDefaultIndicatorOption,
@@ -58,8 +58,7 @@ export const categories = pgTable(
     })
       .default(categoryDefaultIndicatorOption.label)
       .notNull(),
-    orderNumber: integer('order_number'),
-    favoriteOrderNumber: integer('favorite_order_number'),
+    favoriteAt: varchar('archived_at', { length: 30 }),
     archivedAt: varchar('archived_at', { length: 30 }),
   },
   (table) => {

@@ -19,12 +19,13 @@ import {
   TabsTrigger,
 } from '@/components/ui/tabs'
 import { useAppStore } from '@/store/app'
+import { categoryHelper } from '@/utils/category'
 
 import { EmptyTaskCategory, TaskContainer, TaskItem } from '../../task'
 
 export default function Page({ params }: { params: { id?: string } }) {
   const category = useAppStore((s) =>
-    s.categories.find((c) => c.id === params.id && !!c.favoriteOrderNumber)
+    s.categories.find((c) => categoryHelper.isFavoriteCategory(c))
   )
 
   if (!category || !params.id) {

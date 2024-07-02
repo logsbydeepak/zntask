@@ -12,7 +12,7 @@ import {
   MenuIcon,
 } from '@/components/ui/menu'
 import { useAppStore } from '@/store/app'
-import { Category } from '@/utils/category'
+import { Category, categoryHelper } from '@/utils/category'
 
 export function CategoryMenuContent({
   category,
@@ -25,8 +25,8 @@ export function CategoryMenuContent({
   const toggleArchive = useAppStore((s) => s.toggleArchive)
   const toggleFavorite = useAppStore((s) => s.toggleFavorite)
 
-  const isFavorite = !!category.favoriteOrderNumber
-  const isArchived = !!category.archivedAt
+  const isFavorite = categoryHelper.isFavoriteCategory(category)
+  const isArchived = categoryHelper.isArchivedCategory(category)
 
   const menuItem = [
     {

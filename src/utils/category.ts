@@ -34,8 +34,7 @@ const zCategory = z.object({
   id: zRequired.refine(isValid, { message: 'Invalid ulid' }),
   title: zRequired,
   indicator: z.enum(categoryIndicatorLabel),
-  orderNumber: z.number().nullable(),
-  favoriteOrderNumber: z.number().nullable(),
+  favoriteAt: z.string().nullable(),
   archivedAt: z.string().nullable(),
 })
 
@@ -76,7 +75,7 @@ const getFavoriteCategories = (categories: Category[]) => {
   const favoriteCategories: FavoriteCategory[] = []
 
   categories.forEach((c) => {
-    if (typeof c.favoriteOrderNumber === 'number') {
+    if (typeof c.favoriteAt === 'string') {
       favoriteCategories.push(c as FavoriteCategory)
     }
   })
@@ -123,52 +122,11 @@ const sortArchivedCategories = (categories: ArchivedCategory[]) => {
 }
 
 const isFavoriteCategory = (category: Category) => {
-  return typeof category.favoriteOrderNumber === 'number'
+  return typeof category.favoriteAt === 'string'
 }
 
 const isArchivedCategory = (category: Category) => {
   return typeof category.archivedAt === 'string'
-}
-
-const makeCategoryArchived = (
-  category: ActiveCategory,
-  archivedAt: string
-): ArchivedCategory => {
-  return {
-    ...category,
-    archivedAt,
-    orderNumber: null,
-    favoriteOrderNumber: null,
-  }
-}
-
-const makeCategoryUnarchive = (
-  category: ArchivedCategory,
-  orderNumber: number
-): ActiveCategory => {
-  return {
-    ...category,
-    archivedAt: null,
-    orderNumber,
-  }
-}
-
-const makeCategoryFavorite = (
-  category: ActiveCategory,
-  favoriteOrderNumber: number
-): FavoriteCategory => {
-  return {
-    ...category,
-    favoriteOrderNumber,
-    orderNumber: favoriteOrderNumber,
-  }
-}
-
-const makeCategoryUnfavorite = (category: FavoriteCategory): ActiveCategory => {
-  return {
-    ...category,
-    favoriteOrderNumber: null,
-  }
 }
 
 export const categoryHelper = {
@@ -183,9 +141,4 @@ export const categoryHelper = {
   getCategoryColor,
   isFavoriteCategory,
   isArchivedCategory,
-
-  makeCategoryArchived,
-  makeCategoryUnarchive,
-  makeCategoryFavorite,
-  makeCategoryUnfavorite,
 }
