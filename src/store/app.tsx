@@ -1,13 +1,13 @@
-'use client'
+"use client"
 
-import React from 'react'
-import { createStore, StateCreator, useStore } from 'zustand'
-import { persist } from 'zustand/middleware'
-import { useShallow } from 'zustand/react/shallow'
+import React from "react"
+import { createStore, StateCreator, useStore } from "zustand"
+import { persist } from "zustand/middleware"
+import { useShallow } from "zustand/react/shallow"
 
-import { AppSlice, appSlice } from './app-slice'
-import { CategorySlice, categorySlice } from './category-slice'
-import { TaskSlice, taskSlice } from './task-slice'
+import { AppSlice, appSlice } from "./app-slice"
+import { CategorySlice, categorySlice } from "./category-slice"
+import { TaskSlice, taskSlice } from "./task-slice"
 
 export type AppStore = AppSlice & CategorySlice & TaskSlice
 
@@ -25,7 +25,7 @@ const createAppStore = (initialProps?: Partial<AppStore>) => {
         ...initialProps,
       }),
       {
-        name: 'app-store',
+        name: "app-store",
         partialize: (s) => ({
           categories: s.categories,
           parentTasks: s.parentTasks,
@@ -49,8 +49,8 @@ export function AppProvider({
   const store = React.useRef(
     createAppStore({
       ...initialProps,
-      isSidebarOpen: typeof window !== 'undefined' && window.innerWidth >= 768,
-      isScreenSM: typeof window !== 'undefined' && window.innerWidth <= 768,
+      isSidebarOpen: typeof window !== "undefined" && window.innerWidth >= 768,
+      isScreenSM: typeof window !== "undefined" && window.innerWidth <= 768,
     })
   )
   return (
@@ -60,6 +60,6 @@ export function AppProvider({
 
 export function useAppStore<T>(selector: (state: AppStore) => T): T {
   const store = React.use(AppContext)
-  if (!store) throw new Error('Missing AppContext.Provider in the tree')
+  if (!store) throw new Error("Missing AppContext.Provider in the tree")
   return useStore(store, useShallow(selector))
 }

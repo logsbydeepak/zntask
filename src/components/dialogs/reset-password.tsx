@@ -1,22 +1,22 @@
-import React from 'react'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
+import React from "react"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
 
-import { Button } from '@/components/ui/button'
+import { Button } from "#/components/ui/button"
 import {
   DialogClose,
   DialogContent,
   DialogDescription,
   DialogRoot,
   DialogTitle,
-} from '@/components/ui/dialog'
-import { FormError, FormInput, FormLabel, FormRoot } from '@/components/ui/form'
-import { resetPassword } from '@/data/auth'
-import { zResetPassword } from '@/data/utils/zSchema'
+} from "#/components/ui/dialog"
+import { FormError, FormInput, FormLabel, FormRoot } from "#/components/ui/form"
+import { resetPassword } from "#/data/auth"
+import { zResetPassword } from "#/data/utils/zSchema"
 
-import { Head } from '../head'
-import { Alert, useAlert } from '../ui/alert'
+import { Head } from "../head"
+import { Alert, useAlert } from "../ui/alert"
 
 type FormValues = z.infer<typeof zResetPassword>
 
@@ -71,25 +71,25 @@ function ResetPasswordDialogContent({
     startTransition(async () => {
       const res = await resetPassword(values)
       switch (res.code) {
-        case 'OK':
+        case "OK":
           setAlert({
-            message: 'Check your email for reset link',
-            type: 'success',
+            message: "Check your email for reset link",
+            type: "success",
           })
           break
 
-        case 'EMAIL_ALREADY_SENT':
+        case "EMAIL_ALREADY_SENT":
           setAlert({
-            message: 'Email already sent',
-            type: 'success',
+            message: "Email already sent",
+            type: "success",
           })
           break
 
-        case 'INVALID_CREDENTIALS':
+        case "INVALID_CREDENTIALS":
           setError(
-            'email',
+            "email",
             {
-              message: 'Invalid credentials',
+              message: "Invalid credentials",
             },
             { shouldFocus: true }
           )
@@ -99,7 +99,7 @@ function ResetPasswordDialogContent({
   }
 
   React.useEffect(() => {
-    if (errors) setAlert('close')
+    if (errors) setAlert("close")
   }, [setAlert, errors])
 
   return (
@@ -117,7 +117,7 @@ function ResetPasswordDialogContent({
           <FormLabel htmlFor="email">Email</FormLabel>
           <FormInput
             id="email"
-            {...register('email')}
+            {...register("email")}
             placeholder="abc@domain.com"
             autoFocus
           />

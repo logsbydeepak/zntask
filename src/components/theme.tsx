@@ -1,18 +1,18 @@
-'use client'
+"use client"
 
-import React from 'react'
-import * as RadioGroup from '@radix-ui/react-radio-group'
-import { MonitorIcon, MoonStarIcon, SunIcon } from 'lucide-react'
-import { ThemeProvider as Theme, useTheme } from 'next-themes'
+import React from "react"
+import * as RadioGroup from "@radix-ui/react-radio-group"
+import { MonitorIcon, MoonStarIcon, SunIcon } from "lucide-react"
+import { ThemeProvider as Theme, useTheme } from "next-themes"
 
-import { cn } from '@/utils/style'
+import { cn } from "#/utils/style"
 
 import {
   TooltipContent,
   TooltipProvider,
   TooltipRoot,
   TooltipTrigger,
-} from './ui/tooltip'
+} from "./ui/tooltip"
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   return <Theme attribute="class">{children}</Theme>
@@ -20,10 +20,10 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
 export function ThemeSwitch() {
   const { theme: themeProvider, setTheme: setThemeProvider } = useTheme()
-  const [theme, setCurrentTheme] = React.useState<string>('')
+  const [theme, setCurrentTheme] = React.useState<string>("")
 
   React.useEffect(() => {
-    setCurrentTheme(themeProvider || '')
+    setCurrentTheme(themeProvider || "")
   }, [themeProvider])
 
   const setTheme = (currentTheme: string) => {
@@ -33,18 +33,18 @@ export function ThemeSwitch() {
   const themeOptions = [
     {
       Icon: SunIcon,
-      label: 'light theme',
-      value: 'light',
+      label: "light theme",
+      value: "light",
     },
     {
       Icon: MoonStarIcon,
-      label: 'dark theme',
-      value: 'dark',
+      label: "dark theme",
+      value: "dark",
     },
     {
       Icon: MonitorIcon,
-      label: 'system theme',
-      value: 'system',
+      label: "system theme",
+      value: "system",
     },
   ]
 
@@ -61,9 +61,9 @@ export function ThemeSwitch() {
               <RadioGroup.Item
                 value={i.value}
                 className={cn(
-                  'rounded-full text-gray-11',
-                  'outline-2 outline-offset-2 outline-gray-12 hover:text-gray-12',
-                  'focus-visible:outline aria-[checked=true]:bg-gray-12 aria-[checked=true]:text-gray-1'
+                  "rounded-full text-gray-11",
+                  "outline-2 outline-offset-2 outline-gray-12 hover:text-gray-12",
+                  "focus-visible:outline aria-[checked=true]:bg-gray-12 aria-[checked=true]:text-gray-1"
                 )}
               >
                 <Icon className="size-5 p-1" />

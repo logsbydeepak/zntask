@@ -1,6 +1,6 @@
-import Image from 'next/image'
+import Image from "next/image"
 
-import { cn } from '@/utils/style'
+import { cn } from "#/utils/style"
 
 export function genInitials(firstName: string, lastName?: string | null) {
   if (!lastName && firstName.length >= 2) {
@@ -30,7 +30,7 @@ export function Avatar({
   return (
     <div
       className={cn(
-        'group flex size-full select-none items-center justify-center rounded-full border border-gray-5 bg-gray-1 bg-gradient-to-t from-gray-4 to-gray-2/10 shadow-inner shadow-gray-3 hover:border-gray-6 hover:bg-gray-2',
+        "group flex size-full select-none items-center justify-center rounded-full border border-gray-5 bg-gray-1 bg-gradient-to-t from-gray-4 to-gray-2/10 shadow-inner shadow-gray-3 hover:border-gray-6 hover:bg-gray-2",
         className
       )}
     >

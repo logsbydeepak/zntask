@@ -1,15 +1,15 @@
-import React from 'react'
+import React from "react"
 
-import { Button } from '@/components/ui/button'
+import { Button } from "#/components/ui/button"
 import {
   DialogClose,
   DialogContent,
   DialogDescription,
   DialogRoot,
   DialogTitle,
-} from '@/components/ui/dialog'
-import { useAppStore } from '@/store/app'
-import { Category } from '@/utils/category'
+} from "#/components/ui/dialog"
+import { useAppStore } from "#/store/app"
+import { Category } from "#/utils/category"
 
 export function DeleteCategoryDialog() {
   const category = useAppStore((s) => s.dialog.deleteCategory)
@@ -47,7 +47,7 @@ function DeleteDialogContent({
       <div>
         <DialogTitle>Delete Category</DialogTitle>
         <DialogDescription>
-          Are you sure you want to delete{' '}
+          Are you sure you want to delete{" "}
           <span className="font-medium italic">{category.title} </span>?
         </DialogDescription>
       </div>

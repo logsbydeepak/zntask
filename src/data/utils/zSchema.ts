@@ -1,10 +1,10 @@
-import { z } from 'zod'
+import { z } from "zod"
 
-import { zEmail, zPassword, zRequired } from '@/utils/zSchema'
+import { zEmail, zPassword, zRequired } from "#/utils/zSchema"
 
 export const zLoginWithCredentials = z.object({
   email: zEmail,
-  password: zPassword('invalid password'),
+  password: zPassword("invalid password"),
 })
 
 export const zResetPassword = z.object({
@@ -16,12 +16,12 @@ export const zRegisterWithCredentials = z
     firstName: zRequired,
     lastName: z.string().nullable(),
     email: zEmail,
-    password: zPassword('not strong enough'),
+    password: zPassword("not strong enough"),
     confirmPassword: zRequired,
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: 'password do not match',
-    path: ['confirmPassword'],
+    message: "password do not match",
+    path: ["confirmPassword"],
   })
 
 export const zUpdateName = z.object({

@@ -1,35 +1,35 @@
-import { type Config } from 'tailwindcss'
-import colors from 'tailwindcss/colors'
+import { type Config } from "tailwindcss"
+import colors from "tailwindcss/colors"
 
-import { categoryIndicatorOptions } from './src/utils/category'
+import { categoryIndicatorOptions } from "./src/utils/category"
 
 const colorNumber = [
-  '1',
-  '2',
-  '3',
-  '4',
-  '5',
-  '6',
-  '7',
-  '8',
-  '9',
-  '10',
-  '11',
-  '12',
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "10",
+  "11",
+  "12",
 ]
 
 const colorName = [
-  'gray',
-  'orange',
-  'red',
-  'blue',
-  'green',
-  'lime',
-  'pink',
-  'violet',
-  'indigo',
-  'cyan',
-  'amber',
+  "gray",
+  "orange",
+  "red",
+  "blue",
+  "green",
+  "lime",
+  "pink",
+  "violet",
+  "indigo",
+  "cyan",
+  "amber",
 ]
 
 const newColor: { [key: string]: { [key: string]: string } } = {}
@@ -51,8 +51,8 @@ categoryIndicatorOptions.forEach((item) => {
 })
 
 const config: Config = {
-  darkMode: 'class',
-  content: ['./src/app/**/*.tsx', './src/components/**/*.tsx'],
+  darkMode: "class",
+  content: ["./src/app/**/*.tsx", "./src/components/**/*.tsx"],
   theme: {
     colors: {
       white: colors.white,
@@ -63,17 +63,17 @@ const config: Config = {
 
     extend: {
       fontFamily: {
-        sans: ['var(--font-geist-sans)'],
+        sans: ["var(--font-geist-sans)"],
       },
       screens: {
-        xs: '355px',
+        xs: "355px",
       },
       backgroundImage: {
-        'auth-layout-gradient': 'var(--auth-layout-gradient)',
+        "auth-layout-gradient": "var(--auth-layout-gradient)",
       },
     },
   },
   safelist,
-  plugins: [require('@tailwindcss/forms'), require('tailwindcss-animate')],
+  plugins: [require("@tailwindcss/forms"), require("tailwindcss-animate")],
 }
 export default config

@@ -1,8 +1,8 @@
-import { Redis } from '@upstash/redis'
-import { Resend } from 'resend'
-import { UTApi } from 'uploadthing/server'
+import { Redis } from "@upstash/redis"
+import { Resend } from "resend"
+import { UTApi } from "uploadthing/server"
 
-import { env } from '@/env'
+import { env } from "#/env"
 
 export const redis = new Redis({
   url: env.REDIS_URL,

@@ -1,11 +1,11 @@
-'use client'
+"use client"
 
-import { startTransition } from 'react'
-import { useRouter } from 'next/navigation'
+import { startTransition } from "react"
+import { useRouter } from "next/navigation"
 
-import { LogoIcon } from '@/components/icon/logo'
-import { Alert } from '@/components/ui/alert'
-import { Button } from '@/components/ui/button'
+import { LogoIcon } from "#/components/icon/logo"
+import { Alert } from "#/components/ui/alert"
+import { Button } from "#/components/ui/button"
 
 export default function Error({
   error,

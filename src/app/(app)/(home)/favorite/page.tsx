@@ -1,14 +1,14 @@
-'use client'
+"use client"
 
-import React from 'react'
-import { HeartIcon } from 'lucide-react'
+import React from "react"
+import { HeartIcon } from "lucide-react"
 
-import * as Layout from '@/app/(app)/app-layout'
-import { Head } from '@/components/head'
-import { useAppStore } from '@/store/app'
-import { categoryHelper } from '@/utils/category'
+import * as Layout from "#/app/(app)/app-layout"
+import { Head } from "#/components/head"
+import { useAppStore } from "#/store/app"
+import { categoryHelper } from "#/utils/category"
 
-import { CategoryContainer, CategoryItem } from '../category'
+import { CategoryContainer, CategoryItem } from "../category"
 
 export default function Page() {
   const favorites = useAppStore((s) =>

@@ -1,39 +1,39 @@
-'use server'
+"use server"
 
-import { revalidateTag } from 'next/cache'
-import { redirect } from 'next/navigation'
-import bcrypt from 'bcryptjs'
-import { eq } from 'drizzle-orm'
-import ms from 'ms'
-import { z } from 'zod'
+import { revalidateTag } from "next/cache"
+import { redirect } from "next/navigation"
+import bcrypt from "bcryptjs"
+import { eq } from "drizzle-orm"
+import ms from "ms"
+import { z } from "zod"
 
-import { env } from '@/env'
-import { genID } from '@/shared/id'
-import { zPassword, zRequired } from '@/utils/zSchema'
+import { env } from "#/env"
+import { genID } from "#/shared/id"
+import { zPassword, zRequired } from "#/utils/zSchema"
 
-import { db, dbSchema } from './db'
-import { checkToken } from './utils'
+import { db, dbSchema } from "./db"
+import { checkToken } from "./utils"
 import {
   generateAuthJWT,
   generateEmailJWT,
   setAuthCookie,
   UnauthorizedError,
-} from './utils/auth'
-import { redis, resend } from './utils/config'
-import { GC } from './utils/google'
-import { h, r } from './utils/handler'
+} from "./utils/auth"
+import { redis, resend } from "./utils/config"
+import { GC } from "./utils/google"
+import { h, r } from "./utils/handler"
 import {
   zLoginWithCredentials,
   zRegisterWithCredentials,
   zResetPassword,
-} from './utils/zSchema'
+} from "./utils/zSchema"
 
 const gcLogin = new GC(`${env.BASE_URL}/google?type=login`)
 const gcRegister = new GC(`${env.BASE_URL}/google?type=register`)
 const gcNew = new GC(`${env.BASE_URL}/google?type=new`)
 
 const zUpdateAuthProvider = z.object({
-  password: zPassword('invalid password'),
+  password: zPassword("invalid password"),
 })
 
 export const redirectGoogleLogin = h.fn(async () => {
@@ -60,14 +60,14 @@ export const redirectGoogleAddNew = h.auth
     })
 
     if (!user) throw new UnauthorizedError()
-    if (!user.passwordAuth) return r('INVALID_CREDENTIALS')
-    if (user.googleAuth) return r('ALREADY_ADDED')
+    if (!user.passwordAuth) return r("INVALID_CREDENTIALS")
+    if (user.googleAuth) return r("ALREADY_ADDED")
 
     const password = await bcrypt.compare(
       input.password,
       user.passwordAuth.password
     )
-    if (!password) return r('INVALID_CREDENTIALS')
+    if (!password) return r("INVALID_CREDENTIALS")
 
     const url = gcNew.genURL()
     redirect(url)
@@ -81,22 +81,22 @@ export const addGoogleAuthProvider = h.auth
   .input(zGoogleCode)
   .fn(async ({ input, userId }) => {
     const data = await gcNew.getData(input.code)
-    if (data.code !== 'OK') return r('INVALID_CREDENTIALS')
+    if (data.code !== "OK") return r("INVALID_CREDENTIALS")
 
     const googleAuthProvider = await db.query.googleAuth.findFirst({
       where(fields, operators) {
         return operators.eq(fields.id, userId)
       },
     })
-    if (googleAuthProvider) return r('ALREADY_ADDED')
+    if (googleAuthProvider) return r("ALREADY_ADDED")
 
     await db.insert(dbSchema.googleAuth).values({
       id: userId,
       email: data.email,
     })
-    revalidateTag('user')
+    revalidateTag("user")
 
-    return r('OK')
+    return r("OK")
   })
 
 export const removeGoogleAuthProvider = h.auth
@@ -112,20 +112,20 @@ export const removeGoogleAuthProvider = h.auth
       },
     })
     if (!user) throw new UnauthorizedError()
-    if (!user.passwordAuth) return r('INVALID_CREDENTIALS')
-    if (!user.googleAuth) return r('NOT_ADDED')
+    if (!user.passwordAuth) return r("INVALID_CREDENTIALS")
+    if (!user.googleAuth) return r("NOT_ADDED")
 
     const password = await bcrypt.compare(
       input.password,
       user.passwordAuth.password
     )
-    if (!password) return r('INVALID_CREDENTIALS')
+    if (!password) return r("INVALID_CREDENTIALS")
 
     await db
       .delete(dbSchema.googleAuth)
       .where(eq(dbSchema.googleAuth.id, user.googleAuth.id))
 
-    return r('OK')
+    return r("OK")
   })
 
 export const removeCredentialAuthProvider = h.auth
@@ -141,25 +141,25 @@ export const removeCredentialAuthProvider = h.auth
       },
     })
     if (!user) throw new UnauthorizedError()
-    if (!user.passwordAuth) return r('INVALID_CREDENTIALS')
-    if (!user.googleAuth) return r('NOT_ADDED')
+    if (!user.passwordAuth) return r("INVALID_CREDENTIALS")
+    if (!user.googleAuth) return r("NOT_ADDED")
 
     const password = await bcrypt.compare(
       input.password,
       user.passwordAuth.password
     )
-    if (!password) return r('INVALID_CREDENTIALS')
+    if (!password) return r("INVALID_CREDENTIALS")
 
     await db
       .delete(dbSchema.passwordAuth)
       .where(eq(dbSchema.passwordAuth.id, userId))
 
-    return r('OK')
+    return r("OK")
   })
 
 export const loginWithGoogle = h.input(zGoogleCode).fn(async ({ input }) => {
   const data = await gcLogin.getData(input.code)
-  if (data.code !== 'OK') return r('INVALID_CREDENTIALS')
+  if (data.code !== "OK") return r("INVALID_CREDENTIALS")
 
   const user = await db.query.googleAuth.findFirst({
     where(fields, operators) {
@@ -167,15 +167,15 @@ export const loginWithGoogle = h.input(zGoogleCode).fn(async ({ input }) => {
     },
   })
 
-  if (!user) return r('INVALID_CREDENTIALS')
+  if (!user) return r("INVALID_CREDENTIALS")
   const token = await generateAuthJWT(user.id)
   setAuthCookie(token)
-  redirect('/')
+  redirect("/")
 })
 
 export const registerWithGoogle = h.input(zGoogleCode).fn(async ({ input }) => {
   const data = await gcRegister.getData(input.code)
-  if (data.code !== 'OK') return r('INVALID_CREDENTIALS')
+  if (data.code !== "OK") return r("INVALID_CREDENTIALS")
 
   const user = await db.query.users.findFirst({
     where(fields, operators) {
@@ -187,7 +187,7 @@ export const registerWithGoogle = h.input(zGoogleCode).fn(async ({ input }) => {
       return operators.eq(fields.email, data.email)
     },
   })
-  if (user || googleAuthProvider) return r('EMAIL_ALREADY_EXISTS')
+  if (user || googleAuthProvider) return r("EMAIL_ALREADY_EXISTS")
 
   const id = genID()
 
@@ -204,7 +204,7 @@ export const registerWithGoogle = h.input(zGoogleCode).fn(async ({ input }) => {
 
   const token = await generateAuthJWT(id)
   setAuthCookie(token)
-  redirect('/')
+  redirect("/")
 })
 
 export const loginWithCredentials = h
@@ -220,18 +220,18 @@ export const loginWithCredentials = h
       },
     })
 
-    if (!user) return r('INVALID_CREDENTIALS')
-    if (!user.passwordAuth) return r('INVALID_CREDENTIALS')
+    if (!user) return r("INVALID_CREDENTIALS")
+    if (!user.passwordAuth) return r("INVALID_CREDENTIALS")
 
     const password = await bcrypt.compare(
       input.password,
       user.passwordAuth.password
     )
-    if (!password) return r('INVALID_CREDENTIALS')
+    if (!password) return r("INVALID_CREDENTIALS")
 
     const token = await generateAuthJWT(user.id)
     setAuthCookie(token)
-    redirect('/')
+    redirect("/")
   })
 
 export const registerWithCredentials = h
@@ -242,7 +242,7 @@ export const registerWithCredentials = h
         return operators.eq(fields.email, input.email)
       },
     })
-    if (isEmailAlreadyExists) return r('EMAIL_ALREADY_EXISTS')
+    if (isEmailAlreadyExists) return r("EMAIL_ALREADY_EXISTS")
 
     const password = await bcrypt.hash(input.password, 10)
     const id = genID()
@@ -260,7 +260,7 @@ export const registerWithCredentials = h
 
     const token = await generateAuthJWT(id)
     setAuthCookie(token)
-    redirect('/')
+    redirect("/")
   })
 
 export const resetPassword = h.input(zResetPassword).fn(async ({ input }) => {
@@ -269,11 +269,11 @@ export const resetPassword = h.input(zResetPassword).fn(async ({ input }) => {
       return operators.eq(fields.email, input.email)
     },
   })
-  if (!user) return r('INVALID_CREDENTIALS')
+  if (!user) return r("INVALID_CREDENTIALS")
 
   const redisIsExist = (await redis.exists(`reset-password:${user.id}`)) === 1
   if (redisIsExist) {
-    return r('EMAIL_ALREADY_SENT')
+    return r("EMAIL_ALREADY_SENT")
   }
 
   const token = await generateEmailJWT(user.id)
@@ -281,45 +281,45 @@ export const resetPassword = h.input(zResetPassword).fn(async ({ input }) => {
   const email = await resend.emails.send({
     to: input.email,
     from: `team <${env.RESEND_FROM_EMAIL}>`,
-    subject: 'Reset Password',
+    subject: "Reset Password",
     text: `${env.BASE_URL}/add-password?token=${token}`,
   })
 
   if (!email.data?.id) {
-    throw new Error('Failed to send email', { cause: email })
+    throw new Error("Failed to send email", { cause: email })
   }
 
   const redisRes = await redis.set(`reset-password:${user.id}`, token, {
-    px: ms('15 minutes'),
+    px: ms("15 minutes"),
   })
 
-  if (redisRes !== 'OK') {
-    throw new Error('Failed to set reset-password token to redis')
+  if (redisRes !== "OK") {
+    throw new Error("Failed to set reset-password token to redis")
   }
 
-  return r('OK')
+  return r("OK")
 })
 
 const zSchema = z
   .object({
     token: zRequired,
-    password: zPassword('not strong enough'),
+    password: zPassword("not strong enough"),
     confirmPassword: zRequired,
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: 'password do not match',
-    path: ['confirmPassword'],
+    message: "password do not match",
+    path: ["confirmPassword"],
   })
 
 export const addPassword = h.input(zSchema).fn(async function ({ input }) {
   const token = await checkToken(input.token)
-  if (token.code === 'INVALID_TOKEN') return r('INVALID_TOKEN')
-  if (token.code === 'TOKEN_EXPIRED') return r('TOKEN_EXPIRED')
+  if (token.code === "INVALID_TOKEN") return r("INVALID_TOKEN")
+  if (token.code === "TOKEN_EXPIRED") return r("TOKEN_EXPIRED")
   const userId = token.userId
 
   const redisRes = await redis.get(`reset-password:${userId}`)
-  if (!redisRes) return r('INVALID_TOKEN')
-  if (redisRes !== input.token) return r('INVALID_TOKEN')
+  if (!redisRes) return r("INVALID_TOKEN")
+  if (redisRes !== input.token) return r("INVALID_TOKEN")
 
   const user = await db.query.users.findFirst({
     where(fields, operators) {
@@ -329,7 +329,7 @@ export const addPassword = h.input(zSchema).fn(async function ({ input }) {
       passwordAuth: true,
     },
   })
-  if (!user) return r('INVALID_TOKEN')
+  if (!user) return r("INVALID_TOKEN")
 
   const password = await bcrypt.hash(input.password, 10)
   if (!user.passwordAuth) {
@@ -346,5 +346,5 @@ export const addPassword = h.input(zSchema).fn(async function ({ input }) {
       .where(eq(dbSchema.passwordAuth.id, user.id))
   }
 
-  return r('OK')
+  return r("OK")
 })

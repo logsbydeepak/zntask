@@ -1,20 +1,20 @@
-'use client'
+"use client"
 
-import React from 'react'
+import React from "react"
 import {
   CheckboxIndicator,
   Root as CheckboxRoot,
-} from '@radix-ui/react-checkbox'
+} from "@radix-ui/react-checkbox"
 import {
   CheckCircleIcon,
   CircleIcon,
   InboxIcon,
   MoreVerticalIcon,
-} from 'lucide-react'
+} from "lucide-react"
 
-import * as Layout from '@/app/(app)/app-layout'
-import { SchedulePicker } from '@/components/schedule'
-import { TaskMenuContent } from '@/components/task-menu-content'
+import * as Layout from "#/app/(app)/app-layout"
+import { SchedulePicker } from "#/components/schedule"
+import { TaskMenuContent } from "#/components/task-menu-content"
 import {
   ContextMenuContent,
   ContextMenuPortal,
@@ -24,11 +24,11 @@ import {
   DropdownMenuPortal,
   DropdownMenuRoot,
   DropdownMenuTrigger,
-} from '@/components/ui/menu'
-import { genID } from '@/shared/id'
-import { useAppStore } from '@/store/app'
-import { ChildTask, ParentTask } from '@/store/task-slice'
-import { cn } from '@/utils/style'
+} from "#/components/ui/menu"
+import { genID } from "#/shared/id"
+import { useAppStore } from "#/store/app"
+import { ChildTask, ParentTask } from "#/store/task-slice"
+import { cn } from "#/utils/style"
 
 export function EmptyInbox() {
   return (
@@ -58,7 +58,7 @@ export function TaskContainer({ children }: { children: React.ReactNode }) {
 
 export const TaskItem = React.forwardRef<
   HTMLDivElement,
-  React.ComponentPropsWithoutRef<'div'> & {
+  React.ComponentPropsWithoutRef<"div"> & {
     task: ParentTask | ChildTask
   }
 >(({ task, className, ...props }, ref) => {
@@ -68,14 +68,14 @@ export const TaskItem = React.forwardRef<
 
   const handleOnTaskCheckboxClick = React.useCallback(
     (value: boolean) => {
-      if ('categoryId' in task) {
+      if ("categoryId" in task) {
         editParentTask({
           ...task,
           completedAt: value ? new Date().toISOString() : null,
         })
       }
 
-      if ('parentId' in task) {
+      if ("parentId" in task) {
         editChildTask({
           ...task,
           completedAt: value ? new Date().toISOString() : null,
@@ -86,11 +86,11 @@ export const TaskItem = React.forwardRef<
   )
 
   const handleOnTaskClick = React.useCallback(() => {
-    if ('categoryId' in task) {
+    if ("categoryId" in task) {
       setDialog({ editTask: { parentTaskId: task.id } })
     }
 
-    if ('parentId' in task) {
+    if ("parentId" in task) {
       setDialog({ editTask: { childTaskId: task.id } })
     }
   }, [setDialog, task])
@@ -103,7 +103,7 @@ export const TaskItem = React.forwardRef<
             {...props}
             ref={ref}
             className={cn(
-              'flex w-full cursor-pointer touch-none flex-col space-y-1 rounded-lg border border-transparent px-3 py-2 text-sm hover:border-gray-3 hover:bg-gray-2 data-[state=open]:border-gray-3 data-[state=open]:bg-gray-2',
+              "flex w-full cursor-pointer touch-none flex-col space-y-1 rounded-lg border border-transparent px-3 py-2 text-sm hover:border-gray-3 hover:bg-gray-2 data-[state=open]:border-gray-3 data-[state=open]:bg-gray-2",
               className
             )}
             onClick={(e) => {
@@ -143,7 +143,7 @@ export const TaskItem = React.forwardRef<
                     className="truncate text-xs text-gray-11"
                     onClick={handleOnTaskClick}
                   >
-                    {task.details?.split('\n').map((i, index) => (
+                    {task.details?.split("\n").map((i, index) => (
                       <React.Fragment key={index}>
                         {index < 3 && (
                           <>
@@ -163,7 +163,7 @@ export const TaskItem = React.forwardRef<
                       time: task.time ? new Date(task.time) : null,
                     }}
                     setValue={({ date, time }) => {
-                      if ('categoryId' in task) {
+                      if ("categoryId" in task) {
                         editParentTask({
                           ...task,
                           date: date ? date.toISOString() : null,
@@ -171,7 +171,7 @@ export const TaskItem = React.forwardRef<
                         })
                       }
 
-                      if ('parentId' in task) {
+                      if ("parentId" in task) {
                         editChildTask({
                           ...task,
                           date: date ? date.toISOString() : null,
@@ -201,7 +201,7 @@ export const TaskItem = React.forwardRef<
   )
 })
 
-TaskItem.displayName = 'TaskItem'
+TaskItem.displayName = "TaskItem"
 
 function Checkbox({
   value,
@@ -215,7 +215,7 @@ function Checkbox({
       checked={value}
       onClick={(e) => e.stopPropagation()}
       onCheckedChange={(value) => {
-        if (typeof value === 'boolean') {
+        if (typeof value === "boolean") {
           setValue(value)
         }
       }}

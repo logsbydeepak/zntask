@@ -1,11 +1,11 @@
-import React from 'react'
-import { LoaderIcon } from 'lucide-react'
+import React from "react"
+import { LoaderIcon } from "lucide-react"
 
-import { cn } from '@/utils/style'
+import { cn } from "#/utils/style"
 
 export const Button = React.forwardRef<
   HTMLButtonElement,
-  React.ComponentPropsWithoutRef<'button'> & { isLoading?: boolean }
+  React.ComponentPropsWithoutRef<"button"> & { isLoading?: boolean }
 >(({ className, isLoading, ...props }, ref) => {
   return (
     <button
@@ -14,13 +14,13 @@ export const Button = React.forwardRef<
       data-loading={isLoading}
       type="button"
       className={cn(
-        'group inline-flex items-center space-x-1 rounded-full border border-gray-4 px-3 py-1 text-xs font-medium text-gray-11 hover:bg-gray-2 hover:text-gray-12 data-[state=open]:bg-gray-2 data-[state=open]:text-gray-12',
+        "group inline-flex items-center space-x-1 rounded-full border border-gray-4 px-3 py-1 text-xs font-medium text-gray-11 hover:bg-gray-2 hover:text-gray-12 data-[state=open]:bg-gray-2 data-[state=open]:text-gray-12",
         className
       )}
     />
   )
 })
-Button.displayName = 'Badge.Button'
+Button.displayName = "Badge.Button"
 
 export function Icon({ children }: { children: React.ReactNode }) {
   return (

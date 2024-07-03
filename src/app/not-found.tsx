@@ -1,13 +1,13 @@
-import type { Metadata } from 'next'
-import Link from 'next/link'
+import type { Metadata } from "next"
+import Link from "next/link"
 
-import { LogoIcon } from '@/components/icon/logo'
-import { Alert } from '@/components/ui/alert'
-import { buttonStyle } from '@/components/ui/button'
-import { cn } from '@/utils/style'
+import { LogoIcon } from "#/components/icon/logo"
+import { Alert } from "#/components/ui/alert"
+import { buttonStyle } from "#/components/ui/button"
+import { cn } from "#/utils/style"
 
 export const metadata: Metadata = {
-  title: '404',
+  title: "404",
 }
 
 export default function NotFound() {
@@ -32,7 +32,7 @@ export default function NotFound() {
               align="center"
             />
             <Link
-              className={cn(buttonStyle({ intent: 'secondary' }), 'w-full')}
+              className={cn(buttonStyle({ intent: "secondary" }), "w-full")}
               href="/"
             >
               Home

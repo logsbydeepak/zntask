@@ -1,16 +1,16 @@
-import React from 'react'
-import Link from 'next/link'
+import React from "react"
+import Link from "next/link"
 import {
   AsteriskIcon,
   CheckIcon,
   CircleIcon,
   LockIcon,
   TypeIcon,
-} from 'lucide-react'
+} from "lucide-react"
 
-import { GoogleIcon } from '@/components/icon/google'
-import { LogoIcon } from '@/components/icon/logo'
-import { Button } from '@/components/ui/button'
+import { GoogleIcon } from "#/components/icon/google"
+import { LogoIcon } from "#/components/icon/logo"
+import { Button } from "#/components/ui/button"
 
 export function Logo() {
   return (
@@ -58,7 +58,7 @@ export function ContinueWithGoogle({
 function BadgeButton({
   children,
   ...props
-}: { children: React.ReactNode } & React.ComponentPropsWithoutRef<'button'>) {
+}: { children: React.ReactNode } & React.ComponentPropsWithoutRef<"button">) {
   return (
     <button
       {...props}
@@ -99,7 +99,7 @@ export function PasswordVisibilityToggle({
           <AsteriskIcon strokeWidth={3} />
         )}
       </BadgeButtonIcon>
-      <p>{!isVisible ? 'show password' : 'hide password'}</p>
+      <p>{!isVisible ? "show password" : "hide password"}</p>
     </BadgeButton>
   )
 }
@@ -125,7 +125,7 @@ function AccountQuestionAction({
     <Link
       {...props}
       aria-disabled={disabled}
-      href={disabled ? '#' : href}
+      href={disabled ? "#" : href}
       className="font-medium text-gray-11 hover:text-orange-9 hover:underline aria-[disabled=true]:cursor-not-allowed aria-[disabled=true]:text-gray-9"
     >
       {children}
@@ -141,23 +141,23 @@ export const AccountQuestion = {
 
 export const passwordChecklist = [
   {
-    label: '8 characters',
+    label: "8 characters",
     condition: (value: string) => value.length >= 8,
   },
   {
-    label: 'lowercase',
+    label: "lowercase",
     condition: (value: string) => /[a-z]/.test(value),
   },
   {
-    label: 'uppercase',
+    label: "uppercase",
     condition: (value: string) => /[A-Z]/.test(value),
   },
   {
-    label: 'numbers',
+    label: "numbers",
     condition: (value: string) => /[0-9]/.test(value),
   },
   {
-    label: 'symbols',
+    label: "symbols",
     condition: (value: string) => /[^a-zA-Z0-9]/.test(value),
   },
 ]

@@ -1,9 +1,9 @@
-import { StateCreator } from 'zustand'
+import { StateCreator } from "zustand"
 
-import type { RequireOnlyOne } from '@/types'
-import { Category } from '@/utils/category'
+import type { RequireOnlyOne } from "#/types"
+import { Category } from "#/utils/category"
 
-import { AppStore } from './app'
+import { AppStore } from "./app"
 
 interface User {
   firstName: string

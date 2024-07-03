@@ -1,7 +1,7 @@
-import React from 'react'
-import { useRouter } from 'next/navigation'
-import * as VisuallyHidden from '@radix-ui/react-visually-hidden'
-import { Command } from 'cmdk'
+import React from "react"
+import { useRouter } from "next/navigation"
+import * as VisuallyHidden from "@radix-ui/react-visually-hidden"
+import { Command } from "cmdk"
 import {
   ArchiveIcon,
   CalendarClockIcon,
@@ -17,17 +17,17 @@ import {
   ScanSearchIcon,
   SearchIcon,
   SidebarIcon,
-} from 'lucide-react'
+} from "lucide-react"
 
 import {
   DialogContent,
   DialogDescription,
   DialogRoot,
   DialogTitle,
-} from '@/components/ui/dialog'
-import { useAppStore } from '@/store/app'
-import { categoryHelper, getCategoryColor } from '@/utils/category'
-import { cn } from '@/utils/style'
+} from "#/components/ui/dialog"
+import { useAppStore } from "#/store/app"
+import { categoryHelper, getCategoryColor } from "#/utils/category"
+import { cn } from "#/utils/style"
 
 export function CommandPaletteDialog() {
   const isOpen = useAppStore((s) => s.dialog.commandPalette)
@@ -51,12 +51,12 @@ export function CommandPaletteDialog() {
 }
 
 type Page =
-  | 'SEARCH_ACTIVE_CATEGORY'
-  | 'SEARCH_ARCHIVE_CATEGORY'
-  | 'SEARCH_ALL_CATEGORY'
-  | 'SEARCH_TASK'
+  | "SEARCH_ACTIVE_CATEGORY"
+  | "SEARCH_ARCHIVE_CATEGORY"
+  | "SEARCH_ALL_CATEGORY"
+  | "SEARCH_TASK"
 function CommandPaletteContent({ handleClose }: { handleClose: () => void }) {
-  const [search, setSearch] = React.useState('')
+  const [search, setSearch] = React.useState("")
   const [pages, setPages] = React.useState<string[]>([])
   const page = pages[pages.length - 1] as Page | undefined
 
@@ -80,51 +80,51 @@ function CommandPaletteContent({ handleClose }: { handleClose: () => void }) {
 
   const pagesGroups = [
     {
-      label: 'today',
+      label: "today",
       icon: <CalendarClockIcon />,
       onSelect: () => {
-        router.push('/today')
+        router.push("/today")
         handleClose()
       },
     },
     {
-      label: 'upcoming',
+      label: "upcoming",
       icon: <GanttChartIcon />,
       onSelect: () => {
-        router.push('/upcoming')
+        router.push("/upcoming")
 
         handleClose()
       },
     },
     {
-      label: 'inbox',
+      label: "inbox",
       icon: <InboxIcon />,
       onSelect: () => {
-        router.push('/inbox')
+        router.push("/inbox")
         handleClose()
       },
     },
     {
-      label: 'favorite',
+      label: "favorite",
       icon: <HeartIcon />,
       onSelect: () => {
-        router.push('/favorite')
+        router.push("/favorite")
         handleClose()
       },
     },
     {
-      label: 'active category',
+      label: "active category",
       icon: <FolderIcon />,
       onSelect: () => {
-        router.push('/category')
+        router.push("/category")
         handleClose()
       },
     },
     {
-      label: 'archive category',
+      label: "archive category",
       icon: <FolderArchive />,
       onSelect: () => {
-        router.push('/category?status=archive')
+        router.push("/category?status=archive")
         handleClose()
       },
     },
@@ -132,7 +132,7 @@ function CommandPaletteContent({ handleClose }: { handleClose: () => void }) {
 
   const actionsGroup = [
     {
-      label: 'new task',
+      label: "new task",
       icon: <PlusIcon />,
       onSelect: () => {
         setDialog({ createTask: true })
@@ -140,7 +140,7 @@ function CommandPaletteContent({ handleClose }: { handleClose: () => void }) {
       },
     },
     {
-      label: 'new category',
+      label: "new category",
       icon: <FolderPlusIcon />,
       onSelect: () => {
         setDialog({ createCategory: true })
@@ -148,7 +148,7 @@ function CommandPaletteContent({ handleClose }: { handleClose: () => void }) {
       },
     },
     {
-      label: 'toggle sidebar',
+      label: "toggle sidebar",
       icon: <SidebarIcon />,
       onSelect: () => toggleSidebar(),
     },
@@ -156,42 +156,42 @@ function CommandPaletteContent({ handleClose }: { handleClose: () => void }) {
 
   const searchGroups = [
     {
-      label: 'active category',
+      label: "active category",
       icon: <FolderSearchIcon />,
       onSelect: () => {
-        changePage('SEARCH_ACTIVE_CATEGORY')
-        setSearch('')
+        changePage("SEARCH_ACTIVE_CATEGORY")
+        setSearch("")
       },
     },
     {
-      label: 'archive category',
+      label: "archive category",
       icon: <ArchiveIcon />,
       onSelect: () => {
-        changePage('SEARCH_ARCHIVE_CATEGORY')
-        setSearch('')
+        changePage("SEARCH_ARCHIVE_CATEGORY")
+        setSearch("")
       },
     },
     {
-      label: 'all category',
+      label: "all category",
       icon: <ScanSearchIcon />,
       onSelect: () => {
-        changePage('SEARCH_ALL_CATEGORY')
-        setSearch('')
+        changePage("SEARCH_ALL_CATEGORY")
+        setSearch("")
       },
     },
 
     {
-      label: 'task',
+      label: "task",
       icon: <CheckCircleIcon />,
       onSelect: () => {
-        changePage('SEARCH_TASK')
-        setSearch('')
+        changePage("SEARCH_TASK")
+        setSearch("")
       },
     },
   ]
 
   React.useEffect(() => {
-    const el = document.querySelector('[cmdk-list-sizer]')
+    const el = document.querySelector("[cmdk-list-sizer]")
     el?.scrollTo({ top: 0 })
   }, [search])
 
@@ -199,7 +199,7 @@ function CommandPaletteContent({ handleClose }: { handleClose: () => void }) {
     <>
       <Command
         onKeyDown={(e) => {
-          if (e.key === 'Escape') {
+          if (e.key === "Escape") {
             if (pages.length !== 0) {
               e.preventDefault()
               setPages((pages) => pages.slice(0, -1))
@@ -269,7 +269,7 @@ function CommandPaletteContent({ handleClose }: { handleClose: () => void }) {
             </>
           )}
 
-          {page === 'SEARCH_ACTIVE_CATEGORY' && (
+          {page === "SEARCH_ACTIVE_CATEGORY" && (
             <>
               {activeCategory.map((i) => (
                 <CommandItem.Container
@@ -283,8 +283,8 @@ function CommandPaletteContent({ handleClose }: { handleClose: () => void }) {
                   <CommandItem.Icon>
                     <div
                       className={cn(
-                        'size-2.5 rounded-[4px]',
-                        getCategoryColor(i.indicator, 'bg')
+                        "size-2.5 rounded-[4px]",
+                        getCategoryColor(i.indicator, "bg")
                       )}
                     />
                   </CommandItem.Icon>
@@ -295,7 +295,7 @@ function CommandPaletteContent({ handleClose }: { handleClose: () => void }) {
             </>
           )}
 
-          {page === 'SEARCH_ARCHIVE_CATEGORY' && (
+          {page === "SEARCH_ARCHIVE_CATEGORY" && (
             <>
               {archiveCategory.map((i) => (
                 <CommandItem.Container
@@ -309,8 +309,8 @@ function CommandPaletteContent({ handleClose }: { handleClose: () => void }) {
                   <CommandItem.Icon>
                     <div
                       className={cn(
-                        'size-2.5 rounded-[4px]',
-                        getCategoryColor(i.indicator, 'bg')
+                        "size-2.5 rounded-[4px]",
+                        getCategoryColor(i.indicator, "bg")
                       )}
                     />
                   </CommandItem.Icon>
@@ -321,7 +321,7 @@ function CommandPaletteContent({ handleClose }: { handleClose: () => void }) {
             </>
           )}
 
-          {page === 'SEARCH_ALL_CATEGORY' && (
+          {page === "SEARCH_ALL_CATEGORY" && (
             <>
               {categories.map((i) => (
                 <CommandItem.Container
@@ -335,8 +335,8 @@ function CommandPaletteContent({ handleClose }: { handleClose: () => void }) {
                   <CommandItem.Icon>
                     <div
                       className={cn(
-                        'size-2.5 rounded-[4px]',
-                        getCategoryColor(i.indicator, 'bg')
+                        "size-2.5 rounded-[4px]",
+                        getCategoryColor(i.indicator, "bg")
                       )}
                     />
                   </CommandItem.Icon>
@@ -346,7 +346,7 @@ function CommandPaletteContent({ handleClose }: { handleClose: () => void }) {
               ))}
             </>
           )}
-          {page === 'SEARCH_TASK' && (
+          {page === "SEARCH_TASK" && (
             <>
               {parentTask.map((i) => (
                 <CommandItem.Container

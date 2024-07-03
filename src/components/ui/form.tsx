@@ -1,17 +1,17 @@
-import React, { FieldsetHTMLAttributes } from 'react'
-import { XCircleIcon } from 'lucide-react'
+import React, { FieldsetHTMLAttributes } from "react"
+import { XCircleIcon } from "lucide-react"
 
-import { cn } from '@/utils/style'
+import { cn } from "#/utils/style"
 
 const FormRoot = React.forwardRef<
   HTMLFormElement,
   React.FormHTMLAttributes<HTMLFormElement>
 >(({ children, className, ...props }, ref) => (
-  <form {...props} ref={ref} className={cn('w-full', className)}>
+  <form {...props} ref={ref} className={cn("w-full", className)}>
     {children}
   </form>
 ))
-FormRoot.displayName = 'FormRoot'
+FormRoot.displayName = "FormRoot"
 
 const FormInput = React.forwardRef<
   HTMLInputElement,
@@ -21,12 +21,12 @@ const FormInput = React.forwardRef<
     ref={ref}
     {...props}
     className={cn(
-      'mb-2 mt-0.5 w-full rounded-md border border-gray-4 px-3 py-1 ring-offset-4 ring-offset-black placeholder:text-sm placeholder:text-gray-11 focus-visible:border-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-9 disabled:text-gray-9',
+      "mb-2 mt-0.5 w-full rounded-md border border-gray-4 px-3 py-1 ring-offset-4 ring-offset-black placeholder:text-sm placeholder:text-gray-11 focus-visible:border-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-9 disabled:text-gray-9",
       className
     )}
   />
 ))
-FormInput.displayName = 'FormInput'
+FormInput.displayName = "FormInput"
 
 const FormLabel = React.forwardRef<
   HTMLLabelElement,
@@ -36,7 +36,7 @@ const FormLabel = React.forwardRef<
     {children}
   </label>
 ))
-FormLabel.displayName = 'FormLabel'
+FormLabel.displayName = "FormLabel"
 
 const FormError = React.forwardRef<
   HTMLParagraphElement,
@@ -57,7 +57,7 @@ const FormError = React.forwardRef<
     )}
   </>
 ))
-FormError.displayName = 'FormError'
+FormError.displayName = "FormError"
 
 function FormFieldset({
   children,

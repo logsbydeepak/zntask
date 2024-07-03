@@ -1,8 +1,8 @@
-import { StateCreator } from 'zustand'
+import { StateCreator } from "zustand"
 
-import { genID } from '@/shared/id'
+import { genID } from "#/shared/id"
 
-import { AppStore } from './app'
+import { AppStore } from "./app"
 
 interface Task {
   id: string
@@ -29,10 +29,10 @@ const initialState = {
 type State = typeof initialState
 
 interface Actions {
-  addParentTask: (parentTask: Omit<ParentTask, 'id' | 'orderId'>) => {
+  addParentTask: (parentTask: Omit<ParentTask, "id" | "orderId">) => {
     id: string
   }
-  addChildTask: (childTask: Omit<ChildTask, 'id'>) => void
+  addChildTask: (childTask: Omit<ChildTask, "id">) => void
   editParentTask: (parentTask: ParentTask) => void
   editChildTask: (childTask: ChildTask) => void
 

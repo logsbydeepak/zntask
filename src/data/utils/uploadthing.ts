@@ -1,15 +1,15 @@
-import { eq } from 'drizzle-orm'
-import { createUploadthing, type FileRouter } from 'uploadthing/next'
+import { eq } from "drizzle-orm"
+import { createUploadthing, type FileRouter } from "uploadthing/next"
 
-import { db, dbSchema } from '../db'
-import { isAuth } from './auth'
-import { utapi } from './config'
-import { r } from './handler'
+import { db, dbSchema } from "../db"
+import { isAuth } from "./auth"
+import { utapi } from "./config"
+import { r } from "./handler"
 
 const f = createUploadthing()
 
 export const ourFileRouter = {
-  profilePicture: f({ image: { maxFileSize: '4MB' } })
+  profilePicture: f({ image: { maxFileSize: "4MB" } })
     .middleware(async () => {
       return await isAuth()
     })
@@ -20,7 +20,7 @@ export const ourFileRouter = {
         },
       })
 
-      if (!user) throw new Error('User not found!')
+      if (!user) throw new Error("User not found!")
 
       if (user.profilePicture) {
         await utapi.deleteFiles(user?.profilePicture)
@@ -35,7 +35,7 @@ export const ourFileRouter = {
         .set({ profilePicture: file.key })
         .where(eq(dbSchema.users.id, metadata.userId))
 
-      return r('OK')
+      return r("OK")
     }),
 } satisfies FileRouter
 

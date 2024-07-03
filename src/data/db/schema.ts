@@ -1,88 +1,88 @@
-import { relations } from 'drizzle-orm'
-import { index, pgTable, varchar } from 'drizzle-orm/pg-core'
+import { relations } from "drizzle-orm"
+import { index, pgTable, varchar } from "drizzle-orm/pg-core"
 
 import {
   categoryDefaultIndicatorOption,
   categoryIndicatorLabel,
-} from '../../utils/category'
+} from "../../utils/category"
 
-const id = (name = 'id') => varchar(name, { length: 26 })
+const id = (name = "id") => varchar(name, { length: 26 })
 
 const tasks = {
   id: id().primaryKey(),
-  userId: id('user_id').notNull(),
-  completedAt: varchar('completed_at', { length: 30 }),
-  title: varchar('title', { length: 256 }).notNull(),
-  orderId: varchar('order_id', { length: 26 }).notNull(),
-  date: varchar('date', { length: 30 }),
-  time: varchar('time', { length: 30 }),
-  details: varchar('details', { length: 256 }),
-  categoryId: id('category_id'),
+  userId: id("user_id").notNull(),
+  completedAt: varchar("completed_at", { length: 30 }),
+  title: varchar("title", { length: 256 }).notNull(),
+  orderId: varchar("order_id", { length: 26 }).notNull(),
+  date: varchar("date", { length: 30 }),
+  time: varchar("time", { length: 30 }),
+  details: varchar("details", { length: 256 }),
+  categoryId: id("category_id"),
 }
 
 export const users = pgTable(
-  'users',
+  "users",
   {
     id: id().primaryKey(),
-    firstName: varchar('first_name', { length: 256 }).notNull(),
-    lastName: varchar('last_name', { length: 256 }),
-    email: varchar('email', { length: 256 }).unique().notNull(),
-    profilePicture: varchar('profile_picture', { length: 256 }),
+    firstName: varchar("first_name", { length: 256 }).notNull(),
+    lastName: varchar("last_name", { length: 256 }),
+    email: varchar("email", { length: 256 }).unique().notNull(),
+    profilePicture: varchar("profile_picture", { length: 256 }),
   },
   (table) => {
     return {
-      emailIdx: index('email_idx').on(table.email),
+      emailIdx: index("email_idx").on(table.email),
     }
   }
 )
 
-export const passwordAuth = pgTable('password_auth', {
+export const passwordAuth = pgTable("password_auth", {
   id: id().primaryKey(),
-  password: varchar('password', { length: 256 }).notNull(),
+  password: varchar("password", { length: 256 }).notNull(),
 })
 
-export const googleAuth = pgTable('google_auth', {
+export const googleAuth = pgTable("google_auth", {
   id: id().primaryKey(),
-  email: varchar('email', { length: 256 }).notNull().unique(),
+  email: varchar("email", { length: 256 }).notNull().unique(),
 })
 
 export const categories = pgTable(
-  'categories',
+  "categories",
   {
-    userId: id('user_id').notNull(),
+    userId: id("user_id").notNull(),
     id: id().primaryKey(),
-    title: varchar('title', { length: 256 }).notNull(),
-    indicator: varchar('indicator', {
+    title: varchar("title", { length: 256 }).notNull(),
+    indicator: varchar("indicator", {
       length: 256,
       enum: categoryIndicatorLabel,
     })
       .default(categoryDefaultIndicatorOption.label)
       .notNull(),
-    favoriteAt: varchar('archived_at', { length: 30 }),
-    archivedAt: varchar('archived_at', { length: 30 }),
+    favoriteAt: varchar("archived_at", { length: 30 }),
+    archivedAt: varchar("archived_at", { length: 30 }),
   },
   (table) => {
     return {
-      userIdIdx: index('categories_user_id_idx').on(table.userId),
+      userIdIdx: index("categories_user_id_idx").on(table.userId),
     }
   }
 )
 
-export const parentTasks = pgTable('parent_tasks', tasks, (table) => {
+export const parentTasks = pgTable("parent_tasks", tasks, (table) => {
   return {
-    userIdIdx: index('parent_tasks_user_id_idx').on(table.userId),
+    userIdIdx: index("parent_tasks_user_id_idx").on(table.userId),
   }
 })
 
 export const childTask = pgTable(
-  'child_tasks',
+  "child_tasks",
   {
     ...tasks,
-    parentId: id('parent_id').notNull(),
+    parentId: id("parent_id").notNull(),
   },
   (table) => {
     return {
-      userIdIdx: index('child_tasks_user_id_idx').on(table.userId),
+      userIdIdx: index("child_tasks_user_id_idx").on(table.userId),
     }
   }
 )

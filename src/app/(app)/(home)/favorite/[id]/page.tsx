@@ -1,27 +1,27 @@
-'use client'
+"use client"
 
-import React from 'react'
-import { MoreVerticalIcon } from 'lucide-react'
+import React from "react"
+import { MoreVerticalIcon } from "lucide-react"
 
-import * as Layout from '@/app/(app)/app-layout'
-import { CategoryMenuContent } from '@/components/category-menu-content'
-import { Head } from '@/components/head'
+import * as Layout from "#/app/(app)/app-layout"
+import { CategoryMenuContent } from "#/components/category-menu-content"
+import { Head } from "#/components/head"
 import {
   DropdownMenuContent,
   DropdownMenuPortal,
   DropdownMenuRoot,
   DropdownMenuTrigger,
-} from '@/components/ui/menu'
+} from "#/components/ui/menu"
 import {
   TabsContent,
   TabsList,
   TabsRoot,
   TabsTrigger,
-} from '@/components/ui/tabs'
-import { useAppStore } from '@/store/app'
-import { categoryHelper } from '@/utils/category'
+} from "#/components/ui/tabs"
+import { useAppStore } from "#/store/app"
+import { categoryHelper } from "#/utils/category"
 
-import { EmptyTaskCategory, TaskContainer, TaskItem } from '../../task'
+import { EmptyTaskCategory, TaskContainer, TaskItem } from "../../task"
 
 export default function Page({ params }: { params: { id?: string } }) {
   const category = useAppStore((s) =>
@@ -49,7 +49,7 @@ export default function Page({ params }: { params: { id?: string } }) {
             </DropdownMenuTrigger>
 
             <DropdownMenuPortal>
-              <DropdownMenuContent align={'end'}>
+              <DropdownMenuContent align={"end"}>
                 <CategoryMenuContent category={category} type="dropdown" />
               </DropdownMenuContent>
             </DropdownMenuPortal>

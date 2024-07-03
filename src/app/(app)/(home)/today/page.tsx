@@ -1,19 +1,19 @@
-'use client'
+"use client"
 
-import React from 'react'
-import { isToday } from 'date-fns'
-import { CalendarClockIcon } from 'lucide-react'
+import React from "react"
+import { isToday } from "date-fns"
+import { CalendarClockIcon } from "lucide-react"
 
-import * as Layout from '@/app/(app)/app-layout'
-import { Head } from '@/components/head'
+import * as Layout from "#/app/(app)/app-layout"
+import { Head } from "#/components/head"
 import {
   TabsContent,
   TabsList,
   TabsRoot,
   TabsTrigger,
-} from '@/components/ui/tabs'
-import { useAppStore } from '@/store/app'
-import { ParentTask } from '@/store/task-slice'
+} from "#/components/ui/tabs"
+import { useAppStore } from "#/store/app"
+import { ParentTask } from "#/store/task-slice"
 
 export default function Page() {
   return (

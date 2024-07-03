@@ -1,37 +1,37 @@
-'use client'
+"use client"
 
-import React from 'react'
-import { useRouter } from 'next/navigation'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import { useDebounce } from 'use-debounce'
-import { z } from 'zod'
+import React from "react"
+import { useRouter } from "next/navigation"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { useDebounce } from "use-debounce"
+import { z } from "zod"
 
 import {
   passwordChecklist,
   PasswordChecklistItem,
   PasswordVisibilityToggle,
-} from '@/app/(auth)/components'
-import { Alert, useAlert } from '@/components/ui/alert'
-import { Button } from '@/components/ui/button'
+} from "#/app/(auth)/components"
+import { Alert, useAlert } from "#/components/ui/alert"
+import { Button } from "#/components/ui/button"
 import {
   FormError,
   FormFieldset,
   FormInput,
   FormLabel,
   FormRoot,
-} from '@/components/ui/form'
-import { addPassword } from '@/data/auth'
-import { zPassword, zRequired } from '@/utils/zSchema'
+} from "#/components/ui/form"
+import { addPassword } from "#/data/auth"
+import { zPassword, zRequired } from "#/utils/zSchema"
 
 const schema = z
   .object({
-    password: zPassword('not strong enough'),
+    password: zPassword("not strong enough"),
     confirmPassword: zRequired,
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: 'password do not match',
-    path: ['confirmPassword'],
+    message: "password do not match",
+    path: ["confirmPassword"],
   })
 
 type FormValues = z.infer<typeof schema>
@@ -54,7 +54,7 @@ export function Form({ token }: { token: string }) {
     resolver: zodResolver(schema),
   })
 
-  const [watchPassword] = useDebounce(watch('password') ?? '', 500)
+  const [watchPassword] = useDebounce(watch("password") ?? "", 500)
 
   React.useEffect(() => {
     setIsLoading(isPending)
@@ -62,8 +62,8 @@ export function Form({ token }: { token: string }) {
 
   const defaultError = () => {
     setAlert({
-      type: 'destructive',
-      message: 'Something went wrong!',
+      type: "destructive",
+      message: "Something went wrong!",
     })
   }
 
@@ -74,27 +74,27 @@ export function Form({ token }: { token: string }) {
         const res = await addPassword({ ...values, token })
 
         switch (res?.code) {
-          case 'OK':
+          case "OK":
             setAlert({
-              type: 'success',
-              message: 'Password added successfully',
+              type: "success",
+              message: "Password added successfully",
             })
 
-            router.push('/login')
+            router.push("/login")
             break
 
-          case 'INVALID_TOKEN':
+          case "INVALID_TOKEN":
             setAlert({
-              type: 'destructive',
-              message: 'invalid token',
+              type: "destructive",
+              message: "invalid token",
             })
 
             break
 
-          case 'TOKEN_EXPIRED':
+          case "TOKEN_EXPIRED":
             setAlert({
-              type: 'destructive',
-              message: 'token expired',
+              type: "destructive",
+              message: "token expired",
             })
 
             break
@@ -106,7 +106,7 @@ export function Form({ token }: { token: string }) {
   }
 
   React.useEffect(() => {
-    if (isLoading) setAlert('close')
+    if (isLoading) setAlert("close")
   }, [isLoading, setAlert])
 
   return (
@@ -118,10 +118,10 @@ export function Form({ token }: { token: string }) {
             <FormLabel htmlFor="password">Password</FormLabel>
             <FormInput
               id="password"
-              {...register('password')}
+              {...register("password")}
               autoFocus
               placeholder="strong password"
-              type={isPasswordVisible ? 'text' : 'password'}
+              type={isPasswordVisible ? "text" : "password"}
             />
 
             <div className="space-y-2.5">
@@ -152,9 +152,9 @@ export function Form({ token }: { token: string }) {
             <FormLabel htmlFor="confirmPassword">Confirm Password</FormLabel>
             <FormInput
               id="confirmPassword"
-              {...register('confirmPassword')}
+              {...register("confirmPassword")}
               placeholder="strong password"
-              type={isPasswordVisible ? 'text' : 'password'}
+              type={isPasswordVisible ? "text" : "password"}
             />
             <FormError>{errors.confirmPassword?.message}</FormError>
           </div>

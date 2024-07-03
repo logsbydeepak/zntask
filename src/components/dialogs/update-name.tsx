@@ -1,29 +1,29 @@
-import React from 'react'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
+import React from "react"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
 
-import { Button } from '@/components/ui/button'
+import { Button } from "#/components/ui/button"
 import {
   DialogClose,
   DialogContent,
   DialogDescription,
   DialogRoot,
   DialogTitle,
-} from '@/components/ui/dialog'
+} from "#/components/ui/dialog"
 import {
   FormError,
   FormFieldset,
   FormInput,
   FormLabel,
   FormRoot,
-} from '@/components/ui/form'
-import { updateName } from '@/data/user'
-import { zUpdateName } from '@/data/utils/zSchema'
-import { useAppStore } from '@/store/app'
-import { toast } from '@/store/toast'
+} from "#/components/ui/form"
+import { updateName } from "#/data/user"
+import { zUpdateName } from "#/data/utils/zSchema"
+import { useAppStore } from "#/store/app"
+import { toast } from "#/store/toast"
 
-import { Head } from '../head'
+import { Head } from "../head"
 
 type FormValues = z.infer<typeof zUpdateName>
 
@@ -84,7 +84,7 @@ function UpdateNameDialogContent({
 
     startTransition(async () => {
       await updateName(values)
-      toast.success('Name updated')
+      toast.success("Name updated")
       handleClose()
     })
   }
@@ -104,7 +104,7 @@ function UpdateNameDialogContent({
             <FormInput
               autoFocus
               id="firstName"
-              {...register('firstName')}
+              {...register("firstName")}
               placeholder="Haven"
             />
             <FormError>{errors.firstName?.message}</FormError>
@@ -114,7 +114,7 @@ function UpdateNameDialogContent({
             <FormLabel htmlFor="lastName">Last Name</FormLabel>
             <FormInput
               id="lastName"
-              {...register('lastName')}
+              {...register("lastName")}
               placeholder="Thompson"
             />
           </div>

@@ -1,33 +1,33 @@
-import React from 'react'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
+import React from "react"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
 
-import { PasswordVisibilityToggle } from '@/app/(auth)/components'
-import { Button } from '@/components/ui/button'
+import { PasswordVisibilityToggle } from "#/app/(auth)/components"
+import { Button } from "#/components/ui/button"
 import {
   DialogClose,
   DialogContent,
   DialogDescription,
   DialogRoot,
   DialogTitle,
-} from '@/components/ui/dialog'
+} from "#/components/ui/dialog"
 import {
   FormError,
   FormFieldset,
   FormInput,
   FormLabel,
   FormRoot,
-} from '@/components/ui/form'
-import { removeGoogleAuthProvider } from '@/data/auth'
-import { useAppStore } from '@/store/app'
-import { toast } from '@/store/toast'
-import { zPassword } from '@/utils/zSchema'
+} from "#/components/ui/form"
+import { removeGoogleAuthProvider } from "#/data/auth"
+import { useAppStore } from "#/store/app"
+import { toast } from "#/store/toast"
+import { zPassword } from "#/utils/zSchema"
 
-import { Head } from '../head'
+import { Head } from "../head"
 
 const zSchema = z.object({
-  password: zPassword('invalid password'),
+  password: zPassword("invalid password"),
 })
 
 type FormValues = z.infer<typeof zSchema>
@@ -80,19 +80,19 @@ function Content({
       try {
         const res = await removeGoogleAuthProvider(values)
         const resCode = res?.code
-        if (resCode === 'INVALID_CREDENTIALS') {
-          setError('password', {
-            type: 'manual',
-            message: 'invalid credentials',
+        if (resCode === "INVALID_CREDENTIALS") {
+          setError("password", {
+            type: "manual",
+            message: "invalid credentials",
           })
         }
-        if (resCode === 'NOT_ADDED') {
+        if (resCode === "NOT_ADDED") {
           handleClose()
-          toast.error('google auth provider not added')
+          toast.error("google auth provider not added")
         }
-        if (resCode === 'OK') {
+        if (resCode === "OK") {
           handleClose()
-          toast.success('google auth provider removed')
+          toast.success("google auth provider removed")
         }
       } catch (error) {
         toast.error()
@@ -114,9 +114,9 @@ function Content({
           <FormLabel htmlFor="password">Password</FormLabel>
           <FormInput
             id="password"
-            {...register('password')}
+            {...register("password")}
             placeholder="********"
-            type={isPasswordVisible ? 'text' : 'password'}
+            type={isPasswordVisible ? "text" : "password"}
             autoFocus
           />
           <div className="flex flex-wrap justify-between gap-y-2">

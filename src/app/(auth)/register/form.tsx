@@ -1,10 +1,10 @@
-'use client'
+"use client"
 
-import React from 'react'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import { useDebounce } from 'use-debounce'
-import { z } from 'zod'
+import React from "react"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { useDebounce } from "use-debounce"
+import { z } from "zod"
 
 import {
   AccountQuestion,
@@ -13,22 +13,22 @@ import {
   PasswordChecklistItem,
   PasswordVisibilityToggle,
   Separator,
-} from '@/app/(auth)/components'
-import { Alert, useAlert } from '@/components/ui/alert'
-import { Button } from '@/components/ui/button'
+} from "#/app/(auth)/components"
+import { Alert, useAlert } from "#/components/ui/alert"
+import { Button } from "#/components/ui/button"
 import {
   FormError,
   FormFieldset,
   FormInput,
   FormLabel,
   FormRoot,
-} from '@/components/ui/form'
+} from "#/components/ui/form"
 import {
   redirectGoogleRegister,
   registerWithCredentials,
   registerWithGoogle,
-} from '@/data/auth'
-import { zRegisterWithCredentials } from '@/data/utils/zSchema'
+} from "#/data/auth"
+import { zRegisterWithCredentials } from "#/data/utils/zSchema"
 
 type FormValues = z.infer<typeof zRegisterWithCredentials>
 
@@ -37,8 +37,8 @@ export function Form() {
 
   const [isPasswordVisible, setIsPasswordVisible] = React.useState(false)
   const [isGoogleLoading, setIsGoogleLoading] = React.useState(() => {
-    if (typeof window === 'undefined') return false
-    return !!window.localStorage.getItem('googleCode')
+    if (typeof window === "undefined") return false
+    return !!window.localStorage.getItem("googleCode")
   })
 
   const [isCredentialPending, startRegisterWithCredentials] =
@@ -57,34 +57,34 @@ export function Form() {
 
   const isLoading = isGooglePending || isCredentialPending || isGoogleLoading
 
-  const [watchPassword] = useDebounce(watch('password') ?? '', 500)
+  const [watchPassword] = useDebounce(watch("password") ?? "", 500)
 
   const defaultError = React.useCallback(() => {
     setAlert({
-      type: 'destructive',
-      message: 'Something went wrong!',
+      type: "destructive",
+      message: "Something went wrong!",
     })
   }, [setAlert])
 
   const handleGoogleCode = React.useCallback(() => {
-    const code = window.localStorage.getItem('googleCode')
+    const code = window.localStorage.getItem("googleCode")
     if (!code) return
-    window.localStorage.removeItem('googleCode')
+    window.localStorage.removeItem("googleCode")
     startRegisterWithGoogle(async () => {
       try {
         const res = await registerWithGoogle({ code })
         const resCode = res?.code
 
-        if (resCode === 'INVALID_CREDENTIALS') {
+        if (resCode === "INVALID_CREDENTIALS") {
           setAlert({
-            type: 'destructive',
-            message: 'User not found',
+            type: "destructive",
+            message: "User not found",
           })
         }
-        if (resCode === 'EMAIL_ALREADY_EXISTS') {
+        if (resCode === "EMAIL_ALREADY_EXISTS") {
           setAlert({
-            type: 'destructive',
-            message: 'Email already exists',
+            type: "destructive",
+            message: "Email already exists",
           })
         }
       } catch (error) {
@@ -98,9 +98,9 @@ export function Form() {
       try {
         const res = await registerWithCredentials(values)
         const resCode = res?.code
-        if (resCode === 'EMAIL_ALREADY_EXISTS') {
-          setError('email', {
-            message: 'already exists',
+        if (resCode === "EMAIL_ALREADY_EXISTS") {
+          setError("email", {
+            message: "already exists",
           })
         }
       } catch (error) {
@@ -125,7 +125,7 @@ export function Form() {
   }, [handleGoogleCode])
 
   React.useEffect(() => {
-    if (isLoading) setAlert('close')
+    if (isLoading) setAlert("close")
   }, [isLoading, setAlert])
 
   React.useEffect(() => {
@@ -156,7 +156,7 @@ export function Form() {
               <FormInput
                 autoFocus
                 id="firstName"
-                {...register('firstName')}
+                {...register("firstName")}
                 placeholder="Haven"
               />
               <FormError>{errors.firstName?.message}</FormError>
@@ -166,7 +166,7 @@ export function Form() {
               <FormLabel htmlFor="lastName">Last Name</FormLabel>
               <FormInput
                 id="lastName"
-                {...register('lastName')}
+                {...register("lastName")}
                 placeholder="Thompson"
               />
             </div>
@@ -176,7 +176,7 @@ export function Form() {
             <FormLabel htmlFor="email">Email</FormLabel>
             <FormInput
               id="email"
-              {...register('email')}
+              {...register("email")}
               placeholder="abc@domain.com"
             />
 
@@ -187,9 +187,9 @@ export function Form() {
             <FormLabel htmlFor="password">Password</FormLabel>
             <FormInput
               id="password"
-              {...register('password')}
+              {...register("password")}
               placeholder="strong password"
-              type={isPasswordVisible ? 'text' : 'password'}
+              type={isPasswordVisible ? "text" : "password"}
             />
 
             <div className="space-y-2.5">
@@ -220,9 +220,9 @@ export function Form() {
             <FormLabel htmlFor="confirmPassword">Confirm Password</FormLabel>
             <FormInput
               id="confirmPassword"
-              {...register('confirmPassword')}
+              {...register("confirmPassword")}
               placeholder="strong password"
-              type={isPasswordVisible ? 'text' : 'password'}
+              type={isPasswordVisible ? "text" : "password"}
             />
             <FormError>{errors.confirmPassword?.message}</FormError>
           </div>
@@ -237,7 +237,7 @@ export function Form() {
       </Button>
       <AccountQuestion.Container>
         <AccountQuestion.Title>
-          Already have an account?{' '}
+          Already have an account?{" "}
           <AccountQuestion.Action href="/login" disabled={isLoading}>
             Login
           </AccountQuestion.Action>

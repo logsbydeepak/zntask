@@ -1,12 +1,12 @@
-import React from 'react'
-import { Command } from 'cmdk'
-import { FolderIcon, InboxIcon, SearchIcon } from 'lucide-react'
+import React from "react"
+import { Command } from "cmdk"
+import { FolderIcon, InboxIcon, SearchIcon } from "lucide-react"
 
-import { useAppStore } from '@/store/app'
-import { Category, categoryHelper, getCategoryColor } from '@/utils/category'
-import { cn } from '@/utils/style'
+import { useAppStore } from "#/store/app"
+import { Category, categoryHelper, getCategoryColor } from "#/utils/category"
+import { cn } from "#/utils/style"
 
-import { PopoverContent } from './ui/popover'
+import { PopoverContent } from "./ui/popover"
 
 export const CategoryPopover = React.forwardRef<
   React.ElementRef<typeof PopoverContent>,
@@ -105,7 +105,7 @@ export const CategoryPopover = React.forwardRef<
     </PopoverContent>
   )
 })
-CategoryPopover.displayName = 'CategoryPopover'
+CategoryPopover.displayName = "CategoryPopover"
 
 const CategoryItemContainer = React.forwardRef<
   React.ElementRef<typeof Command.Item>,
@@ -140,11 +140,11 @@ function CategoryItemTitle({ children }: { children: React.ReactNode }) {
 function CategoryItemIndicator({
   indicator,
 }: {
-  indicator: Category['indicator']
+  indicator: Category["indicator"]
 }) {
   return (
     <div
-      className={cn('size-2.5 rounded-full', getCategoryColor(indicator, 'bg'))}
+      className={cn("size-2.5 rounded-full", getCategoryColor(indicator, "bg"))}
     />
   )
 }

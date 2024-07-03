@@ -1,8 +1,8 @@
-import React from 'react'
-import Link from 'next/link'
-import { MoreVerticalIcon } from 'lucide-react'
+import React from "react"
+import Link from "next/link"
+import { MoreVerticalIcon } from "lucide-react"
 
-import { CategoryMenuContent } from '@/components/category-menu-content'
+import { CategoryMenuContent } from "#/components/category-menu-content"
 import {
   ContextMenuContent,
   ContextMenuPortal,
@@ -12,13 +12,13 @@ import {
   DropdownMenuPortal,
   DropdownMenuRoot,
   DropdownMenuTrigger,
-} from '@/components/ui/menu'
-import { Category, getCategoryColor } from '@/utils/category'
-import { cn } from '@/utils/style'
+} from "#/components/ui/menu"
+import { Category, getCategoryColor } from "#/utils/category"
+import { cn } from "#/utils/style"
 
 export const CategoryItem = React.forwardRef<
   HTMLAnchorElement,
-  React.ComponentPropsWithoutRef<'a'> & {
+  React.ComponentPropsWithoutRef<"a"> & {
     category: Category
     href: string
   }
@@ -32,7 +32,7 @@ export const CategoryItem = React.forwardRef<
             ref={ref}
             href={href}
             className={cn(
-              'relative flex touch-none items-center justify-between rounded-lg border border-transparent px-4 py-2 hover:border-gray-3 hover:bg-gray-2 data-[state=open]:border-gray-3 data-[state=open]:bg-gray-2',
+              "relative flex touch-none items-center justify-between rounded-lg border border-transparent px-4 py-2 hover:border-gray-3 hover:bg-gray-2 data-[state=open]:border-gray-3 data-[state=open]:bg-gray-2",
               className
             )}
           >
@@ -40,8 +40,8 @@ export const CategoryItem = React.forwardRef<
               <div>
                 <div
                   className={cn(
-                    'size-2.5 rounded-full',
-                    getCategoryColor(category.indicator, 'bg')
+                    "size-2.5 rounded-full",
+                    getCategoryColor(category.indicator, "bg")
                   )}
                 />
               </div>
@@ -76,7 +76,7 @@ export const CategoryItem = React.forwardRef<
     </ContextMenuRoot>
   )
 })
-CategoryItem.displayName = 'CategoryItem'
+CategoryItem.displayName = "CategoryItem"
 
 export function CategoryContainer({ children }: { children: React.ReactNode }) {
   return <div className="space-y-2">{children}</div>

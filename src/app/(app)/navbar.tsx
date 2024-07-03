@@ -1,8 +1,8 @@
-'use client'
+"use client"
 
-import React from 'react'
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import React from "react"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
 import {
   CheckCircleIcon,
   FolderPlusIcon,
@@ -14,11 +14,11 @@ import {
   SearchIcon,
   SunIcon,
   UserIcon,
-} from 'lucide-react'
-import { useTheme } from 'next-themes'
+} from "lucide-react"
+import { useTheme } from "next-themes"
 
-import { Avatar } from '@/components/avatar'
-import { LogoIcon } from '@/components/icon/logo'
+import { Avatar } from "#/components/avatar"
+import { LogoIcon } from "#/components/icon/logo"
 import {
   DropdownMenuContent,
   DropdownMenuItem,
@@ -28,15 +28,15 @@ import {
   DropdownMenuRoot,
   DropdownMenuTrigger,
   MenuIcon,
-} from '@/components/ui/menu'
+} from "#/components/ui/menu"
 import {
   TooltipContent,
   TooltipProvider,
   TooltipRoot,
   TooltipTrigger,
-} from '@/components/ui/tooltip'
-import { useAppStore } from '@/store/app'
-import { cn, tw } from '@/utils/style'
+} from "#/components/ui/tooltip"
+import { useAppStore } from "#/store/app"
+import { cn, tw } from "#/utils/style"
 
 export function Navbar() {
   const setDialog = useAppStore((s) => s.setDialog)
@@ -86,7 +86,7 @@ export function Navbar() {
                 </Icon>
               </TooltipTrigger>
               <TooltipContent sideOffset={8}>
-                {isSidebarOpen ? 'close sidebar' : 'open sidebar'}
+                {isSidebarOpen ? "close sidebar" : "open sidebar"}
               </TooltipContent>
             </TooltipRoot>
 
@@ -158,18 +158,18 @@ function UserMenu() {
   const themeOptions = [
     {
       Icon: SunIcon,
-      label: 'light theme',
-      value: 'light',
+      label: "light theme",
+      value: "light",
     },
     {
       Icon: MoonStarIcon,
-      label: 'dark theme',
-      value: 'dark',
+      label: "dark theme",
+      value: "dark",
     },
     {
       Icon: MonitorIcon,
-      label: 'system theme',
-      value: 'system',
+      label: "system theme",
+      value: "system",
     },
   ]
 
@@ -186,7 +186,7 @@ function UserMenu() {
         </p>
       </div>
 
-      <DropdownMenuItem onSelect={() => router.push('/user')}>
+      <DropdownMenuItem onSelect={() => router.push("/user")}>
         <MenuIcon intent="destructive">
           <UserIcon />
         </MenuIcon>
@@ -197,7 +197,7 @@ function UserMenu() {
         className="flex justify-between p-4"
         value={theme}
         onValueChange={(value) => {
-          if (['light', 'dark', 'system'].includes(value)) {
+          if (["light", "dark", "system"].includes(value)) {
             setTheme(value)
           }
         }}
@@ -209,11 +209,11 @@ function UserMenu() {
                 value={i.value}
                 className={cn(
                   iconStyle,
-                  'size-8 cursor-pointer outline-none',
-                  'data-[highlighted]:text-gray-12 data-[state=checked]:text-gray-1',
-                  'data-[highlighted]:bg-gray-3 data-[state=checked]:bg-orange-10',
-                  'data-[highlighted]:ring-2 data-[highlighted]:ring-gray-3',
-                  'data-[state=checked]:border-orange-8 data-[state=checked]:ring-orange-3'
+                  "size-8 cursor-pointer outline-none",
+                  "data-[highlighted]:text-gray-12 data-[state=checked]:text-gray-1",
+                  "data-[highlighted]:bg-gray-3 data-[state=checked]:bg-orange-10",
+                  "data-[highlighted]:ring-2 data-[highlighted]:ring-gray-3",
+                  "data-[state=checked]:border-orange-8 data-[state=checked]:ring-orange-3"
                 )}
               >
                 <Icon className="size-3.5" />
@@ -238,18 +238,18 @@ function UserMenu() {
 }
 
 const iconStyle = tw(
-  'flex items-center justify-center rounded-lg border border-gray-5 bg-gray-2 text-gray-11 hover:border-gray-6 hover:bg-gray-3 hover:text-gray-12 active:border-gray-7 active:bg-gray-4'
+  "flex items-center justify-center rounded-lg border border-gray-5 bg-gray-2 text-gray-11 hover:border-gray-6 hover:bg-gray-3 hover:text-gray-12 active:border-gray-7 active:bg-gray-4"
 )
 
 const Icon = React.forwardRef<
-  React.ElementRef<'button'>,
-  React.ComponentPropsWithoutRef<'button'>
+  React.ElementRef<"button">,
+  React.ComponentPropsWithoutRef<"button">
 >(({ children, ...props }, ref) => (
-  <button {...props} ref={ref} className={cn(iconStyle, 'size-8')}>
+  <button {...props} ref={ref} className={cn(iconStyle, "size-8")}>
     <span className="size-4">{children}</span>
   </button>
 ))
-Icon.displayName = 'Icon'
+Icon.displayName = "Icon"
 
 function SearchXL() {
   const setDialog = useAppStore((s) => s.setDialog)

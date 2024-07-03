@@ -1,9 +1,9 @@
-'use client'
+"use client"
 
-import React from 'react'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
+import React from "react"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
 
 import {
   AccountQuestion,
@@ -11,23 +11,23 @@ import {
   PasswordVisibilityToggle,
   ResetPassword,
   Separator,
-} from '@/app/(auth)/components'
-import { ResetPasswordDialog } from '@/components/dialogs/reset-password'
-import { Alert, useAlert } from '@/components/ui/alert'
-import { Button } from '@/components/ui/button'
+} from "#/app/(auth)/components"
+import { ResetPasswordDialog } from "#/components/dialogs/reset-password"
+import { Alert, useAlert } from "#/components/ui/alert"
+import { Button } from "#/components/ui/button"
 import {
   FormError,
   FormFieldset,
   FormInput,
   FormLabel,
   FormRoot,
-} from '@/components/ui/form'
+} from "#/components/ui/form"
 import {
   loginWithCredentials,
   loginWithGoogle,
   redirectGoogleLogin,
-} from '@/data/auth'
-import { zLoginWithCredentials } from '@/data/utils/zSchema'
+} from "#/data/auth"
+import { zLoginWithCredentials } from "#/data/utils/zSchema"
 
 type FormValues = z.infer<typeof zLoginWithCredentials>
 
@@ -39,8 +39,8 @@ export function Form() {
   const [isPasswordVisible, setIsPasswordVisible] = React.useState(false)
 
   const [isGoogleLoading, setIsGoogleLoading] = React.useState(() => {
-    if (typeof window === 'undefined') return false
-    return !!window.localStorage.getItem('googleCode')
+    if (typeof window === "undefined") return false
+    return !!window.localStorage.getItem("googleCode")
   })
 
   const [isCredentialPending, startLoginWithCredentials] = React.useTransition()
@@ -58,24 +58,24 @@ export function Form() {
 
   const defaultError = React.useCallback(() => {
     setAlert({
-      type: 'destructive',
-      message: 'Something went wrong!',
+      type: "destructive",
+      message: "Something went wrong!",
     })
   }, [setAlert])
 
   const handleGoogleCode = React.useCallback(() => {
-    const code = window.localStorage.getItem('googleCode')
+    const code = window.localStorage.getItem("googleCode")
     if (!code) return
-    window.localStorage.removeItem('googleCode')
+    window.localStorage.removeItem("googleCode")
     startLoginWithGoogle(async () => {
       try {
         const res = await loginWithGoogle({ code })
         const resCode = res?.code
 
-        if (resCode === 'INVALID_CREDENTIALS') {
+        if (resCode === "INVALID_CREDENTIALS") {
           setAlert({
-            type: 'destructive',
-            message: 'Invalid credentials',
+            type: "destructive",
+            message: "Invalid credentials",
           })
         }
       } catch (error) {
@@ -91,10 +91,10 @@ export function Form() {
         const res = await loginWithCredentials(values)
         const resCode = res?.code
 
-        if (resCode === 'INVALID_CREDENTIALS') {
+        if (resCode === "INVALID_CREDENTIALS") {
           setAlert({
-            type: 'destructive',
-            message: 'Invalid credentials',
+            type: "destructive",
+            message: "Invalid credentials",
           })
         }
       } catch (error) {
@@ -119,7 +119,7 @@ export function Form() {
   }, [handleGoogleCode])
 
   React.useEffect(() => {
-    if (isLoading) setAlert('close')
+    if (isLoading) setAlert("close")
   }, [isLoading, setAlert])
 
   React.useEffect(() => {
@@ -148,7 +148,7 @@ export function Form() {
             <FormInput
               id="email"
               autoFocus
-              {...register('email')}
+              {...register("email")}
               placeholder="abc@domain.com"
             />
             <FormError>{errors.email?.message}</FormError>
@@ -159,9 +159,9 @@ export function Form() {
 
             <FormInput
               id="password"
-              {...register('password')}
+              {...register("password")}
               placeholder="********"
-              type={isPasswordVisible ? 'text' : 'password'}
+              type={isPasswordVisible ? "text" : "password"}
             />
             <div className="flex flex-wrap justify-between gap-y-2">
               <div className="mr-4">
@@ -191,7 +191,7 @@ export function Form() {
       </fieldset>
       <AccountQuestion.Container>
         <AccountQuestion.Title>
-          Already have an account?{' '}
+          Already have an account?{" "}
           <AccountQuestion.Action href="/register" disabled={isLoading}>
             Register
           </AccountQuestion.Action>

@@ -1,32 +1,32 @@
-'use client'
+"use client"
 
-import React, { ReactNode } from 'react'
+import React, { ReactNode } from "react"
 
-import { useAppStore } from '@/store/app'
+import { useAppStore } from "#/store/app"
 
 export function GlobalShortcut() {
   const setDialog = useAppStore((s) => s.setDialog)
 
   React.useEffect(() => {
     function handleShortcuts(e: KeyboardEvent) {
-      if (e.key === 'i' && (e.metaKey || e.ctrlKey)) {
+      if (e.key === "i" && (e.metaKey || e.ctrlKey)) {
         e.preventDefault()
         setDialog({ createTask: true })
       }
 
-      if (e.key === 'b' && (e.metaKey || e.ctrlKey)) {
+      if (e.key === "b" && (e.metaKey || e.ctrlKey)) {
         e.preventDefault()
         setDialog({ createCategory: true })
       }
 
-      if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
+      if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
         e.preventDefault()
         setDialog({ commandPalette: true })
       }
     }
 
-    document.addEventListener('keydown', handleShortcuts)
-    return () => document.removeEventListener('keydown', handleShortcuts)
+    document.addEventListener("keydown", handleShortcuts)
+    return () => document.removeEventListener("keydown", handleShortcuts)
   }, [setDialog])
 
   return null
@@ -37,7 +37,7 @@ export function State() {
   const setIsScreenSM = useAppStore((s) => s.setScreenSM)
 
   const [screenSize, setScreenSize] = React.useState(() => {
-    if (typeof window === 'undefined') return 0
+    if (typeof window === "undefined") return 0
     return window.innerWidth
   })
   const differScreenSize = React.useDeferredValue(screenSize)
@@ -51,8 +51,8 @@ export function State() {
     function handleResize() {
       setScreenSize(window.innerWidth)
     }
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
+    window.addEventListener("resize", handleResize)
+    return () => window.removeEventListener("resize", handleResize)
   }, [setScreenSize])
 
   return null

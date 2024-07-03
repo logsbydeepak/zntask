@@ -1,8 +1,8 @@
-import { isRedirectError } from 'next/dist/client/components/redirect'
-import { redirect } from 'next/navigation'
-import { z } from 'zod'
+import { isRedirectError } from "next/dist/client/components/redirect"
+import { redirect } from "next/navigation"
+import { z } from "zod"
 
-import { isAuth, UnauthorizedError } from './auth'
+import { isAuth, UnauthorizedError } from "./auth"
 
 type Prettify<T> = {
   [K in keyof T]: T[K]
@@ -24,7 +24,7 @@ export function r(code: string, res?: object) {
     return { code: code }
   }
 
-  throw new Error('Something went wrong!')
+  throw new Error("Something went wrong!")
 }
 
 const hAuth = Object.freeze({
@@ -107,5 +107,5 @@ function handleError(error: unknown): never {
   }
 
   console.error(error)
-  throw new Error('Something went wrong!')
+  throw new Error("Something went wrong!")
 }

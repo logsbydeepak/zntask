@@ -1,5 +1,5 @@
-import { db } from './db'
-import { h, r } from './utils/handler'
+import { db } from "./db"
+import { h, r } from "./utils/handler"
 
 export const getInitialData = h.auth.fn(async ({ userId }) => {
   const data = await db.query.users.findFirst({
@@ -18,7 +18,7 @@ export const getInitialData = h.auth.fn(async ({ userId }) => {
       },
     },
   })
-  if (!data) throw new Error('User not found!')
+  if (!data) throw new Error("User not found!")
 
   const user = {
     firstName: data.firstName,
@@ -27,7 +27,7 @@ export const getInitialData = h.auth.fn(async ({ userId }) => {
     email: data.email,
   }
 
-  return r('OK', {
+  return r("OK", {
     user,
     categories: data.categories,
     parentTasks: data.parentTasks,

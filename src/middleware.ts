@@ -1,66 +1,66 @@
-import { cookies } from 'next/headers'
-import { NextRequest, NextResponse } from 'next/server'
-import * as jose from 'jose'
+import { cookies } from "next/headers"
+import { NextRequest, NextResponse } from "next/server"
+import * as jose from "jose"
 
-import { env } from '@/env'
+import { env } from "#/env"
 
-import { redis } from './data/utils/config'
-import { r } from './data/utils/handler'
+import { redis } from "./data/utils/config"
+import { r } from "./data/utils/handler"
 
 export async function middleware(req: NextRequest) {
   try {
     const url = req.url
-    const token = cookies().get('auth')?.value
+    const token = cookies().get("auth")?.value
     const authData = await checkIsAuth(token)
-    const isAuth = authData.code === 'OK'
+    const isAuth = authData.code === "OK"
 
     const { pathname } = req.nextUrl
-    const isIndexPage = pathname === '/'
+    const isIndexPage = pathname === "/"
 
     const isAuthPage =
-      pathname.startsWith('/login') || pathname.startsWith('/register')
+      pathname.startsWith("/login") || pathname.startsWith("/register")
 
     const isAppPage =
-      pathname.startsWith('/today') ||
-      pathname.startsWith('/inbox') ||
-      pathname.startsWith('/upcoming') ||
-      pathname.startsWith('/favorite') ||
-      pathname.startsWith('/category') ||
-      pathname.startsWith('/user') ||
-      pathname.startsWith('/api/uploadthing')
+      pathname.startsWith("/today") ||
+      pathname.startsWith("/inbox") ||
+      pathname.startsWith("/upcoming") ||
+      pathname.startsWith("/favorite") ||
+      pathname.startsWith("/category") ||
+      pathname.startsWith("/user") ||
+      pathname.startsWith("/api/uploadthing")
 
     if (isAuth) {
       const clonedRequest = req.clone()
       clonedRequest.headers.append(
-        'Cookie',
+        "Cookie",
         `middlewareData-auth-userId=${authData.userId}`
       )
       clonedRequest.headers.append(
-        'Cookie',
+        "Cookie",
         `middlewareData-auth-token=${authData.token}`
       )
 
       if (isIndexPage) {
-        return NextResponse.rewrite(new URL('/today', url), {
+        return NextResponse.rewrite(new URL("/today", url), {
           request: clonedRequest,
         })
       }
 
       if (isAuthPage) {
-        return NextResponse.redirect(new URL('/', url))
+        return NextResponse.redirect(new URL("/", url))
       }
       return NextResponse.next({ request: clonedRequest })
     }
 
     if (!isAuth) {
-      if (pathname.startsWith('/api/uploadthing')) return NextResponse.next()
+      if (pathname.startsWith("/api/uploadthing")) return NextResponse.next()
 
       if (isIndexPage) {
-        return NextResponse.rewrite(new URL('/home', url))
+        return NextResponse.rewrite(new URL("/home", url))
       }
 
       if (isAppPage) {
-        return NextResponse.redirect(new URL('/login', url))
+        return NextResponse.redirect(new URL("/login", url))
       }
     }
 
@@ -72,40 +72,40 @@ export async function middleware(req: NextRequest) {
 
 export const config = {
   matcher: [
-    '/',
+    "/",
 
-    '/login/:path*',
-    '/register/:path*',
+    "/login/:path*",
+    "/register/:path*",
 
-    '/today/:path*',
-    '/inbox/:path*',
-    '/upcoming/:path*',
-    '/favorite/:path*',
-    '/category/:path*',
-    '/api/uploadthing:path*',
+    "/today/:path*",
+    "/inbox/:path*",
+    "/upcoming/:path*",
+    "/favorite/:path*",
+    "/category/:path*",
+    "/api/uploadthing:path*",
 
-    '/user/:path*',
+    "/user/:path*",
   ],
 }
 
 async function checkIsAuth(token?: string) {
   try {
-    if (!token) return r('NO_TOKEN')
+    if (!token) return r("NO_TOKEN")
     const secret = jose.base64url.decode(env.JWT_SECRET)
     const { payload } = await jose.jwtDecrypt(token, secret, {
-      audience: 'auth',
+      audience: "auth",
     })
-    if (!payload || !payload?.userId || typeof payload.userId !== 'string')
-      return r('INVALID_PAYLOAD')
+    if (!payload || !payload?.userId || typeof payload.userId !== "string")
+      return r("INVALID_PAYLOAD")
 
     const redisRes = await redis.exists(`logout:${token}`)
-    if (redisRes === 1) return r('LOGGED_OUT')
+    if (redisRes === 1) return r("LOGGED_OUT")
 
-    return r('OK', {
+    return r("OK", {
       userId: payload.userId,
       token: token,
     })
   } catch (error) {
-    return r('ERROR')
+    return r("ERROR")
   }
 }

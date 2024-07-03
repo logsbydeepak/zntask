@@ -1,24 +1,24 @@
-import React from 'react'
-import Image from 'next/image'
-import { generateReactHelpers } from '@uploadthing/react/hooks'
-import { Trash2Icon, UploadIcon } from 'lucide-react'
+import React from "react"
+import Image from "next/image"
+import { generateReactHelpers } from "@uploadthing/react/hooks"
+import { Trash2Icon, UploadIcon } from "lucide-react"
 
-import * as Badge from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
+import * as Badge from "#/components/ui/badge"
+import { Button } from "#/components/ui/button"
 import {
   DialogClose,
   DialogContent,
   DialogRoot,
   DialogTitle,
-} from '@/components/ui/dialog'
-import { FormRoot } from '@/components/ui/form'
-import { removeProfilePicture, revalidateUser } from '@/data/user'
-import type { OurFileRouter } from '@/data/utils/uploadthing'
-import { useAppStore } from '@/store/app'
-import { toast } from '@/store/toast'
+} from "#/components/ui/dialog"
+import { FormRoot } from "#/components/ui/form"
+import { removeProfilePicture, revalidateUser } from "#/data/user"
+import type { OurFileRouter } from "#/data/utils/uploadthing"
+import { useAppStore } from "#/store/app"
+import { toast } from "#/store/toast"
 
-import { Avatar, genInitials } from '../avatar'
-import { Head } from '../head'
+import { Avatar, genInitials } from "../avatar"
+import { Head } from "../head"
 
 const { useUploadThing } = generateReactHelpers<OurFileRouter>()
 
@@ -62,12 +62,12 @@ function UpdateProfilePictureDialogContent({
     user.profilePicture
   )
 
-  const { startUpload, isUploading } = useUploadThing('profilePicture', {
+  const { startUpload, isUploading } = useUploadThing("profilePicture", {
     onClientUploadComplete: (file) => {
       startTransition(async () => {
         await revalidateUser()
       })
-      toast.success('Profile picture updated')
+      toast.success("Profile picture updated")
       handleClose()
     },
     onUploadError: () => {
@@ -86,7 +86,7 @@ function UpdateProfilePictureDialogContent({
     if (reset) {
       startTransition(async () => {
         await removeProfilePicture()
-        toast.success('Profile picture updated')
+        toast.success("Profile picture updated")
         handleClose()
       })
     }
@@ -113,9 +113,9 @@ function UpdateProfilePictureDialogContent({
           <fieldset className="flex flex-col space-y-2" disabled={isLoading}>
             <Badge.Button
               onClick={() => {
-                const input = document.createElement('input')
-                input.type = 'file'
-                input.accept = 'image/png, image/jpeg'
+                const input = document.createElement("input")
+                input.type = "file"
+                input.accept = "image/png, image/jpeg"
                 input.click()
                 input.onchange = () => {
                   const file = input.files?.[0]

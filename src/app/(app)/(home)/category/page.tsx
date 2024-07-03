@@ -1,24 +1,24 @@
-'use client'
+"use client"
 
-import { useRouter, useSearchParams } from 'next/navigation'
-import { FolderIcon } from 'lucide-react'
+import { useRouter, useSearchParams } from "next/navigation"
+import { FolderIcon } from "lucide-react"
 
-import * as Layout from '@/app/(app)/app-layout'
-import { Head } from '@/components/head'
+import * as Layout from "#/app/(app)/app-layout"
+import { Head } from "#/components/head"
 import {
   TabsContent,
   TabsList,
   TabsRoot,
   TabsTrigger,
-} from '@/components/ui/tabs'
-import { useAppStore } from '@/store/app'
-import { categoryHelper } from '@/utils/category'
+} from "#/components/ui/tabs"
+import { useAppStore } from "#/store/app"
+import { categoryHelper } from "#/utils/category"
 
-import { CategoryContainer, CategoryItem } from '../category'
+import { CategoryContainer, CategoryItem } from "../category"
 
 export default function Page() {
-  const statusParams = useSearchParams().get('status')
-  const activeTab = statusParams === 'archive' ? 'archive' : 'active'
+  const statusParams = useSearchParams().get("status")
+  const activeTab = statusParams === "archive" ? "archive" : "active"
   const router = useRouter()
 
   return (

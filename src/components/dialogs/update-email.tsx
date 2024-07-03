@@ -1,34 +1,34 @@
-import React from 'react'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
+import React from "react"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
 
-import { PasswordVisibilityToggle } from '@/app/(auth)/components'
-import { Button } from '@/components/ui/button'
+import { PasswordVisibilityToggle } from "#/app/(auth)/components"
+import { Button } from "#/components/ui/button"
 import {
   DialogClose,
   DialogContent,
   DialogDescription,
   DialogRoot,
   DialogTitle,
-} from '@/components/ui/dialog'
+} from "#/components/ui/dialog"
 import {
   FormError,
   FormFieldset,
   FormInput,
   FormLabel,
   FormRoot,
-} from '@/components/ui/form'
-import { updateEmail } from '@/data/user'
-import { useAppStore } from '@/store/app'
-import { toast } from '@/store/toast'
-import { zEmail, zPassword } from '@/utils/zSchema'
+} from "#/components/ui/form"
+import { updateEmail } from "#/data/user"
+import { useAppStore } from "#/store/app"
+import { toast } from "#/store/toast"
+import { zEmail, zPassword } from "#/utils/zSchema"
 
-import { Head } from '../head'
+import { Head } from "../head"
 
 const zSchema = z.object({
   email: zEmail,
-  password: zPassword('invalid password'),
+  password: zPassword("invalid password"),
 })
 
 type FormValues = z.infer<typeof zSchema>
@@ -82,20 +82,20 @@ function Content({
         const res = await updateEmail(values)
         const resCode = res?.code
 
-        if (resCode === 'INVALID_CREDENTIALS') {
-          setError('password', {
-            type: 'manual',
-            message: 'invalid credentials',
+        if (resCode === "INVALID_CREDENTIALS") {
+          setError("password", {
+            type: "manual",
+            message: "invalid credentials",
           })
         }
-        if (resCode === 'EMAIL_EXISTS') {
-          setError('email', {
-            type: 'manual',
-            message: 'email already exists',
+        if (resCode === "EMAIL_EXISTS") {
+          setError("email", {
+            type: "manual",
+            message: "email already exists",
           })
         }
-        if (resCode === 'OK') {
-          toast.success('Email updated successfully')
+        if (resCode === "OK") {
+          toast.success("Email updated successfully")
           handleClose()
         }
       } catch (error) {
@@ -118,7 +118,7 @@ function Content({
           <FormLabel htmlFor="email">Email</FormLabel>
           <FormInput
             id="email"
-            {...register('email')}
+            {...register("email")}
             placeholder="abc@domain.com"
             autoFocus
           />
@@ -128,9 +128,9 @@ function Content({
           <FormLabel htmlFor="password">Password</FormLabel>
           <FormInput
             id="password"
-            {...register('password')}
+            {...register("password")}
             placeholder="********"
-            type={isPasswordVisible ? 'text' : 'password'}
+            type={isPasswordVisible ? "text" : "password"}
           />
           <div className="flex flex-wrap justify-between gap-y-2">
             <div className="mr-4">

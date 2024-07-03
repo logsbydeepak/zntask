@@ -1,9 +1,9 @@
-'use client'
+"use client"
 
-import { GanttChartIcon } from 'lucide-react'
+import { GanttChartIcon } from "lucide-react"
 
-import * as Layout from '@/app/(app)/app-layout'
-import { Head } from '@/components/head'
+import * as Layout from "#/app/(app)/app-layout"
+import { Head } from "#/components/head"
 
 export default function Page() {
   return (

@@ -1,16 +1,16 @@
-'use client'
+"use client"
 
-import * as Layout from '@/app/(app)/app-layout'
-import { Head } from '@/components/head'
+import * as Layout from "#/app/(app)/app-layout"
+import { Head } from "#/components/head"
 import {
   TabsContent,
   TabsList,
   TabsRoot,
   TabsTrigger,
-} from '@/components/ui/tabs'
-import { useAppStore } from '@/store/app'
+} from "#/components/ui/tabs"
+import { useAppStore } from "#/store/app"
 
-import { EmptyInbox, TaskContainer, TaskItem } from '../task'
+import { EmptyInbox, TaskContainer, TaskItem } from "../task"
 
 export default function Page() {
   return (

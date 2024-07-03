@@ -4,11 +4,11 @@
 
 @layer base {
   .dark .auth-layout-square {
-    background-image: url('../../public/dark-square.svg');
+    background-image: url("../../public/dark-square.svg");
   }
 
   .auth-layout-square {
-    background-image: url('../../public/light-square.svg');
+    background-image: url("../../public/light-square.svg");
   }
 
   input,
@@ -58,14 +58,14 @@
     scroll-padding-block-end: 10px;
   }
 
-  .ToastRoot[data-swipe='move'] {
+  .ToastRoot[data-swipe="move"] {
     transform: translateX(var(--radix-toast-swipe-move-x));
   }
-  .ToastRoot[data-swipe='cancel'] {
+  .ToastRoot[data-swipe="cancel"] {
     transform: translateX(0);
     transition: transform 200ms ease-out;
   }
-  .ToastRoot[data-swipe='end'] {
+  .ToastRoot[data-swipe="end"] {
     animation: slideRight 100ms ease-out;
   }
 }

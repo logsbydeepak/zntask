@@ -1,12 +1,12 @@
-import React from 'react'
+import React from "react"
 import {
   Content as TabsContentPrimitive,
   List as TabsListPrimitive,
   Root as TabsRootPrimitive,
   Trigger as TabsTriggerPrimitive,
-} from '@radix-ui/react-tabs'
+} from "@radix-ui/react-tabs"
 
-import { cn } from '@/utils/style'
+import { cn } from "#/utils/style"
 
 const TabsRoot = TabsRootPrimitive
 const TabsContent = TabsContentPrimitive
@@ -20,7 +20,7 @@ const TabsList = React.forwardRef<
       ref={ref}
       {...props}
       className={cn(
-        'inline-flex space-x-2 rounded-lg bg-gray-3 p-1.5',
+        "inline-flex space-x-2 rounded-lg bg-gray-3 p-1.5",
         className
       )}
     />

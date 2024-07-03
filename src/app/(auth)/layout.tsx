@@ -1,4 +1,4 @@
-import { ThemeSwitch } from '@/components/theme'
+import { ThemeSwitch } from "#/components/theme"
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (

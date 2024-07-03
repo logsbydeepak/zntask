@@ -1,5 +1,5 @@
-import React from 'react'
-import { parse as chronoParse } from 'chrono-node'
+import React from "react"
+import { parse as chronoParse } from "chrono-node"
 import {
   addDays,
   format,
@@ -7,7 +7,7 @@ import {
   isToday,
   isTomorrow,
   isYesterday,
-} from 'date-fns'
+} from "date-fns"
 import {
   CalendarClockIcon,
   CalendarIcon,
@@ -15,13 +15,13 @@ import {
   ChevronRightIcon,
   HourglassIcon,
   XCircleIcon,
-} from 'lucide-react'
-import { DayPicker } from 'react-day-picker'
-import { useDebounce } from 'use-debounce'
+} from "lucide-react"
+import { DayPicker } from "react-day-picker"
+import { useDebounce } from "use-debounce"
 
-import * as Badge from '@/components/ui/badge'
+import * as Badge from "#/components/ui/badge"
 
-import { PopoverContent, PopoverRoot, PopoverTrigger } from './ui/popover'
+import { PopoverContent, PopoverRoot, PopoverTrigger } from "./ui/popover"
 
 export function SchedulePicker({
   value,
@@ -40,7 +40,7 @@ export function SchedulePicker({
           <Badge.Icon>
             <CalendarIcon />
           </Badge.Icon>
-          <span>{date ? showDate(date) : 'select'}</span>
+          <span>{date ? showDate(date) : "select"}</span>
 
           {time && (
             <div>
@@ -79,7 +79,7 @@ const SchedulePopover = React.forwardRef<
 >(({ setIsOpen, value, setValue, ...props }, ref) => {
   const { date, time } = value
 
-  const [inputValue, setInputValue] = React.useState('')
+  const [inputValue, setInputValue] = React.useState("")
   const [actionTime, setActionTime] = React.useState<Date | null>(null)
   const [actionDate, setActionDate] = React.useState<Date | null>(null)
   const [debouncedValue] = useDebounce(inputValue, 500)
@@ -90,7 +90,7 @@ const SchedulePopover = React.forwardRef<
       const date = parseValue.start.date()
 
       setActionDate(date)
-      if (parseValue.start.isCertain('hour')) {
+      if (parseValue.start.isCertain("hour")) {
         setActionTime(date)
       } else {
         setActionTime(null)
@@ -155,7 +155,7 @@ const SchedulePopover = React.forwardRef<
               <Badge.Icon>
                 <CalendarIcon />
               </Badge.Icon>
-              <span>{format(actionDate ?? new Date(), 'MMM d')}</span>
+              <span>{format(actionDate ?? new Date(), "MMM d")}</span>
             </Badge.Button>
           )}
           {actionTime && (
@@ -169,7 +169,7 @@ const SchedulePopover = React.forwardRef<
               <Badge.Icon>
                 <HourglassIcon />
               </Badge.Icon>
-              <span>{format(actionTime ?? new Date(), 'h:mm a')}</span>
+              <span>{format(actionTime ?? new Date(), "h:mm a")}</span>
             </Badge.Button>
           )}
 
@@ -241,7 +241,7 @@ const SchedulePopover = React.forwardRef<
   )
 })
 
-SchedulePopover.displayName = 'SchedulePopover'
+SchedulePopover.displayName = "SchedulePopover"
 
 function Calendar({
   value,
@@ -261,21 +261,21 @@ function Calendar({
       className="text-sm"
       showOutsideDays={true}
       classNames={{
-        month: 'space-y-4',
-        caption: 'flex justify-center relative font-medium',
-        nav: 'space-x-1 flex items-center justify-center',
-        nav_button_next: 'absolute right-1',
-        nav_button_previous: 'absolute left-1',
+        month: "space-y-4",
+        caption: "flex justify-center relative font-medium",
+        nav: "space-x-1 flex items-center justify-center",
+        nav_button_next: "absolute right-1",
+        nav_button_previous: "absolute left-1",
         nav_button:
-          'size-7 bg-transparent p-0 hover:text-gray-12 text-gray-11 flex justify-center items-center rounded-md',
+          "size-7 bg-transparent p-0 hover:text-gray-12 text-gray-11 flex justify-center items-center rounded-md",
 
-        head_cell: 'font-normal text-gray-10 text-xs pb-1',
-        day_today: 'text-orange-9 font-medium aria-[]:text-white',
-        day: 'size-7 rounded-full border border-transparent hover:border-gray-3 hover:bg-gray-2 m-0.5 text-xs aria-[selected=true]:font-medium',
+        head_cell: "font-normal text-gray-10 text-xs pb-1",
+        day_today: "text-orange-9 font-medium aria-[]:text-white",
+        day: "size-7 rounded-full border border-transparent hover:border-gray-3 hover:bg-gray-2 m-0.5 text-xs aria-[selected=true]:font-medium",
         day_selected:
-          'bg-orange-9 text-white hover:bg-orange-9 hover:border-orange-9',
-        day_outside: 'text-gray-10',
-        table: 'w-full',
+          "bg-orange-9 text-white hover:bg-orange-9 hover:border-orange-9",
+        day_outside: "text-gray-10",
+        table: "w-full",
       }}
       components={{
         IconLeft: () => <ChevronLeftIcon className="size-4" />,
@@ -287,30 +287,30 @@ function Calendar({
 
 function weekDayName(date: Date) {
   const day = date.getDay()
-  if (day === 0) return 'S'
-  if (day === 1) return 'M'
-  if (day === 2) return 'T'
-  if (day === 3) return 'W'
-  if (day === 4) return 'T'
-  if (day === 5) return 'F'
-  if (day === 6) return 'S'
-  return 'NA'
+  if (day === 0) return "S"
+  if (day === 1) return "M"
+  if (day === 2) return "T"
+  if (day === 3) return "W"
+  if (day === 4) return "T"
+  if (day === 5) return "F"
+  if (day === 6) return "S"
+  return "NA"
 }
 
 function showDate(date: Date) {
   return (
-    (isTomorrow(date) && 'tomorrow') ||
-    (isToday(date) && 'today') ||
-    (isYesterday(date) && 'yesterday') ||
+    (isTomorrow(date) && "tomorrow") ||
+    (isToday(date) && "today") ||
+    (isYesterday(date) && "yesterday") ||
     (isThisYear(date) &&
       !isToday(date) &&
       !isTomorrow(date) &&
       !isYesterday(date) &&
-      format(date, 'MMM d')) ||
-    format(date, 'MMM d, yyyy')
+      format(date, "MMM d")) ||
+    format(date, "MMM d, yyyy")
   )
 }
 
 function showTime(time: Date) {
-  return format(time, 'h:mm a')
+  return format(time, "h:mm a")
 }

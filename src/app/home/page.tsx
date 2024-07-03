@@ -1,9 +1,9 @@
-import Link from 'next/link'
+import Link from "next/link"
 
-import { LogoIcon } from '@/components/icon/logo'
-import { ThemeSwitch } from '@/components/theme'
-import { buttonStyle } from '@/components/ui/button'
-import { cn } from '@/utils/style'
+import { LogoIcon } from "#/components/icon/logo"
+import { ThemeSwitch } from "#/components/theme"
+import { buttonStyle } from "#/components/ui/button"
+import { cn } from "#/utils/style"
 
 export default function Home() {
   return (
@@ -21,13 +21,13 @@ export default function Home() {
         <div className="space-y-4">
           <Link
             href="/register"
-            className={cn(buttonStyle({ intent: 'primary' }), 'w-full')}
+            className={cn(buttonStyle({ intent: "primary" }), "w-full")}
           >
             Register
           </Link>
           <Link
             href="/login"
-            className={cn(buttonStyle({ intent: 'secondary' }), 'w-full')}
+            className={cn(buttonStyle({ intent: "secondary" }), "w-full")}
           >
             Login
           </Link>

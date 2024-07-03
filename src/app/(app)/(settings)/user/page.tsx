@@ -1,11 +1,11 @@
-import { Suspense } from 'react'
-import { unstable_cache } from 'next/cache'
-import { CheckIcon, LoaderIcon, XIcon } from 'lucide-react'
+import { Suspense } from "react"
+import { unstable_cache } from "next/cache"
+import { CheckIcon, LoaderIcon, XIcon } from "lucide-react"
 
-import * as Layout from '@/app/(app)/app-layout'
-import { Avatar } from '@/components/avatar'
-import { Head } from '@/components/head'
-import { getUserWithAuth } from '@/data/user'
+import * as Layout from "#/app/(app)/app-layout"
+import { Avatar } from "#/components/avatar"
+import { Head } from "#/components/head"
+import { getUserWithAuth } from "#/data/user"
 
 import {
   AddGoogleAuth,
@@ -15,7 +15,7 @@ import {
   RemoveGoogleAuth,
   RemovePasswordAuth,
   ResetPassword,
-} from './edit'
+} from "./edit"
 
 export default async function Page() {
   return (

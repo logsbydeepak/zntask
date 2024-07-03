@@ -1,11 +1,11 @@
-import { google } from 'googleapis'
-import * as jose from 'jose'
-import { z } from 'zod'
+import { google } from "googleapis"
+import * as jose from "jose"
+import { z } from "zod"
 
-import { env } from '@/env'
-import { zEmail, zRequired } from '@/utils/zSchema'
+import { env } from "#/env"
+import { zEmail, zRequired } from "#/utils/zSchema"
 
-import { r } from './handler'
+import { r } from "./handler"
 
 const zGoogleLoginRedirectQuerySchema = z.object({
   code: zRequired,
@@ -39,12 +39,12 @@ export class GC {
 
   genURL() {
     return this.client.generateAuthUrl({
-      access_type: 'offline',
+      access_type: "offline",
       scope: [
-        'https://www.googleapis.com/auth/userinfo.profile',
-        'https://www.googleapis.com/auth/userinfo.email',
+        "https://www.googleapis.com/auth/userinfo.profile",
+        "https://www.googleapis.com/auth/userinfo.email",
       ],
-      prompt: 'select_account',
+      prompt: "select_account",
     })
   }
 
@@ -52,14 +52,14 @@ export class GC {
     try {
       const parsedQuery = zGoogleLoginRedirectQuerySchema.safeParse({ code })
       if (!parsedQuery.success) {
-        return r('INVALID_INPUT')
+        return r("INVALID_INPUT")
       }
 
       const googleTokenRes = await this.client.getToken(parsedQuery.data.code)
       const parsedGoogleTokenRes =
         zGoogleTokenResSchema.safeParse(googleTokenRes)
       if (!parsedGoogleTokenRes.success) {
-        return r('INVALID_INPUT')
+        return r("INVALID_INPUT")
       }
 
       const tokenData = jose.decodeJwt(
@@ -68,11 +68,11 @@ export class GC {
 
       const parsedTokenData = zGoogleIdTokenDataSchema.safeParse(tokenData)
       if (!parsedTokenData.success) {
-        return r('INVALID_INPUT')
+        return r("INVALID_INPUT")
       }
-      return r('OK', { ...parsedTokenData.data })
+      return r("OK", { ...parsedTokenData.data })
     } catch (error) {
-      return r('ERROR')
+      return r("ERROR")
     }
   }
 }

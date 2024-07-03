@@ -1,11 +1,11 @@
-import { Metadata } from 'next'
+import { Metadata } from "next"
 
-import { Logo, SubTitle, Title } from '@/app/(auth)/components'
+import { Logo, SubTitle, Title } from "#/app/(auth)/components"
 
-import { Form } from './form'
+import { Form } from "./form"
 
 export const metadata: Metadata = {
-  title: 'Register',
+  title: "Register",
 }
 
 export default function Page() {

@@ -1,9 +1,9 @@
-import { StateCreator } from 'zustand'
+import { StateCreator } from "zustand"
 
-import { genID, isValidID } from '@/shared/id'
-import { Category, categoryHelper } from '@/utils/category'
+import { genID, isValidID } from "#/shared/id"
+import { Category, categoryHelper } from "#/utils/category"
 
-import { AppStore } from './app'
+import { AppStore } from "./app"
 
 const initialState = {
   categories: [] as Category[],
@@ -12,7 +12,7 @@ type State = typeof initialState
 
 interface Actions {
   addCategory: (
-    category: Pick<Category, 'title' | 'indicator'>
+    category: Pick<Category, "title" | "indicator">
   ) => Category | undefined
   getCategory: (id: string | null) => undefined | Category
   editCategory: (category: Category) => void

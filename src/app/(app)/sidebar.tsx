@@ -1,9 +1,9 @@
-'use client'
+"use client"
 
-import React from 'react'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { cva } from 'cva'
+import React from "react"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import { cva } from "cva"
 import {
   CalendarIcon,
   ChevronDownIcon,
@@ -13,9 +13,9 @@ import {
   HeartIcon,
   InboxIcon,
   MoreVerticalIcon,
-} from 'lucide-react'
+} from "lucide-react"
 
-import { CategoryMenuContent } from '@/components/category-menu-content'
+import { CategoryMenuContent } from "#/components/category-menu-content"
 import {
   ContextMenuContent,
   ContextMenuPortal,
@@ -25,10 +25,10 @@ import {
   DropdownMenuPortal,
   DropdownMenuRoot,
   DropdownMenuTrigger,
-} from '@/components/ui/menu'
-import { useAppStore } from '@/store/app'
-import { Category, categoryHelper, getCategoryColor } from '@/utils/category'
-import { cn, tw } from '@/utils/style'
+} from "#/components/ui/menu"
+import { useAppStore } from "#/store/app"
+import { Category, categoryHelper, getCategoryColor } from "#/utils/category"
+import { cn, tw } from "#/utils/style"
 
 export function Sidebar() {
   const isSidebarOpen = useAppStore((s) => s.isSidebarOpen)
@@ -37,9 +37,9 @@ export function Sidebar() {
     <aside
       data-sidebar={isSidebarOpen}
       className={cn(
-        'fixed bottom-0 top-14 z-10 w-full overflow-y-scroll bg-gray-1 pr-1 md:w-56',
-        'invisible -translate-x-full data-[sidebar=true]:visible data-[sidebar=true]:translate-x-0 ',
-        'transition-transform duration-150 ease-in-out'
+        "fixed bottom-0 top-14 z-10 w-full overflow-y-scroll bg-gray-1 pr-1 md:w-56",
+        "invisible -translate-x-full data-[sidebar=true]:visible data-[sidebar=true]:translate-x-0 ",
+        "transition-transform duration-150 ease-in-out"
       )}
     >
       <div className="my-4 space-y-6 pr-1 ">
@@ -63,33 +63,33 @@ function QuickSection() {
   const item = [
     {
       Icon: CalendarIcon,
-      label: 'today',
-      href: '/today',
-      isActive: pathname.startsWith('/today') || pathname === '/',
+      label: "today",
+      href: "/today",
+      isActive: pathname.startsWith("/today") || pathname === "/",
     },
     {
-      label: 'inbox',
-      href: '/inbox',
+      label: "inbox",
+      href: "/inbox",
       Icon: InboxIcon,
-      isActive: pathname.startsWith('/inbox'),
+      isActive: pathname.startsWith("/inbox"),
     },
     {
-      label: 'upcoming',
-      href: '/upcoming',
+      label: "upcoming",
+      href: "/upcoming",
       Icon: GanttChartIcon,
-      isActive: pathname.startsWith('/upcoming'),
+      isActive: pathname.startsWith("/upcoming"),
     },
     {
-      label: 'favorite',
-      href: '/favorite',
+      label: "favorite",
+      href: "/favorite",
       Icon: HeartIcon,
-      isActive: pathname === '/favorite',
+      isActive: pathname === "/favorite",
     },
     {
-      label: 'category',
-      href: '/category',
+      label: "category",
+      href: "/category",
       Icon: FolderIcon,
-      isActive: pathname === '/category',
+      isActive: pathname === "/category",
     },
   ]
 
@@ -223,8 +223,8 @@ function CategoryItem({
               <Item.Label.Icon>
                 <span
                   className={cn(
-                    'size-2.5 rounded-full',
-                    getCategoryColor(category.indicator, 'bg')
+                    "size-2.5 rounded-full",
+                    getCategoryColor(category.indicator, "bg")
                   )}
                 />
               </Item.Label.Icon>
@@ -240,7 +240,7 @@ function CategoryItem({
             </ContextMenuContent>
           </ContextMenuPortal>
           <DropdownMenuPortal>
-            <DropdownMenuContent align={isScreenSM ? 'end' : 'start'}>
+            <DropdownMenuContent align={isScreenSM ? "end" : "start"}>
               <CategoryMenuContent category={category} type="dropdown" />
             </DropdownMenuContent>
           </DropdownMenuPortal>
@@ -310,7 +310,7 @@ function ShowMore({
           )}
         </Item.Label.Icon>
         <Item.Label.Content>
-          {isOpen ? 'Show less' : `Show ${number} more`}
+          {isOpen ? "Show less" : `Show ${number} more`}
         </Item.Label.Content>
       </Item.Content.Button>
     </Item.Root>
@@ -341,7 +341,7 @@ function ItemRoot({
 }
 
 const itemContentStyle = tw(
-  'flex size-full items-center gap-3 overflow-hidden rounded-lg border border-transparent px-2 hover:border-gray-5 hover:bg-gray-2 group-data-[active=true]:border-gray-4 group-data-[active=true]:bg-gray-2'
+  "flex size-full items-center gap-3 overflow-hidden rounded-lg border border-transparent px-2 hover:border-gray-5 hover:bg-gray-2 group-data-[active=true]:border-gray-4 group-data-[active=true]:bg-gray-2"
 )
 
 const ItemContentLink = React.forwardRef<
@@ -364,13 +364,13 @@ const ItemContentLink = React.forwardRef<
     </Link>
   )
 })
-ItemContentLink.displayName = 'ItemContainerLink'
+ItemContentLink.displayName = "ItemContainerLink"
 
 function ItemContentButton({
   children,
   className,
   ...props
-}: React.ComponentProps<'button'>) {
+}: React.ComponentProps<"button">) {
   return (
     <button {...props} className={cn(itemContentStyle, className)}>
       {children}
@@ -378,7 +378,7 @@ function ItemContentButton({
   )
 }
 
-function LabelContent({ children }: React.ComponentProps<'span'>) {
+function LabelContent({ children }: React.ComponentProps<"span">) {
   return (
     <span className="truncate text-sm text-gray-11 data-[active=true]:font-medium group-data-[active=true]:text-gray-12">
       {children}
@@ -390,12 +390,12 @@ function LabelIcon({
   children,
   className,
   ...props
-}: React.ComponentProps<'span'>) {
+}: React.ComponentProps<"span">) {
   return (
     <span
       {...props}
       className={cn(
-        'flex size-4 shrink-0 items-center justify-center',
+        "flex size-4 shrink-0 items-center justify-center",
         className
       )}
     >

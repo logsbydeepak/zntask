@@ -1,22 +1,22 @@
-import React, { Suspense } from 'react'
-import { LoaderIcon } from 'lucide-react'
+import React, { Suspense } from "react"
+import { LoaderIcon } from "lucide-react"
 
-import { Dialogs } from '@/components/dialogs'
-import { LogoIcon } from '@/components/icon/logo'
+import { Dialogs } from "#/components/dialogs"
+import { LogoIcon } from "#/components/icon/logo"
 import {
   DelayRender,
   GlobalShortcut,
   State,
   SyncAppState,
-} from '@/components/state'
-import { ToastProvider } from '@/components/toast'
-import { getInitialData } from '@/data'
-import { getUser } from '@/data/user'
-import { AppProvider } from '@/store/app'
+} from "#/components/state"
+import { ToastProvider } from "#/components/toast"
+import { getInitialData } from "#/data"
+import { getUser } from "#/data/user"
+import { AppProvider } from "#/store/app"
 
-import { AppLayout } from './app-layout'
-import { Navbar } from './navbar'
-import { Sidebar } from './sidebar'
+import { AppLayout } from "./app-layout"
+import { Navbar } from "./navbar"
+import { Sidebar } from "./sidebar"
 
 export default async function Layout({
   children,

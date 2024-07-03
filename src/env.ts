@@ -1,11 +1,11 @@
-import { createEnv } from '@t3-oss/env-nextjs'
-import { z } from 'zod'
+import { createEnv } from "@t3-oss/env-nextjs"
+import { z } from "zod"
 
-const zRequired = z.string().min(1, { message: 'required' }).trim()
+const zRequired = z.string().min(1, { message: "required" }).trim()
 
 export const env = createEnv({
   server: {
-    NODE_ENV: z.enum(['development', 'production']),
+    NODE_ENV: z.enum(["development", "production"]),
     DATABASE_URL: zRequired.url(),
     JWT_SECRET: zRequired,
     RESEND_API_KEY: zRequired,

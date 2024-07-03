@@ -1,11 +1,11 @@
-import { create, type StateCreator } from 'zustand'
+import { create, type StateCreator } from "zustand"
 
-import { genID } from '@/shared/id'
+import { genID } from "#/shared/id"
 
 export interface Toast {
   id: string
   message: string
-  type: 'success' | 'error'
+  type: "success" | "error"
   action?: {
     label: string
     onClick: () => void
@@ -17,7 +17,7 @@ interface State {
 }
 
 interface Actions {
-  addToast: (toast: Omit<Toast, 'id'>) => void
+  addToast: (toast: Omit<Toast, "id">) => void
   removeToast: (id: string) => void
 }
 
@@ -42,7 +42,7 @@ interface Action {
 
 export const toast = {
   success: (message: string, action?: Action) =>
-    useToastStore.getState().addToast({ message, type: 'success', action }),
-  error: (message = 'Something went wrong', action?: Action) =>
-    useToastStore.getState().addToast({ message, type: 'error', action }),
+    useToastStore.getState().addToast({ message, type: "success", action }),
+  error: (message = "Something went wrong", action?: Action) =>
+    useToastStore.getState().addToast({ message, type: "error", action }),
 }

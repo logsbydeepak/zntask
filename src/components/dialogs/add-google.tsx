@@ -1,33 +1,33 @@
-import React from 'react'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
+import React from "react"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
 
-import { PasswordVisibilityToggle } from '@/app/(auth)/components'
-import { Button } from '@/components/ui/button'
+import { PasswordVisibilityToggle } from "#/app/(auth)/components"
+import { Button } from "#/components/ui/button"
 import {
   DialogClose,
   DialogContent,
   DialogDescription,
   DialogRoot,
   DialogTitle,
-} from '@/components/ui/dialog'
+} from "#/components/ui/dialog"
 import {
   FormError,
   FormFieldset,
   FormInput,
   FormLabel,
   FormRoot,
-} from '@/components/ui/form'
-import { addGoogleAuthProvider, redirectGoogleAddNew } from '@/data/auth'
-import { useAppStore } from '@/store/app'
-import { toast } from '@/store/toast'
-import { zPassword } from '@/utils/zSchema'
+} from "#/components/ui/form"
+import { addGoogleAuthProvider, redirectGoogleAddNew } from "#/data/auth"
+import { useAppStore } from "#/store/app"
+import { toast } from "#/store/toast"
+import { zPassword } from "#/utils/zSchema"
 
-import { Head } from '../head'
+import { Head } from "../head"
 
 const zSchema = z.object({
-  password: zPassword('invalid password'),
+  password: zPassword("invalid password"),
 })
 
 type FormValues = z.infer<typeof zSchema>
@@ -39,8 +39,8 @@ export function AddGoogleDialog() {
 
   const isOpen =
     isAddGoogleAuthOpen ||
-    (typeof window !== 'undefined' &&
-      !!window?.localStorage?.getItem('googleCode'))
+    (typeof window !== "undefined" &&
+      !!window?.localStorage?.getItem("googleCode"))
 
   const handleClose = React.useCallback(() => {
     if (isPending) return
@@ -81,13 +81,13 @@ function Content({
   })
 
   const handleAddGoogle = React.useCallback(() => {
-    const code = window.localStorage.getItem('googleCode')
+    const code = window.localStorage.getItem("googleCode")
     if (!code) return
-    window.localStorage.removeItem('googleCode')
+    window.localStorage.removeItem("googleCode")
     startTransition(async () => {
       try {
         await addGoogleAuthProvider({ code })
-        toast.success('google auth added')
+        toast.success("google auth added")
         handleClose()
       } catch (error) {}
     })
@@ -102,15 +102,15 @@ function Content({
       try {
         const res = await redirectGoogleAddNew(values)
         const resCode = res?.code
-        if (resCode === 'INVALID_CREDENTIALS') {
-          setError('password', {
-            message: 'invalid credentials',
+        if (resCode === "INVALID_CREDENTIALS") {
+          setError("password", {
+            message: "invalid credentials",
           })
           return
         }
-        if (resCode === 'ALREADY_ADDED') {
+        if (resCode === "ALREADY_ADDED") {
           handleClose()
-          toast.error('google auth already added')
+          toast.error("google auth already added")
         }
       } catch (error) {
         toast.error()
@@ -132,10 +132,10 @@ function Content({
           <FormLabel htmlFor="password">Password</FormLabel>
           <FormInput
             id="password"
-            {...register('password')}
+            {...register("password")}
             placeholder="********"
             autoFocus
-            type={isPasswordVisible ? 'text' : 'password'}
+            type={isPasswordVisible ? "text" : "password"}
           />
           <div className="flex flex-wrap justify-between gap-y-2">
             <div className="mr-4">

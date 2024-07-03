@@ -1,13 +1,13 @@
-'use client'
+"use client"
 
-import React from 'react'
-import * as ToastPrimitive from '@radix-ui/react-toast'
-import { CheckIcon, XIcon } from 'lucide-react'
+import React from "react"
+import * as ToastPrimitive from "@radix-ui/react-toast"
+import { CheckIcon, XIcon } from "lucide-react"
 
-import { Toast, useToastStore } from '@/store/toast'
-import { cn } from '@/utils/style'
+import { Toast, useToastStore } from "#/store/toast"
+import { cn } from "#/utils/style"
 
-import { ExclamationIcon } from './icon/exclamation'
+import { ExclamationIcon } from "./icon/exclamation"
 
 export function ToastProvider() {
   const toast = useToastStore((s) => s.toasts)
@@ -26,8 +26,8 @@ export function ToastProvider() {
 function Item({ toast }: { toast: Toast }) {
   const removeToast = useToastStore((s) => s.removeToast)
 
-  const isError = toast.type === 'error'
-  const isSuccess = toast.type === 'success'
+  const isError = toast.type === "error"
+  const isSuccess = toast.type === "success"
 
   return (
     <ToastPrimitive.Root
@@ -63,7 +63,7 @@ function Item({ toast }: { toast: Toast }) {
 
 const Button = React.forwardRef<
   HTMLButtonElement,
-  React.ComponentPropsWithoutRef<'button'>
+  React.ComponentPropsWithoutRef<"button">
 >(({ children, ...props }, ref) => (
   <button
     ref={ref}
@@ -73,7 +73,7 @@ const Button = React.forwardRef<
     {children}
   </button>
 ))
-Button.displayName = 'ToastButton'
+Button.displayName = "ToastButton"
 
 function Icon({
   children,
@@ -85,7 +85,7 @@ function Icon({
   return (
     <div
       className={cn(
-        ' flex size-4 items-center justify-center rounded-full text-white',
+        " flex size-4 items-center justify-center rounded-full text-white",
         className
       )}
     >

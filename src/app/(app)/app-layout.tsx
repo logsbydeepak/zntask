@@ -1,9 +1,9 @@
-'use client'
+"use client"
 
-import React from 'react'
+import React from "react"
 
-import { useAppStore } from '@/store/app'
-import { cn } from '@/utils/style'
+import { useAppStore } from "#/store/app"
+import { cn } from "#/utils/style"
 
 export function Title({ children }: { children: React.ReactNode }) {
   return (
@@ -37,7 +37,7 @@ function EmptyContainer({
   return (
     <div
       className={cn(
-        'flex h-[calc(100vh-200px)] flex-col items-center justify-center',
+        "flex h-[calc(100vh-200px)] flex-col items-center justify-center",
         className
       )}
     >

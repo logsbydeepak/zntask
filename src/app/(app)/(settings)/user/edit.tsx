@@ -1,10 +1,10 @@
-'use client'
+"use client"
 
-import React from 'react'
-import { KeyIcon } from 'lucide-react'
+import React from "react"
+import { KeyIcon } from "lucide-react"
 
-import * as Badge from '@/components/ui/badge'
-import { useAppStore } from '@/store/app'
+import * as Badge from "#/components/ui/badge"
+import { useAppStore } from "#/store/app"
 
 export function EditName() {
   const setDialog = useAppStore((state) => state.setDialog)

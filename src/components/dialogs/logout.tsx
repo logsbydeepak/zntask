@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react"
 
 import {
   DialogClose,
@@ -6,12 +6,12 @@ import {
   DialogDescription,
   DialogRoot,
   DialogTitle,
-} from '@/components/ui/dialog'
-import { logout } from '@/data/user'
-import { useAppStore } from '@/store/app'
-import { toast } from '@/store/toast'
+} from "#/components/ui/dialog"
+import { logout } from "#/data/user"
+import { useAppStore } from "#/store/app"
+import { toast } from "#/store/toast"
 
-import { Button } from '../ui/button'
+import { Button } from "../ui/button"
 
 export function LogoutDialog() {
   const isOpen = useAppStore((s) => s.dialog.logout)

@@ -1,37 +1,37 @@
-import { z } from 'zod'
+import { z } from "zod"
 
-import { isValidID } from '../shared/id'
-import { zRequired } from './zSchema'
+import { isValidID } from "../shared/id"
+import { zRequired } from "./zSchema"
 
 export const categoryDefaultIndicatorOption = {
-  label: 'orange',
-  color: 'orange',
+  label: "orange",
+  color: "orange",
 } as const
 
 export const categoryIndicatorOptions = [
   categoryDefaultIndicatorOption,
-  { label: 'red', color: 'red' },
-  { label: 'blue', color: 'blue' },
-  { label: 'green', color: 'green' },
-  { label: 'amber', color: 'amber' },
-  { label: 'pink', color: 'pink' },
-  { label: 'lime', color: 'lime' },
-  { label: 'cyan', color: 'cyan' },
-  { label: 'violet', color: 'violet' },
-  { label: 'indigo', color: 'indigo' },
+  { label: "red", color: "red" },
+  { label: "blue", color: "blue" },
+  { label: "green", color: "green" },
+  { label: "amber", color: "amber" },
+  { label: "pink", color: "pink" },
+  { label: "lime", color: "lime" },
+  { label: "cyan", color: "cyan" },
+  { label: "violet", color: "violet" },
+  { label: "indigo", color: "indigo" },
 ] as const
 
 type CategoryIndicatorLabelType =
-  (typeof categoryIndicatorOptions)[number]['label']
+  (typeof categoryIndicatorOptions)[number]["label"]
 
 export const categoryIndicatorLabel = categoryIndicatorOptions.map(
   (option) => option.label
-) as [(typeof categoryIndicatorOptions)[number]['label']]
+) as [(typeof categoryIndicatorOptions)[number]["label"]]
 
 export const zCategoryIndicator = z.enum(categoryIndicatorLabel)
 
 const zCategory = z.object({
-  id: zRequired.refine(isValidID, { message: 'Invalid genID' }),
+  id: zRequired.refine(isValidID, { message: "Invalid genID" }),
   title: zRequired,
   indicator: z.enum(categoryIndicatorLabel),
   favoriteAt: z.string().nullable(),
@@ -40,15 +40,15 @@ const zCategory = z.object({
 
 export const getCategoryColor = (
   indicator: CategoryIndicatorLabelType,
-  type: 'bg' | 'hover:ring' | 'bg hover:ring'
+  type: "bg" | "hover:ring" | "bg hover:ring"
 ) => {
   const color = categoryIndicatorOptions.find(
     (option) => option.label === indicator
   )?.color
-  if (!color) throw new Error('Invalid category indicator')
+  if (!color) throw new Error("Invalid category indicator")
 
-  if (type === 'bg') return `bg-${color}-9`
-  if (type === 'hover:ring') return `hover:ring-${color}-6`
+  if (type === "bg") return `bg-${color}-9`
+  if (type === "hover:ring") return `hover:ring-${color}-6`
   return `bg-${color}-9 hover:ring-${color}-6`
 }
 
@@ -75,7 +75,7 @@ const getFavoriteCategories = (categories: Category[]) => {
   const favoriteCategories: FavoriteCategory[] = []
 
   categories.forEach((c) => {
-    if (typeof c.favoriteAt === 'string') {
+    if (typeof c.favoriteAt === "string") {
       favoriteCategories.push(c as FavoriteCategory)
     }
   })
@@ -122,11 +122,11 @@ const sortArchivedCategories = (categories: ArchivedCategory[]) => {
 }
 
 const isFavoriteCategory = (category: Category) => {
-  return typeof category.favoriteAt === 'string'
+  return typeof category.favoriteAt === "string"
 }
 
 const isArchivedCategory = (category: Category) => {
-  return typeof category.archivedAt === 'string'
+  return typeof category.archivedAt === "string"
 }
 
 export const categoryHelper = {

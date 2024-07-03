@@ -4,22 +4,22 @@ import {
   HeartIcon,
   HeartOffIcon,
   Trash2Icon,
-} from 'lucide-react'
+} from "lucide-react"
 
 import {
   ContextMenuItem,
   DropdownMenuItem,
   MenuIcon,
-} from '@/components/ui/menu'
-import { useAppStore } from '@/store/app'
-import { Category, categoryHelper } from '@/utils/category'
+} from "#/components/ui/menu"
+import { useAppStore } from "#/store/app"
+import { Category, categoryHelper } from "#/utils/category"
 
 export function CategoryMenuContent({
   category,
   type,
 }: {
   category: Category
-  type: 'context' | 'dropdown'
+  type: "context" | "dropdown"
 }) {
   const setDialog = useAppStore((s) => s.setDialog)
   const toggleArchive = useAppStore((s) => s.toggleArchive)
@@ -30,27 +30,27 @@ export function CategoryMenuContent({
 
   const menuItem = [
     {
-      label: 'Edit',
+      label: "Edit",
       onSelect: () => setDialog({ editCategory: category }),
       icon: <EditIcon />,
     },
 
     {
-      label: !!isFavorite ? 'Unfavorite' : 'Favorite',
+      label: !!isFavorite ? "Unfavorite" : "Favorite",
       onSelect: () => toggleFavorite(category),
       icon: !!isFavorite ? <HeartOffIcon /> : <HeartIcon />,
     },
 
     {
-      label: isArchived ? 'Unarchive' : 'Archive',
+      label: isArchived ? "Unarchive" : "Archive",
       onSelect: () => toggleArchive(category),
       icon: isArchived ? <ArchiveRestoreIcon /> : <ArchiveRestoreIcon />,
     },
     {
-      label: 'Delete',
+      label: "Delete",
       onSelect: () => setDialog({ deleteCategory: category }),
       icon: <Trash2Icon />,
-      intent: 'destructive' as const,
+      intent: "destructive" as const,
     },
   ]
 
@@ -58,7 +58,7 @@ export function CategoryMenuContent({
     menuItem.splice(1, 1)
   }
 
-  if (type === 'context') {
+  if (type === "context") {
     return menuItem.map((i) => (
       <ContextMenuItem key={i.label} onSelect={i.onSelect} intent={i.intent}>
         <MenuIcon intent={i.intent}>{i.icon}</MenuIcon>

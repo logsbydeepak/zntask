@@ -1,38 +1,38 @@
-import React, { useCallback } from 'react'
-import { zodResolver } from '@hookform/resolvers/zod'
+import React, { useCallback } from "react"
+import { zodResolver } from "@hookform/resolvers/zod"
 import {
   CheckboxIndicator,
   Root as CheckboxRoot,
-} from '@radix-ui/react-checkbox'
-import { DialogTitle } from '@radix-ui/react-dialog'
-import * as VisuallyHidden from '@radix-ui/react-visually-hidden'
+} from "@radix-ui/react-checkbox"
+import { DialogTitle } from "@radix-ui/react-dialog"
+import * as VisuallyHidden from "@radix-ui/react-visually-hidden"
 import {
   CheckCircleIcon,
   CircleIcon,
   InboxIcon,
   PlusIcon,
   Trash2Icon,
-} from 'lucide-react'
-import { useFieldArray, useForm } from 'react-hook-form'
-import { z } from 'zod'
+} from "lucide-react"
+import { useFieldArray, useForm } from "react-hook-form"
+import { z } from "zod"
 
-import { CategoryPopover } from '@/components/category-popover'
-import { Head } from '@/components/head'
-import { SchedulePicker } from '@/components/schedule'
-import * as Badge from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
+import { CategoryPopover } from "#/components/category-popover"
+import { Head } from "#/components/head"
+import { SchedulePicker } from "#/components/schedule"
+import * as Badge from "#/components/ui/badge"
+import { Button } from "#/components/ui/button"
 import {
   DialogClose,
   DialogContent,
   DialogDescription,
   DialogRoot,
-} from '@/components/ui/dialog'
-import { FormRoot } from '@/components/ui/form'
-import { PopoverRoot, PopoverTrigger } from '@/components/ui/popover'
-import { useAppStore } from '@/store/app'
-import { ChildTask, ParentTask } from '@/store/task-slice'
-import { getCategoryColor } from '@/utils/category'
-import { cn } from '@/utils/style'
+} from "#/components/ui/dialog"
+import { FormRoot } from "#/components/ui/form"
+import { PopoverRoot, PopoverTrigger } from "#/components/ui/popover"
+import { useAppStore } from "#/store/app"
+import { ChildTask, ParentTask } from "#/store/task-slice"
+import { getCategoryColor } from "#/utils/category"
+import { cn } from "#/utils/style"
 
 const schema = z.object({
   categoryId: z.string().nullable(),
@@ -55,8 +55,8 @@ export function TaskDialog() {
 
   const task = useAppStore((s) => {
     if (!isEdit) return { parentTask: undefined, childTasks: [] }
-    const isParentId = 'parentTaskId' in isEdit
-    const isChildId = 'childTaskId' in isEdit
+    const isParentId = "parentTaskId" in isEdit
+    const isChildId = "childTaskId" in isEdit
 
     if (isParentId) {
       const parentTask = s.parentTasks.find((i) => i.id === isEdit.parentTaskId)
@@ -109,9 +109,9 @@ export function TaskDialog() {
           childTasks={task.childTasks}
           triggerId={
             isEdit
-              ? 'parentTaskId' in isEdit
+              ? "parentTaskId" in isEdit
                 ? isEdit.parentTaskId
-                : 'childTaskId' in isEdit
+                : "childTaskId" in isEdit
                   ? isEdit.childTaskId
                   : undefined
               : undefined
@@ -165,8 +165,8 @@ function TaskDialogContent({
         tasks: [
           {
             _id: parentTask?.id ?? null,
-            title: parentTask?.title ?? '',
-            details: parentTask?.details ?? '',
+            title: parentTask?.title ?? "",
+            details: parentTask?.details ?? "",
             date: parentTask?.date ? new Date(parentTask.date) : null,
             time: parentTask?.time ? new Date(parentTask.time) : null,
             completedAt: parentTask?.completedAt ? new Date() : null,
@@ -177,14 +177,14 @@ function TaskDialogContent({
     })
 
   const { fields, append, remove } = useFieldArray({
-    name: 'tasks',
+    name: "tasks",
     control,
   })
 
   const onSubmit = useCallback(
     (data: FormValues) => {
       if (isCreate) {
-        let parentId = ''
+        let parentId = ""
 
         data.tasks.forEach((i, index) => {
           if (!i.title) return
@@ -303,18 +303,18 @@ function TaskDialogContent({
 
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Enter' && e.shiftKey) {
+      if (e.key === "Enter" && e.shiftKey) {
         e.preventDefault()
         handleSubmit(onSubmit)()
       }
     }
 
-    document.addEventListener('keydown', handleKeyDown)
-    return () => document.removeEventListener('keydown', handleKeyDown)
+    document.addEventListener("keydown", handleKeyDown)
+    return () => document.removeEventListener("keydown", handleKeyDown)
   }, [handleSubmit, onSubmit])
 
-  const title = parentTask ? `Edit ${parentTask?.title}` : 'Create Task'
-  const description = parentTask ? 'Edit task' : 'Create Task'
+  const title = parentTask ? `Edit ${parentTask?.title}` : "Create Task"
+  const description = parentTask ? "Edit task" : "Create Task"
 
   return (
     <>
@@ -326,15 +326,15 @@ function TaskDialogContent({
       <div className="">
         <div className="flex justify-between space-x-6 p-6">
           <CategoryPicker
-            value={watch('categoryId')}
-            setValue={(value) => setValue('categoryId', value)}
+            value={watch("categoryId")}
+            setValue={(value) => setValue("categoryId", value)}
           />
 
           <Badge.Button
             onClick={() => {
               append({
                 _id: null,
-                title: '',
+                title: "",
                 date: null,
                 time: null,
                 details: null,
@@ -356,7 +356,7 @@ function TaskDialogContent({
         >
           {fields.map((_, index) => (
             <div
-              className={cn('snap-start space-y-2', index !== 0 && 'pl-7')}
+              className={cn("snap-start space-y-2", index !== 0 && "pl-7")}
               key={index}
             >
               <div className="flex space-x-2">
@@ -469,7 +469,7 @@ function Checkbox({
     <CheckboxRoot
       checked={value}
       onCheckedChange={(value) => {
-        if (typeof value === 'boolean') {
+        if (typeof value === "boolean") {
           setValue(value)
         }
       }}
@@ -504,14 +504,14 @@ function CategoryPicker({
             {currentCategory && (
               <div
                 className={cn(
-                  'size-2.5 rounded-full',
-                  getCategoryColor(currentCategory.indicator, 'bg')
+                  "size-2.5 rounded-full",
+                  getCategoryColor(currentCategory.indicator, "bg")
                 )}
               />
             )}
           </Badge.Icon>
           <span className="truncate">
-            {currentCategory ? currentCategory.title : 'Inbox'}
+            {currentCategory ? currentCategory.title : "Inbox"}
           </span>
         </Badge.Button>
       </PopoverTrigger>
