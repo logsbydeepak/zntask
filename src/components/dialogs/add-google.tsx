@@ -12,13 +12,7 @@ import {
   DialogRoot,
   DialogTitle,
 } from "#/components/ui/dialog"
-import {
-  FormError,
-  FormFieldset,
-  FormInput,
-  FormLabel,
-  FormRoot,
-} from "#/components/ui/form"
+import { FormError, FormInput, FormLabel, FormRoot } from "#/components/ui/form"
 import { addGoogleAuthProvider, redirectGoogleAddNew } from "#/data/auth"
 import { useAppStore } from "#/store/app"
 import { toast } from "#/store/toast"

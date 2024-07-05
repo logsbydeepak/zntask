@@ -41,12 +41,10 @@ export default async function Layout({
 }
 
 async function InitData({ children }: { children: React.ReactNode }) {
-  const initialData = await getInitialData()
+  // const initialData = await getInitialData()
   const user = await getUser()
   return (
-    <AppProvider
-      initialProps={{ user: user, categories: initialData.categories }}
-    >
+    <AppProvider initialProps={{ user: user }}>
       <SyncAppState user={user} />
       {children}
     </AppProvider>

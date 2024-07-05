@@ -31,30 +31,55 @@ const schema = z.object({
 })
 
 export function CategoryDialog() {
+  const [isOpen, setIsOpen] = React.useState(false)
+  const dialogOpen = useAppStore((state) => state.dialogOpen)
+
   const isCreate = useAppStore((state) => state.dialog.createCategory)
   const isEdit = useAppStore((state) => state.dialog.editCategory)
   const setDialog = useAppStore((state) => state.setDialog)
 
-  const isOpen = isCreate || !!isEdit
-  const setIsOpen = React.useCallback(
-    (isOpen: boolean) => {
-      if (isCreate) return setDialog({ createCategory: isOpen })
-      if (isEdit) return setDialog({ editCategory: null })
-    },
-    [setDialog, isCreate, isEdit]
-  )
+  const [editCategoryDefaultData, setEditCategoryDefaultData] =
+    React.useState<null | Category>(null)
+  const [createNewMode, setCreateNewMode] = React.useState(false)
 
-  const handleClose = () => {
-    setIsOpen(false)
-  }
+  React.useEffect(() => {
+    if (dialogOpen !== "createCategory") {
+      setIsOpen(false)
+    }
+  }, [dialogOpen, setIsOpen])
+
+  React.useEffect(() => {
+    if (isCreate) {
+      setCreateNewMode(true)
+      setEditCategoryDefaultData(null)
+      setIsOpen(true)
+      setDialog({ createCategory: false })
+      return
+    }
+
+    if (isEdit) {
+      setEditCategoryDefaultData(isEdit)
+      setCreateNewMode(false)
+      setIsOpen(true)
+      setDialog({ editCategory: null })
+      return
+    }
+  }, [
+    isCreate,
+    isEdit,
+    setIsOpen,
+    setDialog,
+    setCreateNewMode,
+    setEditCategoryDefaultData,
+  ])
 
   return (
-    <DialogRoot open={isOpen} onOpenChange={handleClose}>
+    <DialogRoot open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent className="space-y-4">
         <CategoryDialogContent
-          handleClose={handleClose}
-          isEdit={isEdit}
-          isCreate={isCreate}
+          handleClose={() => setIsOpen(false)}
+          isEdit={editCategoryDefaultData}
+          isCreate={createNewMode}
         />
       </DialogContent>
     </DialogRoot>

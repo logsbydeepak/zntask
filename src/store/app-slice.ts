@@ -1,3 +1,4 @@
+import { Key } from "lucide-react"
 import { StateCreator } from "zustand"
 
 import type { RequireOnlyOne } from "#/types"
@@ -40,7 +41,11 @@ const initialState = {
   user: {} as User,
 }
 
-type State = typeof initialState
+type Key = keyof typeof dialogState
+
+type State = typeof initialState & {
+  dialogOpen: Key | null
+}
 
 interface Actions {
   setDialog: <
@@ -61,6 +66,8 @@ export type AppSlice = State & Actions
 
 export const appSlice: StateCreator<AppStore, [], [], AppSlice> = (set) => ({
   ...initialState,
+  dialogOpen: null,
+
   setUser(state) {
     set(() => ({ user: state }))
   },
@@ -72,10 +79,13 @@ export const appSlice: StateCreator<AppStore, [], [], AppSlice> = (set) => ({
   toggleSidebar() {
     set((state) => ({ isSidebarOpen: !state.isSidebarOpen }))
   },
+
   setDialog(state) {
-    set(() => ({
+    const key = Object.keys(state)[0] as Key
+    set(({ dialog }) => ({
+      dialogOpen: key,
       dialog: {
-        ...dialogState,
+        ...dialog,
         ...state,
       },
     }))
