@@ -30,7 +30,11 @@ const schema = z.object({
   indicator: zCategoryIndicator,
 })
 
+type InitialData = { type: "create" } | { type: "edit"; category: Category }
+
 export function CategoryDialog() {
+  const initialData = React.useRef<InitialData>({ type: "create" })
+
   const [isOpen, setIsOpen] = React.useState(false)
   const dialogOpen = useAppStore((state) => state.dialogOpen)
 
@@ -38,48 +42,34 @@ export function CategoryDialog() {
   const isEdit = useAppStore((state) => state.dialog.editCategory)
   const setDialog = useAppStore((state) => state.setDialog)
 
-  const [editCategoryDefaultData, setEditCategoryDefaultData] =
-    React.useState<null | Category>(null)
-  const [createNewMode, setCreateNewMode] = React.useState(false)
-
   React.useEffect(() => {
-    if (dialogOpen !== "createCategory") {
+    if (dialogOpen !== "createCategory" && dialogOpen !== "editCategory") {
       setIsOpen(false)
     }
   }, [dialogOpen, setIsOpen])
 
   React.useEffect(() => {
     if (isCreate) {
-      setCreateNewMode(true)
-      setEditCategoryDefaultData(null)
+      initialData.current = { type: "create" }
       setIsOpen(true)
       setDialog({ createCategory: false })
       return
     }
 
     if (isEdit) {
-      setEditCategoryDefaultData(isEdit)
-      setCreateNewMode(false)
+      initialData.current = { type: "edit", category: isEdit }
       setIsOpen(true)
       setDialog({ editCategory: null })
       return
     }
-  }, [
-    isCreate,
-    isEdit,
-    setIsOpen,
-    setDialog,
-    setCreateNewMode,
-    setEditCategoryDefaultData,
-  ])
+  }, [isCreate, isEdit, setIsOpen, setDialog])
 
   return (
     <DialogRoot open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent className="space-y-4">
         <CategoryDialogContent
           handleClose={() => setIsOpen(false)}
-          isEdit={editCategoryDefaultData}
-          isCreate={createNewMode}
+          initialData={initialData.current}
         />
       </DialogContent>
     </DialogRoot>
@@ -89,12 +79,10 @@ export function CategoryDialog() {
 type FormValues = z.infer<typeof schema>
 function CategoryDialogContent({
   handleClose,
-  isEdit,
-  isCreate,
+  initialData,
 }: {
   handleClose: () => void
-  isCreate: boolean
-  isEdit: Category | null
+  initialData: InitialData
 }) {
   const addCategory = useAppStore((s) => s.addCategory)
   const editCategory = useAppStore((s) => s.editCategory)
@@ -107,20 +95,24 @@ function CategoryDialogContent({
     setValue,
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
-    defaultValues: {
-      title: isEdit?.title ?? "",
-      indicator: isEdit?.indicator ?? "orange",
-    },
+    defaultValues: initialData.type === "edit" ? initialData.category : {},
   })
 
   const onSubmit = (data: FormValues) => {
-    if (isCreate) addCategory(data)
-    if (isEdit) editCategory({ ...isEdit, ...data })
+    if (initialData.type === "edit") {
+      editCategory({ ...initialData.category, ...data })
+    }
 
+    if (initialData.type === "create") {
+      addCategory(data)
+    }
     handleClose()
   }
 
-  const title = isEdit ? `Edit ${isEdit?.title}` : "Create Category"
+  const title =
+    initialData.type === "edit"
+      ? `Edit ${initialData.category.title}`
+      : "Create Category"
 
   return (
     <>
