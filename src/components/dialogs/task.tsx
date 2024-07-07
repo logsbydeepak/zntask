@@ -29,7 +29,7 @@ import {
 } from "#/components/ui/dialog"
 import { FormRoot } from "#/components/ui/form"
 import { PopoverRoot, PopoverTrigger } from "#/components/ui/popover"
-import { useAppStore } from "#/store/app"
+import { getAppState, useAppStore } from "#/store/app"
 import { ChildTask, ParentTask } from "#/store/task-slice"
 import { getCategoryColor } from "#/utils/category"
 import { cn } from "#/utils/style"
@@ -57,50 +57,70 @@ type InitialData =
       triggerId: string | undefined
     }
 
+function getTriggerId(
+  data: { parentTaskId: string } | { childTaskId: string }
+) {
+  if ("parentTaskId" in data) {
+    return data.parentTaskId
+  }
+
+  if ("childTaskId" in data) {
+    return data.childTaskId
+  }
+}
+
+function getTaskData(
+  isEdit: { parentTaskId: string } | { childTaskId: string },
+  store: { parentTasks: ParentTask[]; childTasks: ChildTask[] }
+) {
+  if (!isEdit) return { parentTask: undefined, childTasks: [] }
+  const isParentId = "parentTaskId" in isEdit
+  const isChildId = "childTaskId" in isEdit
+
+  if (isParentId) {
+    const parentTask = store.parentTasks.find(
+      (i) => i.id === isEdit.parentTaskId
+    )
+
+    const childTasks = store.childTasks.filter(
+      (i) => i.parentId === isEdit.parentTaskId
+    )
+
+    if (parentTask) {
+      return { parentTask, childTasks: childTasks }
+    }
+
+    return { parentTask: undefined, childTasks: [] }
+  }
+
+  if (isChildId) {
+    const childTask = store.childTasks.find((i) => i.id === isEdit.childTaskId)
+    if (!childTask) return { parentTask: undefined, childTasks: [] }
+
+    const parentTask = store.parentTasks.find(
+      (i) => i.id === childTask.parentId
+    )
+
+    const childTasks = store.childTasks.filter(
+      (i) => i.parentId === childTask.parentId
+    )
+
+    return { parentTask, childTasks }
+  }
+
+  return { parentTask: undefined, childTasks: [] }
+}
+
 export function TaskDialog() {
   const initialData = React.useRef<InitialData>({ type: "create" })
 
   const [isOpen, setIsOpen] = React.useState(false)
   const dialogOpen = useAppStore((state) => state.dialogOpen)
+  const appState = getAppState()
 
   const isCreate = useAppStore((state) => state.dialog.createTask)
   const isEdit = useAppStore((state) => state.dialog.editTask)
   const setDialog = useAppStore((state) => state.setDialog)
-
-  const task = useAppStore((s) => {
-    if (!isEdit) return { parentTask: undefined, childTasks: [] }
-    const isParentId = "parentTaskId" in isEdit
-    const isChildId = "childTaskId" in isEdit
-
-    if (isParentId) {
-      const parentTask = s.parentTasks.find((i) => i.id === isEdit.parentTaskId)
-
-      const childTasks = s.childTasks.filter(
-        (i) => i.parentId === isEdit.parentTaskId
-      )
-
-      if (parentTask) {
-        return { parentTask, childTasks: childTasks }
-      }
-
-      return { parentTask: undefined, childTasks: [] }
-    }
-
-    if (isChildId) {
-      const childTask = s.childTasks.find((i) => i.id === isEdit.childTaskId)
-
-      if (!childTask) return { parentTask: undefined, childTasks: [] }
-
-      const parentTask = s.parentTasks.find((i) => i.id === childTask?.parentId)
-      const childTasks = s.childTasks.filter(
-        (i) => i.parentId === childTask?.parentId
-      )
-
-      return { parentTask, childTasks }
-    }
-
-    return { parentTask: undefined, childTasks: [] }
-  })
 
   React.useEffect(() => {
     if (isCreate) {
@@ -111,24 +131,24 @@ export function TaskDialog() {
     }
 
     if (isEdit) {
-      if (!task.parentTask) return
+      const data = getTaskData(isEdit, {
+        childTasks: appState().childTasks,
+        parentTasks: appState().parentTasks,
+      })
+
+      if (!data.parentTask) return
+
       initialData.current = {
         type: "edit",
-        parentTask: task.parentTask,
-        childTask: task.childTasks,
-        triggerId: isEdit
-          ? "parentTaskId" in isEdit
-            ? isEdit.parentTaskId
-            : "childTaskId" in isEdit
-              ? isEdit.childTaskId
-              : undefined
-          : undefined,
+        parentTask: data.parentTask,
+        childTask: data.childTasks,
+        triggerId: getTriggerId(isEdit),
       }
       setIsOpen(true)
       setDialog({ editTask: null })
       return
     }
-  }, [isCreate, isEdit, setIsOpen, setDialog, task.childTasks, task.parentTask])
+  }, [isCreate, isEdit, setIsOpen, setDialog, appState])
 
   React.useEffect(() => {
     if (dialogOpen !== "editTask" && dialogOpen !== "createTask") {

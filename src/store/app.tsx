@@ -53,9 +53,16 @@ export function AppProvider({
       isScreenSM: typeof window !== "undefined" && window.innerWidth <= 768,
     })
   )
+  store.current.getState()
   return (
     <AppContext.Provider value={store.current}>{children}</AppContext.Provider>
   )
+}
+
+export function getAppState() {
+  const store = React.use(AppContext)
+  if (!store) throw new Error("Missing AppContext.Provider in the tree")
+  return store.getState
 }
 
 export function useAppStore<T>(selector: (state: AppStore) => T): T {
