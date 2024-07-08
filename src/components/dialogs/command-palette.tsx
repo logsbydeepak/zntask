@@ -30,12 +30,28 @@ import { categoryHelper, getCategoryColor } from "#/utils/category"
 import { cn } from "#/utils/style"
 
 export function CommandPaletteDialog() {
-  const isOpen = useAppStore((s) => s.dialog.commandPalette)
-  const setDialog = useAppStore((s) => s.setDialog)
+  const [isOpen, setIsOpen] = React.useState(false)
 
-  const handleClose = () => {
-    setDialog({ commandPalette: false })
+  const isCommandPalletOpen = useAppStore((s) => s.dialog.commandPalette)
+  const setDialog = useAppStore((s) => s.setDialog)
+  const dialogOpen = useAppStore((state) => state.dialogOpen)
+
+  function handleClose() {
+    setIsOpen(false)
   }
+
+  React.useEffect(() => {
+    if (isCommandPalletOpen) {
+      setDialog({ commandPalette: false })
+      setIsOpen(true)
+    }
+  }, [isCommandPalletOpen, setIsOpen, setDialog])
+
+  React.useEffect(() => {
+    if (dialogOpen !== "commandPalette") {
+      handleClose()
+    }
+  }, [dialogOpen])
 
   return (
     <DialogRoot open={isOpen} onOpenChange={handleClose}>

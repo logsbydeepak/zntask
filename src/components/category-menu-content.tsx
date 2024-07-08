@@ -31,7 +31,7 @@ export function CategoryMenuContent({
   const menuItem = [
     {
       label: "Edit",
-      onSelect: () => setDialog({ editCategory: category }),
+      onSelect: () => setDialog({ editCategory: category.id }),
       icon: <EditIcon />,
     },
 
@@ -48,7 +48,7 @@ export function CategoryMenuContent({
     },
     {
       label: "Delete",
-      onSelect: () => setDialog({ deleteCategory: category }),
+      onSelect: () => setDialog({ deleteCategory: category.id }),
       icon: <Trash2Icon />,
       intent: "destructive" as const,
     },

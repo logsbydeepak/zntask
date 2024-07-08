@@ -20,7 +20,6 @@ const DialogRoot = ({
   <DialogRootPrimitive {...props}>
     <DialogPortalPrimitive>
       <DialogOverlayPrimitive className="fixed inset-0 z-30 bg-gray-1/50 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0" />
-
       {children}
     </DialogPortalPrimitive>
   </DialogRootPrimitive>

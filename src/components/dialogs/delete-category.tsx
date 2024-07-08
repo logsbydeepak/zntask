@@ -8,21 +8,52 @@ import {
   DialogRoot,
   DialogTitle,
 } from "#/components/ui/dialog"
-import { useAppStore } from "#/store/app"
+import { getAppState, useAppStore } from "#/store/app"
 import { Category } from "#/utils/category"
 
+type InitialData = Category
+
 export function DeleteCategoryDialog() {
-  const category = useAppStore((s) => s.dialog.deleteCategory)
+  const initialData = React.useRef<InitialData>()
+
+  const [isOpen, setIsOpen] = React.useState(false)
+  const dialogOpen = useAppStore((state) => state.dialogOpen)
+  const getState = getAppState()
+
+  const categoryId = useAppStore((s) => s.dialog.deleteCategory)
   const setDialog = useAppStore((s) => s.setDialog)
 
-  const isOpen = !!category
-  const closeDialog = () => setDialog({ deleteCategory: null })
+  function handleClose() {
+    setIsOpen(false)
+  }
 
-  if (!category) return null
+  React.useEffect(() => {
+    if (categoryId) {
+      const category = getState().categories.find(
+        (each) => each.id === categoryId
+      )
+      if (!category) return
+
+      initialData.current = category
+      setDialog({ deleteCategory: null })
+      setIsOpen(true)
+    }
+  }, [categoryId, setDialog, getState])
+
+  React.useEffect(() => {
+    if (dialogOpen !== "deleteCategory") {
+      handleClose()
+    }
+  }, [dialogOpen, setIsOpen])
+
+  if (!initialData.current) return null
   return (
-    <DialogRoot open={isOpen} onOpenChange={closeDialog}>
+    <DialogRoot open={isOpen} onOpenChange={() => handleClose()}>
       <DialogContent className="space-y-4 text-center">
-        <DeleteDialogContent handleClose={closeDialog} category={category} />
+        <DeleteDialogContent
+          handleClose={handleClose}
+          category={initialData.current}
+        />
       </DialogContent>
     </DialogRoot>
   )

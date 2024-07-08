@@ -23,8 +23,8 @@ const dialogState = {
   updateEmail: false,
 
   createCategory: false,
-  editCategory: null as null | Category,
-  deleteCategory: null as null | Category,
+  editCategory: null as null | string,
+  deleteCategory: null as null | string,
   createTask: false,
   editTask: null as null | { parentTaskId: string } | { childTaskId: string },
 

@@ -13,7 +13,7 @@ import {
   DialogTitle,
 } from "#/components/ui/dialog"
 import { FormError, FormInput, FormLabel, FormRoot } from "#/components/ui/form"
-import { useAppStore } from "#/store/app"
+import { getAppState, useAppStore } from "#/store/app"
 import {
   Category,
   categoryIndicatorOptions,
@@ -34,41 +34,52 @@ type InitialData = { type: "create" } | { type: "edit"; category: Category }
 
 export function CategoryDialog() {
   const initialData = React.useRef<InitialData>({ type: "create" })
-
   const [isOpen, setIsOpen] = React.useState(false)
-  const dialogOpen = useAppStore((state) => state.dialogOpen)
 
+  const appState = getAppState()
+  const dialogOpen = useAppStore((state) => state.dialogOpen)
   const isCreate = useAppStore((state) => state.dialog.createCategory)
-  const isEdit = useAppStore((state) => state.dialog.editCategory)
+  const editCategoryId = useAppStore((state) => state.dialog.editCategory)
   const setDialog = useAppStore((state) => state.setDialog)
+
+  function handleClose() {
+    setIsOpen(false)
+  }
 
   React.useEffect(() => {
     if (dialogOpen !== "createCategory" && dialogOpen !== "editCategory") {
-      setIsOpen(false)
+      handleClose()
     }
   }, [dialogOpen, setIsOpen])
 
   React.useEffect(() => {
     if (isCreate) {
       initialData.current = { type: "create" }
-      setIsOpen(true)
       setDialog({ createCategory: false })
+      setIsOpen(true)
       return
     }
+  }, [isCreate, setDialog])
 
-    if (isEdit) {
-      initialData.current = { type: "edit", category: isEdit }
+  React.useEffect(() => {
+    if (editCategoryId) {
+      const category = appState().categories.find(
+        (each) => each.id === editCategoryId
+      )
+      if (!category) return
+
+      initialData.current = { type: "edit", category: category }
       setIsOpen(true)
       setDialog({ editCategory: null })
       return
     }
-  }, [isCreate, isEdit, setIsOpen, setDialog])
+  }, [appState, editCategoryId, setDialog])
 
   return (
-    <DialogRoot open={isOpen} onOpenChange={setIsOpen}>
+    <DialogRoot open={isOpen} onOpenChange={() => handleClose()}>
       <DialogContent className="space-y-4">
         <CategoryDialogContent
-          handleClose={() => setIsOpen(false)}
+          handleClose={() => handleClose()}
           initialData={initialData.current}
         />
       </DialogContent>
@@ -95,7 +106,12 @@ function CategoryDialogContent({
     setValue,
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
-    defaultValues: initialData.type === "edit" ? initialData.category : {},
+    defaultValues:
+      initialData.type === "edit"
+        ? initialData.category
+        : {
+            indicator: "orange",
+          },
   })
 
   const onSubmit = (data: FormValues) => {

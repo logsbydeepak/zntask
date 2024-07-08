@@ -11,32 +11,56 @@ import {
   DialogRoot,
   DialogTitle,
 } from "#/components/ui/dialog"
-import {
-  FormError,
-  FormFieldset,
-  FormInput,
-  FormLabel,
-  FormRoot,
-} from "#/components/ui/form"
+import { FormError, FormInput, FormLabel, FormRoot } from "#/components/ui/form"
+import { getInitialData } from "#/data"
 import { updateName } from "#/data/user"
 import { zUpdateName } from "#/data/utils/zSchema"
-import { useAppStore } from "#/store/app"
+import { getAppState, useAppStore } from "#/store/app"
 import { toast } from "#/store/toast"
 
 import { Head } from "../head"
 
 type FormValues = z.infer<typeof zUpdateName>
 
+type InitialData = {
+  firstName: string
+  lastName: string | null
+}
+
 export function UpdateNameDialog() {
+  const appState = getAppState()
+  const dialogOpen = useAppStore((state) => state.dialogOpen)
+  const isUpdateName = useAppStore((state) => state.dialog.updateName)
+  const setDialog = useAppStore((state) => state.setDialog)
+
+  const initialData = React.useRef<InitialData>()
+  const [isOpen, setIsOpen] = React.useState(false)
   const [isPending, startTransition] = React.useTransition()
-  const isOpen = useAppStore((state) => state.dialog.updateName)
-  const setIsOpen = useAppStore((state) => state.setDialog)
 
-  const handleClose = () => {
+  const handleClose = React.useCallback(() => {
     if (isPending) return
-    setIsOpen({ updateName: false })
-  }
+    setIsOpen(false)
+  }, [isPending])
 
+  React.useEffect(() => {
+    if (dialogOpen !== "createCategory" && dialogOpen !== "editCategory") {
+      handleClose()
+    }
+  }, [dialogOpen, handleClose])
+
+  React.useEffect(() => {
+    if (isUpdateName) {
+      const appData = appState()
+      initialData.current = {
+        firstName: appData.user.firstName,
+        lastName: appData.user.lastName,
+      }
+      setDialog({ updateName: false })
+      setIsOpen(true)
+    }
+  }, [appState, isUpdateName, setDialog])
+
+  if (!initialData.current) return
   return (
     <DialogRoot open={isOpen} onOpenChange={handleClose}>
       <DialogContent>
@@ -44,6 +68,7 @@ export function UpdateNameDialog() {
           handleClose={handleClose}
           isPending={isPending}
           startTransition={startTransition}
+          initialData={initialData.current}
         />
       </DialogContent>
     </DialogRoot>
@@ -54,13 +79,13 @@ function UpdateNameDialogContent({
   handleClose,
   isPending,
   startTransition,
+  initialData,
 }: {
   handleClose: () => void
+  initialData: InitialData
   isPending: boolean
   startTransition: React.TransitionStartFunction
 }) {
-  const user = useAppStore((s) => s.user)
-
   const {
     register,
     formState: { errors },
@@ -68,15 +93,15 @@ function UpdateNameDialogContent({
   } = useForm<FormValues>({
     resolver: zodResolver(zUpdateName),
     defaultValues: {
-      firstName: user.firstName,
-      lastName: user.lastName,
+      firstName: initialData.firstName,
+      lastName: initialData.lastName,
     },
   })
 
   const onSubmit = (values: FormValues) => {
     if (
-      user.firstName === values.firstName &&
-      user.lastName === values.lastName
+      initialData.firstName === values.firstName &&
+      initialData.lastName === values.lastName
     ) {
       handleClose()
       return
