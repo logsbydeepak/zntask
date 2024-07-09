@@ -33,14 +33,30 @@ const zSchema = z.object({
 type FormValues = z.infer<typeof zSchema>
 
 export function RemoveGoogleDialog() {
-  const [isPending, startTransition] = React.useTransition()
-  const isOpen = useAppStore((state) => state.dialog.removeGoogleAuth)
-  const setIsOpen = useAppStore((state) => state.setDialog)
+  const [isOpen, setIsOpen] = React.useState(false)
+  const dialogOpen = useAppStore((state) => state.dialogOpen)
 
-  const handleClose = () => {
+  const [isPending, startTransition] = React.useTransition()
+  const isRemoveGoogle = useAppStore((state) => state.dialog.removeGoogleAuth)
+  const setDialog = useAppStore((state) => state.setDialog)
+
+  const handleClose = React.useCallback(() => {
     if (isPending) return
-    setIsOpen({ removeGoogleAuth: false })
-  }
+    setIsOpen(false)
+  }, [isPending])
+
+  React.useEffect(() => {
+    if (isRemoveGoogle) {
+      setDialog({ logout: false })
+      setIsOpen(true)
+    }
+  }, [isRemoveGoogle, setIsOpen, setDialog])
+
+  React.useEffect(() => {
+    if (dialogOpen !== "removeGoogleAuth") {
+      handleClose()
+    }
+  }, [dialogOpen, handleClose])
 
   return (
     <DialogRoot open={isOpen} onOpenChange={handleClose}>

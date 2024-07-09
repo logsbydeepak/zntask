@@ -14,20 +14,36 @@ import { toast } from "#/store/toast"
 import { Button } from "../ui/button"
 
 export function LogoutDialog() {
-  const isOpen = useAppStore((s) => s.dialog.logout)
+  const [isOpen, setIsOpen] = React.useState(false)
+  const dialogOpen = useAppStore((state) => state.dialogOpen)
+
+  const isLogout = useAppStore((s) => s.dialog.logout)
   const setDialog = useAppStore((s) => s.setDialog)
   const [isPending, startTransition] = React.useTransition()
 
-  const closeDialog = () => {
+  const handleClose = React.useCallback(() => {
     if (isPending) return
-    setDialog({ logout: false })
-  }
+    setIsOpen(false)
+  }, [isPending])
+
+  React.useEffect(() => {
+    if (isLogout) {
+      setDialog({ logout: false })
+      setIsOpen(true)
+    }
+  }, [isLogout, setIsOpen, setDialog])
+
+  React.useEffect(() => {
+    if (dialogOpen !== "logout") {
+      handleClose()
+    }
+  }, [dialogOpen, handleClose])
 
   return (
-    <DialogRoot open={isOpen} onOpenChange={closeDialog}>
+    <DialogRoot open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="space-y-4 text-center">
         <LogoutDialogContent
-          handleClose={closeDialog}
+          handleClose={handleClose}
           isPending={isPending}
           startTransition={startTransition}
         />

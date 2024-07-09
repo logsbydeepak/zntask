@@ -34,14 +34,30 @@ const zSchema = z.object({
 type FormValues = z.infer<typeof zSchema>
 
 export function UpdateEmailDialog() {
-  const [isPending, startTransition] = React.useTransition()
-  const isOpen = useAppStore((state) => state.dialog.updateEmail)
-  const setIsOpen = useAppStore((state) => state.setDialog)
+  const [isOpen, setIsOpen] = React.useState(false)
+  const dialogOpen = useAppStore((state) => state.dialogOpen)
 
-  const handleClose = () => {
+  const [isPending, startTransition] = React.useTransition()
+  const isUpdateEmail = useAppStore((state) => state.dialog.updateEmail)
+  const setDialog = useAppStore((state) => state.setDialog)
+
+  const handleClose = React.useCallback(() => {
     if (isPending) return
-    setIsOpen({ updateEmail: false })
-  }
+    setIsOpen(false)
+  }, [isPending])
+
+  React.useEffect(() => {
+    if (isUpdateEmail) {
+      setDialog({ updateEmail: false })
+      setIsOpen(true)
+    }
+  }, [isUpdateEmail, setIsOpen, setDialog])
+
+  React.useEffect(() => {
+    if (dialogOpen !== "updateEmail") {
+      handleClose()
+    }
+  }, [dialogOpen, handleClose])
 
   return (
     <DialogRoot open={isOpen} onOpenChange={handleClose}>

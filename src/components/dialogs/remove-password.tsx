@@ -33,14 +33,32 @@ const zSchema = z.object({
 type FormValues = z.infer<typeof zSchema>
 
 export function RemovePasswordDialog() {
-  const [isPending, startTransition] = React.useTransition()
-  const isOpen = useAppStore((state) => state.dialog.removePasswordAuth)
-  const setIsOpen = useAppStore((state) => state.setDialog)
+  const [isOpen, setIsOpen] = React.useState(false)
+  const dialogOpen = useAppStore((state) => state.dialogOpen)
 
-  const handleClose = () => {
+  const [isPending, startTransition] = React.useTransition()
+  const isRemovePassword = useAppStore(
+    (state) => state.dialog.removePasswordAuth
+  )
+  const setDialog = useAppStore((state) => state.setDialog)
+
+  const handleClose = React.useCallback(() => {
     if (isPending) return
-    setIsOpen({ removePasswordAuth: false })
-  }
+    setIsOpen(false)
+  }, [isPending])
+
+  React.useEffect(() => {
+    if (isRemovePassword) {
+      setDialog({ removePasswordAuth: false })
+      setIsOpen(true)
+    }
+  }, [isRemovePassword, setIsOpen, setDialog])
+
+  React.useEffect(() => {
+    if (dialogOpen !== "removePasswordAuth") {
+      handleClose()
+    }
+  }, [dialogOpen, handleClose])
 
   return (
     <DialogRoot open={isOpen} onOpenChange={handleClose}>
