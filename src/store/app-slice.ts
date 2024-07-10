@@ -2,7 +2,6 @@ import { Key } from "lucide-react"
 import { StateCreator } from "zustand"
 
 import type { RequireOnlyOne } from "#/types"
-import { Category } from "#/utils/category"
 
 import { AppStore } from "./app"
 

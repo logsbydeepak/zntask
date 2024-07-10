@@ -2,7 +2,7 @@ import Image from "next/image"
 
 import { cn } from "#/utils/style"
 
-export function genInitials(firstName: string, lastName?: string | null) {
+function genInitials(firstName: string, lastName?: string | null) {
   if (!lastName && firstName.length >= 2) {
     return `${firstName[0]}${firstName[1]}`.toUpperCase()
   }

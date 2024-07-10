@@ -6,9 +6,7 @@ import { z } from "zod"
 import { Button } from "#/components/ui/button"
 import {
   DialogClose,
-  DialogContent,
   DialogDescription,
-  DialogRoot,
   DialogTitle,
 } from "#/components/ui/dialog"
 import { FormError, FormInput, FormLabel, FormRoot } from "#/components/ui/form"
@@ -20,34 +18,7 @@ import { Alert, useAlert } from "../ui/alert"
 
 type FormValues = z.infer<typeof zResetPassword>
 
-export function ResetPasswordDialog({
-  isOpen,
-  setIsOpen,
-}: {
-  isOpen: boolean
-  setIsOpen: (isOpen: boolean) => void
-}) {
-  const [isPending, startTransition] = React.useTransition()
-
-  const handleClose = () => {
-    if (isPending) return
-    setIsOpen(false)
-  }
-
-  return (
-    <DialogRoot open={isOpen} onOpenChange={handleClose}>
-      <DialogContent>
-        <ResetPasswordDialogContent
-          handleClose={handleClose}
-          isPending={isPending}
-          startTransition={startTransition}
-        />
-      </DialogContent>
-    </DialogRoot>
-  )
-}
-
-function ResetPasswordDialogContent({
+export function ResetPasswordDialogContent({
   handleClose,
   isPending,
   startTransition,

@@ -12,7 +12,7 @@ import {
   ResetPassword,
   Separator,
 } from "#/app/(auth)/components"
-import { ResetPasswordDialog } from "#/components/dialogs/reset-password"
+import { ResetPasswordDialog } from "#/components/dialogs/reset-password-no-auth"
 import { Alert, useAlert } from "#/components/ui/alert"
 import { Button } from "#/components/ui/button"
 import {

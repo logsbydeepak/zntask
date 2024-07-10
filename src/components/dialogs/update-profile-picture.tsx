@@ -1,5 +1,4 @@
 import React from "react"
-import Image from "next/image"
 import { generateReactHelpers } from "@uploadthing/react/hooks"
 import { Trash2Icon, UploadIcon } from "lucide-react"
 
@@ -17,20 +16,38 @@ import type { OurFileRouter } from "#/data/utils/uploadthing"
 import { useAppStore } from "#/store/app"
 import { toast } from "#/store/toast"
 
-import { Avatar, genInitials } from "../avatar"
+import { Avatar } from "../avatar"
 import { Head } from "../head"
 
 const { useUploadThing } = generateReactHelpers<OurFileRouter>()
 
 export function UpdateProfilePictureDialog() {
-  const [isPending, startTransition] = React.useTransition()
-  const isOpen = useAppStore((state) => state.dialog.updateProfilePicture)
-  const setIsOpen = useAppStore((state) => state.setDialog)
+  const [isOpen, setIsOpen] = React.useState(false)
+  const dialogOpen = useAppStore((state) => state.dialogOpen)
 
-  const handleClose = () => {
+  const [isPending, startTransition] = React.useTransition()
+  const isUpdateProfilePicture = useAppStore(
+    (state) => state.dialog.updateProfilePicture
+  )
+  const setDialog = useAppStore((state) => state.setDialog)
+
+  const handleClose = React.useCallback(() => {
     if (isPending) return
-    setIsOpen({ updateProfilePicture: false })
-  }
+    setIsOpen(false)
+  }, [isPending])
+
+  React.useEffect(() => {
+    if (isUpdateProfilePicture) {
+      setDialog({ updateProfilePicture: false })
+      setIsOpen(true)
+    }
+  }, [isUpdateProfilePicture, setIsOpen, setDialog])
+
+  React.useEffect(() => {
+    if (dialogOpen !== "updateProfilePicture") {
+      handleClose()
+    }
+  }, [dialogOpen, handleClose])
 
   return (
     <DialogRoot open={isOpen} onOpenChange={handleClose}>
@@ -91,8 +108,6 @@ function UpdateProfilePictureDialogContent({
       })
     }
   }
-
-  const initials = genInitials(user.firstName, user.lastName)
 
   return (
     <>
