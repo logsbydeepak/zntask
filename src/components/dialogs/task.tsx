@@ -38,7 +38,7 @@ const schema = z.object({
   categoryId: z.string().nullable(),
   tasks: z.array(
     z.object({
-      _id: z.string().nullable(),
+      originalId: z.string().nullable(),
       title: z.string(),
       date: z.date().nullable(),
       time: z.date().nullable(),
@@ -176,7 +176,7 @@ function defaultValue(initialData: InitialData): FormValues | undefined {
 
   if (initialData.type === "create") {
     tasks.push({
-      _id: "",
+      originalId: "",
       title: "",
       details: null,
       date: null,
@@ -187,7 +187,7 @@ function defaultValue(initialData: InitialData): FormValues | undefined {
 
   if (initialData.type === "edit") {
     tasks.push({
-      _id: initialData.parentTask.id,
+      originalId: initialData.parentTask.id,
       title: initialData.parentTask.title,
       details: initialData.parentTask.details,
       date: initialData.parentTask.date
@@ -202,7 +202,7 @@ function defaultValue(initialData: InitialData): FormValues | undefined {
     initialData.childTask.forEach((i) => {
       tasks.push({
         ...i,
-        _id: i.id,
+        originalId: i.id,
         date: i.date ? new Date(i.date) : null,
         time: i.time ? new Date(i.time) : null,
         completedAt: i.completedAt ? new Date(i.completedAt) : null,
@@ -316,7 +316,7 @@ function TaskDialogContent({
             return
           }
 
-          if (!i._id) {
+          if (!i.originalId) {
             addChildTask({
               ...task,
               parentId,
@@ -327,7 +327,7 @@ function TaskDialogContent({
 
           let isChildTaskEdited = false
           const originalChildTask = initialData.childTask.find(
-            (j) => j.id === i._id
+            (j) => j.id === i.originalId
           )
           if (!originalChildTask) return
 
@@ -344,7 +344,7 @@ function TaskDialogContent({
           if (isChildTaskEdited) {
             editChildTask({
               ...task,
-              id: i._id,
+              id: i.originalId,
               parentId,
               orderId: index.toString(),
             })
@@ -401,7 +401,7 @@ function TaskDialogContent({
           <Badge.Button
             onClick={() => {
               append({
-                _id: null,
+                originalId: null,
                 title: "",
                 date: null,
                 time: null,
@@ -422,7 +422,7 @@ function TaskDialogContent({
           onSubmit={handleSubmit(onSubmit)}
           id="task"
         >
-          {fields.map((_, index) => (
+          {fields.map((filed, index) => (
             <div
               className={cn("snap-start space-y-2", index !== 0 && "pl-7")}
               key={index}
@@ -442,18 +442,12 @@ function TaskDialogContent({
 
                 <div className="space-y-2">
                   <input
+                    id={`tasks.${index}.title`}
                     {...register(`tasks.${index}.title`)}
                     autoComplete="off"
-                    id={`tasks.${index}.title`}
                     placeholder="task"
                     className="m-0 w-full border-0 p-0 outline-none placeholder:text-gray-11 focus-visible:ring-0"
-                    {...(initialData.type === "create" && {
-                      autoFocus: true,
-                    })}
-                    {...(initialData.type === "edit" &&
-                      initialData.triggerId === _._id && {
-                        autoFocus: true,
-                      })}
+                    autoFocus={autoFocus(initialData, filed.originalId)}
                   />
 
                   <textarea
@@ -527,6 +521,15 @@ function TaskDialogContent({
   )
 }
 
+function autoFocus(initialData: InitialData, _id: string | null) {
+  if (initialData.type === "create") {
+    return true
+  } else if (initialData.triggerId === _id) {
+    return true
+  }
+  return false
+}
+
 function Checkbox({
   value,
   setValue,
@@ -584,13 +587,11 @@ function CategoryPicker({
           </span>
         </Badge.Button>
       </PopoverTrigger>
-      {isOpen && (
-        <CategoryPopover
-          setValue={setValue}
-          currentCategory={currentCategory}
-          setIsOpen={setIsOpen}
-        />
-      )}
+      <CategoryPopover
+        setValue={setValue}
+        currentCategory={currentCategory}
+        setIsOpen={setIsOpen}
+      />
     </PopoverRoot>
   )
 }

@@ -17,8 +17,6 @@ const appStore: StateCreator<AppStore> = (...args) => ({
   ...taskSlice(...args),
 })
 
-console.log("I ")
-
 const createAppStore = (initialProps?: Partial<AppStore>) => {
   return createStore<AppStore>()(
     persist(
