@@ -9,8 +9,8 @@ import {
   State,
   SyncAppState,
 } from "#/components/state"
+import { Sync } from "#/components/sync"
 import { ToastProvider } from "#/components/toast"
-import { getInitialData } from "#/data"
 import { getUser } from "#/data/user"
 import { AppProvider } from "#/store/app"
 
@@ -27,6 +27,7 @@ export default async function Layout({
     <Suspense fallback={<Loading />}>
       <DelayRender>
         <InitData>
+          <Sync />
           <Navbar />
           <State />
           <Sidebar />

@@ -2,7 +2,6 @@
 
 import React from "react"
 import { createStore, StateCreator, useStore } from "zustand"
-import { persist } from "zustand/middleware"
 import { useShallow } from "zustand/react/shallow"
 
 import { AppSlice, appSlice } from "./app-slice"
@@ -18,22 +17,10 @@ const appStore: StateCreator<AppStore> = (...args) => ({
 })
 
 const createAppStore = (initialProps?: Partial<AppStore>) => {
-  return createStore<AppStore>()(
-    persist(
-      (...args) => ({
-        ...appStore(...args),
-        ...initialProps,
-      }),
-      {
-        name: "app-store",
-        partialize: (s) => ({
-          categories: s.categories,
-          parentTasks: s.parentTasks,
-          childTasks: s.childTasks,
-        }),
-      }
-    )
-  )
+  return createStore<AppStore>()((...args) => ({
+    ...appStore(...args),
+    ...initialProps,
+  }))
 }
 
 type CreateAppStoreType = ReturnType<typeof createAppStore>

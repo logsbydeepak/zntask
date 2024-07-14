@@ -7,6 +7,7 @@ import { AppStore } from "./app"
 
 const initialState = {
   categories: [] as Category[],
+  categoriesSync: [] as string[],
 }
 type State = typeof initialState
 
@@ -45,6 +46,7 @@ export const categorySlice: StateCreator<AppStore, [], [], CategorySlice> = (
 
     set((state) => ({
       categories: [...state.categories, newCategory],
+      categoriesSync: [...state.categoriesSync, id],
     }))
     return newCategory
   },
