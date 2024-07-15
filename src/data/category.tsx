@@ -11,8 +11,8 @@ import { h, r } from "./utils/handler"
 const zCreateCategory = z.object({
   title: zRequired,
   indicator: zCategoryIndicator,
-  favoriteAt: z.string(),
-  archivedAt: z.string(),
+  favoriteAt: z.string().nullable(),
+  archivedAt: z.string().nullable(),
 })
 
 export const createCategory = h.auth

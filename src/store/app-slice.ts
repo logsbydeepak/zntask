@@ -12,6 +12,13 @@ interface User {
   profilePicture: string | null
 }
 
+type Sync = {
+  id: string
+  type: "category"
+  action: "create"
+  actionId: string
+}
+
 const dialogState = {
   resetPassword: false,
   logout: false,
@@ -38,6 +45,7 @@ const initialState = {
   isScreenSM: false,
   isAppSyncing: false,
   user: {} as User,
+  sync: [] as Sync[],
 }
 
 type Key = keyof typeof dialogState
@@ -47,6 +55,7 @@ type State = typeof initialState & {
 }
 
 interface Actions {
+  removeSync: (id: string) => void
   setDialog: <
     T extends RequireOnlyOne<{
       [key in keyof typeof dialogState]: (typeof dialogState)[key]
@@ -59,6 +68,7 @@ interface Actions {
   setScreenSM: (state: boolean) => void
   setAppSyncing: (state: boolean) => void
   setUser: (state: User) => void
+  setAppState: (args: (state: AppStore) => AppStore) => void
 }
 
 export type AppSlice = State & Actions
@@ -66,6 +76,14 @@ export type AppSlice = State & Actions
 export const appSlice: StateCreator<AppStore, [], [], AppSlice> = (set) => ({
   ...initialState,
   dialogOpen: null,
+
+  setAppState(func) {
+    set((s) => func(s))
+  },
+
+  removeSync(id: string) {
+    set((state) => ({ sync: state.sync.filter((each) => each.id !== id) }))
+  },
 
   setUser(state) {
     set(() => ({ user: state }))
