@@ -12,6 +12,7 @@
     "cspell": "cspell ** --gitignore --cache",
     "fix": "run-s format cspell lint:fix",
     "db:push": "bun --env-file .env.local drizzle-kit push",
+    "db:studio": "bun --env-file .env.local drizzle-kit studio",
     "unused": "knip"
   },
   "dependencies": {

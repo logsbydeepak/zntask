@@ -14,10 +14,12 @@ export function Sync() {
   const removeSync = useAppStore((s) => s.removeSync)
 
   React.useEffect(() => {
-    if (isPending) {
-      setAppSyncing(isPending)
-    }
+    setAppSyncing(isPending)
   }, [isPending, setAppSyncing])
+
+  React.useEffect(() => {
+    console.log(isPending)
+  }, [isPending])
 
   React.useEffect(() => {
     startTransition(async () => {

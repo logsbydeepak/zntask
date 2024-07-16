@@ -11,6 +11,7 @@ import {
 } from "#/components/state"
 import { Sync } from "#/components/sync"
 import { ToastProvider } from "#/components/toast"
+import { getInitialData } from "#/data"
 import { getUser } from "#/data/user"
 import { AppProvider } from "#/store/app"
 
@@ -42,11 +43,15 @@ export default async function Layout({
 }
 
 async function InitData({ children }: { children: React.ReactNode }) {
-  // const initialData = await getInitialData()
-  const user = await getUser()
+  const initialData = await getInitialData()
   return (
-    <AppProvider initialProps={{ user: user }}>
-      <SyncAppState user={user} />
+    <AppProvider
+      initialProps={{
+        user: initialData.user,
+        categories: initialData.categories,
+      }}
+    >
+      <SyncAppState user={initialData.user} />
       {children}
     </AppProvider>
   )

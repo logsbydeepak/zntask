@@ -58,7 +58,7 @@ export const categories = pgTable(
     })
       .default(categoryDefaultIndicatorOption.label)
       .notNull(),
-    favoriteAt: varchar("archived_at", { length: 30 }),
+    favoriteAt: varchar("favorite_at", { length: 30 }),
     archivedAt: varchar("archived_at", { length: 30 }),
   },
   (table) => {
