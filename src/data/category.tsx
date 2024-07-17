@@ -22,16 +22,25 @@ export const createCategory = h.auth
   .fn(async ({ userId, input }) => {
     const id = genID()
 
-    await db.insert(dbSchema.categories).values({
-      userId,
-      id,
-      title: input.title,
-      archivedAt: input.archivedAt,
-      favoriteAt: input.favoriteAt,
-      indicator: input.indicator,
-    })
+    const [res] = await db
+      .insert(dbSchema.categories)
+      .values({
+        userId,
+        id,
+        title: input.title,
+        archivedAt: input.archivedAt,
+        favoriteAt: input.favoriteAt,
+        indicator: input.indicator,
+      })
+      .returning({ id: dbSchema.categories.id })
 
-    return r("OK")
+    if (!id) {
+      throw new Error("id should be present")
+    }
+
+    return r("OK", {
+      id: res.id,
+    })
   })
 
 export const editCategory = h.auth

@@ -1,6 +1,7 @@
 "use client"
 
 import React from "react"
+import to from "await-to-js"
 
 import { createCategory } from "#/data/category"
 import { getAppState, useAppStore } from "#/store/app"
@@ -12,14 +13,11 @@ export function Sync() {
   const setAppSyncing = useAppStore((s) => s.setAppSyncing)
   const sync = useAppStore((s) => s.sync)
   const removeSync = useAppStore((s) => s.removeSync)
+  const deleteCategory = useAppStore((s) => s.deleteCategory)
 
   React.useEffect(() => {
     setAppSyncing(isPending)
   }, [isPending, setAppSyncing])
-
-  React.useEffect(() => {
-    console.log(isPending)
-  }, [isPending])
 
   React.useEffect(() => {
     startTransition(async () => {
@@ -32,7 +30,13 @@ export function Sync() {
             const state = appState()
             const category = state.categories.find((each) => each.id == id)
             if (!category) return
-            const res = await createCategory(category)
+            const [error, data] = await to(createCategory(category))
+
+            if (error) {
+              console.log("hi error", error)
+              deleteCategory(category)
+              removeSync(current.id)
+            }
           }
           return
         }
@@ -40,7 +44,7 @@ export function Sync() {
         removeSync(current.id)
       }
     })
-  }, [sync, appState, removeSync])
+  }, [sync, appState, removeSync, deleteCategory])
 
   return null
 }
