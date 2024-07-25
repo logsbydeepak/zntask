@@ -12,12 +12,19 @@ interface User {
   profilePicture: string | null
 }
 
-type Sync = {
-  id: string
-  type: "category"
-  action: "create"
-  actionId: string
-}
+type Sync =
+  | {
+      id: string
+      type: "category"
+      action: "create"
+      actionId: string
+    }
+  | {
+      id: string
+      type: "category"
+      action: "edit"
+      actionId: string
+    }
 
 const dialogState = {
   resetPassword: false,

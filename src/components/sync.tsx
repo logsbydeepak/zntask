@@ -3,7 +3,7 @@
 import React from "react"
 import to from "await-to-js"
 
-import { createCategory } from "#/data/category"
+import { createCategory, editCategory } from "#/data/category"
 import { getAppState, useAppStore } from "#/store/app"
 
 export function Sync() {
@@ -33,11 +33,25 @@ export function Sync() {
             const [error, data] = await to(createCategory(category))
 
             if (error) {
-              console.log("hi error", error)
               deleteCategory(category)
               removeSync(current.id)
             }
           }
+
+          if (current.action === "edit") {
+            const id = current.actionId
+            const state = appState()
+            const category = state.categories.find((each) => each.id == id)
+            if (!category) return
+
+            const [error, data] = await to(editCategory(category))
+
+            if (error) {
+              deleteCategory(category)
+              removeSync(current.id)
+            }
+          }
+
           return
         }
       } catch (error) {

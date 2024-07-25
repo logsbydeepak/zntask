@@ -1,9 +1,9 @@
 "use server"
 
-import { eq } from "drizzle-orm"
+import { and, eq } from "drizzle-orm"
 import { z } from "zod"
 
-import { genID } from "#/shared/id"
+import { genID, isValidID } from "#/shared/id"
 import { zCategoryIndicator } from "#/utils/category"
 import { zRequired } from "#/utils/zSchema"
 
@@ -43,21 +43,27 @@ export const createCategory = h.auth
     })
   })
 
-export const editCategory = h.auth
-  .input(zCreateCategory)
-  .fn(async ({ userId, input }) => {
-    const id = genID()
+const zEditCategory = zCreateCategory.extend({
+  id: zRequired,
+})
 
+export const editCategory = h.auth
+  .input(zEditCategory)
+  .fn(async ({ userId, input }) => {
     const [res] = await db
       .update(dbSchema.categories)
       .set({
-        userId,
-        id,
         title: input.title,
         archivedAt: input.archivedAt,
         favoriteAt: input.favoriteAt,
         indicator: input.indicator,
       })
+      .where(
+        and(
+          eq(dbSchema.categories.id, input.id),
+          eq(dbSchema.categories.userId, userId)
+        )
+      )
       .returning({ id: dbSchema.categories.id })
 
     if (!res) {
