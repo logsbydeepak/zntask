@@ -75,12 +75,15 @@ export const editCategory = h.auth
 
 export const deleteCategory = h.auth
   .input(z.object({ id: zRequired }))
-  .fn(async () => {
-    const id = genID()
-
+  .fn(async ({ input, userId }) => {
     const [res] = await db
       .delete(dbSchema.categories)
-      .where(eq(dbSchema.categories.id, id))
+      .where(
+        and(
+          eq(dbSchema.categories.id, input.id),
+          eq(dbSchema.categories.userId, userId)
+        )
+      )
       .returning({
         id: dbSchema.categories.id,
       })

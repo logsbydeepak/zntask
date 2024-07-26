@@ -25,6 +25,12 @@ type Sync =
       action: "edit"
       actionId: string
     }
+  | {
+      id: string
+      type: "category"
+      action: "delete"
+      actionId: string
+    }
 
 const dialogState = {
   resetPassword: false,

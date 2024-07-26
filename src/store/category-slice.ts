@@ -78,6 +78,15 @@ export const categorySlice: StateCreator<AppStore, [], [], CategorySlice> = (
   deleteCategory: (category) => {
     set((state) => ({
       categories: state.categories.filter((item) => item.id !== category.id),
+      sync: [
+        ...state.sync,
+        {
+          id: genID(),
+          actionId: category.id,
+          type: "category",
+          action: "delete",
+        },
+      ],
     }))
   },
 
