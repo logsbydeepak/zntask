@@ -49,7 +49,7 @@ export const categorySlice: StateCreator<AppStore, [], [], CategorySlice> = (
         ...state.sync,
         {
           id: genID(),
-          actionId: id,
+          syncId: id,
           type: "category",
           action: "create",
         },
@@ -68,7 +68,7 @@ export const categorySlice: StateCreator<AppStore, [], [], CategorySlice> = (
         ...state.sync,
         {
           id: genID(),
-          actionId: category.id,
+          syncId: category.id,
           type: "category",
           action: "edit",
         },
@@ -82,7 +82,7 @@ export const categorySlice: StateCreator<AppStore, [], [], CategorySlice> = (
         ...state.sync,
         {
           id: genID(),
-          actionId: category.id,
+          syncId: category.id,
           type: "category",
           action: "delete",
         },

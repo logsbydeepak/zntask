@@ -17,19 +17,19 @@ type Sync =
       id: string
       type: "category"
       action: "create"
-      actionId: string
+      syncId: string
     }
   | {
       id: string
       type: "category"
       action: "edit"
-      actionId: string
+      syncId: string
     }
   | {
       id: string
       type: "category"
       action: "delete"
-      actionId: string
+      syncId: string
     }
 
 const dialogState = {

@@ -30,7 +30,7 @@ export function Sync() {
       try {
         if (current.type === "category") {
           if (current.action === "create") {
-            const id = current.actionId
+            const id = current.syncId
             const state = appState()
             const category = state.categories.find((each) => each.id == id)
             if (!category) return
@@ -43,7 +43,7 @@ export function Sync() {
           }
 
           if (current.action === "edit") {
-            const id = current.actionId
+            const id = current.syncId
             const state = appState()
             const category = state.categories.find((each) => each.id == id)
             if (!category) return
@@ -57,12 +57,12 @@ export function Sync() {
           }
 
           if (current.action === "delete") {
-            const id = current.actionId
+            const id = current.syncId
             const state = appState()
             const category = state.categories.find((each) => each.id == id)
 
             const [error, data] = await to(
-              syncDeleteCategory({ id: current.actionId })
+              syncDeleteCategory({ id: current.syncId })
             )
 
             if (error && category) {
