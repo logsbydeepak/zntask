@@ -97,7 +97,7 @@ export const categorySlice: StateCreator<AppStore, [], [], CategorySlice> = (
     return get().categories.find((category) => category.id === id)
   },
   toggleArchive: (category) => {
-    if (categoryHelper.isArchivedCategory(category)) {
+    if (categoryHelper.is.archived(category)) {
       set((state) => ({
         categories: state.categories.map((item) => {
           if (item.id === category.id)
@@ -125,7 +125,7 @@ export const categorySlice: StateCreator<AppStore, [], [], CategorySlice> = (
   },
 
   toggleFavorite: (category) => {
-    if (categoryHelper.isFavoriteCategory(category)) {
+    if (categoryHelper.is.favorite(category)) {
       set((state) => ({
         categories: state.categories.map((item) => {
           if (item.id === category.id)
@@ -140,8 +140,8 @@ export const categorySlice: StateCreator<AppStore, [], [], CategorySlice> = (
       const categories = get().categories
 
       let lastOrderNumber = 0
-      const lastFavorite = categoryHelper.sortFavoriteCategories(
-        categoryHelper.getFavoriteCategories(categories)
+      const lastFavorite = categoryHelper.get.favorite(
+        categoryHelper.get.favorite(categories)
       )[-1]
       if (lastFavorite) lastOrderNumber = lastFavorite.favoriteOrderNumber
 

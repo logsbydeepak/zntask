@@ -25,7 +25,7 @@ import { EmptyTaskCategory, TaskContainer, TaskItem } from "../../task"
 
 export default function Page({ params }: { params: { id?: string } }) {
   const category = useAppStore((s) =>
-    s.categories.find((c) => categoryHelper.isFavoriteCategory(c))
+    s.categories.find((c) => categoryHelper.is.favorite(c))
   )
 
   if (!category || !params.id) {

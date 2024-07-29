@@ -486,7 +486,7 @@ function TaskDialogContent({
                     {index !== 0 && (
                       <Badge.Button
                         onClick={() => {
-                          const id = getValues(`tasks.${index}._id`)
+                          const id = getValues(`tasks.${index}.originalId`)
                           if (id) {
                             setRemovedChildTaskIds((prev) => [...prev, id])
                           }

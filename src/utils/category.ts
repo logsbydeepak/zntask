@@ -121,24 +121,31 @@ const sortArchivedCategories = (categories: ArchivedCategory[]) => {
   })
 }
 
-const isFavoriteCategory = (category: Category) => {
+const isFavorite = (category: Category) => {
   return typeof category.favoriteAt === "string"
 }
 
-const isArchivedCategory = (category: Category) => {
+const isArchived = (category: Category) => {
   return typeof category.archivedAt === "string"
 }
 
 export const categoryHelper = {
-  getFavoriteCategories,
-  getActiveCategories,
-  getArchivedCategories,
+  get: {
+    favorite: getFavoriteCategories,
+    active: getActiveCategories,
+    archived: getArchivedCategories,
+  },
 
-  sortFavoriteCategories,
-  sortActiveCategories,
-  sortArchivedCategories,
+  sort: {
+    favorite: sortFavoriteCategories,
+    active: sortActiveCategories,
+    archived: sortArchivedCategories,
+  },
+
+  is: {
+    favorite: isFavorite,
+    archived: isArchived,
+  },
 
   getCategoryColor,
-  isFavoriteCategory,
-  isArchivedCategory,
 }

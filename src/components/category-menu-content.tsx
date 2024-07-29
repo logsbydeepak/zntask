@@ -25,8 +25,8 @@ export function CategoryMenuContent({
   const toggleArchive = useAppStore((s) => s.toggleArchive)
   const toggleFavorite = useAppStore((s) => s.toggleFavorite)
 
-  const isFavorite = categoryHelper.isFavoriteCategory(category)
-  const isArchived = categoryHelper.isArchivedCategory(category)
+  const isFavorite = categoryHelper.is.favorite(category)
+  const isArchived = categoryHelper.is.archived(category)
 
   const menuItem = [
     {

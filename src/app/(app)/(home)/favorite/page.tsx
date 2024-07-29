@@ -12,9 +12,7 @@ import { CategoryContainer, CategoryItem } from "../category"
 
 export default function Page() {
   const favorites = useAppStore((s) =>
-    categoryHelper.sortFavoriteCategories(
-      categoryHelper.getFavoriteCategories(s.categories)
-    )
+    categoryHelper.get.favorite(categoryHelper.get.favorite(s.categories))
   )
 
   return (

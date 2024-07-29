@@ -81,10 +81,10 @@ function CommandPaletteContent({ handleClose }: { handleClose: () => void }) {
   const toggleSidebar = useAppStore((s) => s.toggleSidebar)
 
   const activeCategory = useAppStore((s) =>
-    categoryHelper.getActiveCategories(s.categories)
+    categoryHelper.get.active(s.categories)
   )
   const archiveCategory = useAppStore((s) =>
-    categoryHelper.getArchivedCategories(s.categories)
+    categoryHelper.get.archived(s.categories)
   )
   const categories = useAppStore((s) => s.categories)
   const parentTask = useAppStore((s) => s.parentTasks)

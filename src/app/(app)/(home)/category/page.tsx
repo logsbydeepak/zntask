@@ -52,9 +52,7 @@ export default function Page() {
 
 function ActiveTab() {
   const categories = useAppStore((s) =>
-    categoryHelper.sortActiveCategories(
-      categoryHelper.getActiveCategories(s.categories)
-    )
+    categoryHelper.get.active(categoryHelper.get.active(s.categories))
   )
 
   return (
@@ -72,9 +70,7 @@ function ActiveTab() {
 
 function ArchiveTab() {
   const categories = useAppStore((s) =>
-    categoryHelper.sortArchivedCategories(
-      categoryHelper.getArchivedCategories(s.categories)
-    )
+    categoryHelper.get.archived(categoryHelper.get.archived(s.categories))
   )
 
   return (

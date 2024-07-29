@@ -114,9 +114,7 @@ function FavoriteSection() {
   const [isCollapsibleOpen, setIsCollapsibleOpen] = React.useState(false)
 
   const favorites = useAppStore((s) =>
-    categoryHelper.sortFavoriteCategories(
-      categoryHelper.getFavoriteCategories(s.categories)
-    )
+    categoryHelper.get.favorite(categoryHelper.get.favorite(s.categories))
   )
 
   const favoritesToDisplay = favorites.slice(
@@ -159,9 +157,7 @@ function CategorySection() {
   const pathname = usePathname()
   const [isCollapsibleOpen, setIsCollapsibleOpen] = React.useState(false)
   const categories = useAppStore((s) =>
-    categoryHelper.sortActiveCategories(
-      categoryHelper.getActiveCategories(s.categories)
-    )
+    categoryHelper.get.active(categoryHelper.get.active(s.categories))
   )
 
   const categoriesToDisplay = categories.slice(

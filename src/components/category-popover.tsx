@@ -17,8 +17,8 @@ export const CategoryPopover = React.forwardRef<
   }
 >(({ setIsOpen, setValue: setParentValue, currentCategory, ...props }, ref) => {
   const categories = useAppStore((s) =>
-    categoryHelper
-      .getActiveCategories(s.categories)
+    categoryHelper.get
+      .active(s.categories)
       .filter((i) => i.id !== currentCategory?.id)
   )
 
