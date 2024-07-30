@@ -60,6 +60,7 @@ export const categories = pgTable(
       .notNull(),
     favoriteAt: varchar("favorite_at", { length: 30 }),
     archivedAt: varchar("archived_at", { length: 30 }),
+    createdAt: varchar("created_at", { length: 30 }).notNull(),
   },
   (table) => {
     return {

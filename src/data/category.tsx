@@ -15,12 +15,19 @@ const zCreateCategory = z.object({
   indicator: zCategoryIndicator,
   favoriteAt: z.string().nullable(),
   archivedAt: z.string().nullable(),
+  createdAt: zRequired,
 })
 
 export const createCategory = h.auth
   .input(zCreateCategory)
   .fn(async ({ userId, input }) => {
     const id = genID()
+
+    let createdAt = new Date(input.createdAt)
+
+    if (isNaN(createdAt.getTime())) {
+      createdAt = new Date()
+    }
 
     const [res] = await db
       .insert(dbSchema.categories)
@@ -31,6 +38,7 @@ export const createCategory = h.auth
         archivedAt: input.archivedAt,
         favoriteAt: input.favoriteAt,
         indicator: input.indicator,
+        createdAt: createdAt.toISOString(),
       })
       .returning({ id: dbSchema.categories.id })
 

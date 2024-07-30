@@ -36,6 +36,7 @@ const zCategory = z.object({
   indicator: z.enum(categoryIndicatorLabel),
   favoriteAt: z.string().nullable(),
   archivedAt: z.string().nullable(),
+  createdAt: zRequired,
 })
 
 export const getCategoryColor = (
@@ -110,7 +111,20 @@ const sortFavoriteCategories = (categories: FavoriteCategory[]) => {
 }
 
 const sortActiveCategories = (categories: ActiveCategory[]) => {
-  return categories.sort((a, b) => a.orderNumber - b.orderNumber)
+  return categories.sort(function (a, b) {
+    let firstDate = new Date(a.createdAt)
+    let secondDate = new Date(b.createdAt)
+
+    if (isNaN(firstDate.getTime())) {
+      firstDate = new Date()
+    }
+
+    if (isNaN(secondDate.getTime())) {
+      secondDate = new Date()
+    }
+
+    return firstDate.getTime() - secondDate.getTime()
+  })
 }
 
 const sortArchivedCategories = (categories: ArchivedCategory[]) => {

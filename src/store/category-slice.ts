@@ -41,6 +41,7 @@ export const categorySlice: StateCreator<AppStore, [], [], CategorySlice> = (
       indicator: category.indicator,
       favoriteAt: null,
       archivedAt: null,
+      createdAt: new Date().toString(),
     }
 
     set((state) => ({
