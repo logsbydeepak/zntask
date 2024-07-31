@@ -18,7 +18,6 @@ import { UpdateProfilePictureDialog } from "./update-profile-picture"
 export function Dialogs() {
   return (
     <>
-      <ResetPasswordDialog />
       <UpdateProfilePictureDialog />
       <UpdateNameDialog />
       <ResetPasswordDialog />

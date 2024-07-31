@@ -47,7 +47,7 @@ export function RemoveGoogleDialog() {
 
   React.useEffect(() => {
     if (isRemoveGoogle) {
-      setDialog({ logout: false })
+      setDialog({ removeGoogleAuth: false })
       setIsOpen(true)
     }
   }, [isRemoveGoogle, setIsOpen, setDialog])

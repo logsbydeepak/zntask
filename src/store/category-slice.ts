@@ -138,14 +138,6 @@ export const categorySlice: StateCreator<AppStore, [], [], CategorySlice> = (
         }),
       }))
     } else {
-      const categories = get().categories
-
-      let lastOrderNumber = 0
-      const lastFavorite = categoryHelper.get.favorite(
-        categoryHelper.get.favorite(categories)
-      )[-1]
-      if (lastFavorite) lastOrderNumber = lastFavorite.favoriteOrderNumber
-
       set((state) => ({
         categories: state.categories.map((item) => {
           if (item.id === category.id)
