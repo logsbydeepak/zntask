@@ -11,13 +11,13 @@ const id = (name = "id") => varchar(name, { length: 26 })
 const tasks = {
   id: id().primaryKey(),
   userId: id("user_id").notNull(),
-  completedAt: varchar("completed_at", { length: 30 }),
   title: varchar("title", { length: 256 }).notNull(),
-  orderId: varchar("order_id", { length: 26 }).notNull(),
   date: varchar("date", { length: 30 }),
   time: varchar("time", { length: 30 }),
   details: varchar("details", { length: 256 }),
   categoryId: id("category_id"),
+  createdAt: varchar("created_at", { length: 30 }).notNull(),
+  completedAt: varchar("completed_at", { length: 30 }),
 }
 
 export const users = pgTable(
