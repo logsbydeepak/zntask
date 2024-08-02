@@ -12,25 +12,28 @@ interface User {
   profilePicture: string | null
 }
 
-type Sync =
-  | {
-      id: string
-      type: "category"
-      action: "create"
-      syncId: string
-    }
-  | {
-      id: string
-      type: "category"
-      action: "edit"
-      syncId: string
-    }
-  | {
-      id: string
-      type: "category"
-      action: "delete"
-      syncId: string
-    }
+type SyncCategory = {
+  id: string
+  type: "category"
+  action: "create" | "edit" | "delete"
+  syncId: string
+}
+
+type ParentSyncTask = {
+  id: string
+  type: "parent-task"
+  action: "create" | "edit" | "delete"
+  syncId: string
+}
+
+type ChildSyncTask = {
+  id: string
+  type: "child-task"
+  action: "create" | "edit" | "delete"
+  syncId: string
+}
+
+type Sync = SyncCategory | ParentSyncTask | ChildSyncTask
 
 const dialogState = {
   resetPassword: false,

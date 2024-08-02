@@ -42,7 +42,7 @@ export const createCategory = h.auth
       })
       .returning({ id: dbSchema.categories.id })
 
-    if (!id) {
+    if (!res) {
       throw new Error("id should be present")
     }
 
